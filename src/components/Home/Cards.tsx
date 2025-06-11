@@ -18,7 +18,7 @@ export const Cards: FC = () => {
       <CardWrapper
         title="Explore"
         description="Egestas eu praesent mauris feugiat tellus tempus sem quis. Sodales lacus elit turpis nullam enim condimentum non. Est commodo nec diam sapien aenean. Nullam dui ut enim ut purus augue integer tempor. Nam dictum nunc auctor ornare nec enim eget urna."
-        buttonText="View More"
+        to="/explore"
         image={dashboardImage}
       />
     </div>

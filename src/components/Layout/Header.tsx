@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import Logotype from './logo.svg';
 import { RainbowKitConnectButton } from '../RainbowKitConnectButton';
 
