@@ -1,3 +1,4 @@
+import { Link, type To } from 'react-router-dom';
 import {
   Card,
   CardDescription,
@@ -11,16 +12,11 @@ import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
 interface CardProps {
   title: string;
   description: string;
-  buttonText?: string;
+  to?: To;
   image?: string;
 }
 
-export function CardWrapper({
-  title,
-  description,
-  buttonText,
-  image,
-}: CardProps) {
+export function CardWrapper({ title, description, to, image }: CardProps) {
   return (
     <Card
       className={cn(
@@ -33,10 +29,21 @@ export function CardWrapper({
         {description}
       </CardDescription>
       <CardFooter className="p-0">
-        <Button disabled={!buttonText} variant="secondary">
-          {buttonText || 'Coming Soon'}
-          {buttonText && <ArrowRight size={16} />}
-        </Button>
+        {to ? (
+          <Button disabled={!to} variant="secondary" asChild>
+            <Link
+              to={to}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+            >
+              View More
+              <ArrowRight size={16} />
+            </Link>
+          </Button>
+        ) : (
+          <Button disabled variant="secondary">
+            Coming Soon
+          </Button>
+        )}
       </CardFooter>
       {image && (
         <img

@@ -7,7 +7,7 @@
     "checkTs": "tsc --noEmit",
     "dev": "vite",
     "start": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc && vite build",
     "lint": "eslint . --cache --ext .js,.ts,.tsx --max-warnings 0",
     "lint-git": "node ./internals/scripts/gitlint.cjs",
     "lint-docs": "markdownlint --ignore '**/node_modules/**' '**/*.md'",

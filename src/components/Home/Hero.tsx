@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import type { FC } from 'react';
@@ -19,9 +20,11 @@ export const Hero: FC = () => {
               and private way.
             </p>
           </div>
-          <Button size="lg">
-            Get started
-            <ArrowRight />
+          <Button size="lg" asChild>
+            <Link to="/dashboard">
+              Get started
+              <ArrowRight />
+            </Link>
           </Button>
         </div>
 

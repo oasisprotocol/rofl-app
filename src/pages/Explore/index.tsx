@@ -1,0 +1,6 @@
+import type { FC } from 'react';
+import { MainLayout } from '../../components/Layout/MainLayout';
+
+export const Explore: FC = () => {
+  return <MainLayout>Explore</MainLayout>;
+};
