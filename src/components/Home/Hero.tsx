@@ -1,28 +1,34 @@
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 import type { FC } from 'react';
 
-export const Footer: FC = () => {
+export const Hero: FC = () => {
   return (
-    <footer className="w-full border-t ">
-      <div className="flex flex-col gap-4 sm:flex-row justify-between items-center border-t border-border/40 py-3 px-6">
-        <p className="text-xs text-muted-foreground">
-          Copyright &copy; {new Date().getFullYear()} Oasis Protocol Foundation
-          2025
-        </p>
-        <div className="flex gap-4">
-          <span className="text-xs text-muted-foreground">
-            Version {APP_VERSION}
-          </span>
-          <span className="text-xs text-muted-foreground">|</span>
-          <a
-            href="https://oasis.net/privacy-policy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Privacy Policy
-          </a>
+    <section className="p-6 md:p-12">
+      <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+              Offchain Performance.
+              <br />
+              Onchain Trust.
+            </h1>
+            <p className="text-md text-muted-foreground max-w-lg leading-relaxed">
+              Build next-gen applications with Runtime Offchain Logic, a
+              framework that allows dApps to run in a verifiable, decentralized,
+              and private way.
+            </p>
+          </div>
+          <Button size="lg">
+            Get started
+            <ArrowRight />
+          </Button>
+        </div>
+
+        <div className="relative h-96 lg:h-[400px]">
+          {/* Image placeholder */}
         </div>
       </div>
-    </footer>
+    </section>
   );
 };
