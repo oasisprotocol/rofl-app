@@ -1,9 +1,16 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { WagmiProvider } from 'wagmi';
 import './index.css';
 import App from './App.tsx';
+import { Dashboard } from './pages/Dashboard';
+import { MyApps } from './pages/Dashboard/MyApps';
+import { AppDetails } from './pages/Dashboard/AppDetails';
+import { Machines } from './pages/Dashboard/Machines';
+import { MachinesDetails } from './pages/Dashboard/MachinesDetails';
+import { Create } from './pages/CreateApp';
+import { Explore } from './pages/Explore';
 import { wagmiConfig } from './constants/wagmi-config.ts';
 import {
   lightTheme,
@@ -39,6 +46,14 @@ createRoot(document.getElementById('root')!).render(
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<App />} />
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route path="apps" element={<MyApps />} />
+                <Route path="apps/:id" element={<AppDetails />} />
+                <Route path="machines" element={<Machines />} />
+                <Route path="machines:id" element={<MachinesDetails />} />
+                <Route path="create" element={<Create />} />
+              </Route>
+              <Route path="/explore" element={<Explore />} />
             </Routes>
           </BrowserRouter>
         </RainbowKitProvider>
