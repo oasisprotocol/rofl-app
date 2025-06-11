@@ -4,10 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "checkTs": "tsc --noEmit",
     "dev": "vite",
     "start": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --cache --ext .js,.ts,.tsx --max-warnings 0",
+    "lint-git": "node ./internals/scripts/gitlint.cjs",
+    "lint-docs": "markdownlint --ignore '**/node_modules/**' '**/*.md'",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -28,6 +31,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "markdownlint-cli": "^0.45.0",
     "tailwindcss": "^4.1.8",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
