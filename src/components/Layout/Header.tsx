@@ -7,7 +7,7 @@ import Logotype from './logo.svg';
 export const Header: FC = () => {
   return (
     <header className="py-3 px-5 border-b w-full border-border/40">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="flex justify-between items-center">
         <Link to="/">
           <img src={Logotype} alt="Oasis ROFL" />
         </Link>
