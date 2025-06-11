@@ -1,8 +1,7 @@
 import type { FC } from 'react';
 import { Link } from 'react-router';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
-import { Wallet } from 'lucide-react';
 import Logotype from './logo.svg';
+import { RainbowKitConnectButton } from '../RainbowKitConnectButton';
 
 export const Header: FC = () => {
   return (
@@ -11,9 +10,7 @@ export const Header: FC = () => {
         <Link to="/">
           <img src={Logotype} alt="Oasis ROFL" />
         </Link>
-        <Button>
-          <Wallet /> Connect Wallet
-        </Button>
+        <RainbowKitConnectButton />
       </div>
     </header>
   );
