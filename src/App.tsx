@@ -1,9 +1,9 @@
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import { Footer } from './components/Layout/Footer';
 
 function App() {
   return (
     <>
-      <Button variant="default">UIL test</Button>
+      <Footer />
     </>
   );
 }
