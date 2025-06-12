@@ -9,4 +9,5 @@
 .dark {
   --primary: #03ffff;
   --foreground: #fafafa;
+  --base-card: #18181b;
 }

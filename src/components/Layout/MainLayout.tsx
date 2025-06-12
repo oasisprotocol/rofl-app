@@ -63,7 +63,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
             </SidebarMenu>
           </SidebarContent>
         </Sidebar>
-        <main>{children}</main>
+        <main className="flex-1 p-4">{children}</main>
       </SidebarProvider>
       <Footer />
     </div>
