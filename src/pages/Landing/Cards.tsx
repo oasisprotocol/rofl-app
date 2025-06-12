@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { CardWrapper } from '../Card/index';
+import { CardWrapper } from '../../components/Card/index';
 import dashboardImage from './dashboard.png';
 
 export const Cards: FC = () => {

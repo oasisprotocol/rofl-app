@@ -23,7 +23,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <SidebarProvider>
+      <SidebarProvider className="min-h-fit flex-1">
         <Sidebar collapsible="icon" className="border-r !static !h-full">
           <SidebarContent>
             <SidebarMenu>
@@ -37,17 +37,12 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
-                      <Link to="/dashboard/apps">Apps</Link>
+                      <Link to="/dashboard/apps">My Apps</Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
                       <Link to="/dashboard/machines">Machines</Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton asChild>
-                      <Link to="/dashboard/create">Create</Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
@@ -63,7 +58,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
             </SidebarMenu>
           </SidebarContent>
         </Sidebar>
-        <main>{children}</main>
+        <main className="flex-1 p-5">{children}</main>
       </SidebarProvider>
       <Footer />
     </div>

@@ -2,8 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { WagmiProvider } from 'wagmi';
-import './index.css';
-import App from './App.tsx';
+import { Landing } from './pages/Landing';
 import { Dashboard } from './pages/Dashboard';
 import { MyApps } from './pages/Dashboard/MyApps';
 import { AppDetails } from './pages/Dashboard/AppDetails';
@@ -20,6 +19,7 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AccountAvatar } from './components/AccountAvatar/index.tsx';
 
+import './index.css';
 import '@rainbow-me/rainbowkit/styles.css';
 
 const queryClient = new QueryClient();
@@ -45,8 +45,9 @@ createRoot(document.getElementById('root')!).render(
         >
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<App />} />
-              <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="/" element={<Landing />} />
+              <Route path="/dashboard">
+                <Route index element={<Dashboard />} />
                 <Route path="apps" element={<MyApps />} />
                 <Route path="apps/:id" element={<AppDetails />} />
                 <Route path="machines" element={<Machines />} />
