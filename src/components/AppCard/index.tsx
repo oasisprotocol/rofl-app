@@ -12,20 +12,23 @@ import {
 import { ArrowUpRight } from 'lucide-react';
 import { AppStatusIcon } from '../AppStatusIcon';
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
+import { trimLongString } from '../../utils/trimLongString';
 
-type ExploreAppCardProps = {
+type AppCardProps = {
   app: RoflApp;
   network: string;
   type?: 'explore' | 'dashboard';
 };
 
-export const AppCard: FC<ExploreAppCardProps> = ({ app, network, type }) => {
+export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
   return (
     <Card className="rounded-md">
       <CardHeader className="">
         <div className="flex items-start justify-between">
           <h3 className="text-lg font-semibold text-foreground pr-2 break-all">
-            <>{app.metadata?.['net.oasis.rofl.name']}</>
+            <>
+              {app.metadata?.['net.oasis.rofl.name'] || trimLongString(app.id)}
+            </>
           </h3>
           <AppStatusIcon
             hasActiveInstances={!!app.num_active_instances}

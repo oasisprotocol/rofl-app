@@ -4,10 +4,14 @@ import { MyAppsEmptyState } from '../../pages/Dashboard/MyApps/emptyState';
 import { MachinesEmptyState } from '../../pages/Dashboard/Machines/emptyState';
 import { MetricCard } from './MetricCard';
 import { SectionHeader } from './SectionHeader';
-import { useGetRuntimeRoflApps } from '../../nexus/api';
+import {
+  useGetRuntimeRoflApps,
+  useGetRuntimeRoflmarketProviders,
+} from '../../nexus/api';
 import { useNetwork } from '../../hooks/useNetwork';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { AppCard } from '../../components/AppCard';
+import { MachineCard } from '../../components/MachineCard';
 
 const pageLimit = 3;
 
@@ -16,13 +20,29 @@ export const Dashboard: FC = () => {
   const roflAppsQuery = useGetRuntimeRoflApps(network, 'sapphire', {
     limit: pageLimit,
     offset: 0,
-    // add admin address query parameter when available
+    // TODO: add admin address query parameter when available
   });
+
+  // TODO: fetch providers for active ROFL apps
+  const roflProvidersQuery = useGetRuntimeRoflmarketProviders(
+    network,
+    'sapphire',
+    {
+      limit: pageLimit,
+      offset: 0,
+    }
+  );
   const { data, isLoading, isFetched } = roflAppsQuery;
   const roflApps = data?.data.rofl_apps;
+  const {
+    data: providersData,
+    isLoading: isProviderLoading,
+    isFetched: isProviderFetched,
+  } = roflProvidersQuery;
+  const roflProviders = providersData?.data.providers;
 
-  const appsNumber = roflApps ? roflApps.length : 0;
-  const machinesNumber = 0;
+  const appsNumber = data?.data.total_count;
+  const machinesNumber = providersData?.data.total_count;
   const failuresNumber = 0;
 
   return (
@@ -59,7 +79,17 @@ export const Dashboard: FC = () => {
           to="/dashboard/machines"
           disabled={machinesNumber === 0}
         />
-        <MachinesEmptyState />
+        {isProviderFetched && !machinesNumber && <MachinesEmptyState />}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {isProviderLoading &&
+            Array.from({ length: pageLimit }).map((_, index) => (
+              <Skeleton key={index} className="w-full h-[200px]" />
+            ))}
+          {isFetched &&
+            roflProviders?.map((machine) => (
+              <MachineCard key={machine.address} machine={machine} />
+            ))}
+        </div>
       </div>
     </MainLayout>
   );
