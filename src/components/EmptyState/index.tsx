@@ -4,6 +4,7 @@ import {
   CardFooter,
   CardHeader,
 } from '@oasisprotocol/ui-library/src/components/ui/card';
+import { useAccount } from 'wagmi';
 
 interface EmptyStateProps {
   title: string;
@@ -12,16 +13,22 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ title, description, children }: EmptyStateProps) {
+  const { isConnected } = useAccount();
+
   return (
     <Card className="h-full rounded-md border-0 flex justify-center p-8 gap-2">
       <CardHeader className="text-xl font-semibold text-white text-center">
-        {title}
+        {isConnected ? title : 'Connect is not connected'}
       </CardHeader>
       <CardContent className="max-w-[60%] mx-auto text-gray-400 text-sm text-balance text-center leading-relaxed">
-        {description}
+        {isConnected
+          ? description
+          : 'Please connect your wallet to to gain access to the view.'}
       </CardContent>
 
-      <CardFooter className="flex justify-center pt-2">{children}</CardFooter>
+      <CardFooter className="flex justify-center pt-2">
+        {isConnected ? children : null}
+      </CardFooter>
     </Card>
   );
 }
