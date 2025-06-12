@@ -46,7 +46,8 @@ createRoot(document.getElementById('root')!).render(
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Landing />} />
-              <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="/dashboard">
+                <Route index element={<Dashboard />} />
                 <Route path="apps" element={<MyApps />} />
                 <Route path="apps/:id" element={<AppDetails />} />
                 <Route path="machines" element={<Machines />} />
