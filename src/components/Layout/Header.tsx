@@ -5,7 +5,7 @@ import { RainbowKitConnectButton } from '../RainbowKitConnectButton';
 
 export const Header: FC = () => {
   return (
-    <header className="py-3 px-5 border-b w-full border-border/40">
+    <header className="flex-shrink-0 py-3 px-5 border-b w-full border-border/40">
       <div className="flex justify-between items-center">
         <Link to="/">
           <img src={Logotype} alt="Oasis ROFL" />

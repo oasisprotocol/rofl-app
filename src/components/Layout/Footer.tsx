@@ -2,7 +2,7 @@ import type { FC } from 'react';
 
 export const Footer: FC = () => {
   return (
-    <footer className="w-full border-t pb-8">
+    <footer className="flex-shrink-0 sw-full border-t pb-8">
       <div className="flex flex-col gap-4 sm:flex-row justify-between items-center border-t border-border/40 py-3 px-6">
         <p className="text-xs text-muted-foreground">
           Copyright &copy; {new Date().getFullYear()} Oasis Protocol Foundation
