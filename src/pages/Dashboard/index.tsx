@@ -1,5 +1,4 @@
 import { type FC } from 'react';
-import { MainLayout } from '../../components/Layout/MainLayout';
 import { MyAppsEmptyState } from '../../pages/Dashboard/MyApps/emptyState';
 import { MachinesEmptyState } from '../../pages/Dashboard/Machines/emptyState';
 import { MetricCard } from './MetricCard';
@@ -46,7 +45,7 @@ export const Dashboard: FC = () => {
   const failuresNumber = 0;
 
   return (
-    <MainLayout>
+    <>
       <div className="space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <MetricCard title="ROFL Apps Running" value={appsNumber} />
@@ -91,6 +90,6 @@ export const Dashboard: FC = () => {
             ))}
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 };

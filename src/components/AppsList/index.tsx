@@ -1,5 +1,4 @@
 import { useEffect, type FC, type ReactNode } from 'react';
-import { MainLayout } from '../Layout/MainLayout';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { AppCard } from '../AppCard';
 import {
@@ -60,7 +59,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
     (isFetched && allRoflApps.length === 0);
 
   return (
-    <MainLayout>
+    <>
       {isEmpty && <>{emptyState}</>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {isLoading &&
@@ -79,6 +78,6 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
       </div>
 
       <div ref={ref} className="h-10 w-full" />
-    </MainLayout>
+    </>
   );
 };
