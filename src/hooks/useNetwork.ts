@@ -1,6 +1,6 @@
 import { useAccount } from 'wagmi';
 
-export function useNetwork(): 'mainnet' | 'testnet' {
+export function useNetwork(fallback): 'mainnet' | 'testnet' {
   const { chainId } = useAccount();
 
   if (chainId === 23294) {
@@ -9,6 +9,10 @@ export function useNetwork(): 'mainnet' | 'testnet' {
 
   if (chainId === 23295) {
     return 'testnet';
+  }
+
+  if (fallback) {
+    return fallback;
   }
 
   throw new Error(`Unsupported chainId: ${chainId}.`);

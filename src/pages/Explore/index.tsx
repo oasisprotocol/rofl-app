@@ -1,35 +1,76 @@
-import { type FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { MainLayout } from '../../components/Layout/MainLayout';
 import { ExploreEmptyState } from './emptyState';
-import { useGetRuntimeRoflApps } from '../../nexus/api';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useNetwork } from '../../hooks/useNetwork';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { ExploreAppCard } from './ExploreAppCard';
+import {
+  getGetRuntimeRoflAppsQueryKey,
+  GetRuntimeRoflApps,
+} from '../../nexus/api';
+import { useInView } from 'react-intersection-observer';
 
 const pageLimit = 18;
 
 export const Explore: FC = () => {
-  const network = useNetwork();
-  const roflAppsQuery = useGetRuntimeRoflApps(network, 'sapphire', {
-    limit: pageLimit,
-    offset: 0,
+  const { ref, inView } = useInView();
+  const network = useNetwork('mainnet');
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isFetched,
+  } = useInfiniteQuery({
+    queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire')],
+    queryFn: async ({ pageParam = 0 }) => {
+      const result = await GetRuntimeRoflApps(network, 'sapphire', {
+        limit: pageLimit,
+        offset: pageParam,
+      });
+      return result;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      const totalFetched = allPages.length * pageLimit;
+      return totalFetched < lastPage.data.total_count
+        ? totalFetched
+        : undefined;
+    },
   });
-  const { data, isLoading, isFetched } = roflAppsQuery;
-  const roflApps = data?.data.rofl_apps;
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, inView]);
+
+  const allRoflApps = data?.pages.flatMap((page) => page.data.rofl_apps) || [];
+  const isEmpty = isFetched && allRoflApps.length === 0;
 
   return (
     <MainLayout>
-      {isFetched && !roflApps?.length && <ExploreEmptyState />}
+      {isEmpty && <ExploreEmptyState />}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {isLoading &&
           Array.from({ length: pageLimit }).map((_, index) => (
             <Skeleton key={index} className="w-full h-[200px]" />
           ))}
-        {isFetched &&
-          roflApps?.map((app) => (
-            <ExploreAppCard key={app.id} app={app} network={network} />
+
+        {allRoflApps.map((app) => (
+          <ExploreAppCard key={app.id} app={app} network={network} />
+        ))}
+
+        {isFetchingNextPage &&
+          Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={`next-page-${index}`} className="w-full h-[200px]" />
           ))}
       </div>
+
+      <div ref={ref} className="h-10 w-full" />
     </MainLayout>
   );
 };
