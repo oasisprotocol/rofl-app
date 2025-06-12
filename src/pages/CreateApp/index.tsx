@@ -1,5 +1,6 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
+import { MainLayout } from '../../components/Layout/MainLayout';
 
 export const Create: FC = () => {
-  return <>Create</>;
+  return <MainLayout>Create</MainLayout>;
 };

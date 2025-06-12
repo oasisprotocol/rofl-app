@@ -12,6 +12,7 @@ import {
 import { AccountAvatar } from '../AccountAvatar';
 import { useDisconnect } from 'wagmi';
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile';
+import { useNavigate } from 'react-router-dom';
 
 const TruncatedAddress: FC<{ address: string; className?: string }> = ({
   address,
@@ -32,6 +33,13 @@ interface Props {
 export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
   const isMobile = useIsMobile();
   const { disconnect } = useDisconnect();
+  const navigate = useNavigate();
+
+  const handleDisconnect = () => {
+    disconnect();
+    navigate('/');
+    onMobileClose?.();
+  };
 
   return (
     <ConnectButton.Custom>
@@ -119,10 +127,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                     <Button
                       variant="ghost"
                       className="w-full justify-start rounded-md p-2.5 h-11"
-                      onClick={() => {
-                        disconnect();
-                        onMobileClose?.();
-                      }}
+                      onClick={handleDisconnect}
                     >
                       <span className="text-destructive text-base font-medium leading-6">
                         Sign out
@@ -170,7 +175,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                         Switch network
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => disconnect()}>
+                      <DropdownMenuItem onClick={handleDisconnect}>
                         Disconnect
                       </DropdownMenuItem>
                     </DropdownMenuContent>
