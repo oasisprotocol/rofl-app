@@ -1,11 +1,7 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
 import { MyAppsEmptyState } from './emptyState';
-import { MainLayout } from '../../../components/Layout/MainLayout';
+import { AppsList } from '../../../components/AppsList';
 
 export const MyApps: FC = () => {
-  return (
-    <MainLayout>
-      <MyAppsEmptyState />
-    </MainLayout>
-  );
+  return <AppsList emptyState={<MyAppsEmptyState />} type="dashboard" />;
 };

@@ -18,7 +18,7 @@ export function EmptyState({ title, description, children }: EmptyStateProps) {
   return (
     <Card className="h-full rounded-md border-0 flex justify-center p-8 gap-2">
       <CardHeader className="text-xl font-semibold text-white text-center">
-        {isConnected ? title : 'Connect is not connected'}
+        {isConnected ? title : 'Wallet is not connected'}
       </CardHeader>
       <CardContent className="max-w-[60%] mx-auto text-gray-400 text-sm text-balance text-center leading-relaxed">
         {isConnected

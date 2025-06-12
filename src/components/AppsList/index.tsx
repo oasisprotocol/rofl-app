@@ -1,23 +1,26 @@
-import { useEffect, type FC } from 'react';
-import { MachinesEmptyState } from './emptyState';
-import { MainLayout } from '../../../components/Layout/MainLayout';
+import { useEffect, type FC, type ReactNode } from 'react';
+import { MainLayout } from '../Layout/MainLayout';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
+import { AppCard } from '../AppCard';
+import {
+  getGetRuntimeRoflAppsQueryKey,
+  GetRuntimeRoflApps,
+} from '../../nexus/api';
+import { useNetwork } from '../../hooks/useNetwork';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import { useAccount } from 'wagmi';
-import { useNetwork } from '../../../hooks/useNetwork';
-import {
-  getGetRuntimeRoflAppsQueryKey,
-  GetRuntimeRoflmarketProviders,
-} from '../../../nexus/api';
-import { MachineCard } from '../../../components/MachineCard';
 
-const pageLimit = 9;
+type AppsListProps = {
+  emptyState: ReactNode;
+  type: 'dashboard' | 'explore';
+};
 
-export const Machines: FC = () => {
+export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
+  const pageLimit = type === 'dashboard' ? 9 : 18;
   const { isConnected } = useAccount();
   const { ref, inView } = useInView();
-  const network = useNetwork();
+  const network = useNetwork('mainnet');
 
   const {
     data,
@@ -27,16 +30,16 @@ export const Machines: FC = () => {
     isLoading,
     isFetched,
   } = useInfiniteQuery({
-    queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire')],
+    queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire'), type],
     queryFn: async ({ pageParam = 0 }) => {
-      const result = await GetRuntimeRoflmarketProviders(network, 'sapphire', {
+      const result = await GetRuntimeRoflApps(network, 'sapphire', {
         limit: pageLimit,
         offset: pageParam,
       });
       return result;
     },
     initialPageParam: 0,
-    enabled: isConnected,
+    enabled: type === 'explore' || (type === 'dashboard' && isConnected),
     getNextPageParam: (lastPage, allPages) => {
       const totalFetched = allPages.length * pageLimit;
       return totalFetched < lastPage.data.total_count
@@ -51,21 +54,22 @@ export const Machines: FC = () => {
     }
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, inView]);
 
-  const allRoflProviders =
-    data?.pages.flatMap((page) => page.data.providers) || [];
-  const isEmpty = isFetched && allRoflProviders.length === 0;
+  const allRoflApps = data?.pages.flatMap((page) => page.data.rofl_apps) || [];
+  const isEmpty =
+    (type === 'dashboard' && !isConnected) ||
+    (isFetched && allRoflApps.length === 0);
 
   return (
     <MainLayout>
-      {isEmpty && <MachinesEmptyState />}
+      {isEmpty && <>{emptyState}</>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {isLoading &&
           Array.from({ length: pageLimit }).map((_, index) => (
             <Skeleton key={index} className="w-full h-[200px]" />
           ))}
 
-        {allRoflProviders.map((machine) => (
-          <MachineCard key={machine.address} machine={machine} />
+        {allRoflApps.map((app) => (
+          <AppCard key={app.id} app={app} network={network} type={type} />
         ))}
 
         {isFetchingNextPage &&
