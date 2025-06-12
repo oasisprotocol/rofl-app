@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 import Logotype from './logo.svg';
 import { RainbowKitConnectButton } from '../RainbowKitConnectButton';
@@ -10,11 +10,12 @@ export const Header: FC = () => {
   const { isConnected } = useAccount();
 
   return (
-    <header className="flex-shrink-0 py-3 px-5 border-b w-full border-border/40">
-      <div className="flex justify-between items-center">
-        <Link to="/">
-          <img src={Logotype} alt="Oasis ROFL" />
-        </Link>
+    <div className="w-full flex justify-between items-center">
+      <Link to="/">
+        <img src={Logotype} alt="Oasis ROFL" />
+      </Link>
+
+      <div className="hidden md:flex">
         <div className="flex items-center gap-4">
           {isConnected && (
             <Button asChild>
@@ -27,6 +28,8 @@ export const Header: FC = () => {
           <RainbowKitConnectButton />
         </div>
       </div>
-    </header>
+
+      <div className="md:hidden">{/* Sheet */}</div>
+    </div>
   );
 };

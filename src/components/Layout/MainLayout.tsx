@@ -1,7 +1,7 @@
-import type { FC, ReactNode } from 'react';
+import type { FC } from 'react';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { Link } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
   SidebarContent,
@@ -11,56 +11,134 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
-  SidebarProvider,
+  SidebarGroup,
 } from '@oasisprotocol/ui-library/src/components/ui/sidebar';
-import { AppWindow, Compass } from 'lucide-react';
+import { Compass, LayoutDashboard } from 'lucide-react';
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+} from '@oasisprotocol/ui-library/src/components/ui/breadcrumb';
 
-interface MainLayoutProps {
-  children: ReactNode;
-}
+const locationListMap: Record<string, string[]> = {
+  '/explore': ['Explore'],
+  '/dashboard/machines': ['Dashboard', 'Machines'],
+  '/dashboard/apps': ['Dashboard', 'My Apps'],
+  '/': ['Dashboard'],
+};
 
-export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
+export const MainLayout: FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const locationList = Object.entries(locationListMap).find(([path]) =>
+    location.pathname.toLowerCase().startsWith(path)
+  )?.[1];
+
+  const getBreadcrumbPath = (index: number) => {
+    if (!locationList) return '/';
+    if (index === 0 && locationList[0] === 'Dashboard') {
+      return '/dashboard';
+    }
+    return location.pathname;
+  };
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <SidebarProvider className="min-h-fit flex-1">
+    <Layout
+      headerContent={<Header />}
+      headerBreadcrumbsContent={
+        !!locationList?.length && (
+          <Breadcrumb className="flex px-2">
+            <BreadcrumbList>
+              {locationList.flatMap((loc, i) => {
+                const elements = [
+                  <BreadcrumbItem key={loc + i}>
+                    <BreadcrumbLink asChild>
+                      <NavLink
+                        to={getBreadcrumbPath(i)}
+                        className="text-foreground text-sm font-normal"
+                      >
+                        {loc}
+                      </NavLink>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>,
+                ];
+
+                if (i + 1 < locationList.length) {
+                  elements.push(
+                    <BreadcrumbSeparator key={`sep-${loc}-${i}`} />
+                  );
+                }
+
+                return elements;
+              })}
+            </BreadcrumbList>
+          </Breadcrumb>
+        )
+      }
+      footerContent={<Footer />}
+      sidebar={
         <Sidebar collapsible="icon" className="border-r !static !h-full">
-          <SidebarContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Dashboard">
-                  <Link to="/dashboard">
-                    <AppWindow />
-                    <span>Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
+          <SidebarContent className="bg-sidebar-background">
+            <SidebarGroup>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Button
+                      onClick={() => navigate('/dashboard')}
+                      variant="ghost"
+                      className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                    >
+                      <LayoutDashboard className="h-4 w-4 text-sidebar-foreground" />
+                      Dashboard
+                    </Button>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
-                      <Link to="/dashboard/apps">My Apps</Link>
+                      <Button
+                        onClick={() => navigate('/dashboard/apps')}
+                        variant="ghost"
+                        className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                      >
+                        My Apps
+                      </Button>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
-                      <Link to="/dashboard/machines">Machines</Link>
+                      <Button
+                        onClick={() => navigate('/dashboard/machines')}
+                        variant="ghost"
+                        className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                      >
+                        Machines
+                      </Button>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Explore">
-                  <Link to="/explore">
-                    <Compass />
-                    <span>Explore</span>
-                  </Link>
+                <SidebarMenuButton asChild>
+                  <Button
+                    onClick={() => navigate('/explore')}
+                    variant="ghost"
+                    className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                  >
+                    <Compass className="h-4 w-4 text-sidebar-foreground" />
+                    Explore
+                  </Button>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
+              </SidebarMenu>
+            </SidebarGroup>
           </SidebarContent>
         </Sidebar>
-        <main className="flex-1 p-5">{children}</main>
-      </SidebarProvider>
-      <Footer />
-    </div>
+      }
+    >
+      <div className="flex-1 p-5 h-5/6">
+        <Outlet />
+      </div>
+    </Layout>
   );
 };

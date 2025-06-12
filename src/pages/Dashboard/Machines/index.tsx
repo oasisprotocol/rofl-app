@@ -1,6 +1,5 @@
 import { useEffect, type FC } from 'react';
 import { MachinesEmptyState } from './emptyState';
-import { MainLayout } from '../../../components/Layout/MainLayout';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
@@ -56,7 +55,7 @@ export const Machines: FC = () => {
   const isEmpty = isFetched && allRoflProviders.length === 0;
 
   return (
-    <MainLayout>
+    <>
       {isEmpty && <MachinesEmptyState />}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {isLoading &&
@@ -75,6 +74,6 @@ export const Machines: FC = () => {
       </div>
 
       <div ref={ref} className="h-10 w-full" />
-    </MainLayout>
+    </>
   );
 };

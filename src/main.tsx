@@ -18,6 +18,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AccountAvatar } from './components/AccountAvatar/index.tsx';
+import { MainLayout } from './components/Layout/MainLayout';
 
 import './index.css';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -46,7 +47,7 @@ createRoot(document.getElementById('root')!).render(
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Landing />} />
-              <Route path="/dashboard">
+              <Route path="/dashboard" element={<MainLayout />}>
                 <Route index element={<Dashboard />} />
                 <Route path="apps" element={<MyApps />} />
                 <Route path="apps/:id" element={<AppDetails />} />
@@ -54,7 +55,9 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="machines/:id" element={<MachinesDetails />} />
                 <Route path="create" element={<Create />} />
               </Route>
-              <Route path="/explore" element={<Explore />} />
+              <Route path="/explore" element={<MainLayout />}>
+                <Route index element={<Explore />} />
+              </Route>
             </Routes>
           </BrowserRouter>
         </RainbowKitProvider>
