@@ -5,7 +5,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useNetwork } from '../../hooks/useNetwork';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { AppCard } from '../../components/AppCard';
-
 import {
   getGetRuntimeRoflAppsQueryKey,
   GetRuntimeRoflApps,
