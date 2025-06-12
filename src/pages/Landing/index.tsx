@@ -7,9 +7,11 @@ import { Hero } from './Hero';
 
 export const Landing: FC = () => {
   return (
-    <Layout headerContent={<Header />} footerContent={<Footer />}>
-      <Hero />
-      <Cards />
-    </Layout>
+    <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
+      <Layout headerContent={<Header />} footerContent={<Footer />}>
+        <Hero />
+        <Cards />
+      </Layout>
+    </div>
   );
 };
