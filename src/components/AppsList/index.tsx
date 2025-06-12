@@ -9,8 +9,7 @@ import {
 import { useNetwork } from '../../hooks/useNetwork';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-
-const pageLimit = 18;
+import { useAccount } from 'wagmi';
 
 type AppsListProps = {
   emptyState: ReactNode;
@@ -18,6 +17,8 @@ type AppsListProps = {
 };
 
 export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
+  const pageLimit = type === 'dashboard' ? 9 : 18;
+  const { isConnected } = useAccount();
   const { ref, inView } = useInView();
   const network = useNetwork('mainnet');
 
@@ -29,7 +30,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
     isLoading,
     isFetched,
   } = useInfiniteQuery({
-    queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire')],
+    queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire'), type],
     queryFn: async ({ pageParam = 0 }) => {
       const result = await GetRuntimeRoflApps(network, 'sapphire', {
         limit: pageLimit,
@@ -38,6 +39,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
       return result;
     },
     initialPageParam: 0,
+    enabled: type === 'explore' || (type === 'dashboard' && isConnected),
     getNextPageParam: (lastPage, allPages) => {
       const totalFetched = allPages.length * pageLimit;
       return totalFetched < lastPage.data.total_count
@@ -53,7 +55,9 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, inView]);
 
   const allRoflApps = data?.pages.flatMap((page) => page.data.rofl_apps) || [];
-  const isEmpty = isFetched && allRoflApps.length === 0;
+  const isEmpty =
+    (type === 'dashboard' && !isConnected) ||
+    (isFetched && allRoflApps.length === 0);
 
   return (
     <MainLayout>
