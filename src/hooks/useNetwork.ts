@@ -1,6 +1,6 @@
 import { useAccount } from 'wagmi';
 
-export function useNetwork(fallback): 'mainnet' | 'testnet' {
+export function useNetwork(fallback?: 'mainnet' | 'testnet') {
   const { chainId } = useAccount();
 
   if (chainId === 23294) {
