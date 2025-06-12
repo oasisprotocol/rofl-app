@@ -4,7 +4,8 @@ import { ExploreEmptyState } from './emptyState';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useNetwork } from '../../hooks/useNetwork';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
-import { ExploreAppCard } from './ExploreAppCard';
+import { AppCard } from '../../components/AppCard';
+
 import {
   getGetRuntimeRoflAppsQueryKey,
   GetRuntimeRoflApps,
@@ -61,7 +62,7 @@ export const Explore: FC = () => {
           ))}
 
         {allRoflApps.map((app) => (
-          <ExploreAppCard key={app.id} app={app} network={network} />
+          <AppCard key={app.id} app={app} network={network} type="explore" />
         ))}
 
         {isFetchingNextPage &&
