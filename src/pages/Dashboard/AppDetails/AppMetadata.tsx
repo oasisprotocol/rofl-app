@@ -3,8 +3,32 @@ import { Link } from 'react-router-dom';
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow';
 import { SquarePen } from 'lucide-react';
+import {
+  useGetRuntimeRoflAppsIdTransactions,
+  type RoflApp,
+} from '../../../nexus/api';
+import { useNetwork } from '../../../hooks/useNetwork';
+import { isUrlSafe } from '../../../utils/url';
+import { trimLongString } from '../../../utils/trimLongString';
 
-export const AppMetadata: FC = () => {
+type AppMetadataProps = {
+  app: RoflApp;
+};
+
+export const AppMetadata: FC<AppMetadataProps> = ({ app }) => {
+  const network = useNetwork();
+  const { data } = useGetRuntimeRoflAppsIdTransactions(
+    network,
+    'sapphire',
+    app.id,
+    {
+      limit: 1,
+      method: 'rofl.Update',
+    }
+  );
+  const transaction = data?.data.transactions[0];
+  const repositoryUrl = app.metadata?.['net.oasis.rofl.repository'] as string;
+
   return (
     <div className="space-y-4">
       <DetailsSectionRow label="Machine(s)">
@@ -17,12 +41,12 @@ export const AppMetadata: FC = () => {
       </DetailsSectionRow>
       <DetailsSectionRow label="Explorer Link" className="pb-6 border-b">
         <a
-          href="https://explorer.oasis.io/mainnet/sapphire/rofl/app/rofl1qpdzzm4h73gtes04xjn4whan84s3k33l5gx787l2"
+          href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${app.id}`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-primary"
         >
-          rofl1qpdzzm4h73gtes04xjn4whan84s3k33l5gx787l2
+          {app.id}
         </a>
       </DetailsSectionRow>
       <Button
@@ -34,47 +58,47 @@ export const AppMetadata: FC = () => {
         Edit
       </Button>
       <DetailsSectionRow label="Author">
-        <a
-          href="https://explorer.oasis.io/mainnet/sapphire/address/0x1441b57bD02E92473c89733D00881e859Eff6508"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary"
-        >
-          0x1441b57bD02E92473c89733D00881e859Eff6508
-        </a>
+        <>{app.metadata?.['net.oasis.rofl.author']}</>
       </DetailsSectionRow>
       <DetailsSectionRow label="Description">
-        Ac vel nullam elit facilisis justo dictum non metus a. Dictum quisque
-        condimentum duis sit amet ac. Pharetra amet sed ornare id nunc vivamus
-        habitant enim in. Sed lorem scelerisque sed purus eleifend diam.
-      </DetailsSectionRow>
-      <DetailsSectionRow label="Homepage">
-        <a
-          href="https://www.wt3.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary"
-        >
-          www.wt3.ai
-        </a>
+        <>{app.metadata?.['net.oasis.rofl.description']}</>
       </DetailsSectionRow>
       <DetailsSectionRow label="Repository">
-        <a
-          href="https://github.com/oasisprotocol"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary"
-        >
-          https://github.com/oasisprotocol
-        </a>
+        {isUrlSafe(repositoryUrl) ? (
+          <a
+            href={repositoryUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary"
+          >
+            {repositoryUrl}
+          </a>
+        ) : undefined}
       </DetailsSectionRow>
       <DetailsSectionRow label="License" className=" pb-6 border-b">
-        Apache-2.0
+        <>{app.metadata?.['net.oasis.rofl.license']}</>
       </DetailsSectionRow>
       <div className="text-xl font-bold">Policy</div>
-      <DetailsSectionRow label="Who can run this app">Anyone</DetailsSectionRow>
+      <DetailsSectionRow label="Who can run this app">-</DetailsSectionRow>
       <DetailsSectionRow label="Latest Update" className=" pb-6 border-b">
-        May 14, 2025
+        {transaction && (
+          <>
+            {new Intl.DateTimeFormat('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }).format(new Date(transaction?.timestamp))}
+            <br />
+            <a
+              href={`https://explorer.oasis.io/mainnet/sapphire/tx/${transaction.hash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary"
+            >
+              {trimLongString(transaction.eth_hash || transaction.hash)}
+            </a>
+          </>
+        )}
       </DetailsSectionRow>
     </div>
   );
