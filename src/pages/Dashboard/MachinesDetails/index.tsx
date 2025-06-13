@@ -67,7 +67,11 @@ export const MachinesDetails: FC = () => {
               </MachineDetailsRow>
             </div>
           </TabsContent>
-          <TabsContent value="logs">logs</TabsContent>
+          <TabsContent value="logs">
+            <div className="whitespace-pre-wrap font-mono text-sm bg-card text-foreground mt-6 p-6 rounded-sm overflow-auto leading-relaxed">
+              [2024-01-15 10:30:25] INFO: Application started
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
     </>
