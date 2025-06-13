@@ -10,6 +10,7 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/table';
 import { LockKeyhole, SquarePen, Trash2 } from 'lucide-react';
 import type { RoflAppSecrets } from '../../../nexus/api';
+import { RemoveSecret } from './RemoveSecret';
 
 type AppSecretsProps = {
   secrets: RoflAppSecrets;
@@ -42,12 +43,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({ secrets }) => {
                 </Button>
               </TableCell>
               <TableCell className="w-10">
-                <Button
-                  variant="ghost"
-                  className="text-destructive hover:text-destructive"
-                >
-                  <Trash2 />
-                </Button>
+                <RemoveSecret secret={key} />
               </TableCell>
             </TableRow>
           ))}
