@@ -7,9 +7,11 @@ import {
   TabsList,
   TabsTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/tabs';
-import { Clock, CircleStop, RotateCcw, CircleArrowUp } from 'lucide-react';
+import { Clock, RotateCcw, CircleArrowUp } from 'lucide-react';
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon';
 import { MachineDetailsRow } from './MachineDetailsRow';
+import { MachineStop } from './MachineStop';
+import { MachineRestart } from './MachineRestart';
 
 export const MachinesDetails: FC = () => {
   return (
@@ -26,18 +28,13 @@ export const MachinesDetails: FC = () => {
                 <Clock className="h-4 w-4" />
                 <span>9h 34min</span>
               </div>
-              <Button variant="outline" className="w-full md:w-auto">
+              <Button variant="outline" className="w-full md:w-auto" disabled>
                 <CircleArrowUp />
                 Top up
               </Button>
-              <Button variant="outline" className="w-full md:w-auto md:ml-8">
-                <RotateCcw />
-                Restart
-              </Button>
-              <Button variant="outline" className="w-full md:w-auto md:mr-8">
-                <CircleStop />
-                Stop
-              </Button>
+              <MachineRestart />
+              <MachineStop />
+
               <TabsList className="w-full md:w-auto">
                 <TabsTrigger value="details">Details</TabsTrigger>
                 <TabsTrigger value="logs">Logs</TabsTrigger>
