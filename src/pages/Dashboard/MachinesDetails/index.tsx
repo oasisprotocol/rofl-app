@@ -7,7 +7,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/tabs';
-import { Clock, RotateCcw, CircleArrowUp } from 'lucide-react';
+import { Clock, CircleArrowUp } from 'lucide-react';
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon';
 import { MachineDetailsRow } from './MachineDetailsRow';
 import { MachineStop } from './MachineStop';

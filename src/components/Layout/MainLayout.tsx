@@ -23,7 +23,6 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
 } from '@oasisprotocol/ui-library/src/components/ui/breadcrumb';
-import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
 
 const locationListMap: Record<string, string[]> = {
   '/explore': ['Explore'],

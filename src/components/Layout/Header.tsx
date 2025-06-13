@@ -13,7 +13,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/sheet';
-import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile';
 import { NavbarLink } from '../NavbarLink';
 
@@ -56,7 +55,7 @@ export const Header: FC = () => {
               </Button>
             </div>
           </SheetTrigger>
-          <SheetContent side="top" className={cn('w-full')}>
+          <SheetContent side="top" className="w-full">
             <SheetHeader>
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <div className="flex items-start px-3 py-2.5">
