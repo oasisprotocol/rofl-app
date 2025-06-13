@@ -9,6 +9,7 @@ import {
 import { AppStatusIcon } from '../../../components/AppStatusIcon';
 import { YamlCode } from '../../../components/CodeDisplay';
 import { AppMetadata } from './AppMetadata';
+import { AppSecrets } from './AppSecrets';
 
 export const AppDetails: FC = () => {
   return (
@@ -42,7 +43,9 @@ export const AppDetails: FC = () => {
             <TabsContent value="details">
               <AppMetadata />
             </TabsContent>
-            <TabsContent value="secrets">secrets</TabsContent>
+            <TabsContent value="secrets">
+              <AppSecrets />
+            </TabsContent>
             <TabsContent value="compose">
               <YamlCode
                 data={`
