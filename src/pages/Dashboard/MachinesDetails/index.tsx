@@ -9,7 +9,7 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/tabs';
 import { Clock, CircleArrowUp } from 'lucide-react';
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon';
-import { MachineDetailsRow } from './MachineDetailsRow';
+import { DetailsSectionRow } from '../../../components/DetailsSectionRow';
 import { MachineStop } from './MachineStop';
 import { MachineRestart } from './MachineRestart';
 
@@ -43,16 +43,16 @@ export const MachinesDetails: FC = () => {
           </div>
           <TabsContent value="details">
             <div className="space-y-4">
-              <MachineDetailsRow label="App Running" className=" py-6 border-b">
+              <DetailsSectionRow label="App Running" className=" py-6 border-b">
                 <Link to="/dashboard/apps" className="text-primary">
                   WT3
                 </Link>
-              </MachineDetailsRow>
-              <MachineDetailsRow label="Provider">OPF</MachineDetailsRow>
-              <MachineDetailsRow label="Machine Size">
+              </DetailsSectionRow>
+              <DetailsSectionRow label="Provider">OPF</DetailsSectionRow>
+              <DetailsSectionRow label="Machine Size">
                 Small (1CPU, 2GB RAM, 10GB Storage)
-              </MachineDetailsRow>
-              <MachineDetailsRow label="Node ID" className="pb-6 border-b">
+              </DetailsSectionRow>
+              <DetailsSectionRow label="Node ID" className="pb-6 border-b">
                 <a
                   href="https://explorer.oasis.io/sapphire/rofl/node/0x4d3f5b2d3rP7lUVU2BSfSm53opnGui"
                   target="_blank"
@@ -61,7 +61,7 @@ export const MachinesDetails: FC = () => {
                 >
                   oasis13Gmsfb2D3rP7lUVU2BSfSm53opnGui
                 </a>
-              </MachineDetailsRow>
+              </DetailsSectionRow>
             </div>
           </TabsContent>
           <TabsContent value="logs">
