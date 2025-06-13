@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
 
-type MachineDetailsRowProps = {
+type DetailsSectionRowProps = {
   className?: string;
   label: string;
   children: React.ReactNode;
 };
 
-export const MachineDetailsRow: FC<MachineDetailsRowProps> = ({
+export const DetailsSectionRow: FC<DetailsSectionRowProps> = ({
   className,
   label,
   children,
