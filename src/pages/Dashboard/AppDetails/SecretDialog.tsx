@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/dialog';
-import { CirclePlus } from 'lucide-react';
+import { CirclePlus, SquarePen } from 'lucide-react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
@@ -25,8 +25,15 @@ const formSchema = z.object({
   }),
 });
 
-export const AddSecret: FC = () => {
+type SecretDialogProps = {
+  mode: 'add' | 'edit';
+  secret?: string;
+};
+
+export const SecretDialog: FC<SecretDialogProps> = ({ mode, secret }) => {
   const [open, setOpen] = useState(false);
+  const isEditMode = mode === 'edit';
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,6 +51,17 @@ export const AddSecret: FC = () => {
     if (!newOpen) {
       onCancel();
     } else {
+      if (isEditMode && secret) {
+        form.reset({
+          name: secret,
+          value: '',
+        });
+      } else {
+        form.reset({
+          name: '',
+          value: '',
+        });
+      }
       setOpen(newOpen);
     }
   }
@@ -57,17 +75,27 @@ export const AddSecret: FC = () => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="text-primary">
-          <CirclePlus />
-          Add new
-        </Button>
+        {isEditMode ? (
+          <Button variant="ghost">
+            <SquarePen />
+          </Button>
+        ) : (
+          <Button variant="ghost" className="text-primary">
+            <CirclePlus />
+            Add new
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New Secret</DialogTitle>
+          <DialogTitle>
+            {isEditMode ? 'Edit Secret' : 'Add New Secret'}
+          </DialogTitle>
         </DialogHeader>
         <DialogDescription className="mb-6">
-          Please provide a name and secret for the new entry.
+          {isEditMode
+            ? 'Please provide a new secret value.'
+            : 'Please provide a name and secret for the new entry.'}
         </DialogDescription>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid gap-2">
@@ -79,11 +107,12 @@ export const AddSecret: FC = () => {
                 <>
                   <Input
                     id="name"
-                    placeholder="Enter secret name"
+                    placeholder={isEditMode ? '' : 'Enter secret name'}
                     {...field}
-                    aria-invalid={!!fieldState.error}
+                    disabled={isEditMode}
+                    aria-invalid={!isEditMode && !!fieldState.error}
                   />
-                  {fieldState.error && (
+                  {!isEditMode && fieldState.error && (
                     <div className="text-destructive text-sm">
                       {fieldState.error.message}
                     </div>
@@ -93,7 +122,7 @@ export const AddSecret: FC = () => {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="secret">Value</Label>
+            <Label htmlFor="value">Value</Label>
             <Controller
               control={form.control}
               name="value"
@@ -120,7 +149,7 @@ export const AddSecret: FC = () => {
                 Cancel
               </Button>
               <Button type="submit" className="">
-                Save Changes
+                {isEditMode ? 'Replace' : 'Save Changes'}
               </Button>
             </div>
           </DialogFooter>

@@ -1,5 +1,4 @@
 import { type FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import {
   Table,
   TableHeader,
@@ -8,11 +7,10 @@ import {
   TableHead,
   TableCell,
 } from '@oasisprotocol/ui-library/src/components/ui/table';
-import { LockKeyhole, SquarePen } from 'lucide-react';
+import { LockKeyhole } from 'lucide-react';
 import type { RoflAppSecrets } from '../../../nexus/api';
 import { RemoveSecret } from './RemoveSecret';
-import { AddSecret } from './AddSecret';
-import { EditSecret } from './EditSecret';
+import { SecretDialog } from './SecretDialog';
 
 type AppSecretsProps = {
   secrets: RoflAppSecrets;
@@ -42,7 +40,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({ secrets }) => {
                   {key}: [{(secrets[key] as string).length} bytes]
                 </TableCell>
                 <TableCell className="w-10">
-                  <EditSecret secret={key} />
+                  <SecretDialog mode="edit" secret={key} />
                 </TableCell>
                 <TableCell className="w-10">
                   <RemoveSecret secret={key} />
@@ -52,7 +50,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({ secrets }) => {
           </TableBody>
         </Table>
       )}
-      <AddSecret />
+      <SecretDialog mode="add" />
     </div>
   );
 };
