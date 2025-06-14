@@ -12,6 +12,7 @@ import { LockKeyhole, SquarePen } from 'lucide-react';
 import type { RoflAppSecrets } from '../../../nexus/api';
 import { RemoveSecret } from './RemoveSecret';
 import { AddSecret } from './AddSecret';
+import { EditSecret } from './EditSecret';
 
 type AppSecretsProps = {
   secrets: RoflAppSecrets;
@@ -41,9 +42,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({ secrets }) => {
                   {key}: [{(secrets[key] as string).length} bytes]
                 </TableCell>
                 <TableCell className="w-10">
-                  <Button variant="ghost">
-                    <SquarePen />
-                  </Button>
+                  <EditSecret secret={key} />
                 </TableCell>
                 <TableCell className="w-10">
                   <RemoveSecret secret={key} />
