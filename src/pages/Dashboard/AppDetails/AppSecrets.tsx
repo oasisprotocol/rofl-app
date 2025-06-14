@@ -1,0 +1,56 @@
+import { type FC } from 'react';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from '@oasisprotocol/ui-library/src/components/ui/table';
+import { LockKeyhole } from 'lucide-react';
+import type { RoflAppSecrets } from '../../../nexus/api';
+import { RemoveSecret } from './RemoveSecret';
+import { SecretDialog } from './SecretDialog';
+
+type AppSecretsProps = {
+  secrets: RoflAppSecrets;
+};
+
+export const AppSecrets: FC<AppSecretsProps> = ({ secrets }) => {
+  const hasSecrets = Object.keys(secrets).length > 0;
+  return (
+    <div className="space-y-4">
+      {hasSecrets && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead></TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Object.keys(secrets).map((key) => (
+              <TableRow key={key}>
+                <TableCell>
+                  <LockKeyhole size={16} className="font-white" />
+                </TableCell>
+                <TableCell>
+                  {key}: [{(secrets[key] as string).length} bytes]
+                </TableCell>
+                <TableCell className="w-10">
+                  <SecretDialog mode="edit" secret={key} />
+                </TableCell>
+                <TableCell className="w-10">
+                  <RemoveSecret secret={key} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+      <SecretDialog mode="add" />
+    </div>
+  );
+};

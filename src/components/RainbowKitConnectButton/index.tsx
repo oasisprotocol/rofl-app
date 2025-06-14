@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { ChevronDown, Wallet } from 'lucide-react';
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/dropdown-menu';
 import { AccountAvatar } from '../AccountAvatar';
-import { useDisconnect } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,6 +34,14 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
   const isMobile = useIsMobile();
   const { disconnect } = useDisconnect();
   const navigate = useNavigate();
+  const { chainId } = useAccount();
+  const [selectedChainId, setSelectedChainId] = useState(chainId);
+  useEffect(() => {
+    if (chainId && chainId !== selectedChainId) {
+      setSelectedChainId(chainId);
+      navigate('/dashboard');
+    }
+  }, [chainId, navigate, selectedChainId]);
 
   const handleDisconnect = () => {
     disconnect();

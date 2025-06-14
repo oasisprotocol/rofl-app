@@ -49,7 +49,9 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
                 <>{app.metadata?.['net.oasis.rofl.version']}</>
               </Badge>
             )}
-            <span className="text-xs text-muted-foreground">{app.id}</span>
+            <span className="text-xs text-muted-foreground break-all">
+              {app.id}
+            </span>
           </div>
         )}
       </CardContent>
