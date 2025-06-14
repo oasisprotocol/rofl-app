@@ -19,7 +19,7 @@ type RemoveSecretProps = {
 export const RemoveSecret: FC<RemoveSecretProps> = ({ secret }) => {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button
           variant="ghost"
           className="text-destructive hover:text-destructive"
@@ -35,10 +35,10 @@ export const RemoveSecret: FC<RemoveSecretProps> = ({ secret }) => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <DialogClose>
+          <DialogClose asChild>
             <Button
               variant="destructive"
               onClick={() => console.log('trigger stop action')}
