@@ -35,7 +35,7 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine }) => {
             {/* TODO */}
             ROFL App name
           </span>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground break-all">
             {machine.scheduler}
           </span>
         </div>
