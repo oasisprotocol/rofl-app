@@ -11,7 +11,7 @@ export const MyAppsEmptyState: FC = () => {
       description="  At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
     >
       <Button asChild>
-        <Link to="/dashboard/create">
+        <Link to="/create">
           Create
           <Plus className="ml-2 h-4 w-4" />
         </Link>
