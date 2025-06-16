@@ -31,7 +31,7 @@ export const Header: FC = () => {
         <div className="flex items-center gap-4">
           {isConnected && (
             <Button asChild>
-              <Link to="/dashboard/create">
+              <Link to="/create">
                 Create
                 <Plus className="ml-2 h-4 w-4" />
               </Link>

@@ -53,8 +53,8 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="apps/:id" element={<AppDetails />} />
                 <Route path="machines" element={<Machines />} />
                 <Route path="machines/:id" element={<MachinesDetails />} />
-                <Route path="create" element={<Create />} />
               </Route>
+              <Route path="/create" element={<Create />} />
               <Route path="/explore" element={<MainLayout />}>
                 <Route index element={<Explore />} />
               </Route>
