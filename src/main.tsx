@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { WagmiProvider } from 'wagmi';
+import { CreateContextProvider } from './pages/CreateApp/CreateContextProvider';
 import { Landing } from './pages/Landing';
 import { Dashboard } from './pages/Dashboard';
 import { MyApps } from './pages/Dashboard/MyApps';
@@ -45,20 +46,22 @@ createRoot(document.getElementById('root')!).render(
           )}
         >
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/dashboard" element={<MainLayout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="apps" element={<MyApps />} />
-                <Route path="apps/:id" element={<AppDetails />} />
-                <Route path="machines" element={<Machines />} />
-                <Route path="machines/:id" element={<MachinesDetails />} />
-              </Route>
-              <Route path="/create" element={<Create />} />
-              <Route path="/explore" element={<MainLayout />}>
-                <Route index element={<Explore />} />
-              </Route>
-            </Routes>
+            <CreateContextProvider>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/dashboard" element={<MainLayout />}>
+                  <Route index element={<Dashboard />} />
+                  <Route path="apps" element={<MyApps />} />
+                  <Route path="apps/:id" element={<AppDetails />} />
+                  <Route path="machines" element={<Machines />} />
+                  <Route path="machines/:id" element={<MachinesDetails />} />
+                </Route>
+                <Route path="/create" element={<Create />}></Route>
+                <Route path="/explore" element={<MainLayout />}>
+                  <Route index element={<Explore />} />
+                </Route>
+              </Routes>
+            </CreateContextProvider>
           </BrowserRouter>
         </RainbowKitProvider>
       </QueryClientProvider>
