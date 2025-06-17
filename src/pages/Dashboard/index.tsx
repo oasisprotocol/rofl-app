@@ -48,8 +48,14 @@ export const Dashboard: FC = () => {
     <>
       <div className="space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <MetricCard title="ROFL Apps Running" value={appsNumber} />
-          <MetricCard title="Machines Running" value={machinesNumber} />
+          {isLoading && <Skeleton className="w-full h-[120px]" />}
+          {isFetched && (
+            <MetricCard title="ROFL Apps Running" value={appsNumber} />
+          )}
+          {isProviderLoading && <Skeleton className="w-full h-[120px]" />}
+          {isProviderFetched && (
+            <MetricCard title="Machines Running" value={machinesNumber} />
+          )}
           <MetricCard title="Failures" value={failuresNumber} />
         </div>
         <SectionHeader

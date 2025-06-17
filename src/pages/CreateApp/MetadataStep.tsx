@@ -9,15 +9,22 @@ type MetadataStepProps = {
 
 export const MetadataStep: FC<MetadataStepProps> = ({ handleNext }) => {
   return (
-    <CreateLayout currentStep={1}>
-      <div className="max-w-md mx-auto px-8 py-12 flex flex-col gap-8 items-center">
-        <CreateFormHeader
-          title="Input Your Public ROFL Metadata"
-          description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet
-            vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
-        />
-        <CreateFormNavigation handleNext={handleNext} />
-      </div>
+    <CreateLayout
+      currentStep={1}
+      hints={[
+        {
+          title: 'Tips and Tricks',
+          description:
+            'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
+        },
+      ]}
+    >
+      <CreateFormHeader
+        title="Input Your Public ROFL Metadata"
+        description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet
+          vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
+      />
+      <CreateFormNavigation handleNext={handleNext} />
     </CreateLayout>
   );
 };
