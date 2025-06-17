@@ -33,6 +33,3 @@ export const SectionHeader: FC<SectionHeaderProps> = ({
     </div>
   );
 };
-
-// 20px white
-// 14px muted-foreground

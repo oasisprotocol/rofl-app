@@ -19,8 +19,6 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
   children,
   currentStep = 1,
 }) => {
-  // Steps are 0-indexed in the index.tsx file, but we're starting from 1 here
-  // because the first step (Template) has its own layout
   const sidebarItems = [
     { label: 'Metadata Input', active: currentStep === 1 },
     { label: 'Agent Specific Stuff', active: currentStep === 2 },
@@ -45,6 +43,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
                 </span>
                 {sidebarItems.map((item, index) => (
                   <SidebarItemLabel
+                    completed={index < currentStep - 1}
                     active={item.active}
                     key={item.label}
                     index={index}
