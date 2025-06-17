@@ -10,7 +10,7 @@ import {
   CardContent,
   CardFooter,
 } from '@oasisprotocol/ui-library/src/components/ui/card';
-import ElizaBg from './images/eliza.svg';
+import Empyreal from './images/empyreal.svg';
 
 type TemplateStepProps = {
   handleNext: () => void;
@@ -31,12 +31,12 @@ export const TemplateStep: FC<TemplateStepProps> = ({ handleNext }) => {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="rounded-md">
-              <div className="rounded-t-md bg-black -mt-6 flex items-center justify-center pb-2">
-                <img src={ElizaBg} alt="Eliza" />
+            <Card className="rounded-md pt-6">
+              <div className="rounded-t-md bg-black -mt-6 flex items-center justify-center">
+                <img src={Empyreal} alt="Empyreal" className="w-full" />
               </div>
-              <CardHeader>
-                <CardTitle className="text-white text-lg">elizaOS</CardTitle>
+              <CardHeader className="gap-0">
+                <CardTitle className="text-white text-lg">Empyreal</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <span className="text-muted-foreground text-sm">
