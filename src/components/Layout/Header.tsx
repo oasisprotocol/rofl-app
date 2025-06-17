@@ -1,5 +1,6 @@
 import { useState, type FC } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useCreate } from '../../pages/CreateApp/useCreate';
 import Logotype from './logo.svg';
 import { RainbowKitConnectButton } from '../RainbowKitConnectButton';
 import { Menu, Plus } from 'lucide-react';
@@ -20,6 +21,15 @@ export const Header: FC = () => {
   const isMobile = useIsMobile();
   const { isConnected } = useAccount();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const createContext = useCreate();
+
+  const handleCreateClick = () => {
+    if (createContext) {
+      createContext.resetStep();
+    }
+    navigate('/create');
+  };
 
   return (
     <div className="w-full flex justify-between items-center">
@@ -30,11 +40,9 @@ export const Header: FC = () => {
       <div className="hidden md:flex">
         <div className="flex items-center gap-4">
           {isConnected && (
-            <Button asChild>
-              <Link to="/create">
-                Create
-                <Plus className="ml-2 h-4 w-4" />
-              </Link>
+            <Button onClick={handleCreateClick}>
+              Create
+              <Plus className="ml-2 h-4 w-4" />
             </Button>
           )}
           <RainbowKitConnectButton />
