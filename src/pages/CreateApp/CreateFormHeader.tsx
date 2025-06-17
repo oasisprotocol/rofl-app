@@ -10,7 +10,7 @@ export const CreateFormHeader: FC<CreateFormHeaderProps> = ({
   description,
 }) => {
   return (
-    <div className="mb-8">
+    <div>
       <h1 className="text-2xl font-white font-bold mb-2">{title}</h1>
       <p className="text-muted-foreground text-md max-w-md">{description}</p>
     </div>
