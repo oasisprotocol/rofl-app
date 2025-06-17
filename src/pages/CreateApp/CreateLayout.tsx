@@ -9,15 +9,30 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/sidebar';
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
 import { SidebarItemLabel } from './SidebarItemLabel';
+import {
+  Card,
+  CardContent,
+} from '@oasisprotocol/ui-library/src/components/ui/card';
+import { ArrowUpRight } from 'lucide-react';
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 
 type CreateLayoutProps = {
   children: ReactNode;
   currentStep?: number;
+  docsLink?: string;
+  hints?:
+    | {
+        title: string;
+        description: string;
+      }[]
+    | undefined;
 };
 
 export const CreateLayout: FC<CreateLayoutProps> = ({
   children,
   currentStep = 1,
+  docsLink,
+  hints = [],
 }) => {
   const sidebarItems = [
     { label: 'Metadata Input', active: currentStep === 1 },
@@ -56,7 +71,39 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
         </Sidebar>
       }
     >
-      <div className="flex-1 p-5 h-5/6">{children}</div>
+      <div className="flex-1 p-6 h-full">
+        <div className="flex-1 flex flex-col md:flex-row items-start h-full">
+          <div className="max-w-md mx-auto px-8 py-12 flex flex-col gap-8 items-center">
+            {children}
+          </div>
+          <Card className="rounded-md md:w-[200px] border-0 p-4 gap-0 md:h-full">
+            <CardContent className="text-muted-foreground text-sm p-0 flex-1">
+              <div className="flex flex-col justify-between h-full">
+                {hints.map((hint, index) => (
+                  <div key={index}>
+                    <div className="text-foreground text-sm font-semibold pb-2">
+                      {hint.title}
+                    </div>
+                    <div>{hint.description}</div>
+                  </div>
+                ))}
+                <Button variant="secondary" asChild className="w-full mt-6">
+                  <a
+                    href={docsLink ?? 'https://docs.oasis.io/'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="flex items-center justify-center">
+                      <span>Read our Docs</span>
+                      <ArrowUpRight className="ml-2 h-4 w-4" />
+                    </span>
+                  </a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </Layout>
   );
 };
