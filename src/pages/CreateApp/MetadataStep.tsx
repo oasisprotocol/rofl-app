@@ -9,7 +9,7 @@ import { metadataFormSchema, type MetadataFormData } from './types';
 
 type MetadataStepProps = {
   handleNext: () => void;
-  setAppDataForm: (data: Partial<{ metadata: MetadataFormData }>) => void;
+  setAppDataForm: (data: { metadata: MetadataFormData }) => void;
   metadata?: MetadataFormData;
 };
 

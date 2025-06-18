@@ -21,13 +21,29 @@ export const metadataFormSchema = z.object({
   homepage: z.string().optional(),
 });
 
+export const agentFormSchema = z.object({
+  modelProvider: z.string().min(1, {
+    message: 'Model provider is required.',
+  }),
+  model: z.string().min(1, {
+    message: 'Model is required.',
+  }),
+  apiKey: z.string().min(1, {
+    message: 'API key is required.',
+  }),
+  prompt: z.string().min(1, {
+    message: 'Prompt is required.',
+  }),
+});
+
 export type TemplateFormData = string;
 export type MetadataFormData = z.infer<typeof metadataFormSchema>;
+export type AgentFormData = z.infer<typeof agentFormSchema>;
 
 export type AppData = {
   template?: string;
   metadata?: MetadataFormData;
-  agent?: Record<string, unknown>;
+  agent?: AgentFormData;
   build?: Record<string, unknown>;
   payment?: Record<string, unknown>;
   bootstrap?: Record<string, unknown>;

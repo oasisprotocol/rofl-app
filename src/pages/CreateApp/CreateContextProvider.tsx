@@ -12,7 +12,12 @@ const initAppDataState: AppData = {
     version: '',
     homepage: '',
   },
-  agent: {},
+  agent: {
+    modelProvider: '',
+    model: '',
+    apiKey: '',
+    prompt: '',
+  },
   build: {},
   payment: {},
   bootstrap: {},

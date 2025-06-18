@@ -38,6 +38,7 @@ const CreateContent: FC = () => {
 
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
+      <h1>{JSON.stringify(appData, null, 2)}</h1>
       {currentStep === 0 && (
         <TemplateStep handleNext={handleNext} setAppDataForm={setAppDataForm} />
       )}
@@ -49,7 +50,12 @@ const CreateContent: FC = () => {
         />
       )}
       {currentStep === 2 && (
-        <AgentStep handleNext={handleNext} handleBack={handleBack} />
+        <AgentStep
+          handleNext={handleNext}
+          handleBack={handleBack}
+          agent={appData?.agent}
+          setAppDataForm={setAppDataForm}
+        />
       )}
       {currentStep === 3 && (
         <BuildStep handleNext={handleNext} handleBack={handleBack} />
