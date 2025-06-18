@@ -11,12 +11,22 @@ import {
   CardFooter,
 } from '@oasisprotocol/ui-library/src/components/ui/card';
 import Empyreal from './images/empyreal.svg';
+import type { TemplateFormData } from './types';
 
 type TemplateStepProps = {
   handleNext: () => void;
+  setAppDataForm: (data: Partial<{ template: TemplateFormData }>) => void;
 };
 
-export const TemplateStep: FC<TemplateStepProps> = ({ handleNext }) => {
+export const TemplateStep: FC<TemplateStepProps> = ({
+  handleNext,
+  setAppDataForm,
+}) => {
+  const handleTemplateSelect = () => {
+    setAppDataForm({ template: 'empyreal' });
+    handleNext();
+  };
+
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
       <Layout headerContent={<Header />} footerContent={<Footer />}>
@@ -45,7 +55,7 @@ export const TemplateStep: FC<TemplateStepProps> = ({ handleNext }) => {
                 </span>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" onClick={handleNext}>
+                <Button className="w-full" onClick={handleTemplateSelect}>
                   Select
                 </Button>
               </CardFooter>

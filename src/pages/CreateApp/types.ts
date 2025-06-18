@@ -21,6 +21,7 @@ export const metadataFormSchema = z.object({
   homepage: z.string().optional(),
 });
 
+export type TemplateFormData = string;
 export type MetadataFormData = z.infer<typeof metadataFormSchema>;
 
 export type AppData = {

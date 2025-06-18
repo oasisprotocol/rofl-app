@@ -38,7 +38,9 @@ const CreateContent: FC = () => {
 
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
-      {currentStep === 0 && <TemplateStep handleNext={handleNext} />}
+      {currentStep === 0 && (
+        <TemplateStep handleNext={handleNext} setAppDataForm={setAppDataForm} />
+      )}
       {currentStep === 1 && (
         <MetadataStep
           handleNext={handleNext}
