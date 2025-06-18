@@ -3,8 +3,15 @@ import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
 import { Header } from '../../components/Layout/Header';
 import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
+import type { AppData } from './types';
 
-export const BootstrapStep: FC = () => {
+type BootstrapStepProps = {
+  appData?: AppData;
+};
+
+export const BootstrapStep: FC<BootstrapStepProps> = ({ appData }) => {
+  console.log(JSON.stringify(appData, null, 2));
+
   return (
     <Layout headerContent={<Header />} footerContent={<Footer />}>
       <div className="w-full px-8 py-12 flex flex-col items-center justify-center">

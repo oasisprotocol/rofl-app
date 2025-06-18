@@ -1,6 +1,30 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { CreateContext } from './CreateContext';
+import type { AppData } from './types';
+
+const initAppDataState: AppData = {
+  template: '',
+  metadata: {
+    name: '',
+    author: '',
+    description: '',
+    version: '',
+    homepage: '',
+  },
+  agent: {
+    modelProvider: '',
+    model: '',
+    apiKey: '',
+    prompt: '',
+  },
+  build: {
+    artifacts: 'oasis boot 0.5.0, ROFL container 0.5.1',
+    provider: 'OPF',
+    resources: 'small',
+  },
+  payment: {},
+};
 
 export const CreateContextProvider = ({
   children,
@@ -8,13 +32,25 @@ export const CreateContextProvider = ({
   children: ReactNode;
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
-
+  const [appData, setAppData] = useState<AppData>(initAppDataState);
+  const setAppDataForm = (data: Partial<AppData>) => {
+    setAppData((prevData) => ({ ...prevData, ...data }));
+  };
   const resetStep = () => {
     setCurrentStep(0);
+    setAppData(initAppDataState);
   };
 
   return (
-    <CreateContext.Provider value={{ currentStep, setCurrentStep, resetStep }}>
+    <CreateContext.Provider
+      value={{
+        currentStep,
+        setCurrentStep,
+        resetStep,
+        appData,
+        setAppDataForm,
+      }}
+    >
       {children}
     </CreateContext.Provider>
   );

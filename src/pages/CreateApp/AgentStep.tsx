@@ -1,42 +1,29 @@
-import { type FC, useEffect } from 'react';
+import { type FC, useEffect, useRef } from 'react';
 import { CreateLayout } from './CreateLayout';
 import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { InputFormField } from './InputFormField';
 import { SelectFormField } from './SelectFormField';
-
-const formSchema = z.object({
-  modelProvider: z.string().min(1, {
-    message: 'Model provider is required.',
-  }),
-  model: z.string().min(1, {
-    message: 'Model is required.',
-  }),
-  apiKey: z.string().min(1, {
-    message: 'API key is required.',
-  }),
-  prompt: z.string().min(1, {
-    message: 'Prompt is required.',
-  }),
-});
+import { agentFormSchema, type AgentFormData } from './types';
 
 type AgentStepProps = {
   handleNext: () => void;
   handleBack: () => void;
+  agent?: AgentFormData;
+  setAppDataForm: (data: { agent: AgentFormData }) => void;
 };
 
-export const AgentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      modelProvider: '',
-      model: '',
-      apiKey: '',
-      prompt: '',
-    },
+export const AgentStep: FC<AgentStepProps> = ({
+  handleNext,
+  handleBack,
+  agent,
+  setAppDataForm,
+}) => {
+  const form = useForm<AgentFormData>({
+    resolver: zodResolver(agentFormSchema),
+    defaultValues: { ...agent },
   });
 
   const modelProvider = useWatch({
@@ -44,20 +31,30 @@ export const AgentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
     name: 'modelProvider',
   });
 
+  const previousModelProvider = useRef<string | undefined>(modelProvider);
+
   useEffect(() => {
-    if (modelProvider === 'openai') {
-      form.setValue('model', 'gpt-4o');
-    } else if (modelProvider === 'anthropic') {
-      form.setValue('model', 'sonnet-3.7');
-    } else {
+    if (
+      previousModelProvider.current !== undefined &&
+      previousModelProvider.current !== modelProvider
+    ) {
       form.setValue('model', '');
     }
+    previousModelProvider.current = modelProvider;
   }, [modelProvider, form]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('Agent values:', values);
+  function onSubmit(values: AgentFormData) {
+    setAppDataForm({ agent: values });
     handleNext();
   }
+
+  const handleFormSubmit = () => {
+    form.trigger().then((isValid) => {
+      if (isValid) {
+        form.handleSubmit(onSubmit)();
+      }
+    });
+  };
 
   const getModelOptions = () => {
     if (modelProvider === 'openai') {
@@ -67,8 +64,6 @@ export const AgentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
     }
     return [];
   };
-
-  const formHasErrors = !form.formState.isValid;
 
   return (
     <CreateLayout
@@ -114,6 +109,7 @@ export const AgentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
           name="apiKey"
           label="Model Provider API Key"
           placeholder="Paste or type key here"
+          type="password"
         />
 
         <InputFormField
@@ -125,9 +121,9 @@ export const AgentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
         />
 
         <CreateFormNavigation
-          handleNext={form.handleSubmit(onSubmit)}
+          handleNext={handleFormSubmit}
           handleBack={handleBack}
-          disabled={formHasErrors || !form.formState.isDirty}
+          disabled={form.formState.isSubmitting}
         />
       </form>
     </CreateLayout>
