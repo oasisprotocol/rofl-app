@@ -67,7 +67,7 @@ const CreateContent: FC = () => {
       {currentStep === 4 && (
         <PaymentStep handleNext={handleNext} handleBack={handleBack} />
       )}
-      {currentStep === 5 && <BootstrapStep />}
+      {currentStep === 5 && <BootstrapStep appData={appData} />}
     </div>
   );
 };
