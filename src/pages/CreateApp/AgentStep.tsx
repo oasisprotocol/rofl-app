@@ -45,19 +45,21 @@ export const AgentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
   });
 
   useEffect(() => {
-    if (modelProvider === 'openai') {
-      form.setValue('model', 'gpt-4o');
-    } else if (modelProvider === 'anthropic') {
-      form.setValue('model', 'sonnet-3.7');
-    } else {
-      form.setValue('model', '');
-    }
+    form.setValue('model', '');
   }, [modelProvider, form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log('Agent values:', values);
     handleNext();
   }
+
+  const handleFormSubmit = () => {
+    form.trigger().then((isValid) => {
+      if (isValid) {
+        form.handleSubmit(onSubmit)();
+      }
+    });
+  };
 
   const getModelOptions = () => {
     if (modelProvider === 'openai') {
@@ -67,8 +69,6 @@ export const AgentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
     }
     return [];
   };
-
-  const formHasErrors = !form.formState.isValid;
 
   return (
     <CreateLayout
@@ -125,9 +125,9 @@ export const AgentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
         />
 
         <CreateFormNavigation
-          handleNext={form.handleSubmit(onSubmit)}
+          handleNext={handleFormSubmit}
           handleBack={handleBack}
-          disabled={formHasErrors || !form.formState.isDirty}
+          disabled={form.formState.isSubmitting}
         />
       </form>
     </CreateLayout>

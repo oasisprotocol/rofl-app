@@ -22,12 +22,10 @@ const formSchema = z.object({
     .regex(
       /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/,
       {
-        message: 'Version must be valid semver format (e.g., 1.0.0).',
+        message: 'Version must be valid semver format.',
       }
     ),
-  homepage: z.string().min(1, {
-    message: 'Homepage is required.',
-  }),
+  homepage: z.string().optional(),
 });
 
 type MetadataStepProps = {
@@ -41,7 +39,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({ handleNext }) => {
       name: '',
       author: '',
       description: '',
-      version: '0.1.0',
+      version: '',
       homepage: '',
     },
   });
@@ -51,7 +49,13 @@ export const MetadataStep: FC<MetadataStepProps> = ({ handleNext }) => {
     handleNext();
   };
 
-  const formHasErrors = !form.formState.isValid;
+  const handleFormSubmit = () => {
+    form.trigger().then((isValid) => {
+      if (isValid) {
+        form.handleSubmit(onSubmit)();
+      }
+    });
+  };
 
   return (
     <CreateLayout
@@ -96,7 +100,12 @@ export const MetadataStep: FC<MetadataStepProps> = ({ handleNext }) => {
           type="textarea"
         />
 
-        <InputFormField control={form.control} name="version" label="Version" />
+        <InputFormField
+          control={form.control}
+          name="version"
+          label="Version"
+          placeholder="Rofl App version"
+        />
 
         <InputFormField
           control={form.control}
@@ -106,8 +115,8 @@ export const MetadataStep: FC<MetadataStepProps> = ({ handleNext }) => {
         />
 
         <CreateFormNavigation
-          handleNext={form.handleSubmit(onSubmit)}
-          disabled={formHasErrors || !form.formState.isDirty}
+          handleNext={handleFormSubmit}
+          disabled={form.formState.isSubmitting}
         />
       </form>
     </CreateLayout>

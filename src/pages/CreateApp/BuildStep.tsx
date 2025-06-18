@@ -68,7 +68,13 @@ export const BuildStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
     handleNext();
   };
 
-  const formHasErrors = !form.formState.isValid;
+  const handleFormSubmit = () => {
+    form.trigger().then((isValid) => {
+      if (isValid) {
+        form.handleSubmit(onSubmit)();
+      }
+    });
+  };
 
   return (
     <CreateLayout
@@ -164,9 +170,9 @@ export const BuildStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
           />
         </div>
         <CreateFormNavigation
-          handleNext={() => form.handleSubmit(onSubmit)()}
+          handleNext={handleFormSubmit}
           handleBack={handleBack}
-          disabled={formHasErrors}
+          disabled={form.formState.isSubmitting}
         />
       </form>
     </CreateLayout>
