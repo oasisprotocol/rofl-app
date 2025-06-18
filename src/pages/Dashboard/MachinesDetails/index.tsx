@@ -37,7 +37,7 @@ export const MachinesDetails: FC = () => {
 
               <TabsList className="w-full md:w-auto">
                 <TabsTrigger value="details">Details</TabsTrigger>
-                <TabsTrigger value="logs">Logs</TabsTrigger>
+                {/* <TabsTrigger value="logs">Logs</TabsTrigger> */}
               </TabsList>
             </div>
           </div>
@@ -64,11 +64,11 @@ export const MachinesDetails: FC = () => {
               </DetailsSectionRow>
             </div>
           </TabsContent>
-          <TabsContent value="logs">
+          {/* <TabsContent value="logs">
             <div className="whitespace-pre-wrap font-mono text-sm bg-card text-foreground mt-6 p-6 rounded-sm overflow-auto leading-relaxed">
               [2024-01-15 10:30:25] INFO: Application started
             </div>
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </div>
     </>

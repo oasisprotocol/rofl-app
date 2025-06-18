@@ -1,4 +1,4 @@
-import Empyreal from './images/empyreal.svg';
+import Empyreal from './images/empyreal.webp';
 
 export const templates = [
   {
