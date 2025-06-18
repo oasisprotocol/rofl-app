@@ -1356,6 +1356,7 @@ In practice, Nexus currently expects only the following methods:
   - "rofl.Register"
   - "roflmarket.ProviderCreate"
   - "roflmarket.ProviderUpdate"
+  - "roflmarket.ProviderUpdateOffers"
   - "roflmarket.ProviderRemove"
   - "roflmarket.InstanceCreate"
   - "roflmarket.InstanceTopUp"
@@ -2516,6 +2517,10 @@ export type GetRuntimeRoflAppsParams = {
 
  */
   offset?: number;
+  /**
+   * A filter on the admin of the ROFL app.
+   */
+  admin?: EthOrOasisAddress;
   /**
    * A filter on the name of the ROFL app. If multiple names are provided, the ROFL App must match all of them.
    */
