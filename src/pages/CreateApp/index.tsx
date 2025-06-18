@@ -7,7 +7,7 @@ import { BuildStep } from './BuildStep';
 import { PaymentStep } from './PaymentStep';
 import { BootstrapStep } from './BootstrapStep';
 
-const CreateContent: FC = () => {
+export const Create: FC = () => {
   const context = useCreate();
 
   if (!context) {
@@ -35,6 +35,8 @@ const CreateContent: FC = () => {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  const selectedTemplateName = appData?.template?.name || 'TEMPLATE_NAME';
 
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
@@ -70,8 +72,4 @@ const CreateContent: FC = () => {
       {currentStep === 5 && <BootstrapStep appData={appData} />}
     </div>
   );
-};
-
-export const Create: FC = () => {
-  return <CreateContent />;
 };
