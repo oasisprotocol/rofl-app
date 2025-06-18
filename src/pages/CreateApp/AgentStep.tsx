@@ -7,6 +7,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { InputFormField } from './InputFormField';
 import { SelectFormField } from './SelectFormField';
 import { agentFormSchema, type AgentFormData } from './types';
+import { anthropicModels, deepseekModels, openAiModels } from './ai-models';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -60,9 +61,11 @@ export const AgentStep: FC<AgentStepProps> = ({
 
   const getModelOptions = () => {
     if (modelProvider === 'openai') {
-      return [{ value: 'gpt-4o', label: 'ChatGPT 4o' }];
+      return openAiModels;
     } else if (modelProvider === 'anthropic') {
-      return [{ value: 'sonnet-3.7', label: 'Sonnet-3.7' }];
+      return anthropicModels;
+    } else if (modelProvider === 'deepseek') {
+      return deepseekModels;
     }
     return [];
   };
@@ -96,6 +99,7 @@ export const AgentStep: FC<AgentStepProps> = ({
           options={[
             { value: 'openai', label: 'OpenAI' },
             { value: 'anthropic', label: 'Anthropic' },
+            { value: 'deepseek', label: 'DeepSeek' },
           ]}
         />
 
