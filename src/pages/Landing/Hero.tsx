@@ -1,11 +1,18 @@
+import { useEffect, useState, type FC } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import type { FC } from 'react';
+import HeroImage from './images/hero.svg';
 
 export const Hero: FC = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   return (
-    <section className="p-6 md:p-12">
+    <section className="px-6 md:px-12">
       <div className="grid lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-4">
           <div className="space-y-2">
@@ -28,8 +35,19 @@ export const Hero: FC = () => {
           </Button>
         </div>
 
-        <div className="relative h-96 lg:h-[400px]">
-          {/* Image placeholder */}
+        {/* -mb-[50px] can be removed once the image is properly cropped by designer */}
+        <div
+          className={`-mb-[60px] relative h-96 lg:h-[450px] transition-all duration-1200 delay-500 ease-out ${
+            isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+          }`}
+        >
+          <div className="relative w-full h-full flex items-start justify-center">
+            <img
+              src={HeroImage}
+              alt="Oasis ROFL"
+              className="max-w-full max-h-full object-contain drop-shadow-2xl"
+            />
+          </div>
         </div>
       </div>
     </section>
