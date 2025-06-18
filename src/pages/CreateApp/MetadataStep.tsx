@@ -17,9 +17,14 @@ const formSchema = z.object({
   description: z.string().min(1, {
     message: 'Description is required.',
   }),
-  version: z.string().min(1, {
-    message: 'Version is required.',
-  }),
+  version: z
+    .string()
+    .regex(
+      /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/,
+      {
+        message: 'Version must be valid semver format (e.g., 1.0.0).',
+      }
+    ),
   homepage: z.string().min(1, {
     message: 'Homepage is required.',
   }),
