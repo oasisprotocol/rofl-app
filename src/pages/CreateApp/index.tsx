@@ -14,7 +14,7 @@ const CreateContent: FC = () => {
     return <div>Error: CreateContext not found</div>;
   }
 
-  const { currentStep, setCurrentStep } = context;
+  const { currentStep, setCurrentStep, appData, setAppDataForm } = context;
   const steps = [
     { component: TemplateStep, label: 'Template Selection' },
     { component: MetadataStep, label: 'Metadata Input' },
@@ -39,7 +39,13 @@ const CreateContent: FC = () => {
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
       {currentStep === 0 && <TemplateStep handleNext={handleNext} />}
-      {currentStep === 1 && <MetadataStep handleNext={handleNext} />}
+      {currentStep === 1 && (
+        <MetadataStep
+          handleNext={handleNext}
+          metadata={appData?.metadata}
+          setAppDataForm={setAppDataForm}
+        />
+      )}
       {currentStep === 2 && (
         <AgentStep handleNext={handleNext} handleBack={handleBack} />
       )}

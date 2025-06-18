@@ -1,51 +1,34 @@
-import { type FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { CreateLayout } from './CreateLayout';
 import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { InputFormField } from './InputFormField';
-
-const formSchema = z.object({
-  name: z.string().min(1, {
-    message: 'Name is required.',
-  }),
-  author: z.string().min(1, {
-    message: 'Author is required.',
-  }),
-  description: z.string().min(1, {
-    message: 'Description is required.',
-  }),
-  version: z
-    .string()
-    .regex(
-      /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/,
-      {
-        message: 'Version must be valid semver format.',
-      }
-    ),
-  homepage: z.string().optional(),
-});
+import { metadataFormSchema, type MetadataFormData } from './types';
 
 type MetadataStepProps = {
   handleNext: () => void;
+  setAppDataForm: (data: Partial<{ metadata: MetadataFormData }>) => void;
+  metadata?: MetadataFormData;
 };
 
-export const MetadataStep: FC<MetadataStepProps> = ({ handleNext }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      author: '',
-      description: '',
-      version: '',
-      homepage: '',
-    },
+export const MetadataStep: FC<MetadataStepProps> = ({
+  handleNext,
+  setAppDataForm,
+  metadata,
+}) => {
+  const form = useForm<MetadataFormData>({
+    resolver: zodResolver(metadataFormSchema),
+    defaultValues: { ...metadata },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log('Metadata values:', values);
+  useEffect(() => {
+    form.reset({ ...metadata });
+  }, [metadata, form]);
+
+  const onSubmit = (values: MetadataFormData) => {
+    setAppDataForm({ metadata: values });
     handleNext();
   };
 
