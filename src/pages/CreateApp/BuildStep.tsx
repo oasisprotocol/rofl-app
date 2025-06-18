@@ -11,6 +11,7 @@ import {
   RadioGroupItem,
 } from '@oasisprotocol/ui-library/src/components/ui/radio-group';
 import { buildFormSchema, type BuildFormData } from './types';
+import { SelectFormField } from './SelectFormField';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -101,12 +102,14 @@ export const BuildStep: FC<AgentStepProps> = ({
           placeholder="oasis boot 0.5.0, ROFL container 0.5.1"
         />
 
-        <InputFormField
+        <SelectFormField
           control={form.control}
           name="provider"
           label="Provider"
-          placeholder="OPF"
+          placeholder="Select provider"
+          options={[{ value: 'OPF', label: 'OPF' }]}
         />
+
         <div className="grid gap-2">
           <Label htmlFor="resources">Resources</Label>
           <Controller
