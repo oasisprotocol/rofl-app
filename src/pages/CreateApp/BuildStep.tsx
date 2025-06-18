@@ -4,8 +4,13 @@ import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { InputFormField } from './InputFormField';
+import { Label } from '@oasisprotocol/ui-library/src/components/ui/label';
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from '@oasisprotocol/ui-library/src/components/ui/radio-group';
 
 const formSchema = z.object({
   artifacts: z.string().min(1, {
@@ -14,6 +19,9 @@ const formSchema = z.object({
   provider: z.string().min(1, {
     message: 'Provider is required.',
   }),
+  resources: z.string().min(1, {
+    message: 'Resources are required.',
+  }),
 });
 
 type AgentStepProps = {
@@ -21,17 +29,42 @@ type AgentStepProps = {
   handleBack: () => void;
 };
 
+const resourceOptions = [
+  {
+    id: 'small',
+    name: 'Small',
+    specs: '1CPU, 2GB RAM, 10GB Storage',
+    price: '500 $ROSE',
+    usdPrice: '~35.00 USD',
+  },
+  {
+    id: 'medium',
+    name: 'Medium',
+    specs: '2CPU, 4GB RAM, 25GB Storage',
+    price: '1000 $ROSE',
+    usdPrice: '~70.00 USD',
+  },
+  {
+    id: 'large',
+    name: 'Large',
+    specs: '4CPU, 8GB RAM, 60GB Storage',
+    price: '1500 $ROSE',
+    usdPrice: '~105.00 USD',
+  },
+];
+
 export const BuildStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       artifacts: 'oasis boot 0.5.0, ROFL container 0.5.1',
       provider: 'OPF',
+      resources: 'small',
     },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log('Metadata values:', values);
+    console.log('Build values:', values);
     handleNext();
   };
 
@@ -70,9 +103,68 @@ export const BuildStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
           label="Provider"
           placeholder="OPF"
         />
-
+        <div className="grid gap-2">
+          <Label htmlFor="resources">Resources</Label>
+          <Controller
+            control={form.control}
+            name="resources"
+            render={({ field, fieldState }) => (
+              <>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  className="space-y-2"
+                >
+                  {resourceOptions.map((option) => (
+                    <div key={option.id} className="relative">
+                      <RadioGroupItem
+                        value={option.id}
+                        id={option.id}
+                        className="peer sr-only"
+                      />
+                      <Label
+                        htmlFor={option.id}
+                        className={`
+                              flex items-center justify-between p-3 rounded-md border cursor-pointer transition-all
+                              hover:bg-card peer-checked:bg-card peer-checked:border-primary
+                              ${
+                                field.value === option.id
+                                  ? 'bg-card border-primary'
+                                  : 'border-border'
+                              }
+                              `}
+                      >
+                        <div className="flex flex-col">
+                          <span className="text-md font-semibold mb-1 text-foreground">
+                            {option.name}
+                          </span>
+                          <span className="text-muted-foreground text-sm">
+                            {option.specs}
+                          </span>
+                        </div>
+                        <div className="flex flex-col items-end">
+                          <span className="text-md font-semibold mb-1 text-foreground">
+                            {option.price}
+                          </span>
+                          <span className="text-muted-foreground text-sm">
+                            {option.usdPrice}
+                          </span>
+                        </div>
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+                {fieldState.error && (
+                  <div className="text-destructive text-sm">
+                    {fieldState.error.message}
+                  </div>
+                )}
+              </>
+            )}
+          />
+        </div>
         <CreateFormNavigation
-          handleNext={handleNext}
+          handleNext={() => form.handleSubmit(onSubmit)()}
           handleBack={handleBack}
           disabled={formHasErrors}
         />
