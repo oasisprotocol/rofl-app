@@ -109,6 +109,7 @@ export const AgentStep: FC<AgentStepProps> = ({
           name="apiKey"
           label="Model Provider API Key"
           placeholder="Paste or type key here"
+          type="password"
         />
 
         <InputFormField
