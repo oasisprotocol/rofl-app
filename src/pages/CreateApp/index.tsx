@@ -38,7 +38,7 @@ export const Create: FC = () => {
   };
 
   const selectedTemplateName = getTemplateById(appData?.template)?.name;
-  console.log('selectedTemplateName', selectedTemplateName);
+
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
       {currentStep === 0 && (
