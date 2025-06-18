@@ -11,15 +11,17 @@ import { useNetwork } from '../../hooks/useNetwork';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { AppCard } from '../../components/AppCard';
 import { MachineCard } from '../../components/MachineCard';
+import { useAccount } from 'wagmi';
 
 const pageLimit = 3;
 
 export const Dashboard: FC = () => {
   const network = useNetwork();
+  const { address } = useAccount();
   const roflAppsQuery = useGetRuntimeRoflApps(network, 'sapphire', {
     limit: pageLimit,
     offset: 0,
-    // TODO: add admin address query parameter when available
+    admin: address,
   });
 
   // TODO: fetch providers for active ROFL apps

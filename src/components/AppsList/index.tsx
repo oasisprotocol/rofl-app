@@ -17,7 +17,7 @@ type AppsListProps = {
 
 export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
   const pageLimit = type === 'dashboard' ? 9 : 18;
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { ref, inView } = useInView();
   const network = useNetwork('mainnet');
 
@@ -34,6 +34,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
       const result = await GetRuntimeRoflApps(network, 'sapphire', {
         limit: pageLimit,
         offset: pageParam,
+        admin: type === 'dashboard' ? address : undefined,
       });
       return result;
     },
