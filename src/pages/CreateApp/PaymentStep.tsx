@@ -6,9 +6,14 @@ import { CreateFormNavigation } from './CreateFormNavigation';
 type AgentStepProps = {
   handleNext: () => void;
   handleBack: () => void;
+  selectedTemplateName?: string;
 };
 
-export const PaymentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
+export const PaymentStep: FC<AgentStepProps> = ({
+  handleNext,
+  handleBack,
+  selectedTemplateName,
+}) => {
   return (
     <CreateLayout
       currentStep={4}
@@ -19,6 +24,7 @@ export const PaymentStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
             'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
         },
       ]}
+      selectedTemplateName={selectedTemplateName}
     >
       <CreateFormHeader
         title="Payment"

@@ -11,12 +11,16 @@ import {
   RadioGroupItem,
 } from '@oasisprotocol/ui-library/src/components/ui/radio-group';
 import { buildFormSchema, type BuildFormData } from './types';
+import { SelectFormField } from './SelectFormField';
+import { useGetRosePrice } from '../../coin-gecko/api';
+import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 
 type AgentStepProps = {
   handleNext: () => void;
   handleBack: () => void;
   build?: BuildFormData;
   setAppDataForm: (data: { build: BuildFormData }) => void;
+  selectedTemplateName?: string;
 };
 
 const resourceOptions = [
@@ -24,22 +28,19 @@ const resourceOptions = [
     id: 'small',
     name: 'Small',
     specs: '1CPU, 2GB RAM, 10GB Storage',
-    price: '500 $ROSE',
-    usdPrice: '~35.00 USD',
+    price: '500 ROSE',
   },
   {
     id: 'medium',
     name: 'Medium',
     specs: '2CPU, 4GB RAM, 25GB Storage',
-    price: '1000 $ROSE',
-    usdPrice: '~70.00 USD',
+    price: '1000 ROSE',
   },
   {
     id: 'large',
     name: 'Large',
     specs: '4CPU, 8GB RAM, 60GB Storage',
-    price: '1500 $ROSE',
-    usdPrice: '~105.00 USD',
+    price: '1500 ROSE',
   },
 ];
 
@@ -48,7 +49,13 @@ export const BuildStep: FC<AgentStepProps> = ({
   handleBack,
   build,
   setAppDataForm,
+  selectedTemplateName,
 }) => {
+  const {
+    data: rosePrice,
+    isLoading: isLoadingRosePrice,
+    isFetched: isFetchedRosePrice,
+  } = useGetRosePrice();
   const form = useForm<BuildFormData>({
     resolver: zodResolver(buildFormSchema),
     defaultValues: { ...build },
@@ -81,6 +88,7 @@ export const BuildStep: FC<AgentStepProps> = ({
             'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
         },
       ]}
+      selectedTemplateName={selectedTemplateName}
     >
       <CreateFormHeader
         title="Build and Deploy"
@@ -98,12 +106,14 @@ export const BuildStep: FC<AgentStepProps> = ({
           placeholder="oasis boot 0.5.0, ROFL container 0.5.1"
         />
 
-        <InputFormField
+        <SelectFormField
           control={form.control}
           name="provider"
           label="Provider"
-          placeholder="OPF"
+          placeholder="Select provider"
+          options={[{ value: 'OPF', label: 'OPF' }]}
         />
+
         <div className="grid gap-2">
           <Label htmlFor="resources">Resources</Label>
           <Controller
@@ -148,7 +158,20 @@ export const BuildStep: FC<AgentStepProps> = ({
                             {option.price}
                           </span>
                           <span className="text-muted-foreground text-sm">
-                            {option.usdPrice}
+                            {isLoadingRosePrice && (
+                              <Skeleton className="w-full h-[20px] w-[80px]" />
+                            )}
+                            {isFetchedRosePrice && rosePrice && (
+                              <span>
+                                ~
+                                {new Intl.NumberFormat('en-US', {
+                                  style: 'currency',
+                                  currency: 'USD',
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                }).format(parseFloat(option.price) * rosePrice)}
+                              </span>
+                            )}
                           </span>
                         </div>
                       </Label>

@@ -26,6 +26,7 @@ type CreateLayoutProps = {
         description: string;
       }[]
     | undefined;
+  selectedTemplateName?: string;
 };
 
 export const CreateLayout: FC<CreateLayoutProps> = ({
@@ -33,6 +34,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
   currentStep = 1,
   docsLink,
   hints = [],
+  selectedTemplateName,
 }) => {
   const sidebarItems = [
     { label: 'Metadata Input', active: currentStep === 1 },
@@ -53,8 +55,8 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
                 <span className="text-xl font-semibold text-white">
                   ROFL App Creation
                 </span>
-                <span className="text-xs text-muted-foreground pb-8">
-                  with TEMPLATE_NAME
+                <span className="text-sm text-muted-foreground pb-8">
+                  with {selectedTemplateName}
                 </span>
                 {sidebarItems.map((item, index) => (
                   <SidebarItemLabel

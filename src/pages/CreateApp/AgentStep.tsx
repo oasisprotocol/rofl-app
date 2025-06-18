@@ -7,12 +7,14 @@ import { useForm, useWatch } from 'react-hook-form';
 import { InputFormField } from './InputFormField';
 import { SelectFormField } from './SelectFormField';
 import { agentFormSchema, type AgentFormData } from './types';
+import { anthropicModels, deepseekModels, openAiModels } from './ai-models';
 
 type AgentStepProps = {
   handleNext: () => void;
   handleBack: () => void;
   agent?: AgentFormData;
   setAppDataForm: (data: { agent: AgentFormData }) => void;
+  selectedTemplateName?: string;
 };
 
 export const AgentStep: FC<AgentStepProps> = ({
@@ -20,6 +22,7 @@ export const AgentStep: FC<AgentStepProps> = ({
   handleBack,
   agent,
   setAppDataForm,
+  selectedTemplateName,
 }) => {
   const form = useForm<AgentFormData>({
     resolver: zodResolver(agentFormSchema),
@@ -58,9 +61,11 @@ export const AgentStep: FC<AgentStepProps> = ({
 
   const getModelOptions = () => {
     if (modelProvider === 'openai') {
-      return [{ value: 'gpt-4o', label: 'ChatGPT 4o' }];
+      return openAiModels;
     } else if (modelProvider === 'anthropic') {
-      return [{ value: 'sonnet-3.7', label: 'Sonnet-3.7' }];
+      return anthropicModels;
+    } else if (modelProvider === 'deepseek') {
+      return deepseekModels;
     }
     return [];
   };
@@ -75,6 +80,7 @@ export const AgentStep: FC<AgentStepProps> = ({
             'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
         },
       ]}
+      selectedTemplateName={selectedTemplateName}
     >
       <CreateFormHeader
         title="Agent Specific Stuff"
@@ -93,6 +99,7 @@ export const AgentStep: FC<AgentStepProps> = ({
           options={[
             { value: 'openai', label: 'OpenAI' },
             { value: 'anthropic', label: 'Anthropic' },
+            { value: 'deepseek', label: 'DeepSeek' },
           ]}
         />
 
