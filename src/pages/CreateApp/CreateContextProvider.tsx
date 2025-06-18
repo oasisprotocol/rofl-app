@@ -18,9 +18,12 @@ const initAppDataState: AppData = {
     apiKey: '',
     prompt: '',
   },
-  build: {},
+  build: {
+    artifacts: 'oasis boot 0.5.0, ROFL container 0.5.1',
+    provider: 'OPF',
+    resources: 'small',
+  },
   payment: {},
-  bootstrap: {},
 };
 
 export const CreateContextProvider = ({

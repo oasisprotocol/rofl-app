@@ -1,8 +1,7 @@
-import { type FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { CreateLayout } from './CreateLayout';
 import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { InputFormField } from './InputFormField';
@@ -11,22 +10,13 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@oasisprotocol/ui-library/src/components/ui/radio-group';
-
-const formSchema = z.object({
-  artifacts: z.string().min(1, {
-    message: 'Artifacts are required.',
-  }),
-  provider: z.string().min(1, {
-    message: 'Provider is required.',
-  }),
-  resources: z.string().min(1, {
-    message: 'Resources are required.',
-  }),
-});
+import { buildFormSchema, type BuildFormData } from './types';
 
 type AgentStepProps = {
   handleNext: () => void;
   handleBack: () => void;
+  build?: BuildFormData;
+  setAppDataForm: (data: { build: BuildFormData }) => void;
 };
 
 const resourceOptions = [
@@ -53,18 +43,23 @@ const resourceOptions = [
   },
 ];
 
-export const BuildStep: FC<AgentStepProps> = ({ handleNext, handleBack }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      artifacts: 'oasis boot 0.5.0, ROFL container 0.5.1',
-      provider: 'OPF',
-      resources: 'small',
-    },
+export const BuildStep: FC<AgentStepProps> = ({
+  handleNext,
+  handleBack,
+  build,
+  setAppDataForm,
+}) => {
+  const form = useForm<BuildFormData>({
+    resolver: zodResolver(buildFormSchema),
+    defaultValues: { ...build },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log('Build values:', values);
+  useEffect(() => {
+    form.reset({ ...build });
+  }, [build, form]);
+
+  const onSubmit = (values: BuildFormData) => {
+    setAppDataForm({ build: values });
     handleNext();
   };
 

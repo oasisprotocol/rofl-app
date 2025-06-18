@@ -36,15 +36,27 @@ export const agentFormSchema = z.object({
   }),
 });
 
+export const buildFormSchema = z.object({
+  artifacts: z.string().min(1, {
+    message: 'Artifacts are required.',
+  }),
+  provider: z.string().min(1, {
+    message: 'Provider is required.',
+  }),
+  resources: z.string().min(1, {
+    message: 'Resources are required.',
+  }),
+});
+
 export type TemplateFormData = string;
 export type MetadataFormData = z.infer<typeof metadataFormSchema>;
 export type AgentFormData = z.infer<typeof agentFormSchema>;
+export type BuildFormData = z.infer<typeof buildFormSchema>;
 
 export type AppData = {
   template?: string;
   metadata?: MetadataFormData;
   agent?: AgentFormData;
-  build?: Record<string, unknown>;
+  build?: BuildFormData;
   payment?: Record<string, unknown>;
-  bootstrap?: Record<string, unknown>;
 };
