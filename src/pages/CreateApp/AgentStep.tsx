@@ -13,6 +13,7 @@ type AgentStepProps = {
   handleBack: () => void;
   agent?: AgentFormData;
   setAppDataForm: (data: { agent: AgentFormData }) => void;
+  selectedTemplateName?: string;
 };
 
 export const AgentStep: FC<AgentStepProps> = ({
@@ -20,6 +21,7 @@ export const AgentStep: FC<AgentStepProps> = ({
   handleBack,
   agent,
   setAppDataForm,
+  selectedTemplateName,
 }) => {
   const form = useForm<AgentFormData>({
     resolver: zodResolver(agentFormSchema),
@@ -75,6 +77,7 @@ export const AgentStep: FC<AgentStepProps> = ({
             'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
         },
       ]}
+      selectedTemplateName={selectedTemplateName}
     >
       <CreateFormHeader
         title="Agent Specific Stuff"

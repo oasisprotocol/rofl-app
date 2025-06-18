@@ -17,6 +17,7 @@ type AgentStepProps = {
   handleBack: () => void;
   build?: BuildFormData;
   setAppDataForm: (data: { build: BuildFormData }) => void;
+  selectedTemplateName?: string;
 };
 
 const resourceOptions = [
@@ -48,6 +49,7 @@ export const BuildStep: FC<AgentStepProps> = ({
   handleBack,
   build,
   setAppDataForm,
+  selectedTemplateName,
 }) => {
   const form = useForm<BuildFormData>({
     resolver: zodResolver(buildFormSchema),
@@ -81,6 +83,7 @@ export const BuildStep: FC<AgentStepProps> = ({
             'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
         },
       ]}
+      selectedTemplateName={selectedTemplateName}
     >
       <CreateFormHeader
         title="Build and Deploy"

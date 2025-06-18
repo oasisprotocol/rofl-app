@@ -9,3 +9,7 @@ export const templates = [
     id: 'empyreal',
   },
 ];
+
+export const getTemplateById = (id: string | undefined) => {
+  return templates.find((template) => template.id === id);
+};

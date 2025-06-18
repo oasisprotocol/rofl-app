@@ -11,12 +11,14 @@ type MetadataStepProps = {
   handleNext: () => void;
   setAppDataForm: (data: { metadata: MetadataFormData }) => void;
   metadata?: MetadataFormData;
+  selectedTemplateName?: string;
 };
 
 export const MetadataStep: FC<MetadataStepProps> = ({
   handleNext,
   setAppDataForm,
   metadata,
+  selectedTemplateName,
 }) => {
   const form = useForm<MetadataFormData>({
     resolver: zodResolver(metadataFormSchema),
@@ -50,6 +52,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({
             'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
         },
       ]}
+      selectedTemplateName={selectedTemplateName}
     >
       <CreateFormHeader
         title="Input Your Public ROFL Metadata"

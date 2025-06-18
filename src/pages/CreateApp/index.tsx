@@ -6,6 +6,7 @@ import { AgentStep } from './AgentStep';
 import { BuildStep } from './BuildStep';
 import { PaymentStep } from './PaymentStep';
 import { BootstrapStep } from './BootstrapStep';
+import { getTemplateById } from './templates';
 
 export const Create: FC = () => {
   const context = useCreate();
@@ -36,8 +37,8 @@ export const Create: FC = () => {
     }
   };
 
-  const selectedTemplateName = appData?.template?.name || 'TEMPLATE_NAME';
-
+  const selectedTemplateName = getTemplateById(appData?.template)?.name;
+  console.log('selectedTemplateName', selectedTemplateName);
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
       {currentStep === 0 && (
@@ -48,6 +49,7 @@ export const Create: FC = () => {
           handleNext={handleNext}
           metadata={appData?.metadata}
           setAppDataForm={setAppDataForm}
+          selectedTemplateName={selectedTemplateName}
         />
       )}
       {currentStep === 2 && (
@@ -56,6 +58,7 @@ export const Create: FC = () => {
           handleBack={handleBack}
           agent={appData?.agent}
           setAppDataForm={setAppDataForm}
+          selectedTemplateName={selectedTemplateName}
         />
       )}
       {currentStep === 3 && (
@@ -64,10 +67,15 @@ export const Create: FC = () => {
           handleBack={handleBack}
           build={appData?.build}
           setAppDataForm={setAppDataForm}
+          selectedTemplateName={selectedTemplateName}
         />
       )}
       {currentStep === 4 && (
-        <PaymentStep handleNext={handleNext} handleBack={handleBack} />
+        <PaymentStep
+          handleNext={handleNext}
+          handleBack={handleBack}
+          selectedTemplateName={selectedTemplateName}
+        />
       )}
       {currentStep === 5 && <BootstrapStep appData={appData} />}
     </div>
