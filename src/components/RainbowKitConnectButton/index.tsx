@@ -13,6 +13,7 @@ import { AccountAvatar } from '../AccountAvatar';
 import { useAccount, useDisconnect } from 'wagmi';
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile';
 import { useNavigate } from 'react-router-dom';
+import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
 
 const TruncatedAddress: FC<{ address: string; className?: string }> = ({
   address,
@@ -31,11 +32,30 @@ interface Props {
 }
 
 export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
+  const { login, isLoading, isAuthenticated } = useRoflAppBackendAuthContext();
   const isMobile = useIsMobile();
   const { disconnect } = useDisconnect();
   const navigate = useNavigate();
-  const { chainId } = useAccount();
+  const { chainId, isConnected, address } = useAccount();
   const [selectedChainId, setSelectedChainId] = useState(chainId);
+
+  useEffect(() => {
+    // Auth when wallet is connected, but only in development mode for now
+    if (!import.meta.env.PROD) {
+      const handleLogin = async () => {
+        if (isConnected && address && !isLoading && !isAuthenticated) {
+          try {
+            await login();
+          } catch (error) {
+            console.error('Login failed:', error);
+          }
+        }
+      };
+
+      handleLogin();
+    }
+  }, [isLoading, isAuthenticated, isConnected, address, login]);
+
   useEffect(() => {
     if (chainId && chainId !== selectedChainId) {
       setSelectedChainId(chainId);

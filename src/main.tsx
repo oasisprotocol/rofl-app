@@ -20,6 +20,7 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AccountAvatar } from './components/AccountAvatar/index.tsx';
 import { MainLayout } from './components/Layout/MainLayout';
+import { RoflAppBackendAuthProvider } from './contexts/RoflAppBackendAuth/Provider';
 
 import './index.css';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -45,24 +46,26 @@ createRoot(document.getElementById('root')!).render(
             />
           )}
         >
-          <BrowserRouter>
-            <CreateContextProvider>
-              <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/dashboard" element={<MainLayout />}>
-                  <Route index element={<Dashboard />} />
-                  <Route path="apps" element={<MyApps />} />
-                  <Route path="apps/:id" element={<AppDetails />} />
-                  <Route path="machines" element={<Machines />} />
-                  <Route path="machines/:id" element={<MachinesDetails />} />
-                </Route>
-                <Route path="/create" element={<Create />}></Route>
-                <Route path="/explore" element={<MainLayout />}>
-                  <Route index element={<Explore />} />
-                </Route>
-              </Routes>
-            </CreateContextProvider>
-          </BrowserRouter>
+          <RoflAppBackendAuthProvider>
+            <BrowserRouter>
+              <CreateContextProvider>
+                <Routes>
+                  <Route path="/" element={<Landing />} />
+                  <Route path="/dashboard" element={<MainLayout />}>
+                    <Route index element={<Dashboard />} />
+                    <Route path="apps" element={<MyApps />} />
+                    <Route path="apps/:id" element={<AppDetails />} />
+                    <Route path="machines" element={<Machines />} />
+                    <Route path="machines/:id" element={<MachinesDetails />} />
+                  </Route>
+                  <Route path="/create" element={<Create />}></Route>
+                  <Route path="/explore" element={<MainLayout />}>
+                    <Route index element={<Explore />} />
+                  </Route>
+                </Routes>
+              </CreateContextProvider>
+            </BrowserRouter>
+          </RoflAppBackendAuthProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
