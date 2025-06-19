@@ -22,18 +22,25 @@ export const metadataFormSchema = z.object({
 });
 
 export const agentFormSchema = z.object({
-  modelProvider: z.string().min(1, {
-    message: 'Model provider is required.',
-  }),
-  model: z.string().min(1, {
+  OLLAMA_MODEL: z.string().min(1, {
     message: 'Model is required.',
   }),
-  apiKey: z.string().min(1, {
-    message: 'API key is required.',
-  }),
-  prompt: z.string().min(1, {
-    message: 'Prompt is required.',
-  }),
+  TOKEN: z
+    .string()
+    .min(1, {
+      message: 'Token is required.',
+    })
+    .max(50, {
+      message: 'Token must be less than 50 characters.',
+    }),
+  OLLAMA_SYSTEM_PROMPT: z
+    .string()
+    .min(1, {
+      message: 'Prompt is required.',
+    })
+    .max(1000, {
+      message: 'Prompt must be less than 1000 characters.',
+    }),
 });
 
 export const buildFormSchema = z.object({

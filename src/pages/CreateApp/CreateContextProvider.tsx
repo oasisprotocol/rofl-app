@@ -13,10 +13,9 @@ const initAppDataState: AppData = {
     homepage: '',
   },
   agent: {
-    modelProvider: '',
-    model: '',
-    apiKey: '',
-    prompt: '',
+    OLLAMA_MODEL: '',
+    TOKEN: '',
+    OLLAMA_SYSTEM_PROMPT: '',
   },
   build: {
     artifacts: 'oasis boot 0.5.0, ROFL container 0.5.1',

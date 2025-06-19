@@ -1,13 +1,12 @@
-import { type FC, useEffect, useRef } from 'react';
+import { type FC } from 'react';
 import { CreateLayout } from './CreateLayout';
 import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { InputFormField } from './InputFormField';
 import { SelectFormField } from './SelectFormField';
 import { agentFormSchema, type AgentFormData } from './types';
-import { anthropicModels, deepseekModels, openAiModels } from './ai-models';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -29,23 +28,6 @@ export const AgentStep: FC<AgentStepProps> = ({
     defaultValues: { ...agent },
   });
 
-  const modelProvider = useWatch({
-    control: form.control,
-    name: 'modelProvider',
-  });
-
-  const previousModelProvider = useRef<string | undefined>(modelProvider);
-
-  useEffect(() => {
-    if (
-      previousModelProvider.current !== undefined &&
-      previousModelProvider.current !== modelProvider
-    ) {
-      form.setValue('model', '');
-    }
-    previousModelProvider.current = modelProvider;
-  }, [modelProvider, form]);
-
   function onSubmit(values: AgentFormData) {
     setAppDataForm({ agent: values });
     handleNext();
@@ -57,17 +39,6 @@ export const AgentStep: FC<AgentStepProps> = ({
         form.handleSubmit(onSubmit)();
       }
     });
-  };
-
-  const getModelOptions = () => {
-    if (modelProvider === 'openai') {
-      return openAiModels;
-    } else if (modelProvider === 'anthropic') {
-      return anthropicModels;
-    } else if (modelProvider === 'deepseek') {
-      return deepseekModels;
-    }
-    return [];
   };
 
   return (
@@ -93,36 +64,27 @@ export const AgentStep: FC<AgentStepProps> = ({
       >
         <SelectFormField
           control={form.control}
-          name="modelProvider"
-          label="Model Provider"
-          placeholder="Select a model provider"
-          options={[
-            { value: 'openai', label: 'OpenAI' },
-            { value: 'anthropic', label: 'Anthropic' },
-            { value: 'deepseek', label: 'DeepSeek' },
-          ]}
-        />
-
-        <SelectFormField
-          control={form.control}
-          name="model"
-          label="Select Model"
+          name="OLLAMA_MODEL"
+          label="Select the LLM running inside your TEE bot"
           placeholder="Select a model"
-          options={getModelOptions()}
+          options={[
+            { value: 'gemma3:1b', label: 'Gemma 3 1B' },
+            { value: 'deepseek-r1:1.5b', label: 'Deepseek 1.5B' },
+          ]}
         />
 
         <InputFormField
           control={form.control}
-          name="apiKey"
-          label="Model Provider API Key"
-          placeholder="Paste or type key here"
+          name="TOKEN"
+          label="Telegram API token"
+          placeholder="Paste or type API token here"
           type="password"
         />
 
         <InputFormField
           control={form.control}
-          name="prompt"
-          label="Prompt"
+          name="OLLAMA_SYSTEM_PROMPT"
+          label="LLM system prompt"
           placeholder="Instructions for the agent on how to act, behave..."
           type="textarea"
         />
