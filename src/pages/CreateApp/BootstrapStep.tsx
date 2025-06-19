@@ -1,10 +1,12 @@
-import { type FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
 import { Header } from '../../components/Layout/Header';
 import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
 import type { AppData, MetadataFormData } from './types';
 import { stringify } from 'yaml';
+import { useUploadArtifact } from '../../backend/api';
+import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
 
 type BootstrapStepProps = {
   appData?: AppData;
@@ -17,6 +19,18 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, parser }) => {
   }
   const appConfig = parser(appData.metadata);
   const stringifiedYaml = stringify(appConfig);
+  const { token } = useRoflAppBackendAuthContext();
+  const uploadArtifactMutation = useUploadArtifact(token);
+
+  useEffect(() => {
+    if (appData.template && stringifiedYaml) {
+      uploadArtifactMutation.mutate({
+        id: appData.template,
+        content: stringifiedYaml,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appData.template, stringifiedYaml]);
 
   return (
     <Layout headerContent={<Header />} footerContent={<Footer />}>

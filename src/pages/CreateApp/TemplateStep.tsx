@@ -42,7 +42,7 @@ export const TemplateStep: FC<TemplateStepProps> = ({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {templates.map((template) => (
-              <Card className="rounded-md pt-6 flex flex-col">
+              <Card key={template.id} className="rounded-md pt-6 flex flex-col">
                 <div className="rounded-t-md h-[160px] -mt-6">
                   <img
                     src={template.image}
