@@ -11,7 +11,6 @@ export const templates = [
     description: parsedTemplate.description,
     image: tgbot,
     id: 'tgbot',
-    parsedTemplate,
     initialValues: {
       metadata: {
         name: parsedTemplate.title,
