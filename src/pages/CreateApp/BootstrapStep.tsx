@@ -48,7 +48,7 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, parser }) => {
   const uploadArtifactMutation = useUploadArtifact(token);
 
   useEffect(() => {
-    if (appData.template && stringifiedYaml) {
+    if (appData.template && stringifiedYaml && !import.meta.env.PROD) {
       uploadArtifactMutation.mutate({
         id: appData.template,
         content: stringifiedYaml,
