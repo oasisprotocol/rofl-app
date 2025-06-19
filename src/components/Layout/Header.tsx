@@ -33,7 +33,7 @@ export const Header: FC = () => {
 
   return (
     <div className="w-full flex justify-between items-center">
-      <Link to="/">
+      <Link to={isConnected ? '/dashboard' : '/'}>
         <img src={Logotype} alt="Oasis ROFL" />
       </Link>
 
