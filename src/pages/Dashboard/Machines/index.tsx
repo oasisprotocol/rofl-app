@@ -64,7 +64,11 @@ export const Machines: FC = () => {
           ))}
 
         {allRoflProviders.map((machine) => (
-          <MachineCard key={machine.address} machine={machine} />
+          <MachineCard
+            key={machine.address}
+            machine={machine}
+            network={network}
+          />
         ))}
 
         {isFetchingNextPage &&
