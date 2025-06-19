@@ -11,7 +11,16 @@ export const templates = [
     description: parsedTemplate.description,
     image: tgbot,
     id: 'tgbot',
-    template: parsedTemplate,
+    parsedTemplate,
+    initialValues: {
+      metadata: {
+        name: parsedTemplate.title,
+        author: parsedTemplate.author,
+        description: parsedTemplate.description,
+        version: parsedTemplate.version,
+        homepage: parsedTemplate.homepage,
+      },
+    },
     templateParser: (metadata: Partial<MetadataFormData>) => {
       return {
         ...parsedTemplate,

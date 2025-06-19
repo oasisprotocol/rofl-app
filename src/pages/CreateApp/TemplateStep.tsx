@@ -10,12 +10,17 @@ import {
   CardContent,
   CardFooter,
 } from '@oasisprotocol/ui-library/src/components/ui/card';
-import type { TemplateFormData } from './types';
+import type { MetadataFormData, TemplateFormData } from './types';
 import { templates } from './templates';
 
 type TemplateStepProps = {
   handleNext: () => void;
-  setAppDataForm: (data: Partial<{ template: TemplateFormData }>) => void;
+  setAppDataForm: (
+    data: Partial<{
+      template: TemplateFormData;
+      metadata: Partial<MetadataFormData>;
+    }>
+  ) => void;
 };
 
 export const TemplateStep: FC<TemplateStepProps> = ({
@@ -23,7 +28,13 @@ export const TemplateStep: FC<TemplateStepProps> = ({
   setAppDataForm,
 }) => {
   const handleTemplateSelect = (id: string) => {
-    setAppDataForm({ template: id });
+    const template = templates.find((template) => template.id === id);
+    setAppDataForm({
+      template: id,
+      metadata: {
+        ...template?.initialValues.metadata,
+      },
+    });
     handleNext();
   };
 
