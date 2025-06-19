@@ -1,0 +1,66 @@
+title: Telegram bot
+description: |
+  Confidential Telegram chat bot running entirely inside the TEE. No prompts
+  will ever leave the trusted environment! Define your bot behavior with
+  confidential system prompt.
+image: https://rofl.app/templates/tgbot.png
+version: 0.1.0
+repository: https://github.com/oasisprotocol/demo-rofl-tgbot
+author: Oasis Protocol Foundation <info@oasis.net>
+license: Apache-2.0
+tags:
+  - ChatBot
+  - LLM
+  - Telegram
+  - ollama
+
+tee: tdx
+kind: container
+resources:
+  memory: 4096
+  cpus: 2
+  storage:
+    kind: disk-persistent
+    size: 10000
+
+secrets:
+  - name: OLLAMA_MODEL
+    title: "Model name"
+    description: "Select the LLM running inside your TEE bot"
+    type: select
+    required: true
+    options:
+      - "gemma3:1b": "Gemma 3 1B"
+      - "deepseek-r1:1.5b": "Deepseek 1.5B"
+  - name: TOKEN
+    title: "Telegram API token"
+    description: "Request your Telegram bot API token by sending `/newbot` command to the @BotFather account"
+    type: text
+    placeholder: "1234567890:ABCDEFGH..."
+    required: true
+    maxlength: 50
+  - name: OLLAMA_SYSTEM_PROMPT
+    title: "LLM system prompt"
+    description: "Instructions for personalizing your bot"
+    type: textarea
+    required: false
+    maxlength: 1000
+
+compose: |
+  services:
+  ollama:
+    image: "docker.io/ollama/ollama"
+    ports:
+      - "11434:11434"
+    volumes:
+      - /storage/ollama:/root/.ollama
+    entrypoint: ["/usr/bin/bash", "-c", "/bin/ollama serve & sleep 5; ollama pull ${OLLAMA_MODEL}; wait"]
+
+  python-telegram-bot:
+    build: .
+    image: "ghcr.io/oasisprotocol/demo-rofl-tgbot:ollama"
+    platform: linux/amd64
+    environment:
+      - TOKEN=${TOKEN}
+      - OLLAMA_MODEL=${OLLAMA_MODEL}
+      - OLLAMA_SYSTEM_PROMPT=${OLLAMA_SYSTEM_PROMPT}
