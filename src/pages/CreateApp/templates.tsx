@@ -20,6 +20,10 @@ export const templates = [
         version: parsedTemplate.version,
         homepage: parsedTemplate.homepage,
       },
+      build: {
+        provider: 'OPF',
+        resources: 'medium',
+      },
     },
     templateParser: (metadata: Partial<MetadataFormData>) => {
       return {

@@ -10,11 +10,11 @@ import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/
 
 type BootstrapStepProps = {
   appData?: AppData;
-  parser: (metadata: MetadataFormData) => unknown;
+  parser?: (metadata: MetadataFormData) => unknown;
 };
 
 export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, parser }) => {
-  if (!appData?.metadata) {
+  if (!appData?.metadata || !parser) {
     throw new Error('App data or metadata is not provided');
   }
   const appConfig = parser(appData.metadata);

@@ -38,7 +38,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
 }) => {
   const sidebarItems = [
     { label: 'Metadata Input', active: currentStep === 1 },
-    { label: 'Agent Specific Stuff', active: currentStep === 2 },
+    { label: 'Agent Secrets', active: currentStep === 2 },
     { label: 'Build and Deploy', active: currentStep === 3 },
     { label: 'Payment', active: currentStep === 4 },
   ];

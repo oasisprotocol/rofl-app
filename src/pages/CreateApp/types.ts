@@ -44,9 +44,7 @@ export const agentFormSchema = z.object({
 });
 
 export const buildFormSchema = z.object({
-  artifacts: z.string().min(1, {
-    message: 'Artifacts are required.',
-  }),
+  artifacts: z.string().optional(),
   provider: z.string().min(1, {
     message: 'Provider is required.',
   }),
