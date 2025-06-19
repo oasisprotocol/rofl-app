@@ -37,7 +37,7 @@ export const Create: FC = () => {
     }
   };
 
-  const selectedTemplateName = getTemplateById(appData?.template)?.name;
+  const selectedTemplate = getTemplateById(appData?.template);
 
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
@@ -49,7 +49,7 @@ export const Create: FC = () => {
           handleNext={handleNext}
           metadata={appData?.metadata}
           setAppDataForm={setAppDataForm}
-          selectedTemplateName={selectedTemplateName}
+          selectedTemplateName={selectedTemplate?.name}
         />
       )}
       {currentStep === 2 && (
@@ -58,7 +58,7 @@ export const Create: FC = () => {
           handleBack={handleBack}
           agent={appData?.agent}
           setAppDataForm={setAppDataForm}
-          selectedTemplateName={selectedTemplateName}
+          selectedTemplateName={selectedTemplate?.name}
         />
       )}
       {currentStep === 3 && (
@@ -67,17 +67,22 @@ export const Create: FC = () => {
           handleBack={handleBack}
           build={appData?.build}
           setAppDataForm={setAppDataForm}
-          selectedTemplateName={selectedTemplateName}
+          selectedTemplateName={selectedTemplate?.name}
         />
       )}
       {currentStep === 4 && (
         <PaymentStep
           handleNext={handleNext}
           handleBack={handleBack}
-          selectedTemplateName={selectedTemplateName}
+          selectedTemplateName={selectedTemplate?.name}
         />
       )}
-      {currentStep === 5 && <BootstrapStep appData={appData} />}
+      {currentStep === 5 && (
+        <BootstrapStep
+          appData={appData}
+          parser={selectedTemplate?.templateParser}
+        />
+      )}
     </div>
   );
 };

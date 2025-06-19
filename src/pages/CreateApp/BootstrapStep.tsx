@@ -3,14 +3,20 @@ import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
 import { Header } from '../../components/Layout/Header';
 import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
-import type { AppData } from './types';
+import type { AppData, MetadataFormData } from './types';
+import { stringify } from 'yaml';
 
 type BootstrapStepProps = {
   appData?: AppData;
+  parser: (metadata: MetadataFormData) => unknown;
 };
 
-export const BootstrapStep: FC<BootstrapStepProps> = ({ appData }) => {
-  console.log(JSON.stringify(appData, null, 2));
+export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, parser }) => {
+  if (!appData?.metadata) {
+    throw new Error('App data or metadata is not provided');
+  }
+  const appConfig = parser(appData.metadata);
+  const stringifiedYaml = stringify(appConfig);
 
   return (
     <Layout headerContent={<Header />} footerContent={<Footer />}>
