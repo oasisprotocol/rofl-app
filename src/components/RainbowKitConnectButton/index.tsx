@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC } from 'react';
+import { useEffect, useState, type FC, type ReactNode } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { ChevronDown, Wallet } from 'lucide-react';
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
@@ -210,6 +210,66 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                   </DropdownMenu>
                 </div>
               );
+            })()}
+          </div>
+        );
+      }}
+    </ConnectButton.Custom>
+  );
+};
+
+type SimpleRainbowKitConnectButtonProps = {
+  children: ReactNode;
+};
+
+export const SimpleRainbowKitConnectButton: FC<
+  SimpleRainbowKitConnectButtonProps
+> = ({ children }) => {
+  return (
+    <ConnectButton.Custom>
+      {({ account, chain, openChainModal, openConnectModal, mounted }) => {
+        const ready = mounted;
+        const connected = ready && account && chain;
+
+        return (
+          <div
+            {...(!ready && {
+              'aria-hidden': true,
+              style: {
+                opacity: 0,
+                pointerEvents: 'none',
+                userSelect: 'none',
+              },
+            })}
+          >
+            {(() => {
+              if (!connected) {
+                return (
+                  <Button
+                    onClick={() => {
+                      openConnectModal();
+                    }}
+                    size="lg"
+                  >
+                    {children}
+                  </Button>
+                );
+              }
+
+              if (chain.unsupported) {
+                return (
+                  <Button
+                    size="lg"
+                    onClick={() => {
+                      openChainModal();
+                    }}
+                    variant="destructive"
+                    className="max-md:w-full"
+                  >
+                    Wrong network
+                  </Button>
+                );
+              }
             })()}
           </div>
         );
