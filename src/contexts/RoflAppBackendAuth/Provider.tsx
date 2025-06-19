@@ -1,11 +1,17 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, type ReactNode } from 'react';
 import { useAccount, useSignMessage, useChainId } from 'wagmi';
-import { useGetNonce, useLogin } from '../backend/api';
+import { useGetNonce, useLogin } from '../../backend/api';
+import { RoflAppBackendAuthContext } from './Context';
 
-export function useSiweAuth() {
+export function RoflAppBackendAuthProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const { address, isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
   const chainId = useChainId();
+
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -14,6 +20,7 @@ export function useSiweAuth() {
     isConnected ? address : undefined
   );
   const loginMutation = useLogin();
+
   const createSiweMessage = useCallback(
     (address: string, nonce: string, chainId: number): string => {
       const domain = location.hostname;
@@ -60,10 +67,10 @@ Issued At: ${issuedAt}`;
       });
 
       setToken(jwtToken);
-      console.log('SIWE Authentication successful');
+
       return jwtToken;
     } catch (err) {
-      console.error('Login failed:', err);
+      console.log('Login failed:', err);
       setError(err instanceof Error ? err.message : 'Login failed');
       throw err;
     } finally {
@@ -87,7 +94,7 @@ Issued At: ${issuedAt}`;
 
   const isAuthenticated = !!token;
 
-  return {
+  const value = {
     login,
     logout,
     isLoading,
@@ -95,4 +102,10 @@ Issued At: ${issuedAt}`;
     isAuthenticated,
     token,
   };
+
+  return (
+    <RoflAppBackendAuthContext.Provider value={value}>
+      {children}
+    </RoflAppBackendAuthContext.Provider>
+  );
 }
