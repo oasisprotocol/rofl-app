@@ -129,6 +129,7 @@ export const BuildStep: FC<AgentStepProps> = ({
                   {resourceOptions.map((option) => (
                     <div key={option.id} className="relative">
                       <RadioGroupItem
+                        disabled={option.id !== field.value}
                         value={option.id}
                         id={option.id}
                         className="peer sr-only"

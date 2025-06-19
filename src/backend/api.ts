@@ -22,6 +22,11 @@ type MeResponse = {
   [key: string]: unknown;
 };
 
+type UploadArtifactRequest = {
+  id: string;
+  content: string;
+};
+
 const fetchNonce = async (address: string): Promise<string> => {
   const response = await axios.get<NonceResponse>(`${BACKEND_URL}/auth/nonce`, {
     params: { address },
@@ -48,6 +53,19 @@ const fetchMe = async (token: string): Promise<MeResponse> => {
   return response.data;
 };
 
+const uploadArtifact = async (
+  id: string,
+  content: string,
+  token: string
+): Promise<void> => {
+  await axios.put(`${BACKEND_URL}/artifacts/${id}`, content, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/octet-stream',
+    },
+  });
+};
+
 export function useGetNonce(address: string | undefined) {
   return useQuery<string, AxiosError<unknown>>({
     queryKey: ['nonce', address],
@@ -71,6 +89,13 @@ export function useGetMe(token: string | null) {
     queryFn: () => fetchMe(token!),
     enabled: !!token,
     staleTime: 1000 * 60 * 3, // 3 minutes
+    throwOnError: false,
+  });
+}
+
+export function useUploadArtifact(token: string | null) {
+  return useMutation<void, AxiosError<unknown>, UploadArtifactRequest>({
+    mutationFn: ({ id, content }) => uploadArtifact(id, content, token!),
     throwOnError: false,
   });
 }

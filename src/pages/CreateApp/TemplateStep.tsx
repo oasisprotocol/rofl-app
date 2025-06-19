@@ -10,12 +10,12 @@ import {
   CardContent,
   CardFooter,
 } from '@oasisprotocol/ui-library/src/components/ui/card';
-import type { TemplateFormData } from './types';
+import { type AppData } from './types';
 import { templates } from './templates';
 
 type TemplateStepProps = {
   handleNext: () => void;
-  setAppDataForm: (data: Partial<{ template: TemplateFormData }>) => void;
+  setAppDataForm: (data: Partial<AppData>) => void;
 };
 
 export const TemplateStep: FC<TemplateStepProps> = ({
@@ -23,7 +23,11 @@ export const TemplateStep: FC<TemplateStepProps> = ({
   setAppDataForm,
 }) => {
   const handleTemplateSelect = (id: string) => {
-    setAppDataForm({ template: id });
+    const template = templates.find((template) => template.id === id);
+    setAppDataForm({
+      template: id,
+      ...template?.initialValues,
+    });
     handleNext();
   };
 
@@ -42,7 +46,7 @@ export const TemplateStep: FC<TemplateStepProps> = ({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {templates.map((template) => (
-              <Card className="rounded-md pt-6 flex flex-col">
+              <Card key={template.id} className="rounded-md pt-6 flex flex-col">
                 <div className="rounded-t-md h-[160px] -mt-6">
                   <img
                     src={template.image}
