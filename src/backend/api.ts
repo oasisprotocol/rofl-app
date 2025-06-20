@@ -148,7 +148,12 @@ export function useGetRoflBuildResults(
       return fetchRoflBuildResults(taskId!, token!);
     },
     enabled: !!taskId && !!token,
-    refetchInterval: 3000,
+    refetchInterval: (data) => {
+      if (data.state.data?.err) {
+        return false;
+      }
+      return 3000;
+    },
     refetchIntervalInBackground: true,
     retry: (failureCount, error) => {
       if (error?.response?.status === 404) {

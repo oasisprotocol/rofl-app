@@ -1,11 +1,11 @@
-import { type FC, useEffect, useState, useRef } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
 import { Header } from '../../components/Layout/Header';
 import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
 import type { AppData, MetadataFormData } from './types';
 import { stringify } from 'yaml';
-import { useBuildRofl } from '../../backend/api';
+import { useBuildRofl, useGetRoflBuildResults } from '../../backend/api';
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
 
 // TEMP
@@ -90,6 +90,9 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
       compose,
     });
   }
+
+  const { data } = useGetRoflBuildResults(taskId, token);
+  console.log('Build results:', data);
 
   useEffect(() => {
     const interval = setInterval(() => {
