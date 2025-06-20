@@ -3,14 +3,12 @@ import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
 import { Header } from '../../components/Layout/Header';
 import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
-import type { AppData, MetadataFormData } from './types';
+import type { AppData } from './types';
 import { stringify } from 'yaml';
-import { useUploadArtifact } from '../../backend/api';
-import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
 
 type BootstrapStepProps = {
   appData?: AppData;
-  parser?: (metadata: MetadataFormData) => unknown;
+  template: any;
 };
 
 const textContent = [
@@ -36,26 +34,20 @@ const textContent = [
   },
 ];
 
-export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, parser }) => {
+export const BootstrapStep: FC<BootstrapStepProps> = ({
+  appData,
+  template,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  if (!appData?.metadata || !parser) {
-    throw new Error('App data or metadata is not provided');
-  }
-  const appConfig = parser(appData.metadata);
-  const stringifiedYaml = stringify(appConfig);
-  const { token } = useRoflAppBackendAuthContext();
-  const uploadArtifactMutation = useUploadArtifact(token);
 
-  useEffect(() => {
-    if (appData.template && stringifiedYaml && !import.meta.env.PROD) {
-      uploadArtifactMutation.mutate({
-        id: appData.template,
-        content: stringifiedYaml,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appData.template, stringifiedYaml]);
+  if (!appData || !template) {
+    throw new Error('Missing data to bootstrap the app');
+  }
+
+  const rofl = template.templateParser(appData.metadata);
+  const roflYaml = stringify(rofl);
+  const composeYaml = template.yaml.compose;
 
   useEffect(() => {
     const interval = setInterval(() => {
