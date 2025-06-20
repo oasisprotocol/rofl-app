@@ -7,6 +7,7 @@ import type { AppData, MetadataFormData } from './types';
 import { stringify } from 'yaml';
 import { useBuildRofl, useGetRoflBuildResults } from '../../backend/api';
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
+import { useNetwork } from '../../hooks/useNetwork';
 
 // TEMP
 type Template = {
@@ -26,7 +27,9 @@ type Template = {
     rofl: Record<string, unknown>;
   };
   templateParser: (
-    metadata: Partial<MetadataFormData>
+    metadata: Partial<MetadataFormData>,
+    network: 'mainnet' | 'testnet',
+    appId: string
   ) => Record<string, unknown>;
 };
 
@@ -62,6 +65,7 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
   appData,
   template,
 }) => {
+  const network = useNetwork();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [taskId, setTaskId] = useState<string | null>(null);
@@ -75,7 +79,8 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
     throw new Error('Missing data to bootstrap the app');
   }
 
-  const rofl = template.templateParser(appData.metadata || {});
+  const appId = 'TODO'; // Create app tx
+  const rofl = template.templateParser(appData.metadata!, network, appId);
   const roflYaml = stringify(rofl);
   const composeYaml = template.yaml.compose;
   const manifestBuf = new TextEncoder().encode(roflYaml);

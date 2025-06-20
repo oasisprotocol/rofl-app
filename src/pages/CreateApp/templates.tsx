@@ -1,20 +1,22 @@
 import { parse } from 'yaml';
 import tgbot from '../../../templates/tgbot/tgbot.png';
 import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw';
+import defaultDeployments from '../../../templates/default-deployments.yaml?raw';
 import type { MetadataFormData } from './types';
 
+const parsedDefaultDeployments = parse(defaultDeployments);
 const parsedTemplate = parse(tgbotTemplate);
 const { compose: tgbotCompose, ...tgbotRofl } = parsedTemplate;
 
 export const templates = [
   {
-    name: parsedTemplate.title,
+    name: parsedTemplate.name,
     description: parsedTemplate.description,
     image: tgbot,
     id: 'tgbot',
     initialValues: {
       metadata: {
-        name: parsedTemplate.title,
+        name: parsedTemplate.name,
         author: parsedTemplate.author,
         description: parsedTemplate.description,
         version: parsedTemplate.version,
@@ -29,7 +31,11 @@ export const templates = [
       compose: tgbotCompose,
       rofl: tgbotRofl,
     },
-    templateParser: (metadata: Partial<MetadataFormData>) => {
+    templateParser: (
+      metadata: Partial<MetadataFormData>,
+      network: 'mainnet' | 'testnet',
+      appId: string
+    ) => {
       return {
         ...tgbotRofl,
         title: metadata.name,
@@ -37,6 +43,13 @@ export const templates = [
         author: metadata.author,
         version: metadata.version,
         homepage: metadata.homepage,
+        deployments: {
+          default: {
+            ...parsedDefaultDeployments.deployments.default,
+            app_id: appId,
+            network,
+          },
+        },
       };
     },
   },
