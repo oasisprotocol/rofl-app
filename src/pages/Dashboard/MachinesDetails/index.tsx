@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import {
   Tabs,
@@ -16,24 +16,22 @@ import { MachineRestart } from './MachineRestart';
 import { useNetwork } from '../../../hooks/useNetwork';
 import {
   useGetRuntimeRoflAppsId,
-  useGetRuntimeRoflmarketInstances,
+  useGetRuntimeRoflmarketProvidersAddressInstancesId,
 } from '../../../nexus/api';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
 
 export const MachinesDetails: FC = () => {
   const network = useNetwork();
-  // Replace query with provider instance by ID when exists
-  const roflMachinesQuery = useGetRuntimeRoflmarketInstances(
+  const { provider, id } = useParams();
+  const roflMachinesQuery = useGetRuntimeRoflmarketProvidersAddressInstancesId(
     network,
     'sapphire',
-    {
-      limit: 1,
-      offset: 0,
-    }
+    provider!,
+    id!
   );
   const { data, isLoading, isFetched } = roflMachinesQuery;
-  const machine = data?.data.instances[0];
+  const machine = data?.data;
 
   return (
     <>
