@@ -8,13 +8,13 @@ const { compose: tgbotCompose, ...tgbotRofl } = parsedTemplate;
 
 export const templates = [
   {
-    name: parsedTemplate.title,
+    name: parsedTemplate.name,
     description: parsedTemplate.description,
     image: tgbot,
     id: 'tgbot',
     initialValues: {
       metadata: {
-        name: parsedTemplate.title,
+        name: parsedTemplate.name,
         author: parsedTemplate.author,
         description: parsedTemplate.description,
         version: parsedTemplate.version,

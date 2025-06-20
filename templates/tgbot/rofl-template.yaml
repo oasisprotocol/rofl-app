@@ -1,4 +1,4 @@
-title: Telegram bot
+name: Telegram bot
 description: |
   Confidential Telegram chat bot running entirely inside the TEE. No prompts
   will ever leave the trusted environment! Define your bot behavior with
