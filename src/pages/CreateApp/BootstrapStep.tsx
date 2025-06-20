@@ -1,11 +1,11 @@
-import { type FC, useEffect, useState, useRef } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
 import { Header } from '../../components/Layout/Header';
 import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
 import type { AppData, MetadataFormData } from './types';
 import { stringify } from 'yaml';
-import { useBuildRofl } from '../../backend/api';
+import { useBuildRofl, useGetRoflBuildResults } from '../../backend/api';
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
 
 // TEMP
@@ -64,9 +64,12 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const hasTriggeredBuildRef = useRef(false);
+  const [taskId, setTaskId] = useState<string | null>(null);
+  const [buildTriggered, setBuildTriggered] = useState(false);
   const { token } = useRoflAppBackendAuthContext();
-  const buildRoflMutation = useBuildRofl(token);
+  const buildRoflMutation = useBuildRofl(token, (data) =>
+    setTaskId(data.task_id)
+  );
 
   if (!appData || !template) {
     throw new Error('Missing data to bootstrap the app');
@@ -80,21 +83,16 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
   const manifest = Array.from(new Uint8Array(manifestBuf));
   const compose = Array.from(new Uint8Array(composeBuf));
 
-  useEffect(() => {
-    // Revisit the logic to trigger the build only once
-    if (
-      !hasTriggeredBuildRef.current &&
-      token &&
-      !buildRoflMutation.isPending &&
-      !buildRoflMutation.isSuccess
-    ) {
-      hasTriggeredBuildRef.current = true;
-      buildRoflMutation.mutate({
-        manifest,
-        compose,
-      });
-    }
-  }, [token, buildRoflMutation, manifest, compose]);
+  if (!buildTriggered && token && appData && template) {
+    setBuildTriggered(true);
+    buildRoflMutation.mutate({
+      manifest,
+      compose,
+    });
+  }
+
+  const { data } = useGetRoflBuildResults(taskId, token);
+  console.log('Build results:', data);
 
   useEffect(() => {
     const interval = setInterval(() => {
