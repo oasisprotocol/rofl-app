@@ -1,16 +1,38 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState, useRef } from 'react';
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
 import { Header } from '../../components/Layout/Header';
 import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
 import type { AppData, MetadataFormData } from './types';
 import { stringify } from 'yaml';
-import { useUploadArtifact } from '../../backend/api';
+import { useBuildRofl } from '../../backend/api';
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
+
+// TEMP
+type Template = {
+  name: string;
+  description: string;
+  image: string;
+  id: string;
+  initialValues: {
+    metadata: Partial<MetadataFormData>;
+    build: {
+      provider: string;
+      resources: string;
+    };
+  };
+  yaml: {
+    compose: string;
+    rofl: Record<string, unknown>;
+  };
+  templateParser: (
+    metadata: Partial<MetadataFormData>
+  ) => Record<string, unknown>;
+};
 
 type BootstrapStepProps = {
   appData?: AppData;
-  parser?: (metadata: MetadataFormData) => unknown;
+  template: Template | undefined;
 };
 
 const textContent = [
@@ -36,26 +58,43 @@ const textContent = [
   },
 ];
 
-export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, parser }) => {
+export const BootstrapStep: FC<BootstrapStepProps> = ({
+  appData,
+  template,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  if (!appData?.metadata || !parser) {
-    throw new Error('App data or metadata is not provided');
-  }
-  const appConfig = parser(appData.metadata);
-  const stringifiedYaml = stringify(appConfig);
+  const hasTriggeredBuildRef = useRef(false);
   const { token } = useRoflAppBackendAuthContext();
-  const uploadArtifactMutation = useUploadArtifact(token);
+  const buildRoflMutation = useBuildRofl(token);
+
+  if (!appData || !template) {
+    throw new Error('Missing data to bootstrap the app');
+  }
+
+  const rofl = template.templateParser(appData.metadata || {});
+  const roflYaml = stringify(rofl);
+  const composeYaml = template.yaml.compose;
+  const manifestBuf = new TextEncoder().encode(roflYaml);
+  const composeBuf = new TextEncoder().encode(composeYaml);
+  const manifest = Array.from(new Uint8Array(manifestBuf));
+  const compose = Array.from(new Uint8Array(composeBuf));
 
   useEffect(() => {
-    if (appData.template && stringifiedYaml && !import.meta.env.PROD) {
-      uploadArtifactMutation.mutate({
-        id: appData.template,
-        content: stringifiedYaml,
+    // Revisit the logic to trigger the build only once
+    if (
+      !hasTriggeredBuildRef.current &&
+      token &&
+      !buildRoflMutation.isPending &&
+      !buildRoflMutation.isSuccess
+    ) {
+      hasTriggeredBuildRef.current = true;
+      buildRoflMutation.mutate({
+        manifest,
+        compose,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appData.template, stringifiedYaml]);
+  }, [token, buildRoflMutation, manifest, compose]);
 
   useEffect(() => {
     const interval = setInterval(() => {

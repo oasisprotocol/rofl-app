@@ -22,9 +22,21 @@ type MeResponse = {
   [key: string]: unknown;
 };
 
-type UploadArtifactRequest = {
-  id: string;
-  content: string;
+type RoflBuildRequest = {
+  manifest: number[];
+  compose: number[];
+};
+
+type RoflBuildResponse = {
+  task_id: string;
+};
+
+type RoflBuildResultsResponse = {
+  manifest: string | null;
+  oci_reference: string;
+  manifest_hash: string;
+  logs: string;
+  err: string;
 };
 
 const fetchNonce = async (address: string): Promise<string> => {
@@ -53,17 +65,36 @@ const fetchMe = async (token: string): Promise<MeResponse> => {
   return response.data;
 };
 
-const uploadArtifact = async (
-  id: string,
-  content: string,
+const buildRofl = async (
+  { manifest, compose }: RoflBuildRequest,
   token: string
-): Promise<void> => {
-  await axios.put(`${BACKEND_URL}/artifacts/${id}`, content, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/octet-stream',
-    },
-  });
+): Promise<RoflBuildResponse> => {
+  const response = await axios.post<RoflBuildResponse>(
+    `${BACKEND_URL}/rofl/build`,
+    { manifest, compose },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  return response.data;
+};
+
+const fetchRoflBuildResults = async (
+  taskId: string,
+  token: string
+): Promise<RoflBuildResultsResponse> => {
+  const response = await axios.get<RoflBuildResultsResponse>(
+    `${BACKEND_URL}/rofl/build/${taskId}/results`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
 };
 
 export function useGetNonce(address: string | undefined) {
@@ -93,9 +124,31 @@ export function useGetMe(token: string | null) {
   });
 }
 
-export function useUploadArtifact(token: string | null) {
-  return useMutation<void, AxiosError<unknown>, UploadArtifactRequest>({
-    mutationFn: ({ id, content }) => uploadArtifact(id, content, token!),
+export function useBuildRofl(token: string | null) {
+  return useMutation<RoflBuildResponse, AxiosError<unknown>, RoflBuildRequest>({
+    mutationFn: (data) => buildRofl(data, token!),
+    throwOnError: false,
+  });
+}
+
+export function useGetRoflBuildResults(
+  taskId: string | null,
+  token: string | null
+) {
+  return useQuery<RoflBuildResultsResponse, AxiosError<unknown>>({
+    queryKey: ['rofl-build-results', taskId, token],
+    queryFn: () => {
+      return fetchRoflBuildResults(taskId!, token!);
+    },
+    enabled: !!taskId && !!token,
+    refetchInterval: 3000,
+    refetchIntervalInBackground: true,
+    retry: (failureCount, error) => {
+      if (error?.response?.status === 404) {
+        return false;
+      }
+      return failureCount < 3;
+    },
     throwOnError: false,
   });
 }

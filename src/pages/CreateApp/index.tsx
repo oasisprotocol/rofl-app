@@ -78,10 +78,7 @@ export const Create: FC = () => {
         />
       )}
       {currentStep === 5 && (
-        <BootstrapStep
-          appData={appData}
-          parser={selectedTemplate?.templateParser}
-        />
+        <BootstrapStep appData={appData} template={selectedTemplate} />
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw';
 import type { MetadataFormData } from './types';
 
 const parsedTemplate = parse(tgbotTemplate);
+const { compose: tgbotCompose, ...tgbotRofl } = parsedTemplate;
 
 export const templates = [
   {
@@ -24,9 +25,13 @@ export const templates = [
         resources: 'medium',
       },
     },
+    yaml: {
+      compose: tgbotCompose,
+      rofl: tgbotRofl,
+    },
     templateParser: (metadata: Partial<MetadataFormData>) => {
       return {
-        ...parsedTemplate,
+        ...tgbotRofl,
         title: metadata.name,
         description: metadata.description,
         author: metadata.author,
