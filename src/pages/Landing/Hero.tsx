@@ -4,8 +4,11 @@ import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import HeroImage from './images/hero.svg';
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
+import { SimpleRainbowKitConnectButton } from '../../components/RainbowKitConnectButton';
+import { useAccount } from 'wagmi';
 
 export const Hero: FC = () => {
+  const { isConnected } = useAccount();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -36,12 +39,19 @@ export const Hero: FC = () => {
               and private way.
             </p>
           </div>
-          <Button size="lg" asChild>
-            <Link to="/dashboard">
+          {isConnected ? (
+            <Button size="lg" asChild>
+              <Link to="/dashboard">
+                Get started
+                <ArrowRight />
+              </Link>
+            </Button>
+          ) : (
+            <SimpleRainbowKitConnectButton>
               Get started
               <ArrowRight />
-            </Link>
-          </Button>
+            </SimpleRainbowKitConnectButton>
+          )}
         </div>
 
         {/* -mb-[50px] can be removed once the image is properly cropped by designer */}

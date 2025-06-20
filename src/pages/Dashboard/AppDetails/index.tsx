@@ -18,8 +18,8 @@ import { trimLongString } from '../../../utils/trimLongString';
 
 export const AppDetails: FC = () => {
   const network = useNetwork();
-  const id = useParams().id!;
-  const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', id);
+  const { id } = useParams();
+  const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', id!);
   const { data, isLoading, isFetched } = roflAppQuery;
   const roflApp = data?.data;
 

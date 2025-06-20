@@ -5,7 +5,7 @@ import { MetricCard } from './MetricCard';
 import { SectionHeader } from './SectionHeader';
 import {
   useGetRuntimeRoflApps,
-  useGetRuntimeRoflmarketProviders,
+  useGetRuntimeRoflmarketInstances,
 } from '../../nexus/api';
 import { useNetwork } from '../../hooks/useNetwork';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
@@ -24,26 +24,25 @@ export const Dashboard: FC = () => {
     admin: address,
   });
 
-  // TODO: fetch providers for active ROFL apps
-  const roflProvidersQuery = useGetRuntimeRoflmarketProviders(
+  const roflMachinesQuery = useGetRuntimeRoflmarketInstances(
     network,
     'sapphire',
     {
       limit: pageLimit,
       offset: 0,
+      admin: address,
     }
   );
   const { data, isLoading, isFetched } = roflAppsQuery;
   const roflApps = data?.data.rofl_apps;
   const {
-    data: providersData,
-    isLoading: isProviderLoading,
-    isFetched: isProviderFetched,
-  } = roflProvidersQuery;
-  const roflProviders = providersData?.data.providers;
-
+    data: machinesData,
+    isLoading: isMachinesLoading,
+    isFetched: isMachinesFetched,
+  } = roflMachinesQuery;
+  const roflMachines = machinesData?.data.instances;
   const appsNumber = data?.data.total_count;
-  const machinesNumber = providersData?.data.total_count;
+  const machinesNumber = machinesData?.data.total_count;
   const failuresNumber = 0;
 
   return (
@@ -54,8 +53,8 @@ export const Dashboard: FC = () => {
           {isFetched && (
             <MetricCard title="ROFL Apps Running" value={appsNumber} />
           )}
-          {isProviderLoading && <Skeleton className="w-full h-[120px]" />}
-          {isProviderFetched && (
+          {isMachinesLoading && <Skeleton className="w-full h-[120px]" />}
+          {isMachinesFetched && (
             <MetricCard title="Machines Running" value={machinesNumber} />
           )}
           <MetricCard title="Failures" value={failuresNumber} />
@@ -86,15 +85,19 @@ export const Dashboard: FC = () => {
           to="/dashboard/machines"
           disabled={machinesNumber === 0}
         />
-        {isProviderFetched && !machinesNumber && <MachinesEmptyState />}
+        {isMachinesFetched && !machinesNumber && <MachinesEmptyState />}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {isProviderLoading &&
+          {isMachinesLoading &&
             Array.from({ length: pageLimit }).map((_, index) => (
               <Skeleton key={index} className="w-full h-[200px]" />
             ))}
           {isFetched &&
-            roflProviders?.map((machine) => (
-              <MachineCard key={machine.address} machine={machine} />
+            roflMachines?.map((machine) => (
+              <MachineCard
+                key={machine.id}
+                machine={machine}
+                network={network}
+              />
             ))}
         </div>
       </div>

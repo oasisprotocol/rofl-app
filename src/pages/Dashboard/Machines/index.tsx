@@ -7,14 +7,14 @@ import { useAccount } from 'wagmi';
 import { useNetwork } from '../../../hooks/useNetwork';
 import {
   getGetRuntimeRoflAppsQueryKey,
-  GetRuntimeRoflmarketProviders,
+  GetRuntimeRoflmarketInstances,
 } from '../../../nexus/api';
 import { MachineCard } from '../../../components/MachineCard';
 
 const pageLimit = 9;
 
 export const Machines: FC = () => {
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { ref, inView } = useInView();
   const network = useNetwork();
 
@@ -28,9 +28,10 @@ export const Machines: FC = () => {
   } = useInfiniteQuery({
     queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire')],
     queryFn: async ({ pageParam = 0 }) => {
-      const result = await GetRuntimeRoflmarketProviders(network, 'sapphire', {
+      const result = await GetRuntimeRoflmarketInstances(network, 'sapphire', {
         limit: pageLimit,
         offset: pageParam,
+        admin: address,
       });
       return result;
     },
@@ -50,9 +51,9 @@ export const Machines: FC = () => {
     }
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, inView]);
 
-  const allRoflProviders =
-    data?.pages.flatMap((page) => page.data.providers) || [];
-  const isEmpty = isFetched && allRoflProviders.length === 0;
+  const allRoflInstances =
+    data?.pages.flatMap((page) => page.data.instances) || [];
+  const isEmpty = isFetched && allRoflInstances.length === 0;
 
   return (
     <>
@@ -63,8 +64,8 @@ export const Machines: FC = () => {
             <Skeleton key={index} className="w-full h-[200px]" />
           ))}
 
-        {allRoflProviders.map((machine) => (
-          <MachineCard key={machine.address} machine={machine} />
+        {allRoflInstances.map((machine) => (
+          <MachineCard key={machine.id} machine={machine} network={network} />
         ))}
 
         {isFetchingNextPage &&
