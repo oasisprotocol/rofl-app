@@ -8,60 +8,122 @@ import {
   TabsTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/tabs';
 import { Clock, CircleArrowUp } from 'lucide-react';
+import { formatDistanceToNow, parseISO, isFuture } from 'date-fns';
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon';
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow';
 import { MachineStop } from './MachineStop';
 import { MachineRestart } from './MachineRestart';
+import { useNetwork } from '../../../hooks/useNetwork';
+import {
+  useGetRuntimeRoflAppsId,
+  useGetRuntimeRoflmarketInstances,
+} from '../../../nexus/api';
+import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
+import { trimLongString } from '../../../utils/trimLongString';
 
 export const MachinesDetails: FC = () => {
+  const network = useNetwork();
+  // Replace query with provider instance by ID when exists
+  const roflMachinesQuery = useGetRuntimeRoflmarketInstances(
+    network,
+    'sapphire',
+    {
+      limit: 1,
+      offset: 0,
+    }
+  );
+  const { data, isLoading, isFetched } = roflMachinesQuery;
+  const machine = data?.data.instances[0];
+
   return (
     <>
       <div>
         <Tabs defaultValue="details">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b py-5">
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold">OPF-1</h1>
-              <MachineStatusIcon removed={false} />
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 text-orange-400 px-3 py-1.5 ">
-                <Clock className="h-4 w-4" />
-                <span>9h 34min</span>
-              </div>
-              <Button variant="outline" className="w-full md:w-auto" disabled>
-                <CircleArrowUp />
-                Top up
-              </Button>
-              <MachineRestart />
-              <MachineStop />
+            {isLoading && <Skeleton className="w-full h-[36px]" />}
+            {isFetched && machine && (
+              <>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-bold">
+                    <>
+                      {machine.metadata?.['net.oasis.provider.name'] ||
+                        trimLongString(machine.provider)}
+                    </>
+                  </h1>
+                  <MachineStatusIcon
+                    removed={machine.removed}
+                    expirationDate={machine.paid_until}
+                  />
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <div className="flex items-center gap-2 text-orange-400 px-3 py-1.5 ">
+                    {machine.paid_until &&
+                      isFuture(parseISO(machine.paid_until)) && (
+                        <>
+                          <Clock className="h-4 w-4" />
+                          <span>
+                            {formatDistanceToNow(parseISO(machine.paid_until), {
+                              addSuffix: false,
+                            })}
+                          </span>
+                        </>
+                      )}
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="w-full md:w-auto"
+                    disabled
+                  >
+                    <CircleArrowUp />
+                    Top up
+                  </Button>
+                  <MachineRestart />
+                  <MachineStop />
 
-              <TabsList className="w-full md:w-auto">
-                <TabsTrigger value="details">Details</TabsTrigger>
-                {/* <TabsTrigger value="logs">Logs</TabsTrigger> */}
-              </TabsList>
-            </div>
+                  <TabsList className="w-full md:w-auto">
+                    <TabsTrigger value="details">Details</TabsTrigger>
+                    {/* <TabsTrigger value="logs">Logs</TabsTrigger> */}
+                  </TabsList>
+                </div>
+              </>
+            )}
           </div>
           <TabsContent value="details">
             <div className="space-y-4">
-              <DetailsSectionRow label="App Running" className=" py-6 border-b">
-                <Link to="/dashboard/apps" className="text-primary">
-                  WT3
-                </Link>
-              </DetailsSectionRow>
-              <DetailsSectionRow label="Provider">OPF</DetailsSectionRow>
-              <DetailsSectionRow label="Machine Size">
-                Small (1CPU, 2GB RAM, 10GB Storage)
-              </DetailsSectionRow>
-              <DetailsSectionRow label="Node ID" className="pb-6 border-b">
-                <a
-                  href="https://explorer.oasis.io/sapphire/rofl/node/0x4d3f5b2d3rP7lUVU2BSfSm53opnGui"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary"
-                >
-                  oasis13Gmsfb2D3rP7lUVU2BSfSm53opnGui
-                </a>
-              </DetailsSectionRow>
+              {isLoading && <Skeleton className="w-full h-[200px]" />}
+              {isFetched && machine && (
+                <>
+                  <DetailsSectionRow
+                    label="App Running"
+                    className=" py-6 border-b"
+                  >
+                    <Link
+                      to={`/dashboard/apps/${machine.deployment?.app_id}`}
+                      className="text-primary"
+                    >
+                      <MachineAppDetails
+                        appId={machine.deployment?.app_id as string}
+                      />
+                    </Link>
+                  </DetailsSectionRow>
+                  <DetailsSectionRow label="Provider">
+                    {machine.provider}
+                  </DetailsSectionRow>
+                  <DetailsSectionRow label="Instance ID">
+                    {machine.id}
+                  </DetailsSectionRow>
+                  <DetailsSectionRow label="CPU / RAM / Storage">
+                    <>
+                      {machine.resources?.cpus || 'N/A'} /{' '}
+                      {machine.resources?.memory || 'N/A'} /{' '}
+                      {machine.resources?.storage || 'N/A'}
+                    </>
+                  </DetailsSectionRow>
+                  <DetailsSectionRow label="Node ID" className="pb-6 border-b">
+                    {machine.node_id}
+                  </DetailsSectionRow>
+                </>
+              )}
             </div>
           </TabsContent>
           {/* <TabsContent value="logs">
@@ -73,4 +135,15 @@ export const MachinesDetails: FC = () => {
       </div>
     </>
   );
+};
+
+const MachineAppDetails: FC<{
+  appId: string;
+}> = ({ appId }) => {
+  const network = useNetwork();
+  const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', appId);
+  const { data, isFetched } = roflAppQuery;
+  const roflAppName = data?.data.metadata['net.oasis.rofl.name'];
+
+  return <>{isFetched && <>{roflAppName || appId}</>}</>;
 };

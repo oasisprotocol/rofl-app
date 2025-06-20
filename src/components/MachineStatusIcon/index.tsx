@@ -1,15 +1,16 @@
 import { type FC } from 'react';
 import { CircleCheck, CircleMinus } from 'lucide-react';
-import { parseISO, addMinutes, isWithinInterval } from 'date-fns';
+import { parseISO, addMinutes, isWithinInterval, isPast } from 'date-fns';
 import { Badge } from '@oasisprotocol/ui-library/src/components/ui/badge';
 
 type MachineStatusTypes = 'active' | 'removed' | 'expiring';
 
 function getMachineStatus(
   removed: boolean,
-  expiringSoon: boolean
+  expiringSoon: boolean,
+  expired: boolean
 ): MachineStatusTypes {
-  if (removed) return 'removed';
+  if (removed || expired) return 'removed';
   if (expiringSoon) return 'expiring';
   return 'active';
 }
@@ -34,12 +35,22 @@ const isExpiringSoon = (expirationDate: string) => {
   }
 };
 
+const isExpired = (expirationDate: string) => {
+  try {
+    const paidUntilDate = parseISO(expirationDate);
+    return isPast(paidUntilDate);
+  } catch {
+    return false;
+  }
+};
+
 export const MachineStatusIcon: FC<MachineStatusIconProps> = ({
   removed,
   expirationDate,
 }) => {
-  const expiringSoon = isExpiringSoon(expirationDate);
-  const status = getMachineStatus(removed, expiringSoon);
+  const expired = isExpired(expirationDate);
+  const expiringSoon = !expired && isExpiringSoon(expirationDate);
+  const status = getMachineStatus(removed, expiringSoon, expired);
   const getStatusIcon = (status: MachineStatusTypes) => {
     switch (status) {
       case 'active':
