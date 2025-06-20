@@ -64,9 +64,12 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const hasTriggeredBuildRef = useRef(false);
+  const [taskId, setTaskId] = useState<string | null>(null);
+  const [buildTriggered, setBuildTriggered] = useState(false);
   const { token } = useRoflAppBackendAuthContext();
-  const buildRoflMutation = useBuildRofl(token);
+  const buildRoflMutation = useBuildRofl(token, (data) =>
+    setTaskId(data.task_id)
+  );
 
   if (!appData || !template) {
     throw new Error('Missing data to bootstrap the app');
@@ -80,21 +83,13 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
   const manifest = Array.from(new Uint8Array(manifestBuf));
   const compose = Array.from(new Uint8Array(composeBuf));
 
-  useEffect(() => {
-    // Revisit the logic to trigger the build only once
-    if (
-      !hasTriggeredBuildRef.current &&
-      token &&
-      !buildRoflMutation.isPending &&
-      !buildRoflMutation.isSuccess
-    ) {
-      hasTriggeredBuildRef.current = true;
-      buildRoflMutation.mutate({
-        manifest,
-        compose,
-      });
-    }
-  }, [token, buildRoflMutation, manifest, compose]);
+  if (!buildTriggered && token && appData && template) {
+    setBuildTriggered(true);
+    buildRoflMutation.mutate({
+      manifest,
+      compose,
+    });
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
