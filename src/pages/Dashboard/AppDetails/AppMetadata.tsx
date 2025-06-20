@@ -79,7 +79,9 @@ export const AppMetadata: FC<AppMetadataProps> = ({ app }) => {
         <>{app.metadata?.['net.oasis.rofl.license']}</>
       </DetailsSectionRow>
       <div className="text-xl font-bold">Policy</div>
-      <DetailsSectionRow label="Who can run this app">-</DetailsSectionRow>
+      <DetailsSectionRow label="Who can run this app">
+        <Endorsements endorsements={app.policy.endorsements} />
+      </DetailsSectionRow>
       <DetailsSectionRow label="Latest Update" className=" pb-6 border-b">
         {transaction && (
           <>
@@ -102,4 +104,24 @@ export const AppMetadata: FC<AppMetadataProps> = ({ app }) => {
       </DetailsSectionRow>
     </div>
   );
+};
+
+const Endorsements = ({ endorsements }: { endorsements: unknown }) => {
+  const items = endorsements as Array<{ node?: string; any?: boolean }>;
+
+  if (items.some((item) => 'node' in item)) {
+    return (
+      <>
+        {items.map((item) => (
+          <div key={item.node}>{item.node}</div>
+        ))}
+      </>
+    );
+  }
+
+  if (items.length === 1 && 'any' in items[0]) {
+    return <>Any</>;
+  }
+
+  return <></>;
 };
