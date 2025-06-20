@@ -66,6 +66,8 @@ import GetRuntimeRoflAppsIdInstancesRakTransactionsMutator from '../replaceNetwo
 import GetRuntimeRoflmarketProvidersMutator from '../replaceNetworkWithBaseURL';
 import GetRuntimeRoflmarketProvidersAddressMutator from '../replaceNetworkWithBaseURL';
 import GetRuntimeRoflmarketProvidersAddressOffersMutator from '../replaceNetworkWithBaseURL';
+import GetRuntimeRoflmarketProvidersAddressOffersIdMutator from '../replaceNetworkWithBaseURL';
+import GetRuntimeRoflmarketProvidersAddressInstancesIdMutator from '../replaceNetworkWithBaseURL';
 import GetRuntimeRoflmarketInstancesMutator from '../replaceNetworkWithBaseURL';
 import GetLayerStatsTxVolumeMutator from '../replaceNetworkWithBaseURL';
 import GetLayerStatsActiveAccountsMutator from '../replaceNetworkWithBaseURL';
@@ -8426,6 +8428,296 @@ export function useGetRuntimeRoflmarketProvidersAddressOffers<
       runtime,
       address,
       params,
+      options
+    );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Returns a specific ROFL market offer.
+ */
+export const GetRuntimeRoflmarketProvidersAddressOffersId = (
+  network: 'mainnet' | 'testnet',
+  runtime: Runtime,
+  address: StakingAddress,
+  id: string,
+  options?: SecondParameter<
+    typeof GetRuntimeRoflmarketProvidersAddressOffersIdMutator
+  >,
+  signal?: AbortSignal
+) => {
+  return GetRuntimeRoflmarketProvidersAddressOffersIdMutator<RoflMarketOffer>(
+    {
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
+        String(runtime)
+      )}/roflmarket_providers/${encodeURIComponent(
+        String(address)
+      )}/offers/${encodeURIComponent(String(id))}`,
+      method: 'GET',
+      signal,
+    },
+    options
+  );
+};
+
+export const getGetRuntimeRoflmarketProvidersAddressOffersIdQueryKey = (
+  network: 'mainnet' | 'testnet',
+  runtime: Runtime,
+  address: StakingAddress,
+  id: string
+) => {
+  return [
+    `/${network}/${runtime}/roflmarket_providers/${address}/offers/${id}`,
+  ] as const;
+};
+
+export const getGetRuntimeRoflmarketProvidersAddressOffersIdQueryOptions = <
+  TData = Awaited<
+    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>
+  >,
+  TError = void
+>(
+  network: 'mainnet' | 'testnet',
+  runtime: Runtime,
+  address: StakingAddress,
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<
+      typeof GetRuntimeRoflmarketProvidersAddressOffersIdMutator
+    >;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetRuntimeRoflmarketProvidersAddressOffersIdQueryKey(
+      network,
+      runtime,
+      address,
+      id
+    );
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>
+  > = ({ signal }) =>
+    GetRuntimeRoflmarketProvidersAddressOffersId(
+      network,
+      runtime,
+      address,
+      id,
+      requestOptions,
+      signal
+    );
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(network && runtime && address && id),
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetRuntimeRoflmarketProvidersAddressOffersIdQueryResult =
+  NonNullable<
+    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>
+  >;
+export type GetRuntimeRoflmarketProvidersAddressOffersIdQueryError = void;
+
+/**
+ * @summary Returns a specific ROFL market offer.
+ */
+
+export function useGetRuntimeRoflmarketProvidersAddressOffersId<
+  TData = Awaited<
+    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>
+  >,
+  TError = void
+>(
+  network: 'mainnet' | 'testnet',
+  runtime: Runtime,
+  address: StakingAddress,
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<
+      typeof GetRuntimeRoflmarketProvidersAddressOffersIdMutator
+    >;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions =
+    getGetRuntimeRoflmarketProvidersAddressOffersIdQueryOptions(
+      network,
+      runtime,
+      address,
+      id,
+      options
+    );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Returns a specific ROFL market instance.
+ */
+export const GetRuntimeRoflmarketProvidersAddressInstancesId = (
+  network: 'mainnet' | 'testnet',
+  runtime: Runtime,
+  address: StakingAddress,
+  id: string,
+  options?: SecondParameter<
+    typeof GetRuntimeRoflmarketProvidersAddressInstancesIdMutator
+  >,
+  signal?: AbortSignal
+) => {
+  return GetRuntimeRoflmarketProvidersAddressInstancesIdMutator<RoflMarketInstance>(
+    {
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
+        String(runtime)
+      )}/roflmarket_providers/${encodeURIComponent(
+        String(address)
+      )}/instances/${encodeURIComponent(String(id))}`,
+      method: 'GET',
+      signal,
+    },
+    options
+  );
+};
+
+export const getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryKey = (
+  network: 'mainnet' | 'testnet',
+  runtime: Runtime,
+  address: StakingAddress,
+  id: string
+) => {
+  return [
+    `/${network}/${runtime}/roflmarket_providers/${address}/instances/${id}`,
+  ] as const;
+};
+
+export const getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryOptions = <
+  TData = Awaited<
+    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>
+  >,
+  TError = void
+>(
+  network: 'mainnet' | 'testnet',
+  runtime: Runtime,
+  address: StakingAddress,
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<
+        ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>
+      >,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<
+      typeof GetRuntimeRoflmarketProvidersAddressInstancesIdMutator
+    >;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryKey(
+      network,
+      runtime,
+      address,
+      id
+    );
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>
+  > = ({ signal }) =>
+    GetRuntimeRoflmarketProvidersAddressInstancesId(
+      network,
+      runtime,
+      address,
+      id,
+      requestOptions,
+      signal
+    );
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(network && runtime && address && id),
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetRuntimeRoflmarketProvidersAddressInstancesIdQueryResult =
+  NonNullable<
+    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>
+  >;
+export type GetRuntimeRoflmarketProvidersAddressInstancesIdQueryError = void;
+
+/**
+ * @summary Returns a specific ROFL market instance.
+ */
+
+export function useGetRuntimeRoflmarketProvidersAddressInstancesId<
+  TData = Awaited<
+    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>
+  >,
+  TError = void
+>(
+  network: 'mainnet' | 'testnet',
+  runtime: Runtime,
+  address: StakingAddress,
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<
+        ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>
+      >,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<
+      typeof GetRuntimeRoflmarketProvidersAddressInstancesIdMutator
+    >;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions =
+    getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryOptions(
+      network,
+      runtime,
+      address,
+      id,
       options
     );
 
