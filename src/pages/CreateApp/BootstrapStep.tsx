@@ -1,14 +1,38 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState, useRef } from 'react';
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
 import { Header } from '../../components/Layout/Header';
 import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
-import type { AppData } from './types';
+import type { AppData, MetadataFormData } from './types';
 import { stringify } from 'yaml';
+import { useBuildRofl } from '../../backend/api';
+import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
+
+// TEMP
+type Template = {
+  name: string;
+  description: string;
+  image: string;
+  id: string;
+  initialValues: {
+    metadata: Partial<MetadataFormData>;
+    build: {
+      provider: string;
+      resources: string;
+    };
+  };
+  yaml: {
+    compose: string;
+    rofl: Record<string, unknown>;
+  };
+  templateParser: (
+    metadata: Partial<MetadataFormData>
+  ) => Record<string, unknown>;
+};
 
 type BootstrapStepProps = {
   appData?: AppData;
-  template: any;
+  template: Template | undefined;
 };
 
 const textContent = [
@@ -40,14 +64,37 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const hasTriggeredBuildRef = useRef(false);
+  const { token } = useRoflAppBackendAuthContext();
+  const buildRoflMutation = useBuildRofl(token);
 
   if (!appData || !template) {
     throw new Error('Missing data to bootstrap the app');
   }
 
-  const rofl = template.templateParser(appData.metadata);
+  const rofl = template.templateParser(appData.metadata || {});
   const roflYaml = stringify(rofl);
   const composeYaml = template.yaml.compose;
+  const manifestBuf = new TextEncoder().encode(roflYaml);
+  const composeBuf = new TextEncoder().encode(composeYaml);
+  const manifest = Array.from(new Uint8Array(manifestBuf));
+  const compose = Array.from(new Uint8Array(composeBuf));
+
+  useEffect(() => {
+    // Revisit the logic to trigger the build only once
+    if (
+      !hasTriggeredBuildRef.current &&
+      token &&
+      !buildRoflMutation.isPending &&
+      !buildRoflMutation.isSuccess
+    ) {
+      hasTriggeredBuildRef.current = true;
+      buildRoflMutation.mutate({
+        manifest,
+        compose,
+      });
+    }
+  }, [token, buildRoflMutation, manifest, compose]);
 
   useEffect(() => {
     const interval = setInterval(() => {
