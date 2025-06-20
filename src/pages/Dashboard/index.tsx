@@ -24,7 +24,7 @@ export const Dashboard: FC = () => {
     admin: address,
   });
 
-  const roflProvidersQuery = useGetRuntimeRoflmarketInstances(
+  const roflMachinesQuery = useGetRuntimeRoflmarketInstances(
     network,
     'sapphire',
     {
@@ -39,7 +39,7 @@ export const Dashboard: FC = () => {
     data: machinesData,
     isLoading: isMachinesLoading,
     isFetched: isMachinesFetched,
-  } = roflProvidersQuery;
+  } = roflMachinesQuery;
   const roflMachines = machinesData?.data.instances;
   const appsNumber = data?.data.total_count;
   const machinesNumber = machinesData?.data.total_count;

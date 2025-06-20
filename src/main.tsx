@@ -56,7 +56,10 @@ createRoot(document.getElementById('root')!).render(
                     <Route path="apps" element={<MyApps />} />
                     <Route path="apps/:id" element={<AppDetails />} />
                     <Route path="machines" element={<Machines />} />
-                    <Route path="machines/:id" element={<MachinesDetails />} />
+                    <Route
+                      path="machines/:provider/instances/:id"
+                      element={<MachinesDetails />}
+                    />
                   </Route>
                   <Route path="/create" element={<Create />}></Route>
                   <Route path="/explore" element={<MainLayout />}>

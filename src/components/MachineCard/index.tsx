@@ -64,7 +64,9 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="secondary" asChild>
-          <Link to={`/dashboard/machines/${machine.provider}`}>
+          <Link
+            to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}
+          >
             View details
           </Link>
         </Button>
