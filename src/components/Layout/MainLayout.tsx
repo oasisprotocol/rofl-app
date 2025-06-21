@@ -24,51 +24,79 @@ import {
   BreadcrumbSeparator,
 } from '@oasisprotocol/ui-library/src/components/ui/breadcrumb';
 
-const locationListMap: Record<string, string[]> = {
-  '/explore': ['Explore'],
-  '/dashboard/machines': ['Dashboard', 'Machines'],
-  '/dashboard/apps': ['Dashboard', 'My Apps'],
-  '/': ['Dashboard'],
+const navItems = {
+  dashboard: { label: 'Dashboard', path: '/dashboard' },
+  myApps: { label: 'My Apps', path: '/dashboard/apps' },
+  machines: { label: 'Machines', path: '/dashboard/machines' },
+  explore: { label: 'Explore', path: '/explore' },
 };
+
+const breadcrumbConfigs = [
+  {
+    pattern: navItems.explore.path,
+    breadcrumbs: [navItems.explore],
+    matchType: 'startsWith',
+  },
+  {
+    pattern: navItems.machines.path,
+    breadcrumbs: [navItems.dashboard, navItems.machines],
+    matchType: 'startsWith',
+  },
+  {
+    pattern: navItems.myApps.path,
+    breadcrumbs: [navItems.dashboard, navItems.myApps],
+    matchType: 'startsWith',
+  },
+  {
+    pattern: navItems.dashboard.path,
+    breadcrumbs: [navItems.dashboard],
+    matchType: 'exact',
+  },
+];
 
 export const MainLayout: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const locationList = Object.entries(locationListMap).find(([path]) =>
-    location.pathname.toLowerCase().startsWith(path)
-  )?.[1];
 
-  const getBreadcrumbPath = (index: number) => {
-    if (!locationList) return '/';
-    if (index === 0 && locationList[0] === 'Dashboard') {
-      return '/dashboard';
-    }
-    return location.pathname;
+  const getBreadcrumbConfig = () => {
+    const pathname = location.pathname.toLowerCase();
+
+    return breadcrumbConfigs.find((config) => {
+      if (config.matchType === 'exact') {
+        return pathname === config.pattern;
+      } else {
+        return pathname.startsWith(config.pattern);
+      }
+    });
   };
+
+  const breadcrumbConfig = getBreadcrumbConfig();
+  const breadcrumbs = breadcrumbConfig?.breadcrumbs || [];
+
   return (
     <Layout
       headerContent={<Header />}
       headerBreadcrumbsContent={
-        !!locationList?.length && (
+        !!breadcrumbs.length && (
           <Breadcrumb className="flex px-2">
             <BreadcrumbList>
-              {locationList.flatMap((loc, i) => {
+              {breadcrumbs.flatMap((breadcrumb, i) => {
                 const elements = [
-                  <BreadcrumbItem key={loc + i}>
+                  <BreadcrumbItem key={breadcrumb.label + i}>
                     <BreadcrumbLink asChild>
                       <NavLink
-                        to={getBreadcrumbPath(i)}
+                        to={breadcrumb.path}
                         className="text-foreground text-sm font-normal"
                       >
-                        {loc}
+                        {breadcrumb.label}
                       </NavLink>
                     </BreadcrumbLink>
                   </BreadcrumbItem>,
                 ];
 
-                if (i + 1 < locationList.length) {
+                if (i + 1 < breadcrumbs.length) {
                   elements.push(
-                    <BreadcrumbSeparator key={`sep-${loc}-${i}`} />
+                    <BreadcrumbSeparator key={`sep-${breadcrumb.label}-${i}`} />
                   );
                 }
 
