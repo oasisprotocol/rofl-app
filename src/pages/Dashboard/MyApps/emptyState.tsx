@@ -8,12 +8,12 @@ export const MyAppsEmptyState: FC = () => {
   return (
     <EmptyState
       title="Create your first ROFL App"
-      description="  At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
+      description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
     >
       <Button asChild>
         <Link to="/create">
           Create
-          <Plus className="ml-2 h-4 w-4" />
+          <Plus className="h-4 w-4" />
         </Link>
       </Button>
     </EmptyState>
