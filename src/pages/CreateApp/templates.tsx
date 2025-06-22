@@ -16,12 +16,12 @@ export const templates = [
     id: 'tgbot',
     initialValues: {
       metadata: {
-        name: parsedTemplate.name,
-        author: parsedTemplate.author,
-        description: parsedTemplate.description,
-        version: parsedTemplate.version,
-        homepage: parsedTemplate.homepage,
-        license: parsedTemplate.license,
+        name: parsedTemplate.name || '',
+        author: parsedTemplate.author || '',
+        description: parsedTemplate.description || '',
+        version: parsedTemplate.version || '',
+        homepage: parsedTemplate.homepage || '',
+        license: parsedTemplate.license || '',
       },
       build: {
         provider: 'OPF',
