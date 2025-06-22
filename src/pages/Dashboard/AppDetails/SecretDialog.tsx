@@ -12,9 +12,8 @@ import {
 import { CirclePlus, SquarePen } from 'lucide-react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller } from 'react-hook-form';
-import { Input } from '@oasisprotocol/ui-library/src/components/ui/input';
-import { Label } from '@oasisprotocol/ui-library/src/components/ui/label';
+import { useForm } from 'react-hook-form';
+import { InputFormField } from '../../CreateApp/InputFormField';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -98,51 +97,21 @@ export const SecretDialog: FC<SecretDialogProps> = ({ mode, secret }) => {
             : 'Please provide a name and secret for the new entry.'}
         </DialogDescription>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid gap-2">
-            <Label htmlFor="name">Name</Label>
-            <Controller
-              control={form.control}
-              name="name"
-              render={({ field, fieldState }) => (
-                <>
-                  <Input
-                    id="name"
-                    placeholder={isEditMode ? '' : 'Enter secret name'}
-                    {...field}
-                    disabled={isEditMode}
-                    aria-invalid={!isEditMode && !!fieldState.error}
-                  />
-                  {!isEditMode && fieldState.error && (
-                    <div className="text-destructive text-sm">
-                      {fieldState.error.message}
-                    </div>
-                  )}
-                </>
-              )}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="value">Value</Label>
-            <Controller
-              control={form.control}
-              name="value"
-              render={({ field, fieldState }) => (
-                <>
-                  <Input
-                    id="value"
-                    type="password"
-                    {...field}
-                    aria-invalid={!!fieldState.error}
-                  />
-                  {fieldState.error && (
-                    <p className="text-destructive text-sm">
-                      {fieldState.error.message}
-                    </p>
-                  )}
-                </>
-              )}
-            />
-          </div>
+          <InputFormField
+            control={form.control}
+            name="name"
+            label="Name"
+            placeholder={isEditMode ? '' : 'Enter secret name'}
+            disabled={isEditMode}
+          />
+
+          <InputFormField
+            control={form.control}
+            name="value"
+            label="Value"
+            type="password"
+          />
+
           <DialogFooter>
             <div className="flex flex-1 justify-between">
               <Button variant="outline" onClick={onCancel} type="reset">
