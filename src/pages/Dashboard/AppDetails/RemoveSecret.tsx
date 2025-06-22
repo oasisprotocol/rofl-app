@@ -14,9 +14,13 @@ import { Trash2 } from 'lucide-react';
 
 type RemoveSecretProps = {
   secret: string;
+  handleRemoveSecret: (secret: string) => void;
 };
 
-export const RemoveSecret: FC<RemoveSecretProps> = ({ secret }) => {
+export const RemoveSecret: FC<RemoveSecretProps> = ({
+  secret,
+  handleRemoveSecret,
+}) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -41,7 +45,7 @@ export const RemoveSecret: FC<RemoveSecretProps> = ({ secret }) => {
           <DialogClose asChild>
             <Button
               variant="destructive"
-              onClick={() => console.log('trigger stop action')}
+              onClick={() => handleRemoveSecret(secret)}
             >
               Confirm
             </Button>

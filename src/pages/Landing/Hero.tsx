@@ -67,7 +67,7 @@ export const Hero: FC = () => {
           <div className="relative w-full h-full flex items-start justify-center">
             <img
               src={HeroImage}
-              alt="Oasis ROFL"
+              alt="ROFL App"
               className="max-w-full max-h-full object-contain drop-shadow-2xl"
             />
           </div>

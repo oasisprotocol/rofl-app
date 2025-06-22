@@ -34,7 +34,7 @@ export const Header: FC = () => {
   return (
     <div className="w-full flex justify-between items-center">
       <Link to={isConnected ? '/dashboard' : '/'}>
-        <img src={Logotype} alt="Oasis ROFL" />
+        <img src={Logotype} alt="ROFL App" className="h-[36px]" />
       </Link>
 
       <div className="hidden md:flex">
@@ -68,7 +68,7 @@ export const Header: FC = () => {
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <div className="flex items-start px-3 py-2.5">
                 <NavLink to="/" onClick={() => setIsOpen(false)}>
-                  <img src={Logotype} alt="Oasis ROFL" />
+                  <img src={Logotype} alt="ROFL App" />
                 </NavLink>
               </div>
             </SheetHeader>

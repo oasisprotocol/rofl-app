@@ -1,5 +1,4 @@
-import { type FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import { useEffect, useState, type FC } from 'react';
 import {
   Tabs,
   TabsContent,
@@ -10,18 +9,67 @@ import { AppStatusIcon } from '../../../components/AppStatusIcon';
 import { YamlCode } from '../../../components/CodeDisplay';
 import { AppMetadata } from './AppMetadata';
 import { AppSecrets } from './AppSecrets';
-import { useGetRuntimeRoflAppsId } from '../../../nexus/api';
+import {
+  useGetRuntimeRoflAppsId,
+  type RoflAppMetadata,
+  type RoflAppSecrets,
+} from '../../../nexus/api';
 import { useNetwork } from '../../../hooks/useNetwork';
 import { useParams } from 'react-router-dom';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
+import { type ViewMetadataState, type ViewSecretsState } from './types';
+import { DiscardChanges } from './DiscardButton';
+import { ApplyChanges } from './ApplyChanges';
+
+function setDefaultMetadataViewState(
+  metadata: RoflAppMetadata | undefined = {}
+): ViewMetadataState {
+  return {
+    isDirty: false,
+    metadata: {
+      name: (metadata['net.oasis.rofl.name'] as string) || '',
+      author: (metadata['net.oasis.rofl.author'] as string) || '',
+      description: (metadata['net.oasis.rofl.description'] as string) || '',
+      version: (metadata['net.oasis.rofl.version'] as string) || '',
+      homepage: (metadata['net.oasis.rofl.homepage'] as string) || '',
+      license: (metadata['net.oasis.rofl.license'] as string) || '',
+    },
+  };
+}
+
+function setDefaultSecretsViewState(
+  secrets: RoflAppSecrets | undefined = {}
+): ViewSecretsState {
+  return {
+    isDirty: false,
+    secrets: {
+      ...secrets,
+    },
+  };
+}
 
 export const AppDetails: FC = () => {
+  const [viewMetadataState, setViewMetadataState] = useState({
+    ...setDefaultMetadataViewState(),
+  });
+  const [viewSecretsState, setViewSecretsState] = useState({
+    ...setDefaultSecretsViewState(),
+  });
   const network = useNetwork();
   const { id } = useParams();
   const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', id!);
   const { data, isLoading, isFetched } = roflAppQuery;
   const roflApp = data?.data;
+
+  useEffect(() => {
+    if (roflApp) {
+      setViewMetadataState({
+        ...setDefaultMetadataViewState(roflApp.metadata),
+      });
+      setViewSecretsState({ ...setDefaultSecretsViewState(roflApp.secrets) });
+    }
+  }, [roflApp]);
 
   return (
     <>
@@ -41,23 +89,42 @@ export const AppDetails: FC = () => {
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold">
                   <>
-                    {roflApp.metadata?.['net.oasis.rofl.name'] ||
+                    {viewMetadataState.metadata.name ||
                       trimLongString(roflApp.id)}
                   </>
                 </h1>
                 <AppStatusIcon hasActiveInstances removed={false} />
               </div>
               <div className="flex flex-wrap gap-3">
-                <Button
-                  disabled
-                  variant="destructive"
-                  className="w-full md:w-auto md:ml-8"
-                >
-                  Discard
-                </Button>
-                <Button disabled className="w-full md:w-auto md:mr-8">
-                  Apply
-                </Button>
+                <DiscardChanges
+                  disabled={
+                    !viewMetadataState.isDirty && !viewSecretsState.isDirty
+                  }
+                  onConfirm={() => {
+                    setViewMetadataState({
+                      ...setDefaultMetadataViewState(roflApp.metadata),
+                    });
+                    setViewSecretsState({
+                      ...setDefaultSecretsViewState(roflApp.secrets),
+                    });
+                  }}
+                />
+                <ApplyChanges
+                  disabled={
+                    !viewMetadataState.isDirty && !viewSecretsState.isDirty
+                  }
+                  onConfirm={() => {
+                    setViewMetadataState((prev) => ({
+                      ...prev,
+                      isDirty: false,
+                    }));
+                    setViewSecretsState((prev) => ({
+                      ...prev,
+                      isDirty: false,
+                    }));
+                    roflAppQuery.refetch();
+                  }}
+                />
                 <TabsList className="w-full md:w-auto">
                   <TabsTrigger value="details">Details</TabsTrigger>
                   <TabsTrigger value="secrets">Secrets</TabsTrigger>
@@ -66,10 +133,18 @@ export const AppDetails: FC = () => {
               </div>
             </div>
             <TabsContent value="details">
-              <AppMetadata app={roflApp} />
+              <AppMetadata
+                id={roflApp.id}
+                editableState={viewMetadataState.metadata}
+                policy={roflApp.policy}
+                setViewMetadataState={setViewMetadataState}
+              />
             </TabsContent>
             <TabsContent value="secrets">
-              <AppSecrets secrets={roflApp.secrets} />
+              <AppSecrets
+                secrets={viewSecretsState.secrets}
+                setViewSecretsState={setViewSecretsState}
+              />
             </TabsContent>
             <TabsContent value="compose">
               <YamlCode

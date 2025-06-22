@@ -8,16 +8,49 @@ import {
   TableCell,
 } from '@oasisprotocol/ui-library/src/components/ui/table';
 import { LockKeyhole } from 'lucide-react';
-import type { RoflAppSecrets } from '../../../nexus/api';
+import { type RoflAppSecrets } from '../../../nexus/api';
 import { RemoveSecret } from './RemoveSecret';
 import { SecretDialog } from './SecretDialog';
+import { type ViewSecretsState } from './types';
 
 type AppSecretsProps = {
   secrets: RoflAppSecrets;
+  setViewSecretsState: (state: ViewSecretsState) => void;
 };
 
-export const AppSecrets: FC<AppSecretsProps> = ({ secrets }) => {
+export const AppSecrets: FC<AppSecretsProps> = ({
+  secrets,
+  setViewSecretsState,
+}) => {
   const hasSecrets = Object.keys(secrets).length > 0;
+
+  function handleRemoveSecret(secret: string) {
+    const updatedSecrets = { ...secrets };
+    delete updatedSecrets[secret];
+    setViewSecretsState({
+      isDirty: true,
+      secrets: updatedSecrets,
+    });
+  }
+
+  function handleAddSecret(name: string, value: string) {
+    const updatedSecrets = { ...secrets, [name]: value };
+    setViewSecretsState({
+      isDirty: true,
+      secrets: updatedSecrets,
+    });
+  }
+
+  function handleEditSecret(name: string, value: string) {
+    console.log('value', value);
+    console.log('name', name);
+    const updatedSecrets = { ...secrets, [name]: value };
+    setViewSecretsState({
+      isDirty: true,
+      secrets: updatedSecrets,
+    });
+  }
+
   return (
     <div className="space-y-4">
       {hasSecrets && (
@@ -40,17 +73,24 @@ export const AppSecrets: FC<AppSecretsProps> = ({ secrets }) => {
                   {key}: [{(secrets[key] as string).length} bytes]
                 </TableCell>
                 <TableCell className="w-10">
-                  <SecretDialog mode="edit" secret={key} />
+                  <SecretDialog
+                    mode="edit"
+                    secret={key}
+                    handleEditSecret={handleEditSecret}
+                  />
                 </TableCell>
                 <TableCell className="w-10">
-                  <RemoveSecret secret={key} />
+                  <RemoveSecret
+                    secret={key}
+                    handleRemoveSecret={handleRemoveSecret}
+                  />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       )}
-      <SecretDialog mode="add" />
+      <SecretDialog mode="add" handleAddSecret={handleAddSecret} />
     </div>
   );
 };

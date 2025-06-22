@@ -20,6 +20,7 @@ import {
 } from '../../../nexus/api';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
+import { MachineResources } from '../../../components/MachineResources';
 
 export const MachinesDetails: FC = () => {
   const network = useNetwork();
@@ -110,12 +111,12 @@ export const MachinesDetails: FC = () => {
                   <DetailsSectionRow label="Instance ID">
                     {machine.id}
                   </DetailsSectionRow>
-                  <DetailsSectionRow label="CPU / RAM / Storage">
-                    <>
-                      {machine.resources?.cpus || 'N/A'} /{' '}
-                      {machine.resources?.memory || 'N/A'} /{' '}
-                      {machine.resources?.storage || 'N/A'}
-                    </>
+                  <DetailsSectionRow label="Resources">
+                    <MachineResources
+                      cpus={machine.resources?.cpus}
+                      memory={machine.resources?.memory}
+                      storage={machine.resources?.storage}
+                    />
                   </DetailsSectionRow>
                   <DetailsSectionRow label="Node ID" className="pb-6 border-b">
                     {machine.node_id}

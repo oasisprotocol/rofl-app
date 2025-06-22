@@ -15,7 +15,7 @@ import { CircleStop } from 'lucide-react';
 export const MachineStop: FC = () => {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant="outline" className="w-full md:w-auto md:mr-8">
           <CircleStop />
           Stop

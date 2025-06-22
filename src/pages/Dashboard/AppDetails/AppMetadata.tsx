@@ -1,33 +1,41 @@
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow';
-import { SquarePen } from 'lucide-react';
 import {
   useGetRuntimeRoflAppsIdTransactions,
-  type RoflApp,
+  type RoflAppPolicy,
 } from '../../../nexus/api';
 import { useNetwork } from '../../../hooks/useNetwork';
 import { isUrlSafe } from '../../../utils/url';
 import { trimLongString } from '../../../utils/trimLongString';
+import { MetadataDialog } from './MetadataDialog';
+import { type ViewMetadataState } from './types';
+import { type MetadataFormData } from '../../CreateApp/types';
 
 type AppMetadataProps = {
-  app: RoflApp;
+  id: string;
+  editableState: MetadataFormData;
+  policy: RoflAppPolicy;
+  setViewMetadataState: (state: ViewMetadataState) => void;
 };
 
-export const AppMetadata: FC<AppMetadataProps> = ({ app }) => {
+export const AppMetadata: FC<AppMetadataProps> = ({
+  id,
+  editableState,
+  policy,
+  setViewMetadataState,
+}) => {
   const network = useNetwork();
   const { data } = useGetRuntimeRoflAppsIdTransactions(
     network,
     'sapphire',
-    app.id,
+    id,
     {
       limit: 1,
       method: 'rofl.Update',
     }
   );
   const transaction = data?.data.transactions[0];
-  const repositoryUrl = app.metadata?.['net.oasis.rofl.repository'] as string;
 
   return (
     <div className="space-y-4">
@@ -41,45 +49,46 @@ export const AppMetadata: FC<AppMetadataProps> = ({ app }) => {
       </DetailsSectionRow>
       <DetailsSectionRow label="Explorer Link" className="pb-6 border-b">
         <a
-          href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${app.id}`}
+          href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${id}`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-primary"
         >
-          {app.id}
+          {id}
         </a>
       </DetailsSectionRow>
-      <Button
-        disabled
-        variant="outline"
-        className="w-full md:w-auto md:ml-8 float-right"
-      >
-        <SquarePen />
-        Edit
-      </Button>
+      <MetadataDialog
+        metadata={editableState}
+        setViewMetadataState={setViewMetadataState}
+      />
       <DetailsSectionRow label="Author">
-        <>{app.metadata?.['net.oasis.rofl.author']}</>
+        <>{editableState.author}</>
       </DetailsSectionRow>
       <DetailsSectionRow label="Description">
-        <>{app.metadata?.['net.oasis.rofl.description']}</>
+        <>{editableState.description}</>
       </DetailsSectionRow>
-      <DetailsSectionRow label="Repository">
-        {isUrlSafe(repositoryUrl) ? (
+      <DetailsSectionRow label="Version">
+        <>{editableState.version}</>
+      </DetailsSectionRow>
+      <DetailsSectionRow label="Homepage">
+        {isUrlSafe(editableState.homepage) ? (
           <a
-            href={repositoryUrl}
+            href={editableState.homepage}
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary"
           >
-            {repositoryUrl}
+            {editableState.homepage}
           </a>
         ) : undefined}
       </DetailsSectionRow>
       <DetailsSectionRow label="License" className=" pb-6 border-b">
-        <>{app.metadata?.['net.oasis.rofl.license']}</>
+        <>{editableState.license}</>
       </DetailsSectionRow>
       <div className="text-xl font-bold">Policy</div>
-      <DetailsSectionRow label="Who can run this app">-</DetailsSectionRow>
+      <DetailsSectionRow label="Who can run this app">
+        <Endorsements endorsements={policy.endorsements} />
+      </DetailsSectionRow>
       <DetailsSectionRow label="Latest Update" className=" pb-6 border-b">
         {transaction && (
           <>
@@ -102,4 +111,24 @@ export const AppMetadata: FC<AppMetadataProps> = ({ app }) => {
       </DetailsSectionRow>
     </div>
   );
+};
+
+const Endorsements = ({ endorsements }: { endorsements: unknown }) => {
+  const items = endorsements as Array<{ node?: string; any?: boolean }>;
+
+  if (items.some((item) => 'node' in item)) {
+    return (
+      <>
+        {items.map((item) => (
+          <div key={item.node}>{item.node}</div>
+        ))}
+      </>
+    );
+  }
+
+  if (items.length === 1 && 'any' in items[0]) {
+    return <>Any</>;
+  }
+
+  return <></>;
 };

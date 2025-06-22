@@ -1,4 +1,4 @@
-# Oasis ROFL App (name to be decided)
+# ROFL App
 
 A web-based dashboard application for creating, exploring, monitoring and
 interacting with Oasis ROFL (Runtime Offchain Logic) Apps.
