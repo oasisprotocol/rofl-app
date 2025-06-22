@@ -12,12 +12,13 @@ import { AppSecrets } from './AppSecrets';
 import {
   useGetRuntimeRoflAppsId,
   type RoflAppMetadata,
+  type RoflAppSecrets,
 } from '../../../nexus/api';
 import { useNetwork } from '../../../hooks/useNetwork';
 import { useParams } from 'react-router-dom';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
-import { type ViewMetadataState } from './types';
+import { type ViewMetadataState, type ViewSecretsState } from './types';
 import { DiscardChanges } from './DiscardButton';
 import { ApplyChanges } from './ApplyChanges';
 
@@ -37,10 +38,26 @@ function setDefaultMetadataViewState(
   };
 }
 
+function setDefaultSecretsViewState(
+  secrets: RoflAppSecrets | undefined = {}
+): ViewSecretsState {
+  return {
+    isDirty: false,
+    secrets: {
+      ...secrets,
+    },
+  };
+}
+
 export const AppDetails: FC = () => {
   const [viewMetadataState, setViewMetadataState] = useState({
     ...setDefaultMetadataViewState(),
   });
+  const [viewSecretsState, setViewSecretsState] = useState({
+    ...setDefaultSecretsViewState(),
+  });
+  console.log('viewMetadataState', viewMetadataState);
+  console.log('viewSecretsState', viewSecretsState);
   const network = useNetwork();
   const { id } = useParams();
   const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', id!);
@@ -52,6 +69,7 @@ export const AppDetails: FC = () => {
       setViewMetadataState({
         ...setDefaultMetadataViewState(roflApp.metadata),
       });
+      setViewSecretsState({ ...setDefaultSecretsViewState(roflApp.secrets) });
     }
   }, [roflApp]);
 
@@ -81,17 +99,28 @@ export const AppDetails: FC = () => {
               </div>
               <div className="flex flex-wrap gap-3">
                 <DiscardChanges
-                  disabled={!viewMetadataState.isDirty}
-                  onConfirm={() =>
+                  disabled={
+                    !viewMetadataState.isDirty && !viewSecretsState.isDirty
+                  }
+                  onConfirm={() => {
                     setViewMetadataState({
                       ...setDefaultMetadataViewState(roflApp.metadata),
-                    })
-                  }
+                    });
+                    setViewSecretsState({
+                      ...setDefaultSecretsViewState(roflApp.secrets),
+                    });
+                  }}
                 />
                 <ApplyChanges
-                  disabled={!viewMetadataState.isDirty}
+                  disabled={
+                    !viewMetadataState.isDirty && !viewSecretsState.isDirty
+                  }
                   onConfirm={() => {
                     setViewMetadataState((prev) => ({
+                      ...prev,
+                      isDirty: false,
+                    }));
+                    setViewSecretsState((prev) => ({
                       ...prev,
                       isDirty: false,
                     }));
@@ -114,7 +143,10 @@ export const AppDetails: FC = () => {
               />
             </TabsContent>
             <TabsContent value="secrets">
-              <AppSecrets secrets={roflApp.secrets} />
+              <AppSecrets
+                secrets={viewSecretsState.secrets}
+                setViewSecretsState={setViewSecretsState}
+              />
             </TabsContent>
             <TabsContent value="compose">
               <YamlCode

@@ -8,16 +8,31 @@ import {
   TableCell,
 } from '@oasisprotocol/ui-library/src/components/ui/table';
 import { LockKeyhole } from 'lucide-react';
-import type { RoflAppSecrets } from '../../../nexus/api';
+import { type RoflAppSecrets } from '../../../nexus/api';
 import { RemoveSecret } from './RemoveSecret';
 import { SecretDialog } from './SecretDialog';
+import { type ViewSecretsState } from './types';
 
 type AppSecretsProps = {
   secrets: RoflAppSecrets;
+  setViewSecretsState: (state: ViewSecretsState) => void;
 };
 
-export const AppSecrets: FC<AppSecretsProps> = ({ secrets }) => {
+export const AppSecrets: FC<AppSecretsProps> = ({
+  secrets,
+  setViewSecretsState,
+}) => {
   const hasSecrets = Object.keys(secrets).length > 0;
+
+  function handleRemoveSecret(secret: string) {
+    const updatedSecrets = { ...secrets };
+    delete updatedSecrets[secret];
+    setViewSecretsState({
+      isDirty: true,
+      secrets: updatedSecrets,
+    });
+  }
+
   return (
     <div className="space-y-4">
       {hasSecrets && (
@@ -43,7 +58,10 @@ export const AppSecrets: FC<AppSecretsProps> = ({ secrets }) => {
                   <SecretDialog mode="edit" secret={key} />
                 </TableCell>
                 <TableCell className="w-10">
-                  <RemoveSecret secret={key} />
+                  <RemoveSecret
+                    secret={key}
+                    handleRemoveSecret={handleRemoveSecret}
+                  />
                 </TableCell>
               </TableRow>
             ))}
