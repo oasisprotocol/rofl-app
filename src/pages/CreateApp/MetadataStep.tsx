@@ -4,7 +4,7 @@ import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { InputFormField } from './InputFormField';
+import { MetadataFormFields } from '../../components/MetadataFormFields';
 import { metadataFormSchema, type MetadataFormData } from './types';
 
 type MetadataStepProps = {
@@ -64,41 +64,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 mb-6 w-full"
       >
-        <InputFormField
-          control={form.control}
-          name="name"
-          label="Name"
-          placeholder="ROFL App name"
-        />
-
-        <InputFormField
-          control={form.control}
-          name="author"
-          label="Author"
-          placeholder="Rofl App Creator"
-        />
-
-        <InputFormField
-          control={form.control}
-          name="description"
-          label="Description"
-          placeholder="Tell us something about it"
-          type="textarea"
-        />
-
-        <InputFormField
-          control={form.control}
-          name="version"
-          label="Version"
-          placeholder="Rofl App version"
-        />
-
-        <InputFormField
-          control={form.control}
-          name="homepage"
-          label="Homepage"
-          placeholder="Website, Twitter, Discord"
-        />
+        <MetadataFormFields control={form.control} />
 
         <CreateFormNavigation
           handleNext={handleFormSubmit}

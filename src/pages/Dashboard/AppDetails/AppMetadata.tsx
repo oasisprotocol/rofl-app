@@ -1,8 +1,6 @@
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow';
-import { SquarePen } from 'lucide-react';
 import {
   useGetRuntimeRoflAppsIdTransactions,
   type RoflApp,
@@ -10,6 +8,7 @@ import {
 import { useNetwork } from '../../../hooks/useNetwork';
 import { isUrlSafe } from '../../../utils/url';
 import { trimLongString } from '../../../utils/trimLongString';
+import { MetadataDialog } from './MetadataDialog';
 
 type AppMetadataProps = {
   app: RoflApp;
@@ -49,14 +48,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({ app }) => {
           {app.id}
         </a>
       </DetailsSectionRow>
-      <Button
-        disabled
-        variant="outline"
-        className="w-full md:w-auto md:ml-8 float-right"
-      >
-        <SquarePen />
-        Edit
-      </Button>
+      <MetadataDialog metadata={app.metadata} />
       <DetailsSectionRow label="Author">
         <>{app.metadata?.['net.oasis.rofl.author']}</>
       </DetailsSectionRow>
