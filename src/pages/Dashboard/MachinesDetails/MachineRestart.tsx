@@ -15,7 +15,7 @@ import { RotateCcw } from 'lucide-react';
 export const MachineRestart: FC = () => {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant="outline" className="w-full md:w-auto md:ml-8">
           <RotateCcw />
           Restart
