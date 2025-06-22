@@ -21,7 +21,7 @@ export const metadataFormSchema = z.object({
   license: z.string().min(1, {
     message: 'License is required.',
   }),
-  homepage: z.string().optional(),
+  homepage: z.string().url().optional(),
 });
 
 export const agentFormSchema = z.object({

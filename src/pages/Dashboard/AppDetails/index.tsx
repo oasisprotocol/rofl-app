@@ -19,6 +19,7 @@ import { useParams } from 'react-router-dom';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
 import { type ViewMetadataState } from './types';
+import { DiscardChanges } from './DiscardButton';
 
 function setDefaultMetadataViewState(
   metadata: RoflAppMetadata | undefined = {}
@@ -79,18 +80,14 @@ export const AppDetails: FC = () => {
                 <AppStatusIcon hasActiveInstances removed={false} />
               </div>
               <div className="flex flex-wrap gap-3">
-                <Button
+                <DiscardChanges
                   disabled={!viewMetadataState.isDirty}
-                  variant="destructive"
-                  className="w-full md:w-auto md:ml-8"
-                  onClick={() =>
+                  onConfirm={() =>
                     setViewMetadataState({
                       ...setDefaultMetadataViewState(roflApp.metadata),
                     })
                   }
-                >
-                  Discard
-                </Button>
+                />
                 <Button
                   disabled={!viewMetadataState.isDirty}
                   className="w-full md:w-auto md:mr-8"
