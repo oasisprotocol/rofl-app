@@ -27,9 +27,16 @@ const formSchema = z.object({
 type SecretDialogProps = {
   mode: 'add' | 'edit';
   secret?: string;
+  handleAddSecret?: (name: string, value: string) => void;
+  handleEditSecret?: (name: string, value: string) => void;
 };
 
-export const SecretDialog: FC<SecretDialogProps> = ({ mode, secret }) => {
+export const SecretDialog: FC<SecretDialogProps> = ({
+  mode,
+  secret,
+  handleAddSecret,
+  handleEditSecret,
+}) => {
   const [open, setOpen] = useState(false);
   const isEditMode = mode === 'edit';
 
@@ -66,7 +73,14 @@ export const SecretDialog: FC<SecretDialogProps> = ({ mode, secret }) => {
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('values', values);
+    if (mode === 'add') {
+      handleAddSecret?.(values.name, values.value);
+    }
+
+    if (isEditMode && secret) {
+      handleEditSecret?.(secret, values.value);
+    }
+
     form.reset();
     setOpen(false);
   }
@@ -117,7 +131,7 @@ export const SecretDialog: FC<SecretDialogProps> = ({ mode, secret }) => {
               <Button variant="outline" onClick={onCancel} type="reset">
                 Cancel
               </Button>
-              <Button type="submit" className="">
+              <Button type="submit">
                 {isEditMode ? 'Replace' : 'Save Changes'}
               </Button>
             </div>

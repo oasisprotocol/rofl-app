@@ -56,8 +56,6 @@ export const AppDetails: FC = () => {
   const [viewSecretsState, setViewSecretsState] = useState({
     ...setDefaultSecretsViewState(),
   });
-  console.log('viewMetadataState', viewMetadataState);
-  console.log('viewSecretsState', viewSecretsState);
   const network = useNetwork();
   const { id } = useParams();
   const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', id!);

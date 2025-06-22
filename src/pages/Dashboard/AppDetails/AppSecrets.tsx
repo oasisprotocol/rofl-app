@@ -33,6 +33,24 @@ export const AppSecrets: FC<AppSecretsProps> = ({
     });
   }
 
+  function handleAddSecret(name: string, value: string) {
+    const updatedSecrets = { ...secrets, [name]: value };
+    setViewSecretsState({
+      isDirty: true,
+      secrets: updatedSecrets,
+    });
+  }
+
+  function handleEditSecret(name: string, value: string) {
+    console.log('value', value);
+    console.log('name', name);
+    const updatedSecrets = { ...secrets, [name]: value };
+    setViewSecretsState({
+      isDirty: true,
+      secrets: updatedSecrets,
+    });
+  }
+
   return (
     <div className="space-y-4">
       {hasSecrets && (
@@ -55,7 +73,11 @@ export const AppSecrets: FC<AppSecretsProps> = ({
                   {key}: [{(secrets[key] as string).length} bytes]
                 </TableCell>
                 <TableCell className="w-10">
-                  <SecretDialog mode="edit" secret={key} />
+                  <SecretDialog
+                    mode="edit"
+                    secret={key}
+                    handleEditSecret={handleEditSecret}
+                  />
                 </TableCell>
                 <TableCell className="w-10">
                   <RemoveSecret
@@ -68,7 +90,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({
           </TableBody>
         </Table>
       )}
-      <SecretDialog mode="add" />
+      <SecretDialog mode="add" handleAddSecret={handleAddSecret} />
     </div>
   );
 };
