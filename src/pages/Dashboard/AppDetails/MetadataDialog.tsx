@@ -17,13 +17,18 @@ import {
   metadataFormSchema,
   type MetadataFormData,
 } from '../../CreateApp/types';
-import type { RoflAppMetadata } from '../../../nexus/api';
+import { type RoflAppMetadata } from '../../../nexus/api';
+import { type ViewMetadataState } from './types';
 
 type MetadataDialogProps = {
   metadata?: RoflAppMetadata;
+  setViewMetadataState: (state: ViewMetadataState) => void;
 };
 
-export const MetadataDialog: FC<MetadataDialogProps> = ({ metadata }) => {
+export const MetadataDialog: FC<MetadataDialogProps> = ({
+  metadata,
+  setViewMetadataState,
+}) => {
   const [open, setOpen] = useState(false);
 
   const form = useForm<MetadataFormData>({
@@ -40,11 +45,7 @@ export const MetadataDialog: FC<MetadataDialogProps> = ({ metadata }) => {
   useEffect(() => {
     if (metadata) {
       form.reset({
-        name: (metadata?.['net.oasis.rofl.name'] as string) || '',
-        author: (metadata?.['net.oasis.rofl.author'] as string) || '',
-        description: (metadata?.['net.oasis.rofl.description'] as string) || '',
-        version: (metadata?.['net.oasis.rofl.version'] as string) || '',
-        homepage: (metadata?.['net.oasis.rofl.homepage'] as string) || '',
+        ...metadata,
       });
     }
   }, [metadata, form]);
@@ -63,7 +64,12 @@ export const MetadataDialog: FC<MetadataDialogProps> = ({ metadata }) => {
   }
 
   function onSubmit(values: MetadataFormData) {
-    console.log(values);
+    setViewMetadataState({
+      isDirty: true,
+      metadata: {
+        ...values,
+      },
+    });
     form.reset();
     setOpen(false);
   }

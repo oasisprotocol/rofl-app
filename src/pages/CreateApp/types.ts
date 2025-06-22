@@ -18,6 +18,9 @@ export const metadataFormSchema = z.object({
         message: 'Version must be valid semver format.',
       }
     ),
+  license: z.string().min(1, {
+    message: 'License is required.',
+  }),
   homepage: z.string().optional(),
 });
 

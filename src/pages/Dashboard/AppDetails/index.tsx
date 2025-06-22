@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import {
   Tabs,
@@ -10,18 +10,49 @@ import { AppStatusIcon } from '../../../components/AppStatusIcon';
 import { YamlCode } from '../../../components/CodeDisplay';
 import { AppMetadata } from './AppMetadata';
 import { AppSecrets } from './AppSecrets';
-import { useGetRuntimeRoflAppsId } from '../../../nexus/api';
+import {
+  useGetRuntimeRoflAppsId,
+  type RoflAppMetadata,
+} from '../../../nexus/api';
 import { useNetwork } from '../../../hooks/useNetwork';
 import { useParams } from 'react-router-dom';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
+import { type ViewMetadataState } from './types';
+
+function setDefaultMetadataViewState(
+  metadata: RoflAppMetadata | undefined = {}
+): ViewMetadataState {
+  return {
+    isDirty: false,
+    metadata: {
+      name: (metadata['net.oasis.rofl.name'] as string) || '',
+      author: (metadata['net.oasis.rofl.author'] as string) || '',
+      description: (metadata['net.oasis.rofl.description'] as string) || '',
+      version: (metadata['net.oasis.rofl.version'] as string) || '',
+      homepage: (metadata['net.oasis.rofl.homepage'] as string) || '',
+      license: (metadata['net.oasis.rofl.license'] as string) || '',
+    },
+  };
+}
 
 export const AppDetails: FC = () => {
+  const [viewMetadataState, setViewMetadataState] = useState({
+    ...setDefaultMetadataViewState(),
+  });
   const network = useNetwork();
   const { id } = useParams();
   const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', id!);
   const { data, isLoading, isFetched } = roflAppQuery;
   const roflApp = data?.data;
+
+  useEffect(() => {
+    if (roflApp) {
+      setViewMetadataState({
+        ...setDefaultMetadataViewState(roflApp.metadata),
+      });
+    }
+  }, [roflApp]);
 
   return (
     <>
@@ -41,7 +72,7 @@ export const AppDetails: FC = () => {
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold">
                   <>
-                    {roflApp.metadata?.['net.oasis.rofl.name'] ||
+                    {viewMetadataState.metadata.name ||
                       trimLongString(roflApp.id)}
                   </>
                 </h1>
@@ -49,13 +80,21 @@ export const AppDetails: FC = () => {
               </div>
               <div className="flex flex-wrap gap-3">
                 <Button
-                  disabled
+                  disabled={!viewMetadataState.isDirty}
                   variant="destructive"
                   className="w-full md:w-auto md:ml-8"
+                  onClick={() =>
+                    setViewMetadataState({
+                      ...setDefaultMetadataViewState(roflApp.metadata),
+                    })
+                  }
                 >
                   Discard
                 </Button>
-                <Button disabled className="w-full md:w-auto md:mr-8">
+                <Button
+                  disabled={!viewMetadataState.isDirty}
+                  className="w-full md:w-auto md:mr-8"
+                >
                   Apply
                 </Button>
                 <TabsList className="w-full md:w-auto">
@@ -66,7 +105,12 @@ export const AppDetails: FC = () => {
               </div>
             </div>
             <TabsContent value="details">
-              <AppMetadata app={roflApp} />
+              <AppMetadata
+                id={roflApp.id}
+                editableState={viewMetadataState.metadata}
+                policy={roflApp.policy}
+                setViewMetadataState={setViewMetadataState}
+              />
             </TabsContent>
             <TabsContent value="secrets">
               <AppSecrets secrets={roflApp.secrets} />

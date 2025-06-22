@@ -43,6 +43,13 @@ export const MetadataFormFields: FC<MetadataFormFieldsProps> = ({
 
       <InputFormField
         control={control}
+        name="license"
+        label="license"
+        placeholder="MIT, Apache-2.0, etc."
+      />
+
+      <InputFormField
+        control={control}
         name="homepage"
         label="Homepage"
         placeholder="Website, Twitter, Discord"
