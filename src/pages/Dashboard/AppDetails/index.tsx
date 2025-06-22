@@ -1,5 +1,4 @@
 import { useEffect, useState, type FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 import {
   Tabs,
   TabsContent,
@@ -20,6 +19,7 @@ import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
 import { type ViewMetadataState } from './types';
 import { DiscardChanges } from './DiscardButton';
+import { ApplyChanges } from './ApplyChanges';
 
 function setDefaultMetadataViewState(
   metadata: RoflAppMetadata | undefined = {}
@@ -88,12 +88,16 @@ export const AppDetails: FC = () => {
                     })
                   }
                 />
-                <Button
+                <ApplyChanges
                   disabled={!viewMetadataState.isDirty}
-                  className="w-full md:w-auto md:mr-8"
-                >
-                  Apply
-                </Button>
+                  onConfirm={() => {
+                    setViewMetadataState((prev) => ({
+                      ...prev,
+                      isDirty: false,
+                    }));
+                    roflAppQuery.refetch();
+                  }}
+                />
                 <TabsList className="w-full md:w-auto">
                   <TabsTrigger value="details">Details</TabsTrigger>
                   <TabsTrigger value="secrets">Secrets</TabsTrigger>
