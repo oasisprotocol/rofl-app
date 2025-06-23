@@ -74,6 +74,7 @@ export const Create: FC = () => {
         <PaymentStep
           handleNext={handleNext}
           handleBack={handleBack}
+          appData={appData}
           selectedTemplateName={selectedTemplate?.name}
         />
       )}

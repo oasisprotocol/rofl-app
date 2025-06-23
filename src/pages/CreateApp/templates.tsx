@@ -24,7 +24,7 @@ export const templates = [
         license: parsedTemplate.license || '',
       },
       build: {
-        provider: 'OPF',
+        provider: '',
         resources: 'medium',
       },
     },
