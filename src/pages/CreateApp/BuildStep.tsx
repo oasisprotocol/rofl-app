@@ -15,6 +15,7 @@ import { useGetRosePrice } from '../../coin-gecko/api';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { useNetwork } from '../../hooks/useNetwork';
 import { useGetRuntimeRoflmarketProviders } from '../../nexus/api';
+import { getWhitelistedProviders } from '../../utils/providers';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -56,14 +57,13 @@ export const BuildStep: FC<AgentStepProps> = ({
   const providersQuery = useGetRuntimeRoflmarketProviders(network, 'sapphire');
   const { data } = providersQuery;
   const providers = data?.data.providers;
-  const providerOptions = providers
-    ? providers?.map((provider) => ({
-        value: provider.address,
-        label:
-          (provider.metadata['net.oasis.provider.name'] as string) ||
-          provider.address,
-      }))
-    : [];
+  const whitelistedProviders = getWhitelistedProviders(providers, network);
+  const providerOptions = whitelistedProviders?.map((provider) => ({
+    value: provider.address,
+    label:
+      (provider.metadata?.['net.oasis.provider.name'] as string) ||
+      provider.address,
+  }));
   const {
     data: rosePrice,
     isLoading: isLoadingRosePrice,
@@ -77,6 +77,12 @@ export const BuildStep: FC<AgentStepProps> = ({
   useEffect(() => {
     form.reset({ ...build });
   }, [build, form]);
+
+  useEffect(() => {
+    if (providerOptions.length === 1 && !form.getValues('provider')) {
+      form.setValue('provider', providerOptions[0].value);
+    }
+  }, [providerOptions, form]);
 
   const onSubmit = (values: BuildFormData) => {
     setAppDataForm({ build: values });

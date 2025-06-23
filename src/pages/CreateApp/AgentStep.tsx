@@ -54,7 +54,7 @@ export const AgentStep: FC<AgentStepProps> = ({
       selectedTemplateName={selectedTemplateName}
     >
       <CreateFormHeader
-        title="Agent Secrets"
+        title="Agent Config"
         description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
       />
 
