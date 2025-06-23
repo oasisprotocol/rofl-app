@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { WagmiProvider } from 'wagmi';
 import { CreateContextProvider } from './pages/CreateApp/CreateContextProvider';
 import { Landing } from './pages/Landing';
@@ -33,6 +33,53 @@ const rainbowKitTheme: Theme = {
   },
 };
 
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Landing />,
+  },
+  {
+    path: '/dashboard',
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+      {
+        path: 'apps',
+        element: <MyApps />,
+      },
+      {
+        path: 'apps/:id',
+        element: <AppDetails />,
+      },
+      {
+        path: 'machines',
+        element: <Machines />,
+      },
+      {
+        path: 'machines/:provider/instances/:id',
+        element: <MachinesDetails />,
+      },
+    ],
+  },
+  {
+    path: '/create',
+    element: <Create />,
+  },
+  {
+    path: '/explore',
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <Explore />,
+      },
+    ],
+  },
+]);
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <WagmiProvider config={wagmiConfig}>
@@ -47,27 +94,9 @@ createRoot(document.getElementById('root')!).render(
           )}
         >
           <RoflAppBackendAuthProvider>
-            <BrowserRouter>
-              <CreateContextProvider>
-                <Routes>
-                  <Route path="/" element={<Landing />} />
-                  <Route path="/dashboard" element={<MainLayout />}>
-                    <Route index element={<Dashboard />} />
-                    <Route path="apps" element={<MyApps />} />
-                    <Route path="apps/:id" element={<AppDetails />} />
-                    <Route path="machines" element={<Machines />} />
-                    <Route
-                      path="machines/:provider/instances/:id"
-                      element={<MachinesDetails />}
-                    />
-                  </Route>
-                  <Route path="/create" element={<Create />}></Route>
-                  <Route path="/explore" element={<MainLayout />}>
-                    <Route index element={<Explore />} />
-                  </Route>
-                </Routes>
-              </CreateContextProvider>
-            </BrowserRouter>
+            <CreateContextProvider>
+              <RouterProvider router={router} />
+            </CreateContextProvider>
           </RoflAppBackendAuthProvider>
         </RainbowKitProvider>
       </QueryClientProvider>

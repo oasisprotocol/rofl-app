@@ -23,11 +23,7 @@ export const DiscardChanges: FC<DiscardChangesProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          disabled={disabled}
-          variant="destructive"
-          className="w-full md:w-auto md:ml-8"
-        >
+        <Button disabled={disabled} variant="destructive">
           Discard
         </Button>
       </DialogTrigger>

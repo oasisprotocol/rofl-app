@@ -15,12 +15,13 @@ import {
   type RoflAppSecrets,
 } from '../../../nexus/api';
 import { useNetwork } from '../../../hooks/useNetwork';
-import { useParams } from 'react-router-dom';
+import { useParams, useBlocker } from 'react-router-dom';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
 import { type ViewMetadataState, type ViewSecretsState } from './types';
 import { DiscardChanges } from './DiscardButton';
 import { ApplyChanges } from './ApplyChanges';
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
 
 function setDefaultMetadataViewState(
   metadata: RoflAppMetadata | undefined = {}
@@ -62,6 +63,12 @@ export const AppDetails: FC = () => {
   const { data, isLoading, isFetched } = roflAppQuery;
   const roflApp = data?.data;
 
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      (viewMetadataState.isDirty || viewSecretsState.isDirty) &&
+      currentLocation.pathname !== nextLocation.pathname
+  );
+
   useEffect(() => {
     if (roflApp) {
       setViewMetadataState({
@@ -83,72 +90,82 @@ export const AppDetails: FC = () => {
         </div>
       )}
       {isFetched && roflApp && (
-        <div>
-          <Tabs defaultValue="details">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b py-5 mb-5">
-              <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-bold">
-                  <>
-                    {viewMetadataState.metadata.name ||
-                      trimLongString(roflApp.id)}
-                  </>
-                </h1>
-                <AppStatusIcon hasActiveInstances removed={false} />
+        <>
+          <div
+            className={cn(
+              'flex items-center gap-2 px-4 py-2 rounded-md bg-card absolute right-6 bottom-16',
+              !viewMetadataState.isDirty &&
+                !viewSecretsState.isDirty &&
+                'hidden',
+              blocker.state === 'blocked' && 'animate-bounce'
+            )}
+          >
+            <span className="text-sm font-semibold pr-6">Unsaved Changes</span>
+            <DiscardChanges
+              disabled={!viewMetadataState.isDirty && !viewSecretsState.isDirty}
+              onConfirm={() => {
+                setViewMetadataState({
+                  ...setDefaultMetadataViewState(roflApp.metadata),
+                });
+                setViewSecretsState({
+                  ...setDefaultSecretsViewState(roflApp.secrets),
+                });
+                blocker.reset();
+              }}
+            />
+            <ApplyChanges
+              disabled={!viewMetadataState.isDirty && !viewSecretsState.isDirty}
+              onConfirm={() => {
+                setViewMetadataState((prev) => ({
+                  ...prev,
+                  isDirty: false,
+                }));
+                setViewSecretsState((prev) => ({
+                  ...prev,
+                  isDirty: false,
+                }));
+                blocker.reset();
+                roflAppQuery.refetch();
+              }}
+            />
+          </div>
+          <div>
+            <Tabs defaultValue="details">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b py-5 mb-5">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-bold">
+                    <>
+                      {viewMetadataState.metadata.name ||
+                        trimLongString(roflApp.id)}
+                    </>
+                  </h1>
+                  <AppStatusIcon hasActiveInstances removed={false} />
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <TabsList className="w-full md:w-auto">
+                    <TabsTrigger value="details">Details</TabsTrigger>
+                    <TabsTrigger value="secrets">Secrets</TabsTrigger>
+                    <TabsTrigger value="compose">Compose</TabsTrigger>
+                  </TabsList>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-3">
-                <DiscardChanges
-                  disabled={
-                    !viewMetadataState.isDirty && !viewSecretsState.isDirty
-                  }
-                  onConfirm={() => {
-                    setViewMetadataState({
-                      ...setDefaultMetadataViewState(roflApp.metadata),
-                    });
-                    setViewSecretsState({
-                      ...setDefaultSecretsViewState(roflApp.secrets),
-                    });
-                  }}
+              <TabsContent value="details">
+                <AppMetadata
+                  id={roflApp.id}
+                  editableState={viewMetadataState.metadata}
+                  policy={roflApp.policy}
+                  setViewMetadataState={setViewMetadataState}
                 />
-                <ApplyChanges
-                  disabled={
-                    !viewMetadataState.isDirty && !viewSecretsState.isDirty
-                  }
-                  onConfirm={() => {
-                    setViewMetadataState((prev) => ({
-                      ...prev,
-                      isDirty: false,
-                    }));
-                    setViewSecretsState((prev) => ({
-                      ...prev,
-                      isDirty: false,
-                    }));
-                    roflAppQuery.refetch();
-                  }}
+              </TabsContent>
+              <TabsContent value="secrets">
+                <AppSecrets
+                  secrets={viewSecretsState.secrets}
+                  setViewSecretsState={setViewSecretsState}
                 />
-                <TabsList className="w-full md:w-auto">
-                  <TabsTrigger value="details">Details</TabsTrigger>
-                  <TabsTrigger value="secrets">Secrets</TabsTrigger>
-                  <TabsTrigger value="compose">Compose</TabsTrigger>
-                </TabsList>
-              </div>
-            </div>
-            <TabsContent value="details">
-              <AppMetadata
-                id={roflApp.id}
-                editableState={viewMetadataState.metadata}
-                policy={roflApp.policy}
-                setViewMetadataState={setViewMetadataState}
-              />
-            </TabsContent>
-            <TabsContent value="secrets">
-              <AppSecrets
-                secrets={viewSecretsState.secrets}
-                setViewSecretsState={setViewSecretsState}
-              />
-            </TabsContent>
-            <TabsContent value="compose">
-              <YamlCode
-                data={`
+              </TabsContent>
+              <TabsContent value="compose">
+                <YamlCode
+                  data={`
                 services:
                 ollama:
                 image: "docker.io/ollama/ollama"
@@ -200,10 +217,11 @@ export const AppDetails: FC = () => {
       condition: service_completed_successfully
       
       `}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
+                />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </>
       )}
     </>
   );
