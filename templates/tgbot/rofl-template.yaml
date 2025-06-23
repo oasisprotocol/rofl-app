@@ -6,7 +6,7 @@ description: |
 image: https://rofl.app/templates/tgbot.png
 version: 0.1.0
 repository: https://github.com/oasisprotocol/demo-rofl-tgbot
-author: Oasis Protocol Foundation <info@oasis.net>
+author: Oasis Protocol Foundation <info@oasisprotocol.org>
 license: Apache-2.0
 tags:
   - ChatBot
