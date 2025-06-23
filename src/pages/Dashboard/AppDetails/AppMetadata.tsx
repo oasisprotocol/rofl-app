@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow';
 import {
   useGetRuntimeRoflAppsIdTransactions,
+  useGetRuntimeRoflmarketInstances,
   type RoflAppPolicy,
 } from '../../../nexus/api';
 import { useNetwork } from '../../../hooks/useNetwork';
@@ -11,6 +12,8 @@ import { trimLongString } from '../../../utils/trimLongString';
 import { MetadataDialog } from './MetadataDialog';
 import { type ViewMetadataState } from './types';
 import { type MetadataFormData } from '../../CreateApp/types';
+import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
+import { MachineResources } from '../../../components/MachineResources';
 
 type AppMetadataProps = {
   id: string;
@@ -36,17 +39,61 @@ export const AppMetadata: FC<AppMetadataProps> = ({
     }
   );
   const transaction = data?.data.transactions[0];
+  const {
+    data: machinesData,
+    isLoading: isMachineLoading,
+    isFetched: isMachineFetched,
+  } = useGetRuntimeRoflmarketInstances(network, 'sapphire', {
+    deployed_app_id: id,
+  });
+  const machines = machinesData?.data.instances;
 
   return (
     <div className="space-y-4">
-      <DetailsSectionRow label="Machine(s)">
-        <Link to="/dashboard/machines" className="text-primary">
-          OPF-1
-        </Link>
-      </DetailsSectionRow>
-      <DetailsSectionRow label="Minimum resources" className=" pb-6 border-b">
-        1CPU, 2GB RAM, 10GB Storage
-      </DetailsSectionRow>
+      {isMachineLoading && <Skeleton className="w-full h-60px]" />}
+
+      {machines && machines.length > 0 && isMachineFetched ? (
+        <>
+          <DetailsSectionRow label="Machine(s)">
+            {machines.map((machine, index) => (
+              <>
+                <Link
+                  key={machine.id}
+                  to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}
+                  className="text-primary"
+                >
+                  <>
+                    {machine.metadata['net.oasis.provider.name'] ||
+                      trimLongString(machine.provider)}
+                  </>
+                </Link>
+                {index < machines.length - 1 && <>, </>}
+              </>
+            ))}
+          </DetailsSectionRow>
+          <DetailsSectionRow
+            label="Machine(s) resources"
+            className=" pb-6 border-b"
+          >
+            {machines.map((machine, index) => (
+              <>
+                <MachineResources
+                  cpus={machine.resources.cpus}
+                  memory={machine.resources.memory}
+                  storage={machine.resources.storage}
+                />
+                {index < machines.length - 1 && <>, </>}
+              </>
+            ))}
+          </DetailsSectionRow>
+        </>
+      ) : (
+        <DetailsSectionRow label="Machine(s)" className="pb-6 border-b">
+          <span className="text-muted-foreground">
+            Machines data is not available.
+          </span>
+        </DetailsSectionRow>
+      )}
       <DetailsSectionRow label="Explorer Link" className="pb-6 border-b">
         <a
           href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${id}`}
