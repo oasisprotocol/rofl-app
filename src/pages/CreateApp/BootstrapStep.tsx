@@ -84,16 +84,12 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
   const rofl = template.templateParser(appData.metadata!, network, appId);
   const roflYaml = stringify(rofl);
   const composeYaml = template.yaml.compose;
-  const manifestBuf = new TextEncoder().encode(roflYaml);
-  const composeBuf = new TextEncoder().encode(composeYaml);
-  const manifest = Array.from(new Uint8Array(manifestBuf));
-  const compose = Array.from(new Uint8Array(composeBuf));
 
   if (!buildTriggered && token && appData && template) {
     setBuildTriggered(true);
     buildRoflMutation.mutate({
-      manifest,
-      compose,
+      manifest: roflYaml,
+      compose: composeYaml,
     });
   }
 

@@ -23,8 +23,8 @@ type MeResponse = {
 };
 
 type RoflBuildRequest = {
-  manifest: number[];
-  compose: number[];
+  manifest: string;
+  compose: string;
 };
 
 type RoflBuildResponse = {
