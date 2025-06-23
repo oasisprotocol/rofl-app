@@ -6,7 +6,6 @@ import {
   TabsTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/tabs';
 import { AppStatusIcon } from '../../../components/AppStatusIcon';
-import { YamlCode } from '../../../components/CodeDisplay';
 import { AppMetadata } from './AppMetadata';
 import { AppSecrets } from './AppSecrets';
 import {
@@ -22,6 +21,9 @@ import { type ViewMetadataState, type ViewSecretsState } from './types';
 import { DiscardChanges } from './DiscardButton';
 import { ApplyChanges } from './ApplyChanges';
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
+import { useDownloadArtifact } from '../../../backend/api';
+import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAuth/hooks';
+import { AppArtifacts } from './AppArtifacts';
 
 function setDefaultMetadataViewState(
   metadata: RoflAppMetadata | undefined = {}
@@ -62,6 +64,9 @@ export const AppDetails: FC = () => {
   const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', id!);
   const { data, isLoading, isFetched } = roflAppQuery;
   const roflApp = data?.data;
+  const { token } = useRoflAppBackendAuthContext();
+  const roflArtifact = useDownloadArtifact(`${id}-rofl-yaml`, token);
+  const composeArtifact = useDownloadArtifact(`${id}-compose-yaml`, token);
 
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
@@ -164,59 +169,12 @@ export const AppDetails: FC = () => {
                 />
               </TabsContent>
               <TabsContent value="compose">
-                <YamlCode
-                  data={`
-                services:
-                ollama:
-                image: "docker.io/ollama/ollama"
-                ports:
-                - "11434:11434"
-                volumes:
-                - ~/ollama-storage:/root/.ollama
-                entrypoint: ["/usr/bin/bash", "-c", "/bin/ollama serve & sleep 5; ollama pull deepseek-r1:1.5b; wait"]
-                
-                sapphire-localnet:
-                image: "ghcr.io/oasisprotocol/sapphire-localnet"
-                platform: "linux/x86_64"
-                ports:
-                - "8544-8548:8544-8548"
-                healthcheck:
-      test: ["CMD", "test", "-f", "/CONTAINER_READY"]
-      interval: 30s
-      timeout: 10s
-      retries: 20
-      
-      contracts:
-      image: "ghcr.io/foundry-rs/foundry:latest"
-      volumes:
-      - ./contracts:/contracts
-      entrypoint: /bin/sh -c 'cd contracts && forge create --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --rpc-url http://sapphire-localnet:8545 --broadcast ChatBot --constructor-args localhost 00d795c033fb4b94873d81b6327f5371768ffc6fcf 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-      depends_on:
-      sapphire-localnet:
-      condition: service_healthy
-      
-      oracle:
-      environment:
-      CONTRACT_ADDRESS: 0x5FbDB2315678afecb367f032d93F642f64180aa3
-    build:
-      dockerfile: Dockerfile.oracle
-      #    entrypoint: /bin/sh -c 'python main.py --network http://sapphire-localnet:8545 --ollama-address http://ollama:11434 --secret 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 $$CONTRACT_ADDRESS'
-      entrypoint: /bin/sh -c 'sleep 100; python main.py --network http://sapphire-localnet:8545 --ollama-address http://ollama:11434 --secret 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 0x5FbDB2315678afecb367f032d93F642f64180aa3'
-      restart: on-failure
-      depends_on:
-      contracts:
-      condition: service_completed_successfully
-      
-      frontend:
-      build:
-      dockerfile: Dockerfile.frontend
-    ports:
-      - "5173:5173"
-      depends_on:
-      contracts:
-      condition: service_completed_successfully
-      
-      `}
+                <AppArtifacts
+                  isFetched={
+                    roflArtifact.isFetched && composeArtifact.isFetched
+                  }
+                  roflYaml={roflArtifact.data}
+                  composeYaml={composeArtifact.data}
                 />
               </TabsContent>
             </Tabs>
