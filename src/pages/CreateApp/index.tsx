@@ -17,12 +17,12 @@ export const Create: FC = () => {
 
   const { currentStep, setCurrentStep, appData, setAppDataForm } = context;
   const steps = [
-    { component: TemplateStep, label: 'Template Selection' },
-    { component: MetadataStep, label: 'Metadata Input' },
-    { component: AgentStep, label: 'Agent Specific Stuff' },
-    { component: BuildStep, label: 'Build and Deploy' },
-    { component: PaymentStep, label: 'Payment' },
-    { component: BootstrapStep, label: 'Bootstrap' },
+    { component: TemplateStep },
+    { component: MetadataStep },
+    { component: AgentStep },
+    { component: BuildStep },
+    { component: PaymentStep },
+    { component: BootstrapStep },
   ];
 
   const handleNext = () => {
