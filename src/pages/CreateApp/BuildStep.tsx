@@ -4,7 +4,6 @@ import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { InputFormField } from './InputFormField';
 import { Label } from '@oasisprotocol/ui-library/src/components/ui/label';
 import {
   RadioGroup,
@@ -113,13 +112,6 @@ export const BuildStep: FC<AgentStepProps> = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 mb-6 w-full"
       >
-        <InputFormField
-          control={form.control}
-          name="artifacts"
-          label="Base Artifacts"
-          placeholder="oasis boot 0.5.0, ROFL container 0.5.1"
-        />
-
         <SelectFormField
           control={form.control}
           name="provider"
