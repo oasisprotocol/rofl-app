@@ -8,6 +8,7 @@ import { stringify } from 'yaml';
 import { useBuildRofl, useGetRoflBuildResults } from '../../backend/api';
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
 import { useNetwork } from '../../hooks/useNetwork';
+import { useArtifactUploads } from '../../hooks/useArtifactUploads';
 
 // TEMP
 type Template = {
@@ -79,7 +80,7 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
     throw new Error('Missing data to bootstrap the app');
   }
 
-  const appId = 'TODO'; // Create app tx
+  const appId = 'rofl1qpdzzm4h73gtes04xjn4whan84s3k33l5gx787l2'; // Create app tx
   const rofl = template.templateParser(appData.metadata!, network, appId);
   const roflYaml = stringify(rofl);
   const composeYaml = template.yaml.compose;
@@ -96,8 +97,16 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
     });
   }
 
+  const { roflUpload, composeUpload } = useArtifactUploads({
+    token,
+    appId,
+    roflYaml,
+    composeYaml,
+  });
+
   const { data } = useGetRoflBuildResults(taskId, token);
   console.log('Build results:', data);
+  console.log('Upload status - ROFL:', roflUpload, 'Compose:', composeUpload);
 
   useEffect(() => {
     const interval = setInterval(() => {

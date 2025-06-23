@@ -39,6 +39,13 @@ type RoflBuildResultsResponse = {
   err: string;
 };
 
+type ArtifactUploadRequest = {
+  id: string;
+  file: File | Blob;
+};
+
+type ArtifactDownloadResponse = Blob;
+
 const fetchNonce = async (address: string): Promise<string> => {
   const response = await axios.get<NonceResponse>(`${BACKEND_URL}/auth/nonce`, {
     params: { address },
@@ -94,6 +101,32 @@ const fetchRoflBuildResults = async (
       },
     }
   );
+  return response.data;
+};
+
+const uploadArtifact = async (
+  { id, file }: ArtifactUploadRequest,
+  token: string
+): Promise<void> => {
+  await axios.put(`${BACKEND_URL}/artifacts/${id}`, file, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/octet-stream',
+    },
+    transformRequest: [(data) => data],
+  });
+};
+
+const downloadArtifact = async (
+  id: string,
+  token: string
+): Promise<ArtifactDownloadResponse> => {
+  const response = await axios.get(`${BACKEND_URL}/artifacts/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    responseType: 'blob',
+  });
   return response.data;
 };
 
@@ -161,6 +194,30 @@ export function useGetRoflBuildResults(
       }
       return failureCount < 3;
     },
+    throwOnError: false,
+  });
+}
+
+export function useUploadArtifact(token: string | null) {
+  return useMutation<void, AxiosError<unknown>, ArtifactUploadRequest>({
+    mutationFn: (data) => uploadArtifact(data, token!),
+    throwOnError: false,
+    onError: (error) => {
+      console.error('Error uploading artifact:', error);
+    },
+  });
+}
+
+export function useDownloadArtifact(
+  id: string | null,
+  token: string | null,
+  enabled: boolean = true
+) {
+  return useQuery<ArtifactDownloadResponse, AxiosError<unknown>>({
+    queryKey: ['artifact-download', id, token],
+    queryFn: () => downloadArtifact(id!, token!),
+    enabled: !!id && !!token && enabled,
+    staleTime: 0,
     throwOnError: false,
   });
 }
