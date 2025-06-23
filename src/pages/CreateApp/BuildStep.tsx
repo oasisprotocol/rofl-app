@@ -14,6 +14,8 @@ import { buildFormSchema, type BuildFormData } from './types';
 import { SelectFormField } from './SelectFormField';
 import { useGetRosePrice } from '../../coin-gecko/api';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
+import { useNetwork } from '../../hooks/useNetwork';
+import { useGetRuntimeRoflmarketProviders } from '../../nexus/api';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -51,6 +53,18 @@ export const BuildStep: FC<AgentStepProps> = ({
   setAppDataForm,
   selectedTemplateName,
 }) => {
+  const network = useNetwork();
+  const providersQuery = useGetRuntimeRoflmarketProviders(network, 'sapphire');
+  const { data } = providersQuery;
+  const providers = data?.data.providers;
+  const providerOptions = providers
+    ? providers?.map((provider) => ({
+        value: provider.address,
+        label:
+          (provider.metadata['net.oasis.provider.name'] as string) ||
+          provider.address,
+      }))
+    : [];
   const {
     data: rosePrice,
     isLoading: isLoadingRosePrice,
@@ -111,7 +125,7 @@ export const BuildStep: FC<AgentStepProps> = ({
           name="provider"
           label="Provider"
           placeholder="Select provider"
-          options={[{ value: 'OPF', label: 'OPF' }]}
+          options={[...providerOptions]}
         />
 
         <div className="grid gap-2">
