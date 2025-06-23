@@ -23,9 +23,7 @@ export const ApplyChanges: FC<ApplyChangesProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={disabled} className="w-full md:w-auto md:mr-8">
-          Apply
-        </Button>
+        <Button disabled={disabled}>Apply</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
