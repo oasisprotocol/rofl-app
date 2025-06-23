@@ -15,7 +15,7 @@ import {
   type RoflAppSecrets,
 } from '../../../nexus/api';
 import { useNetwork } from '../../../hooks/useNetwork';
-import { useParams } from 'react-router-dom';
+import { useParams, useBlocker } from 'react-router-dom';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
 import { type ViewMetadataState, type ViewSecretsState } from './types';
@@ -61,6 +61,25 @@ export const AppDetails: FC = () => {
   const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', id!);
   const { data, isLoading, isFetched } = roflAppQuery;
   const roflApp = data?.data;
+
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      (viewMetadataState.isDirty || viewSecretsState.isDirty) &&
+      currentLocation.pathname !== nextLocation.pathname
+  );
+
+  useEffect(() => {
+    if (blocker.state === 'blocked') {
+      const shouldLeave = window.confirm(
+        'Unsaved Changes: Please Approve or Discard your changes before leaving this page.'
+      );
+      if (shouldLeave) {
+        blocker.proceed();
+      } else {
+        blocker.reset();
+      }
+    }
+  }, [blocker]);
 
   useEffect(() => {
     if (roflApp) {
