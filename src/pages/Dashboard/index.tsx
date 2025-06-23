@@ -21,7 +21,7 @@ export const Dashboard: FC = () => {
   const roflAppsQuery = useGetRuntimeRoflApps(network, 'sapphire', {
     limit: pageLimit,
     offset: 0,
-    admin: address,
+    // admin: address,
   });
 
   const roflMachinesQuery = useGetRuntimeRoflmarketInstances(
@@ -30,7 +30,7 @@ export const Dashboard: FC = () => {
     {
       limit: pageLimit,
       offset: 0,
-      admin: address,
+      // admin: address,
     }
   );
   const { data, isLoading, isFetched } = roflAppsQuery;

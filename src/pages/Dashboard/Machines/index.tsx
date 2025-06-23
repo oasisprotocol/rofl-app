@@ -31,7 +31,7 @@ export const Machines: FC = () => {
       const result = await GetRuntimeRoflmarketInstances(network, 'sapphire', {
         limit: pageLimit,
         offset: pageParam,
-        admin: address,
+        // admin: address,
       });
       return result;
     },

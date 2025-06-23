@@ -34,7 +34,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
       const result = await GetRuntimeRoflApps(network, 'sapphire', {
         limit: pageLimit,
         offset: pageParam,
-        admin: type === 'dashboard' ? address : undefined,
+        // admin: type === 'dashboard' ? address : undefined,
       });
       return result;
     },
