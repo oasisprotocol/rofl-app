@@ -51,11 +51,19 @@ export const Dashboard: FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {isLoading && <Skeleton className="w-full h-[120px]" />}
           {isFetched && (
-            <MetricCard title="ROFL Apps Running" value={appsNumber} />
+            <MetricCard
+              title="ROFL Apps Running"
+              value={appsNumber}
+              isTotalCountClipped={data?.data.is_total_count_clipped}
+            />
           )}
           {isMachinesLoading && <Skeleton className="w-full h-[120px]" />}
           {isMachinesFetched && (
-            <MetricCard title="Machines Running" value={machinesNumber} />
+            <MetricCard
+              title="Machines Running"
+              value={machinesNumber}
+              isTotalCountClipped={machinesData?.data.is_total_count_clipped}
+            />
           )}
           <MetricCard title="Failures" value={failuresNumber} />
         </div>
