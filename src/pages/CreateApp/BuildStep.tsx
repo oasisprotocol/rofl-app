@@ -14,8 +14,13 @@ import { SelectFormField } from './SelectFormField';
 import { useGetRosePrice } from '../../coin-gecko/api';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { useNetwork } from '../../hooks/useNetwork';
-import { useGetRuntimeRoflmarketProviders } from '../../nexus/api';
 import { getWhitelistedProviders } from '../../utils/providers';
+import {
+  useGetRuntimeRoflmarketProviders,
+  useGetRuntimeRoflmarketProvidersAddressOffers,
+} from '../../nexus/api';
+import { fromBaseUnits } from '../../utils/number-utils';
+import { MachineResources } from '../../components/MachineResources';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -24,27 +29,6 @@ type AgentStepProps = {
   setAppDataForm: (data: { build: BuildFormData }) => void;
   selectedTemplateName?: string;
 };
-
-const resourceOptions = [
-  {
-    id: 'small',
-    name: 'Small',
-    specs: '1CPU, 2GB RAM, 10GB Storage',
-    price: '500 ROSE',
-  },
-  {
-    id: 'medium',
-    name: 'Medium',
-    specs: '2CPU, 4GB RAM, 25GB Storage',
-    price: '1000 ROSE',
-  },
-  {
-    id: 'large',
-    name: 'Large',
-    specs: '4CPU, 8GB RAM, 60GB Storage',
-    price: '1500 ROSE',
-  },
-];
 
 export const BuildStep: FC<AgentStepProps> = ({
   handleNext,
@@ -83,6 +67,39 @@ export const BuildStep: FC<AgentStepProps> = ({
       form.setValue('provider', providerOptions[0].value);
     }
   }, [providerOptions, form]);
+
+  const providerValue = form.watch('provider');
+  const providersOffers = useGetRuntimeRoflmarketProvidersAddressOffers(
+    network,
+    'sapphire',
+    providerValue
+  );
+
+  const resourceOptions =
+    providersOffers.data?.data.offers.map((offer) => ({
+      id: offer.id,
+      name: (offer.metadata['net.oasis.scheduler.offer'] as string) || offer.id,
+      specs: (
+        <MachineResources
+          cpus={offer.resources.cpus}
+          memory={offer.resources.memory}
+          storage={offer.resources.storage}
+        />
+      ),
+      price: `${fromBaseUnits(
+        (offer.payment?.native as { terms?: Record<string, string> })?.terms?.[
+          '1'
+        ] || '0',
+        18
+      )} ROSE`,
+    })) || [];
+
+  useEffect(() => {
+    if (providerValue) {
+      providersOffers.refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [providerValue]);
 
   const onSubmit = (values: BuildFormData) => {
     setAppDataForm({ build: values });
@@ -141,7 +158,6 @@ export const BuildStep: FC<AgentStepProps> = ({
                   {resourceOptions.map((option) => (
                     <div key={option.id} className="relative">
                       <RadioGroupItem
-                        disabled={option.id !== field.value}
                         value={option.id}
                         id={option.id}
                         className="peer sr-only"
@@ -159,7 +175,7 @@ export const BuildStep: FC<AgentStepProps> = ({
                               `}
                       >
                         <div className="flex flex-col">
-                          <span className="text-md font-semibold mb-1 text-foreground">
+                          <span className="text-md font-semibold mb-1 text-foreground capitalize">
                             {option.name}
                           </span>
                           <span className="text-muted-foreground text-sm">
