@@ -2,18 +2,23 @@ import { type FC } from 'react';
 import { CreateLayout } from './CreateLayout';
 import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
+import { type AppData } from './types';
 
 type AgentStepProps = {
   handleNext: () => void;
   handleBack: () => void;
   selectedTemplateName?: string;
+  appData?: AppData;
 };
 
 export const PaymentStep: FC<AgentStepProps> = ({
   handleNext,
   handleBack,
   selectedTemplateName,
+  appData,
 }) => {
+  console.log('appData', appData);
+
   return (
     <CreateLayout
       currentStep={4}
