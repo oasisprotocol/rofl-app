@@ -2659,6 +2659,10 @@ export type GetRuntimeRoflmarketInstancesParams = {
    * A filter on the admin of the ROFL market instance.
    */
   admin?: EthOrOasisAddress;
+  /**
+   * A filter on the deployed app ID of the ROFL market instance.
+   */
+  deployed_app_id?: string;
 };
 
 export type GetLayerStatsTxVolumeParams = {
