@@ -4,11 +4,9 @@ import { Header } from '../../components/Layout/Header';
 import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
 import type { AppData, MetadataFormData } from './types';
-import { stringify } from 'yaml';
-import { useBuildRofl, useCreateAndDeployApp, useGetRoflBuildResults } from '../../backend/api';
+import { useCreateAndDeployApp } from '../../backend/api';
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
 import { useNetwork } from '../../hooks/useNetwork';
-import { useArtifactUploads } from '../../hooks/useArtifactUploads';
 
 // TEMP
 export type Template = {
@@ -69,48 +67,24 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
   const network = useNetwork();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const [taskId, setTaskId] = useState<string | null>(null);
   const [buildTriggered, setBuildTriggered] = useState(false);
   const { token } = useRoflAppBackendAuthContext();
-  const buildRoflMutation = useBuildRofl(token, (data) =>
-    setTaskId(data.task_id)
-  );
   const createAndDeployAppMutation = useCreateAndDeployApp();
 
   if (!appData || !template) {
     throw new Error('Missing data to bootstrap the app');
   }
 
-  const appId = 'rofl1qpdzzm4h73gtes04xjn4whan84s3k33l5gx787l2'; // Create app tx
-  const rofl = template.templateParser(appData.metadata!, network, appId);
-  const roflYaml = stringify(rofl);
-  const composeYaml = template.yaml.compose;
-
   if (!buildTriggered && token && appData && template) {
     setBuildTriggered(true);
-    buildRoflMutation.mutate({
-      manifest: roflYaml,
-      compose: composeYaml,
-    });
-
     createAndDeployAppMutation.mutate({
       token: token!,
       template,
       appData,
       network,
     });
+    // TODO: useArtifactUploads
   }
-
-  const { roflUpload, composeUpload } = useArtifactUploads({
-    token,
-    appId,
-    roflYaml,
-    composeYaml,
-  });
-
-  const { data } = useGetRoflBuildResults(taskId, token);
-  console.log('Build results:', data);
-  console.log('Upload status - ROFL:', roflUpload, 'Compose:', composeUpload);
 
   useEffect(() => {
     const interval = setInterval(() => {

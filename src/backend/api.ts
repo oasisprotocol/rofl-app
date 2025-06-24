@@ -165,47 +165,6 @@ export function useGetMe(token: string | null) {
   });
 }
 
-export function useBuildRofl(
-  token: string | null,
-  onSuccess: (data: RoflBuildResponse) => void
-) {
-  return useMutation<RoflBuildResponse, AxiosError<unknown>, RoflBuildRequest>({
-    mutationFn: (data) => buildRofl(data, token!),
-    throwOnError: false,
-    onSuccess: onSuccess,
-    onError: (error) => {
-      console.error('Error starting build:', error);
-    },
-  });
-}
-
-export function useGetRoflBuildResults(
-  taskId: string | null,
-  token: string | null
-) {
-  return useQuery<RoflBuildResultsResponse, AxiosError<unknown>>({
-    queryKey: ['rofl-build-results', taskId, token],
-    queryFn: () => {
-      return fetchRoflBuildResults(taskId!, token!);
-    },
-    enabled: !!taskId && !!token,
-    refetchInterval: (data) => {
-      if (data.state.data?.err) {
-        return false;
-      }
-      return 3000;
-    },
-    refetchIntervalInBackground: true,
-    retry: (failureCount, error) => {
-      if (error?.response?.status === 404) {
-        return false;
-      }
-      return failureCount < 3;
-    },
-    throwOnError: false,
-  });
-}
-
 export function useUploadArtifact(token: string | null) {
   return useMutation<void, AxiosError<unknown>, ArtifactUploadRequest>({
     mutationFn: (data) => uploadArtifact(data, token!),
