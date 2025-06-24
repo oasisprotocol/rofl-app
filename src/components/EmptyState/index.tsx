@@ -4,31 +4,37 @@ import {
   CardFooter,
   CardHeader,
 } from '@oasisprotocol/ui-library/src/components/ui/card';
-import { useAccount } from 'wagmi';
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
+import { type ReactNode } from 'react';
 
 interface EmptyStateProps {
   title: string;
-  description: string;
+  description: ReactNode;
   children?: React.ReactNode;
+  className?: string;
 }
 
-export function EmptyState({ title, description, children }: EmptyStateProps) {
-  const { isConnected } = useAccount();
-
+export function EmptyState({
+  className,
+  title,
+  description,
+  children,
+}: EmptyStateProps) {
   return (
-    <Card className="h-full rounded-md border-0 flex justify-center p-8 gap-2">
+    <Card
+      className={cn(
+        'h-full rounded-md border-0 flex justify-center p-8 gap-2',
+        className
+      )}
+    >
       <CardHeader className="text-xl font-semibold text-white text-center">
-        {isConnected ? title : 'Wallet is not connected'}
+        {title}
       </CardHeader>
       <CardContent className="md:max-w-[60%] mx-auto text-gray-400 text-sm text-balance text-center leading-relaxed">
-        {isConnected
-          ? description
-          : 'Please connect your wallet to to gain access to the view.'}
+        {description}
       </CardContent>
 
-      <CardFooter className="flex justify-center pt-2">
-        {isConnected ? children : null}
-      </CardFooter>
+      <CardFooter className="flex justify-center pt-2">{children}</CardFooter>
     </Card>
   );
 }
