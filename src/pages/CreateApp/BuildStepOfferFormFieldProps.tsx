@@ -12,28 +12,33 @@ type BuildStepOffersProps = {
   offer: RoflMarketOffer;
   fieldValue: string;
   multiplyNumber?: number;
+  duration: string;
 };
 
 export const BuildStepOffers: FC<BuildStepOffersProps> = ({
   offer,
   multiplyNumber = 1,
   fieldValue,
+  duration,
 }) => {
+  const targetTerms = duration === 'months' ? '2' : '1';
+  const targetTermsPrice = (
+    offer.payment?.native as { terms?: Record<string, string> }
+  )?.terms?.[targetTerms];
+  const multiplyBy = duration === 'days' ? multiplyNumber * 24 : multiplyNumber;
   const {
     data: rosePrice,
     isLoading: isLoadingRosePrice,
     isFetched: isFetchedRosePrice,
   } = useGetRosePrice();
   const roseCost = fromBaseUnits(
-    multiplyBaseUnits(
-      (
-        offer.payment?.native as {
-          terms?: Record<string, string>;
-        }
-      )?.terms?.['1'] || '0',
-      multiplyNumber
-    )
+    multiplyBaseUnits(targetTermsPrice || '0', multiplyBy)
   );
+
+  const isValidInput =
+    Number.isInteger(multiplyNumber) &&
+    multiplyNumber > 0 &&
+    parseFloat(roseCost) > 0;
 
   return (
     <div key={offer.id} className="relative">
@@ -58,23 +63,29 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
           </span>
         </div>
         <div className="flex flex-col items-end">
-          {roseCost} ROSE
-          <span className="text-muted-foreground text-sm">
-            {isLoadingRosePrice && (
-              <Skeleton className="w-full h-[20px] w-[80px]" />
-            )}
-            {isFetchedRosePrice && rosePrice && (
-              <span>
-                ~
-                {new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }).format(parseFloat(roseCost) * rosePrice)}
+          {!isValidInput ? (
+            '-'
+          ) : (
+            <>
+              {roseCost} ROSE
+              <span className="text-muted-foreground text-sm">
+                {isLoadingRosePrice && (
+                  <Skeleton className="w-full h-[20px] w-[80px]" />
+                )}
+                {isFetchedRosePrice && rosePrice && (
+                  <span>
+                    ~
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'currency',
+                      currency: 'USD',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(parseFloat(roseCost) * rosePrice)}
+                  </span>
+                )}
               </span>
-            )}
-          </span>
+            </>
+          )}
         </div>
       </Label>
     </div>

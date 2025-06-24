@@ -183,6 +183,7 @@ export const BuildStep: FC<AgentStepProps> = ({
                       offer={offer}
                       fieldValue={field.value}
                       multiplyNumber={Number(form.watch('number'))}
+                      duration={form.watch('duration')}
                     />
                   ))}
                 </RadioGroup>
