@@ -14,6 +14,7 @@ import { useAccount, useDisconnect } from 'wagmi'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
 import { useNavigate } from 'react-router-dom'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
+import { mainnet } from 'viem/chains'
 
 const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address, className = '' }) => {
   return (
@@ -55,8 +56,10 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
 
   useEffect(() => {
     if (chainId && chainId !== selectedChainId) {
-      setSelectedChainId(chainId)
-      navigate('/dashboard')
+      if (!([mainnet.id] as number[]).includes(chainId)) {
+        setSelectedChainId(chainId)
+        navigate('/dashboard')
+      }
     }
   }, [chainId, navigate, selectedChainId])
 
