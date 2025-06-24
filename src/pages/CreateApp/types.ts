@@ -50,6 +50,12 @@ export const buildFormSchema = z.object({
   provider: z.string().min(1, {
     message: 'Provider is required.',
   }),
+  duration: z.string().min(1, {
+    message: 'Duration is required.',
+  }),
+  number: z.coerce.number().int().positive({
+    message: 'Number is required.',
+  }),
   resources: z.string().min(1, {
     message: 'Resources are required.',
   }),

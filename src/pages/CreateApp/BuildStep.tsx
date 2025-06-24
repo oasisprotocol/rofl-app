@@ -9,6 +9,12 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@oasisprotocol/ui-library/src/components/ui/radio-group';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '@oasisprotocol/ui-library/src/components/ui/alert';
+import { Info } from 'lucide-react';
 import { buildFormSchema, type BuildFormData } from './types';
 import { SelectFormField } from './SelectFormField';
 import { useGetRosePrice } from '../../coin-gecko/api';
@@ -21,6 +27,7 @@ import {
 } from '../../nexus/api';
 import { fromBaseUnits } from '../../utils/number-utils';
 import { MachineResources } from '../../components/MachineResources';
+import { InputFormField } from './InputFormField';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -94,6 +101,13 @@ export const BuildStep: FC<AgentStepProps> = ({
       )} ROSE`,
     })) || [];
 
+  // API terms are like 1=hour, 2=month, 3=year, but only hour is mandatory
+  const durationOptions = [
+    { value: 'hours', label: 'Hours' },
+    { value: 'days', label: 'Days' },
+    { value: 'months', label: 'Months' },
+  ];
+
   useEffect(() => {
     if (providerValue) {
       providersOffers.refetch();
@@ -143,6 +157,36 @@ export const BuildStep: FC<AgentStepProps> = ({
           options={[...providerOptions]}
           disabled
         />
+
+        <SelectFormField
+          control={form.control}
+          name="duration"
+          label="Duration period"
+          placeholder="Select duration"
+          options={[...durationOptions]}
+        />
+
+        <InputFormField
+          control={form.control}
+          name="number"
+          label={`Number of ${form.watch('duration') || 'hours'}`}
+          placeholder="Enter number"
+          type="number"
+        />
+
+        {form.watch('duration') === 'hours' &&
+          Number(form.watch('number')) === 1 && (
+            <Alert>
+              <>
+                <Info />
+                <AlertTitle>Short period of time</AlertTitle>
+                <AlertDescription>
+                  1 hour is a very short period of time for a ROFL app. It may
+                  not be enough for testing or debugging.
+                </AlertDescription>
+              </>
+            </Alert>
+          )}
 
         <div className="grid gap-2">
           <Label htmlFor="resources">Resources</Label>

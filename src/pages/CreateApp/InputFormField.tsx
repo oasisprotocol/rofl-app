@@ -14,7 +14,7 @@ type InputFormFieldProps<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   placeholder?: string;
-  type?: 'input' | 'password' | 'textarea';
+  type?: 'input' | 'password' | 'number' | 'textarea';
   disabled?: boolean;
 };
 
@@ -34,14 +34,14 @@ export const InputFormField = <T extends FieldValues>({
         name={name}
         render={({ field, fieldState }) => (
           <>
-            {type === 'input' || type === 'password' ? (
+            {type === 'input' || type === 'password' || type === 'number' ? (
               <Input
                 className="dark:[-webkit-autofill]:!bg-gray-800 dark:[-webkit-autofill]:!text-white"
                 id={name}
                 placeholder={placeholder}
                 {...field}
                 aria-invalid={!!fieldState.error}
-                type={type === 'password' ? 'password' : 'text'}
+                type={type}
                 autoComplete={type === 'password' ? 'new-password' : 'off'}
                 spellCheck={type === 'password' ? 'false' : 'true'}
                 disabled={disabled}
