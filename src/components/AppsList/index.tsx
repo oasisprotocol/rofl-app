@@ -19,7 +19,8 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
   const pageLimit = type === 'dashboard' ? 9 : 18;
   const { address, isConnected } = useAccount();
   const { ref, inView } = useInView();
-  const network = useNetwork('mainnet');
+  // Fallback is needed to render Explore page content without wallet connection
+  const network = useNetwork(type === 'dashboard' ? undefined : 'mainnet');
 
   const {
     data,

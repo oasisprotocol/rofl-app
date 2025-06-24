@@ -23,6 +23,7 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
 } from '@oasisprotocol/ui-library/src/components/ui/breadcrumb';
+import { ErrorBoundary } from '../ErrorBoundary';
 
 const navItems = {
   dashboard: { label: 'Dashboard', path: '/dashboard' },
@@ -165,7 +166,9 @@ export const MainLayout: FC = () => {
       }
     >
       <div className="flex-1 p-5 h-5/6">
-        <Outlet />
+        <ErrorBoundary key={location.pathname}>
+          <Outlet />
+        </ErrorBoundary>
       </div>
     </Layout>
   );

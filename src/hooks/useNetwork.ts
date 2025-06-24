@@ -1,7 +1,16 @@
 import { useAccount } from 'wagmi';
+import { AppError, AppErrors } from '../components/ErrorBoundary/errors';
 
 export function useNetwork(fallback?: 'mainnet' | 'testnet') {
-  const { chainId } = useAccount();
+  const { isConnected, chainId } = useAccount();
+
+  if (!isConnected) {
+    if (!fallback) {
+      throw new AppError(AppErrors.WalletNotConnected);
+    } else {
+      return fallback;
+    }
+  }
 
   if (chainId === 23294) {
     return 'mainnet';
@@ -15,5 +24,5 @@ export function useNetwork(fallback?: 'mainnet' | 'testnet') {
     return fallback;
   }
 
-  throw new Error(`Unsupported chainId: ${chainId}.`);
+  throw new AppError(AppErrors.UnsupportedChain);
 }
