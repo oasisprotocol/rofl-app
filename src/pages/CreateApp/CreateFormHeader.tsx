@@ -12,7 +12,7 @@ export const CreateFormHeader: FC<CreateFormHeaderProps> = ({
   return (
     <div>
       <h1 className="text-2xl font-white font-bold mb-2">{title}</h1>
-      <p className="text-muted-foreground text-md max-w-md">{description}</p>
+      <p className="text-muted-foreground text-sm max-w-md">{description}</p>
     </div>
   );
 };
