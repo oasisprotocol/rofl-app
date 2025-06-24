@@ -102,10 +102,18 @@ export const BuildStep: FC<AgentStepProps> = ({
     })) || [];
 
   // API terms are like 1=hour, 2=month, 3=year, but only hour is mandatory
+  // Testnet provider provide only hourly terms
+  const hasMonthlyTerms = providersOffers.data?.data.offers.some(
+    (offer) =>
+      (offer.payment?.native as { terms?: Record<string, string> })?.terms?.[
+        '2'
+      ]
+  );
+
   const durationOptions = [
     { value: 'hours', label: 'Hours' },
     { value: 'days', label: 'Days' },
-    { value: 'months', label: 'Months' },
+    ...(hasMonthlyTerms ? [{ value: 'months', label: 'Months' }] : []),
   ];
 
   useEffect(() => {
