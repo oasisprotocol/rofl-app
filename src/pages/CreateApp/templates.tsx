@@ -27,7 +27,7 @@ export const templates = [
         provider: '',
         duration: 'hours',
         number: 1,
-        resources: 'medium',
+        resources: '',
       },
     },
     yaml: {
