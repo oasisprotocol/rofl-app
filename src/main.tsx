@@ -27,7 +27,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 
 const queryClient = new QueryClient();
 const rainbowKitTheme: Theme = {
-  ...lightTheme({ accentColor: 'var(--brand-extra-dark)' }),
+  ...lightTheme({ /* accentColor: 'var(--brand-extra-dark)' */ }),
   fonts: {
     body: 'inherit',
   },
