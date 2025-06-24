@@ -4,6 +4,7 @@ import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
 import { type AppData } from './types';
 import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator';
+import { fromBaseUnits } from '../../utils/number-utils';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -18,8 +19,6 @@ export const PaymentStep: FC<AgentStepProps> = ({
   selectedTemplateName,
   appData,
 }) => {
-  console.log('appData', appData);
-
   return (
     <CreateLayout
       currentStep={4}
@@ -40,7 +39,11 @@ export const PaymentStep: FC<AgentStepProps> = ({
       <div className="space-y-2 w-full">
         <div className="flex justify-between items-center">
           <span className="text-white text-sm">Machine cost</span>
-          <span className="text-white text-sm">100 ROSE</span>
+          <span className="text-white text-sm">
+            {appData?.build?.roseCostInBaseUnits
+              ? `${fromBaseUnits(appData.build.roseCostInBaseUnits)} ROSE`
+              : '-'}
+          </span>
         </div>
 
         <Separator className="" />
@@ -54,7 +57,11 @@ export const PaymentStep: FC<AgentStepProps> = ({
 
         <div className="flex justify-between items-center">
           <span className="text-white text-sm font-medium">Total</span>
-          <span className="text-white text-sm font-medium">-</span>
+          <span className="text-white text-sm font-medium">
+            {appData?.build?.roseCostInBaseUnits
+              ? `${fromBaseUnits(appData.build.roseCostInBaseUnits)} ROSE`
+              : '-'}
+          </span>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-import { useEffect, type FC } from 'react';
+import { useEffect, useCallback, type FC } from 'react';
 import { CreateLayout } from './CreateLayout';
 import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
@@ -47,6 +47,12 @@ export const BuildStep: FC<AgentStepProps> = ({
     resolver: zodResolver(buildFormSchema),
     defaultValues: { ...build },
   });
+  const handleCostCalculated = useCallback(
+    (roseCostInBaseUnits: string) => {
+      form.setValue('roseCostInBaseUnits', roseCostInBaseUnits);
+    },
+    [form]
+  );
 
   useEffect(() => {
     form.reset({ ...build });
@@ -171,10 +177,12 @@ export const BuildStep: FC<AgentStepProps> = ({
                 >
                   {providersOffers.data?.data.offers.map((offer) => (
                     <BuildStepOffers
+                      key={offer.id}
                       offer={offer}
                       fieldValue={field.value}
                       multiplyNumber={Number(form.watch('number'))}
                       duration={form.watch('duration')}
+                      onCostCalculated={handleCostCalculated}
                     />
                   ))}
                 </RadioGroup>

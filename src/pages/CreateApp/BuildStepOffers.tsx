@@ -13,6 +13,7 @@ type BuildStepOffersProps = {
   fieldValue: string;
   multiplyNumber?: number;
   duration: string;
+  onCostCalculated?: (roseCostInBaseUnits: string) => void;
 };
 
 export const BuildStepOffers: FC<BuildStepOffersProps> = ({
@@ -20,6 +21,7 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
   multiplyNumber = 1,
   fieldValue,
   duration,
+  onCostCalculated,
 }) => {
   const targetTerms = duration === 'months' ? '2' : '1';
   const targetTermsPrice = (
@@ -31,14 +33,20 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
     isLoading: isLoadingRosePrice,
     isFetched: isFetchedRosePrice,
   } = useGetRosePrice();
-  const roseCost = fromBaseUnits(
-    multiplyBaseUnits(targetTermsPrice || '0', multiplyBy)
+  const roseCostInBaseUnits = multiplyBaseUnits(
+    targetTermsPrice || '0',
+    multiplyBy
   );
+  const roseCost = fromBaseUnits(roseCostInBaseUnits);
 
   const isValidInput =
     Number.isInteger(multiplyNumber) &&
     multiplyNumber > 0 &&
     parseFloat(roseCost) > 0;
+
+  if (isValidInput && onCostCalculated && fieldValue === offer.id) {
+    onCostCalculated(roseCostInBaseUnits);
+  }
 
   return (
     <div key={offer.id} className="relative">
