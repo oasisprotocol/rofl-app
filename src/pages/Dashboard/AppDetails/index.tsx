@@ -14,16 +14,14 @@ import {
   type RoflAppSecrets,
 } from '../../../nexus/api';
 import { useNetwork } from '../../../hooks/useNetwork';
-import { useParams, useBlocker } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
 import { type ViewMetadataState, type ViewSecretsState } from './types';
-import { DiscardChanges } from './DiscardButton';
-import { ApplyChanges } from './ApplyChanges';
-import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
 import { useDownloadArtifact } from '../../../backend/api';
 import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAuth/hooks';
 import { AppArtifacts } from './AppArtifacts';
+import { UnsavedChanges } from './UnsavedChanges';
 
 function setDefaultMetadataViewState(
   metadata: RoflAppMetadata | undefined = {}
@@ -68,11 +66,6 @@ export const AppDetails: FC = () => {
   const roflArtifact = useDownloadArtifact(`${id}-rofl-yaml`, token);
   const composeArtifact = useDownloadArtifact(`${id}-compose-yaml`, token);
   const editEnabled = !!token && !!roflArtifact.data && !!composeArtifact.data;
-  const blocker = useBlocker(
-    ({ currentLocation, nextLocation }) =>
-      (viewMetadataState.isDirty || viewSecretsState.isDirty) &&
-      currentLocation.pathname !== nextLocation.pathname
-  );
 
   useEffect(() => {
     if (roflApp) {
@@ -96,44 +89,28 @@ export const AppDetails: FC = () => {
       )}
       {isFetched && roflApp && (
         <>
-          <div
-            className={cn(
-              'flex items-center gap-2 px-4 py-2 rounded-md bg-card absolute right-6 bottom-16',
-              !viewMetadataState.isDirty &&
-                !viewSecretsState.isDirty &&
-                'hidden',
-              blocker.state === 'blocked' && 'animate-bounce'
-            )}
-          >
-            <span className="text-sm font-semibold pr-6">Unsaved Changes</span>
-            <DiscardChanges
-              disabled={!viewMetadataState.isDirty && !viewSecretsState.isDirty}
-              onConfirm={() => {
-                setViewMetadataState({
-                  ...setDefaultMetadataViewState(roflApp.metadata),
-                });
-                setViewSecretsState({
-                  ...setDefaultSecretsViewState(roflApp.secrets),
-                });
-                blocker.reset();
-              }}
-            />
-            <ApplyChanges
-              disabled={!viewMetadataState.isDirty && !viewSecretsState.isDirty}
-              onConfirm={() => {
-                setViewMetadataState((prev) => ({
-                  ...prev,
-                  isDirty: false,
-                }));
-                setViewSecretsState((prev) => ({
-                  ...prev,
-                  isDirty: false,
-                }));
-                blocker.reset();
-                roflAppQuery.refetch();
-              }}
-            />
-          </div>
+          <UnsavedChanges
+            isDirty={viewMetadataState.isDirty || viewSecretsState.isDirty}
+            onDiscard={() => {
+              setViewMetadataState({
+                ...setDefaultMetadataViewState(roflApp.metadata),
+              });
+              setViewSecretsState({
+                ...setDefaultSecretsViewState(roflApp.secrets),
+              });
+            }}
+            onConfirm={() => {
+              setViewMetadataState((prev) => ({
+                ...prev,
+                isDirty: false,
+              }));
+              setViewSecretsState((prev) => ({
+                ...prev,
+                isDirty: false,
+              }));
+              roflAppQuery.refetch();
+            }}
+          />
           <div>
             <Tabs defaultValue="details">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b py-5 mb-5">
