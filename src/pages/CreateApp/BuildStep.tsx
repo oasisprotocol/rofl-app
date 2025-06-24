@@ -16,6 +16,7 @@ import {
 } from '../../nexus/api';
 import { InputFormField } from './InputFormField';
 import { BuildStepOffers } from './BuildStepOffers';
+import * as oasisRT from '@oasisprotocol/client-rt';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -65,18 +66,19 @@ export const BuildStep: FC<AgentStepProps> = ({
   }, [providerOptions, form]);
 
   const providerValue = form.watch('provider');
-  const providersOffers = useGetRuntimeRoflmarketProvidersAddressOffers(
+  const providersOffersQuery = useGetRuntimeRoflmarketProvidersAddressOffers(
     network,
     'sapphire',
     providerValue
   );
+  const offers = providersOffersQuery.data?.data.offers.filter((offer) => offer.resources.tee === oasisRT.types.RoflmarketTeeType.TDX)
 
   // API terms are like 1=hour, 2=month, 3=year, but only hour is mandatory
   // Testnet provider provide only hourly terms
-  const hasMonthlyTerms = providersOffers.data?.data.offers.some(
+  const hasMonthlyTerms = offers?.some(
     (offer) =>
       (offer.payment?.native as { terms?: Record<string, string> })?.terms?.[
-        '2'
+        oasisRT.types.RoflmarketTerm.MONTH
       ]
   );
 
@@ -169,7 +171,7 @@ export const BuildStep: FC<AgentStepProps> = ({
                   value={field.value}
                   className="space-y-2"
                 >
-                  {providersOffers.data?.data.offers.map((offer) => (
+                  {offers?.map((offer) => (
                     <BuildStepOffers
                       key={offer.id}
                       offer={offer}
