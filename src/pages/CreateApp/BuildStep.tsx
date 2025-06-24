@@ -25,7 +25,7 @@ import {
   useGetRuntimeRoflmarketProviders,
   useGetRuntimeRoflmarketProvidersAddressOffers,
 } from '../../nexus/api';
-import { fromBaseUnits } from '../../utils/number-utils';
+import { fromBaseUnits, multiplyBaseUnits } from '../../utils/number-utils';
 import { MachineResources } from '../../components/MachineResources';
 import { InputFormField } from './InputFormField';
 
@@ -81,25 +81,6 @@ export const BuildStep: FC<AgentStepProps> = ({
     'sapphire',
     providerValue
   );
-
-  const resourceOptions =
-    providersOffers.data?.data.offers.map((offer) => ({
-      id: offer.id,
-      name: (offer.metadata['net.oasis.scheduler.offer'] as string) || offer.id,
-      specs: (
-        <MachineResources
-          cpus={offer.resources.cpus}
-          memory={offer.resources.memory}
-          storage={offer.resources.storage}
-        />
-      ),
-      price: `${fromBaseUnits(
-        (offer.payment?.native as { terms?: Record<string, string> })?.terms?.[
-          '1'
-        ] || '0',
-        18
-      )} ROSE`,
-    })) || [];
 
   // API terms are like 1=hour, 2=month, 3=year, but only hour is mandatory
   // Testnet provider provide only hourly terms
@@ -208,20 +189,20 @@ export const BuildStep: FC<AgentStepProps> = ({
                   value={field.value}
                   className="space-y-2"
                 >
-                  {resourceOptions.map((option) => (
-                    <div key={option.id} className="relative">
+                  {providersOffers.data?.data.offers.map((offer) => (
+                    <div key={offer.id} className="relative">
                       <RadioGroupItem
-                        value={option.id}
-                        id={option.id}
+                        value={offer.id}
+                        id={offer.id}
                         className="peer sr-only"
                       />
                       <Label
-                        htmlFor={option.id}
+                        htmlFor={offer.id}
                         className={`
                               flex items-center justify-between p-3 rounded-md border cursor-pointer transition-all
                               hover:bg-card peer-checked:bg-card peer-checked:border-primary
                               ${
-                                field.value === option.id
+                                field.value === offer.id
                                   ? 'bg-card border-primary'
                                   : 'border-border'
                               }
@@ -229,16 +210,30 @@ export const BuildStep: FC<AgentStepProps> = ({
                       >
                         <div className="flex flex-col">
                           <span className="text-md font-semibold mb-1 text-foreground capitalize">
-                            {option.name}
+                            {(offer.metadata[
+                              'net.oasis.scheduler.offer'
+                            ] as string) || offer.id}
                           </span>
                           <span className="text-muted-foreground text-sm">
-                            {option.specs}
+                            <MachineResources
+                              cpus={offer.resources.cpus}
+                              memory={offer.resources.memory}
+                              storage={offer.resources.storage}
+                            />
                           </span>
                         </div>
                         <div className="flex flex-col items-end">
-                          <span className="text-md font-semibold mb-1 text-foreground">
-                            {option.price}
-                          </span>
+                          {fromBaseUnits(
+                            multiplyBaseUnits(
+                              (
+                                offer.payment?.native as {
+                                  terms?: Record<string, string>;
+                                }
+                              )?.terms?.['1'] || '0',
+                              Number(form.watch('number')) || 1
+                            )
+                          )}{' '}
+                          ROSE
                           <span className="text-muted-foreground text-sm">
                             {isLoadingRosePrice && (
                               <Skeleton className="w-full h-[20px] w-[80px]" />
@@ -246,12 +241,12 @@ export const BuildStep: FC<AgentStepProps> = ({
                             {isFetchedRosePrice && rosePrice && (
                               <span>
                                 ~
-                                {new Intl.NumberFormat('en-US', {
+                                {/* {new Intl.NumberFormat('en-US', {
                                   style: 'currency',
                                   currency: 'USD',
                                   minimumFractionDigits: 2,
                                   maximumFractionDigits: 2,
-                                }).format(parseFloat(option.price) * rosePrice)}
+                                }).format(parseFloat(offer.price) * rosePrice)} */}
                               </span>
                             )}
                           </span>
