@@ -26,7 +26,7 @@ export const templates = [
       build: {
         provider: '',
         duration: 'hours',
-        number: 1,
+        number: 2,
         resources: '',
       },
     },

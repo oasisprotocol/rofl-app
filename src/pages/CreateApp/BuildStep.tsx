@@ -6,12 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Label } from '@oasisprotocol/ui-library/src/components/ui/label';
 import { RadioGroup } from '@oasisprotocol/ui-library/src/components/ui/radio-group';
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '@oasisprotocol/ui-library/src/components/ui/alert';
-import { Info } from 'lucide-react';
 import { buildFormSchema, type BuildFormData } from './types';
 import { SelectFormField } from './SelectFormField';
 import { useNetwork } from '../../hooks/useNetwork';
@@ -21,7 +15,7 @@ import {
   useGetRuntimeRoflmarketProvidersAddressOffers,
 } from '../../nexus/api';
 import { InputFormField } from './InputFormField';
-import { BuildStepOffers } from './BuildStepOfferFormFieldProps';
+import { BuildStepOffers } from './BuildStepOffers';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -136,35 +130,32 @@ export const BuildStep: FC<AgentStepProps> = ({
           disabled
         />
 
-        <SelectFormField
-          control={form.control}
-          name="duration"
-          label="Duration period"
-          placeholder="Select duration"
-          options={[...durationOptions]}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          <SelectFormField
+            control={form.control}
+            name="duration"
+            label="Duration period"
+            placeholder="Select duration"
+            options={[...durationOptions]}
+          />
 
-        <InputFormField
-          control={form.control}
-          name="number"
-          label={`Number of ${form.watch('duration') || 'hours'}`}
-          placeholder="Enter number"
-          type="number"
-        />
-
-        {form.watch('duration') === 'hours' &&
-          Number(form.watch('number')) === 1 && (
-            <Alert>
-              <>
-                <Info />
-                <AlertTitle>Short period of time</AlertTitle>
-                <AlertDescription>
+          <div>
+            <InputFormField
+              control={form.control}
+              name="number"
+              label={`Number of ${form.watch('duration') || 'hours'}`}
+              placeholder="Enter number"
+              type="number"
+            />
+            {form.watch('duration') === 'hours' &&
+              Number(form.watch('number')) === 1 && (
+                <div className="text-sm text-warning leading-tight mt-2">
                   1 hour is a very short period of time for a ROFL app. It may
-                  not be enough for testing or debugging.
-                </AlertDescription>
-              </>
-            </Alert>
-          )}
+                  not be enough for debugging.
+                </div>
+              )}
+          </div>
+        </div>
 
         <div className="grid gap-2">
           <Label htmlFor="resources">Resources</Label>
