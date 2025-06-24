@@ -16,6 +16,7 @@ type InputFormFieldProps<T extends FieldValues> = {
   placeholder?: string;
   type?: 'input' | 'password' | 'number' | 'textarea';
   disabled?: boolean;
+  min?: number;
 };
 
 export const InputFormField = <T extends FieldValues>({
@@ -25,6 +26,7 @@ export const InputFormField = <T extends FieldValues>({
   placeholder,
   type = 'input',
   disabled = false,
+  min,
 }: InputFormFieldProps<T>): ReactNode => {
   return (
     <div className="grid gap-2">
@@ -45,6 +47,7 @@ export const InputFormField = <T extends FieldValues>({
                 autoComplete={type === 'password' ? 'new-password' : 'off'}
                 spellCheck={type === 'password' ? 'false' : 'true'}
                 disabled={disabled}
+                min={min}
               />
             ) : (
               <Textarea

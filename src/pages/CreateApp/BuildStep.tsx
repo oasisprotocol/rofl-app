@@ -152,6 +152,7 @@ export const BuildStep: FC<AgentStepProps> = ({
               label={`Number of ${form.watch('duration') || 'hours'}`}
               placeholder="Enter number"
               type="number"
+              min={1}
             />
             {form.watch('duration') === 'hours' &&
               Number(form.watch('number')) === 1 && (
