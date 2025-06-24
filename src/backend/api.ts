@@ -413,3 +413,14 @@ export function useCreateAndDeployApp() {
     },
   });
 }
+
+export function useRemoveApp() {
+  const { sendTransactionAsync } = useSendTransaction()
+  return useMutation<void, AxiosError<unknown>, { appId: `rofl1${string}`, network: 'mainnet' | 'testnet' }>({
+    mutationFn: async ({ appId, network }) => {
+      const sapphireRuntimeId = network === 'mainnet' ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279') : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId);
+      await sendTransactionAsync(rofl.callRemove().setBody({ id: oasisRT.rofl.fromBech32(appId) }).toSubcall());
+    }
+  })
+}

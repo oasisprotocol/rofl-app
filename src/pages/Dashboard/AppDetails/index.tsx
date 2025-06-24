@@ -18,10 +18,12 @@ import { useParams } from 'react-router-dom';
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { trimLongString } from '../../../utils/trimLongString';
 import { type ViewMetadataState, type ViewSecretsState } from './types';
-import { useDownloadArtifact } from '../../../backend/api';
+import { useDownloadArtifact, useRemoveApp } from '../../../backend/api';
 import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAuth/hooks';
 import { AppArtifacts } from './AppArtifacts';
 import { UnsavedChanges } from './UnsavedChanges';
+import { Trash2 } from 'lucide-react';
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
 
 function setDefaultMetadataViewState(
   metadata: RoflAppMetadata | undefined = {}
@@ -66,6 +68,7 @@ export const AppDetails: FC = () => {
   const roflArtifact = useDownloadArtifact(`${id}-rofl-yaml`, token);
   const composeArtifact = useDownloadArtifact(`${id}-compose-yaml`, token);
   const editEnabled = !!token && !!roflArtifact.data && !!composeArtifact.data;
+  const { mutateAsync: removeApp } = useRemoveApp()
 
   useEffect(() => {
     if (roflApp) {
@@ -123,12 +126,22 @@ export const AppDetails: FC = () => {
                   </h1>
                   <AppStatusIcon hasActiveInstances removed={false} />
                 </div>
-                <div className="flex flex-wrap gap-3">
-                  <TabsList className="w-full md:w-auto">
-                    <TabsTrigger value="details">Details</TabsTrigger>
-                    <TabsTrigger value="secrets">Secrets</TabsTrigger>
-                    <TabsTrigger value="compose">Compose</TabsTrigger>
-                  </TabsList>
+                <div className="flex items-center gap-8">
+                  {
+                    roflApp?.removed && (
+                      <Button variant="outline" size="icon" onClick={() => removeApp({ appId: id as `rofl1${string}`, network })}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    )
+                  }
+
+                  <div className="flex flex-wrap gap-3">
+                    <TabsList className="w-full md:w-auto">
+                      <TabsTrigger value="details">Details</TabsTrigger>
+                      <TabsTrigger value="secrets">Secrets</TabsTrigger>
+                      <TabsTrigger value="compose">Compose</TabsTrigger>
+                    </TabsList>
+                  </div>
                 </div>
               </div>
               <TabsContent value="details">
