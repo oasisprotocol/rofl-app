@@ -5,13 +5,13 @@ import { Footer } from '../../components/Layout/Footer';
 import Bootstrap from './images/bootstrap.png';
 import type { AppData, MetadataFormData } from './types';
 import { stringify } from 'yaml';
-import { useBuildRofl, useGetRoflBuildResults } from '../../backend/api';
+import { useBuildRofl, useCreateAndDeployApp, useGetRoflBuildResults } from '../../backend/api';
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
 import { useNetwork } from '../../hooks/useNetwork';
 import { useArtifactUploads } from '../../hooks/useArtifactUploads';
 
 // TEMP
-type Template = {
+export type Template = {
   name: string;
   description: string;
   image: string;
@@ -75,6 +75,7 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
   const buildRoflMutation = useBuildRofl(token, (data) =>
     setTaskId(data.task_id)
   );
+  const createAndDeployAppMutation = useCreateAndDeployApp();
 
   if (!appData || !template) {
     throw new Error('Missing data to bootstrap the app');
@@ -90,6 +91,13 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({
     buildRoflMutation.mutate({
       manifest: roflYaml,
       compose: composeYaml,
+    });
+
+    createAndDeployAppMutation.mutate({
+      token: token!,
+      template,
+      appData,
+      network,
     });
   }
 
