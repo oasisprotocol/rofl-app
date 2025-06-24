@@ -3,6 +3,8 @@ import { CreateLayout } from './CreateLayout';
 import { CreateFormHeader } from './CreateFormHeader';
 import { CreateFormNavigation } from './CreateFormNavigation';
 import { type AppData } from './types';
+import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator';
+import { fromBaseUnits } from '../../utils/number-utils';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -17,8 +19,6 @@ export const PaymentStep: FC<AgentStepProps> = ({
   selectedTemplateName,
   appData,
 }) => {
-  console.log('appData', appData);
-
   return (
     <CreateLayout
       currentStep={4}
@@ -35,6 +35,36 @@ export const PaymentStep: FC<AgentStepProps> = ({
         title="Payment"
         description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
       />
+
+      <div className="space-y-2 w-full">
+        <div className="flex justify-between items-center">
+          <span className="text-white text-sm">Machine cost</span>
+          <span className="text-white text-sm">
+            {appData?.build?.roseCostInBaseUnits
+              ? `${fromBaseUnits(appData.build.roseCostInBaseUnits)} ROSE`
+              : '-'}
+          </span>
+        </div>
+
+        <Separator className="" />
+
+        <div className="flex justify-between items-center">
+          <span className="text-white text-sm">Fees</span>
+          <span className="text-white text-sm">-</span>
+        </div>
+
+        <Separator className="" />
+
+        <div className="flex justify-between items-center">
+          <span className="text-white text-sm font-medium">Total</span>
+          <span className="text-white text-sm font-medium">
+            {appData?.build?.roseCostInBaseUnits
+              ? `${fromBaseUnits(appData.build.roseCostInBaseUnits)} ROSE`
+              : '-'}
+          </span>
+        </div>
+      </div>
+
       <CreateFormNavigation handleNext={handleNext} handleBack={handleBack} />
     </CreateLayout>
   );

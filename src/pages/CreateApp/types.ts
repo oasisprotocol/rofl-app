@@ -59,6 +59,7 @@ export const buildFormSchema = z.object({
   resources: z.string().min(1, {
     message: 'Resources are required.',
   }),
+  roseCostInBaseUnits: z.string().optional(),
 });
 
 export type TemplateFormData = string;

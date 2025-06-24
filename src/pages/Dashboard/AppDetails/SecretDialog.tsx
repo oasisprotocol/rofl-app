@@ -29,6 +29,7 @@ type SecretDialogProps = {
   secret?: string;
   handleAddSecret?: (name: string, value: string) => void;
   handleEditSecret?: (name: string, value: string) => void;
+  editEnabled?: boolean;
 };
 
 export const SecretDialog: FC<SecretDialogProps> = ({
@@ -36,6 +37,7 @@ export const SecretDialog: FC<SecretDialogProps> = ({
   secret,
   handleAddSecret,
   handleEditSecret,
+  editEnabled,
 }) => {
   const [open, setOpen] = useState(false);
   const isEditMode = mode === 'edit';
@@ -93,7 +95,11 @@ export const SecretDialog: FC<SecretDialogProps> = ({
             <SquarePen />
           </Button>
         ) : (
-          <Button variant="ghost" className="text-primary">
+          <Button
+            variant="ghost"
+            className="text-primary"
+            disabled={!editEnabled}
+          >
             <CirclePlus />
             Add new
           </Button>

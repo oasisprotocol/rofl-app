@@ -20,6 +20,7 @@ type AppMetadataProps = {
   editableState: MetadataFormData;
   policy: RoflAppPolicy;
   setViewMetadataState: (state: ViewMetadataState) => void;
+  editEnabled?: boolean;
 };
 
 export const AppMetadata: FC<AppMetadataProps> = ({
@@ -27,6 +28,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   editableState,
   policy,
   setViewMetadataState,
+  editEnabled,
 }) => {
   const network = useNetwork();
   const { data } = useGetRuntimeRoflAppsIdTransactions(
@@ -107,6 +109,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
       <MetadataDialog
         metadata={editableState}
         setViewMetadataState={setViewMetadataState}
+        editEnabled={editEnabled}
       />
       <DetailsSectionRow label="Author">
         <>{editableState.author}</>
