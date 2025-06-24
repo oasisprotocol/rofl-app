@@ -11,6 +11,7 @@ import { Machines } from './pages/Dashboard/Machines';
 import { MachinesDetails } from './pages/Dashboard/MachinesDetails';
 import { Create } from './pages/CreateApp';
 import { Explore } from './pages/Explore';
+import { NotFound } from './components/NotFound';
 import { wagmiConfig } from './constants/wagmi-config.ts';
 import {
   lightTheme,
@@ -27,7 +28,9 @@ import '@rainbow-me/rainbowkit/styles.css';
 
 const queryClient = new QueryClient();
 const rainbowKitTheme: Theme = {
-  ...lightTheme({ /* accentColor: 'var(--brand-extra-dark)' */ }),
+  ...lightTheme({
+    /* accentColor: 'var(--brand-extra-dark)' */
+  }),
   fonts: {
     body: 'inherit',
   },
@@ -77,6 +80,10 @@ const router = createBrowserRouter([
         element: <Explore />,
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 
