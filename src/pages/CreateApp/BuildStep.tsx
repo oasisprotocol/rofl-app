@@ -5,10 +5,7 @@ import { CreateFormNavigation } from './CreateFormNavigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Label } from '@oasisprotocol/ui-library/src/components/ui/label';
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@oasisprotocol/ui-library/src/components/ui/radio-group';
+import { RadioGroup } from '@oasisprotocol/ui-library/src/components/ui/radio-group';
 import {
   Alert,
   AlertDescription,
@@ -17,17 +14,14 @@ import {
 import { Info } from 'lucide-react';
 import { buildFormSchema, type BuildFormData } from './types';
 import { SelectFormField } from './SelectFormField';
-import { useGetRosePrice } from '../../coin-gecko/api';
-import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { useNetwork } from '../../hooks/useNetwork';
 import { getWhitelistedProviders } from '../../utils/providers';
 import {
   useGetRuntimeRoflmarketProviders,
   useGetRuntimeRoflmarketProvidersAddressOffers,
 } from '../../nexus/api';
-import { fromBaseUnits, multiplyBaseUnits } from '../../utils/number-utils';
-import { MachineResources } from '../../components/MachineResources';
 import { InputFormField } from './InputFormField';
+import { BuildStepOffers } from './BuildStepOfferFormFieldProps';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -55,11 +49,6 @@ export const BuildStep: FC<AgentStepProps> = ({
       (provider.metadata?.['net.oasis.provider.name'] as string) ||
       provider.address,
   }));
-  const {
-    data: rosePrice,
-    isLoading: isLoadingRosePrice,
-    isFetched: isFetchedRosePrice,
-  } = useGetRosePrice();
   const form = useForm<BuildFormData>({
     resolver: zodResolver(buildFormSchema),
     defaultValues: { ...build },
@@ -190,69 +179,11 @@ export const BuildStep: FC<AgentStepProps> = ({
                   className="space-y-2"
                 >
                   {providersOffers.data?.data.offers.map((offer) => (
-                    <div key={offer.id} className="relative">
-                      <RadioGroupItem
-                        value={offer.id}
-                        id={offer.id}
-                        className="peer sr-only"
-                      />
-                      <Label
-                        htmlFor={offer.id}
-                        className={`
-                              flex items-center justify-between p-3 rounded-md border cursor-pointer transition-all
-                              hover:bg-card peer-checked:bg-card peer-checked:border-primary
-                              ${
-                                field.value === offer.id
-                                  ? 'bg-card border-primary'
-                                  : 'border-border'
-                              }
-                              `}
-                      >
-                        <div className="flex flex-col">
-                          <span className="text-md font-semibold mb-1 text-foreground capitalize">
-                            {(offer.metadata[
-                              'net.oasis.scheduler.offer'
-                            ] as string) || offer.id}
-                          </span>
-                          <span className="text-muted-foreground text-sm">
-                            <MachineResources
-                              cpus={offer.resources.cpus}
-                              memory={offer.resources.memory}
-                              storage={offer.resources.storage}
-                            />
-                          </span>
-                        </div>
-                        <div className="flex flex-col items-end">
-                          {fromBaseUnits(
-                            multiplyBaseUnits(
-                              (
-                                offer.payment?.native as {
-                                  terms?: Record<string, string>;
-                                }
-                              )?.terms?.['1'] || '0',
-                              Number(form.watch('number')) || 1
-                            )
-                          )}{' '}
-                          ROSE
-                          <span className="text-muted-foreground text-sm">
-                            {isLoadingRosePrice && (
-                              <Skeleton className="w-full h-[20px] w-[80px]" />
-                            )}
-                            {isFetchedRosePrice && rosePrice && (
-                              <span>
-                                ~
-                                {/* {new Intl.NumberFormat('en-US', {
-                                  style: 'currency',
-                                  currency: 'USD',
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(parseFloat(offer.price) * rosePrice)} */}
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                      </Label>
-                    </div>
+                    <BuildStepOffers
+                      offer={offer}
+                      fieldValue={field.value}
+                      multiplyNumber={Number(form.watch('number'))}
+                    />
                   ))}
                 </RadioGroup>
                 {fieldState.error && (
