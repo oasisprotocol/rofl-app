@@ -25,6 +25,7 @@ type SelectFormFieldProps<T extends FieldValues> = {
   label: string;
   options: SelectOption[];
   placeholder?: string;
+  disabled?: boolean;
 };
 
 export const SelectFormField = <T extends FieldValues>({
@@ -33,6 +34,7 @@ export const SelectFormField = <T extends FieldValues>({
   label,
   options,
   placeholder,
+  disabled,
 }: SelectFormFieldProps<T>): ReactNode => {
   return (
     <div className="grid gap-2">
@@ -46,6 +48,7 @@ export const SelectFormField = <T extends FieldValues>({
               onValueChange={field.onChange}
               defaultValue={field.value}
               value={field.value}
+              disabled={disabled}
             >
               <SelectTrigger
                 id={name}

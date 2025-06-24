@@ -5,17 +5,17 @@ import { CreateFormNavigation } from './CreateFormNavigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Label } from '@oasisprotocol/ui-library/src/components/ui/label';
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@oasisprotocol/ui-library/src/components/ui/radio-group';
+import { RadioGroup } from '@oasisprotocol/ui-library/src/components/ui/radio-group';
 import { buildFormSchema, type BuildFormData } from './types';
 import { SelectFormField } from './SelectFormField';
-import { useGetRosePrice } from '../../coin-gecko/api';
-import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
 import { useNetwork } from '../../hooks/useNetwork';
-import { useGetRuntimeRoflmarketProviders } from '../../nexus/api';
 import { getWhitelistedProviders } from '../../utils/providers';
+import {
+  useGetRuntimeRoflmarketProviders,
+  useGetRuntimeRoflmarketProvidersAddressOffers,
+} from '../../nexus/api';
+import { InputFormField } from './InputFormField';
+import { BuildStepOffers } from './BuildStepOffers';
 
 type AgentStepProps = {
   handleNext: () => void;
@@ -24,27 +24,6 @@ type AgentStepProps = {
   setAppDataForm: (data: { build: BuildFormData }) => void;
   selectedTemplateName?: string;
 };
-
-const resourceOptions = [
-  {
-    id: 'small',
-    name: 'Small',
-    specs: '1CPU, 2GB RAM, 10GB Storage',
-    price: '500 ROSE',
-  },
-  {
-    id: 'medium',
-    name: 'Medium',
-    specs: '2CPU, 4GB RAM, 25GB Storage',
-    price: '1000 ROSE',
-  },
-  {
-    id: 'large',
-    name: 'Large',
-    specs: '4CPU, 8GB RAM, 60GB Storage',
-    price: '1500 ROSE',
-  },
-];
 
 export const BuildStep: FC<AgentStepProps> = ({
   handleNext,
@@ -64,11 +43,6 @@ export const BuildStep: FC<AgentStepProps> = ({
       (provider.metadata?.['net.oasis.provider.name'] as string) ||
       provider.address,
   }));
-  const {
-    data: rosePrice,
-    isLoading: isLoadingRosePrice,
-    isFetched: isFetchedRosePrice,
-  } = useGetRosePrice();
   const form = useForm<BuildFormData>({
     resolver: zodResolver(buildFormSchema),
     defaultValues: { ...build },
@@ -83,6 +57,35 @@ export const BuildStep: FC<AgentStepProps> = ({
       form.setValue('provider', providerOptions[0].value);
     }
   }, [providerOptions, form]);
+
+  const providerValue = form.watch('provider');
+  const providersOffers = useGetRuntimeRoflmarketProvidersAddressOffers(
+    network,
+    'sapphire',
+    providerValue
+  );
+
+  // API terms are like 1=hour, 2=month, 3=year, but only hour is mandatory
+  // Testnet provider provide only hourly terms
+  const hasMonthlyTerms = providersOffers.data?.data.offers.some(
+    (offer) =>
+      (offer.payment?.native as { terms?: Record<string, string> })?.terms?.[
+        '2'
+      ]
+  );
+
+  const durationOptions = [
+    { value: 'hours', label: 'Hours' },
+    { value: 'days', label: 'Days' },
+    ...(hasMonthlyTerms ? [{ value: 'months', label: 'Months' }] : []),
+  ];
+
+  useEffect(() => {
+    if (providerValue) {
+      providersOffers.refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [providerValue]);
 
   const onSubmit = (values: BuildFormData) => {
     setAppDataForm({ build: values });
@@ -124,7 +127,35 @@ export const BuildStep: FC<AgentStepProps> = ({
           label="Provider"
           placeholder="Select provider"
           options={[...providerOptions]}
+          disabled
         />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          <SelectFormField
+            control={form.control}
+            name="duration"
+            label="Duration period"
+            placeholder="Select duration"
+            options={[...durationOptions]}
+          />
+
+          <div>
+            <InputFormField
+              control={form.control}
+              name="number"
+              label={`Number of ${form.watch('duration') || 'hours'}`}
+              placeholder="Enter number"
+              type="number"
+            />
+            {form.watch('duration') === 'hours' &&
+              Number(form.watch('number')) === 1 && (
+                <div className="text-sm text-warning leading-tight mt-2">
+                  1 hour is a very short period of time for a ROFL app. It may
+                  not be enough for debugging.
+                </div>
+              )}
+          </div>
+        </div>
 
         <div className="grid gap-2">
           <Label htmlFor="resources">Resources</Label>
@@ -138,57 +169,13 @@ export const BuildStep: FC<AgentStepProps> = ({
                   value={field.value}
                   className="space-y-2"
                 >
-                  {resourceOptions.map((option) => (
-                    <div key={option.id} className="relative">
-                      <RadioGroupItem
-                        disabled={option.id !== field.value}
-                        value={option.id}
-                        id={option.id}
-                        className="peer sr-only"
-                      />
-                      <Label
-                        htmlFor={option.id}
-                        className={`
-                              flex items-center justify-between p-3 rounded-md border cursor-pointer transition-all
-                              hover:bg-card peer-checked:bg-card peer-checked:border-primary
-                              ${
-                                field.value === option.id
-                                  ? 'bg-card border-primary'
-                                  : 'border-border'
-                              }
-                              `}
-                      >
-                        <div className="flex flex-col">
-                          <span className="text-md font-semibold mb-1 text-foreground">
-                            {option.name}
-                          </span>
-                          <span className="text-muted-foreground text-sm">
-                            {option.specs}
-                          </span>
-                        </div>
-                        <div className="flex flex-col items-end">
-                          <span className="text-md font-semibold mb-1 text-foreground">
-                            {option.price}
-                          </span>
-                          <span className="text-muted-foreground text-sm">
-                            {isLoadingRosePrice && (
-                              <Skeleton className="w-full h-[20px] w-[80px]" />
-                            )}
-                            {isFetchedRosePrice && rosePrice && (
-                              <span>
-                                ~
-                                {new Intl.NumberFormat('en-US', {
-                                  style: 'currency',
-                                  currency: 'USD',
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                }).format(parseFloat(option.price) * rosePrice)}
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                      </Label>
-                    </div>
+                  {providersOffers.data?.data.offers.map((offer) => (
+                    <BuildStepOffers
+                      offer={offer}
+                      fieldValue={field.value}
+                      multiplyNumber={Number(form.watch('number'))}
+                      duration={form.watch('duration')}
+                    />
                   ))}
                 </RadioGroup>
                 {fieldState.error && (
