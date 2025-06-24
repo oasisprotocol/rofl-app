@@ -141,6 +141,7 @@ export const BuildStep: FC<AgentStepProps> = ({
           label="Provider"
           placeholder="Select provider"
           options={[...providerOptions]}
+          disabled
         />
 
         <div className="grid gap-2">
