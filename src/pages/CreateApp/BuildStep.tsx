@@ -86,13 +86,6 @@ export const BuildStep: FC<AgentStepProps> = ({
     ...(hasMonthlyTerms ? [{ value: 'months', label: 'Months' }] : []),
   ];
 
-  useEffect(() => {
-    if (providerValue) {
-      providersOffers.refetch();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [providerValue]);
-
   const onSubmit = (values: BuildFormData) => {
     setAppDataForm({ build: values });
     handleNext();
