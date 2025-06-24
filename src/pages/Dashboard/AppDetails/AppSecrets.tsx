@@ -16,11 +16,13 @@ import { type ViewSecretsState } from './types';
 type AppSecretsProps = {
   secrets: RoflAppSecrets;
   setViewSecretsState: (state: ViewSecretsState) => void;
+  editEnabled?: boolean;
 };
 
 export const AppSecrets: FC<AppSecretsProps> = ({
   secrets,
   setViewSecretsState,
+  editEnabled,
 }) => {
   const hasSecrets = Object.keys(secrets).length > 0;
 
@@ -33,17 +35,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({
     });
   }
 
-  function handleAddSecret(name: string, value: string) {
-    const updatedSecrets = { ...secrets, [name]: value };
-    setViewSecretsState({
-      isDirty: true,
-      secrets: updatedSecrets,
-    });
-  }
-
   function handleEditSecret(name: string, value: string) {
-    console.log('value', value);
-    console.log('name', name);
     const updatedSecrets = { ...secrets, [name]: value };
     setViewSecretsState({
       isDirty: true,
@@ -81,6 +73,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({
                 </TableCell>
                 <TableCell className="w-10">
                   <RemoveSecret
+                    editEnabled={editEnabled}
                     secret={key}
                     handleRemoveSecret={handleRemoveSecret}
                   />
@@ -90,7 +83,11 @@ export const AppSecrets: FC<AppSecretsProps> = ({
           </TableBody>
         </Table>
       )}
-      <SecretDialog mode="add" handleAddSecret={handleAddSecret} />
+      <SecretDialog
+        mode="add"
+        handleAddSecret={handleEditSecret}
+        editEnabled={editEnabled}
+      />
     </div>
   );
 };

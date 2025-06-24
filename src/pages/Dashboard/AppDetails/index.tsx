@@ -67,7 +67,7 @@ export const AppDetails: FC = () => {
   const { token } = useRoflAppBackendAuthContext();
   const roflArtifact = useDownloadArtifact(`${id}-rofl-yaml`, token);
   const composeArtifact = useDownloadArtifact(`${id}-compose-yaml`, token);
-
+  const editEnabled = !!token && !!roflArtifact.data && !!composeArtifact.data;
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
       (viewMetadataState.isDirty || viewSecretsState.isDirty) &&
@@ -160,12 +160,14 @@ export const AppDetails: FC = () => {
                   editableState={viewMetadataState.metadata}
                   policy={roflApp.policy}
                   setViewMetadataState={setViewMetadataState}
+                  editEnabled={editEnabled}
                 />
               </TabsContent>
               <TabsContent value="secrets">
                 <AppSecrets
                   secrets={viewSecretsState.secrets}
                   setViewSecretsState={setViewSecretsState}
+                  editEnabled={editEnabled}
                 />
               </TabsContent>
               <TabsContent value="compose">

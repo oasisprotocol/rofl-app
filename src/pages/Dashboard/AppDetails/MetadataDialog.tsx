@@ -23,11 +23,13 @@ import { type ViewMetadataState } from './types';
 type MetadataDialogProps = {
   metadata?: RoflAppMetadata;
   setViewMetadataState: (state: ViewMetadataState) => void;
+  editEnabled?: boolean;
 };
 
 export const MetadataDialog: FC<MetadataDialogProps> = ({
   metadata,
   setViewMetadataState,
+  editEnabled,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -78,6 +80,7 @@ export const MetadataDialog: FC<MetadataDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button
+          disabled={!editEnabled}
           variant="outline"
           className="w-full md:w-auto md:ml-8 float-right"
         >

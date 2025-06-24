@@ -15,16 +15,19 @@ import { Trash2 } from 'lucide-react';
 type RemoveSecretProps = {
   secret: string;
   handleRemoveSecret: (secret: string) => void;
+  editEnabled?: boolean;
 };
 
 export const RemoveSecret: FC<RemoveSecretProps> = ({
   secret,
   handleRemoveSecret,
+  editEnabled,
 }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
+          disabled={!editEnabled}
           variant="ghost"
           className="text-destructive hover:text-destructive"
         >
