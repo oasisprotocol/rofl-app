@@ -51,9 +51,12 @@ export const AppDetails: FC = () => {
   const { data, isLoading, isFetched } = roflAppQuery
   const roflApp = data?.data
   const { token } = useRoflAppBackendAuthContext()
-  const roflArtifact = useDownloadArtifact(`${id}-rofl-yaml`, token)
-  const composeArtifact = useDownloadArtifact(`${id}-compose-yaml`, token)
-  const editEnabled = !!token && !!roflArtifact.data && !!composeArtifact.data
+  const { isFetched: isRoflYamlFetched, data: roflYaml } = useDownloadArtifact(`${id}-rofl-yaml`, token)
+  const { isFetched: isComposeYamlFetched, data: composeYaml } = useDownloadArtifact(
+    `${id}-compose-yaml`,
+    token,
+  )
+  const editEnabled = !!token && !!roflYaml && !!composeYaml
   const { mutateAsync: removeApp } = useRemoveApp()
 
   useEffect(() => {
@@ -149,9 +152,9 @@ export const AppDetails: FC = () => {
               </TabsContent>
               <TabsContent value="compose">
                 <AppArtifacts
-                  isFetched={roflArtifact.isFetched && composeArtifact.isFetched}
-                  roflYaml={roflArtifact.data}
-                  composeYaml={composeArtifact.data}
+                  isFetched={isRoflYamlFetched && isComposeYamlFetched}
+                  roflYaml={roflYaml}
+                  composeYaml={composeYaml}
                 />
               </TabsContent>
             </Tabs>

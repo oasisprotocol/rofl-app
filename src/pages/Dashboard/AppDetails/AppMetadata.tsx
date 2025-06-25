@@ -53,7 +53,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
         <>
           <DetailsSectionRow label="Machine(s)">
             {machines.map((machine, index) => (
-              <>
+              <span key={machine.id}>
                 <Link
                   key={machine.id}
                   to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}
@@ -62,7 +62,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
                   <>{machine.metadata['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
                 </Link>
                 {index < machines.length - 1 && <>, </>}
-              </>
+              </span>
             ))}
           </DetailsSectionRow>
           <DetailsSectionRow label="Machine(s) resources" className=" pb-6 border-b">

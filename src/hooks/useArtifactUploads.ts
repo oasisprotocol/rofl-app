@@ -6,9 +6,20 @@ interface UseArtifactUploadsProps {
   appId: string
   roflYaml: string
   composeYaml: string
+  enabled?: boolean
+  onSuccess?: () => void
+  onError?: (error: unknown) => void
 }
 
-export function useArtifactUploads({ token, appId, roflYaml, composeYaml }: UseArtifactUploadsProps) {
+export function useArtifactUploads({
+  token,
+  appId,
+  roflYaml,
+  composeYaml,
+  enabled = true,
+  onSuccess,
+  onError,
+}: UseArtifactUploadsProps) {
   const [uploadsTriggered, setUploadsTriggered] = useState(false)
   const uploadKeyRef = useRef<string | null>(null)
   const roflUploadMutation = useUploadArtifact(token)
@@ -19,6 +30,7 @@ export function useArtifactUploads({ token, appId, roflYaml, composeYaml }: UseA
 
     if (
       !uploadsTriggered &&
+      enabled &&
       token &&
       appId &&
       roflYaml &&
@@ -45,7 +57,19 @@ export function useArtifactUploads({ token, appId, roflYaml, composeYaml }: UseA
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, appId, roflYaml, composeYaml, uploadsTriggered])
+  }, [token, appId, roflYaml, composeYaml, uploadsTriggered, enabled])
+
+  useEffect(() => {
+    const isSuccess = roflUploadMutation.isSuccess && composeUploadMutation.isSuccess
+    const isError = roflUploadMutation.isError || composeUploadMutation.isError
+
+    if (uploadsTriggered && isSuccess && onSuccess) {
+      onSuccess()
+    } else if (uploadsTriggered && isError && onError) {
+      const error = roflUploadMutation.error || composeUploadMutation.error
+      onError(error)
+    }
+  }, [roflUploadMutation, composeUploadMutation, uploadsTriggered, onSuccess, onError])
 
   return {
     roflUpload: {

@@ -63,14 +63,14 @@ export const AnimatedStepText: FC<AnimatedStepTextProps> = ({ bootstrapStep }) =
       >
         {content.header}
       </h1>
-      <p
+      <div
         key={`description-${bootstrapStep}`}
         className={`text-muted-foreground text-md max-w-md text-center transition-all duration-400 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
         }`}
       >
         {content.description}
-      </p>
+      </div>
     </div>
   )
 }
