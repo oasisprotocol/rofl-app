@@ -16,7 +16,7 @@ export const Dashboard: FC = () => {
   const network = useNetwork()
   const { address } = useAccount()
   const roflAppsQuery = useGetRuntimeRoflApps(network, 'sapphire', {
-    limit: pageLimit,
+    limit: 1000,
     offset: 0,
     admin: address,
   })
@@ -31,6 +31,7 @@ export const Dashboard: FC = () => {
   const { data: machinesData, isLoading: isMachinesLoading, isFetched: isMachinesFetched } = roflMachinesQuery
   const roflMachines = machinesData?.data.instances
   const appsNumber = data?.data.total_count
+  const runningAppsNumber = roflApps?.filter(app => app.num_active_instances > 0).length || 0
   const machinesNumber = machinesData?.data.total_count
 
   return (
@@ -41,7 +42,7 @@ export const Dashboard: FC = () => {
           {isFetched && (
             <MetricCard
               title="ROFL Apps Running"
-              value={appsNumber}
+              value={runningAppsNumber}
               isTotalCountClipped={data?.data.is_total_count_clipped}
             />
           )}
@@ -62,7 +63,9 @@ export const Dashboard: FC = () => {
               <Skeleton key={index} className="w-full h-[200px]" />
             ))}
           {isFetched &&
-            roflApps?.map(app => <AppCard key={app.id} app={app} network={network} type="dashboard" />)}
+            roflApps
+              ?.slice(0, 3)
+              .map(app => <AppCard key={app.id} app={app} network={network} type="dashboard" />)}
         </div>
         <SectionHeader title="Machines" to="/dashboard/machines" disabled={machinesNumber === 0} />
         {isMachinesFetched && !machinesNumber && <MachinesEmptyState />}
