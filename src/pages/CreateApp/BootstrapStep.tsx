@@ -109,11 +109,9 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
       <div className="w-full px-8 py-12 flex flex-col items-center justify-center">
         {/* mitigate webm black background */}
         <div className="w-full bg-gradient-to-r from-background from-25% via-black via-50% to-background to-75% flex items-center justify-center mb-8">
-          <div className="w-[310px] h-[310px]">
-            <video width="310%" height="310" autoPlay muted loop playsInline>
-              <source src="https://assets.oasis.io/webm/Oasis-Loader-310x310.webm" type="video/webm" />
-            </video>
-          </div>
+          <video width="310" height="310" autoPlay muted loop playsInline>
+            <source src="https://assets.oasis.io/webm/Oasis-Loader-310x310.webm" type="video/webm" />
+          </video>
         </div>
         <AnimatedStepText bootstrapStep={bootstrapStep} />
       </div>
