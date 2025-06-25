@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const metadataFormSchema = z.object({
   name: z.string().min(1, {
@@ -16,13 +16,13 @@ export const metadataFormSchema = z.object({
       /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/,
       {
         message: 'Version must be valid semver format.',
-      }
+      },
     ),
   license: z.string().min(1, {
     message: 'License is required.',
   }),
   homepage: z.string().url().or(z.literal('')),
-});
+})
 
 export const agentFormSchema = z.object({
   OLLAMA_MODEL: z.string().min(1, {
@@ -44,7 +44,7 @@ export const agentFormSchema = z.object({
     .max(1000, {
       message: 'Prompt must be less than 1000 characters.',
     }),
-});
+})
 
 export const buildFormSchema = z.object({
   provider: z.string().min(1, {
@@ -58,17 +58,17 @@ export const buildFormSchema = z.object({
     message: 'Resources are required.',
   }),
   roseCostInBaseUnits: z.string().optional(),
-});
+})
 
-export type TemplateFormData = string;
-export type MetadataFormData = z.infer<typeof metadataFormSchema>;
-export type AgentFormData = z.infer<typeof agentFormSchema>;
-export type BuildFormData = z.infer<typeof buildFormSchema>;
+export type TemplateFormData = string
+export type MetadataFormData = z.infer<typeof metadataFormSchema>
+export type AgentFormData = z.infer<typeof agentFormSchema>
+export type BuildFormData = z.infer<typeof buildFormSchema>
 
 export type AppData = {
-  template?: string;
-  metadata?: MetadataFormData;
-  agent?: AgentFormData;
-  build?: BuildFormData;
-  payment?: Record<string, unknown>;
-};
+  template?: string
+  metadata?: MetadataFormData
+  agent?: AgentFormData
+  build?: BuildFormData
+  payment?: Record<string, unknown>
+}

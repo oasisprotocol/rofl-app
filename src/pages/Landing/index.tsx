@@ -1,9 +1,9 @@
-import { type FC } from 'react';
-import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
-import { Header } from '../../components/Layout/Header';
-import { Footer } from '../../components/Layout/Footer';
-import { Cards } from './Cards';
-import { Hero } from './Hero';
+import { type FC } from 'react'
+import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout'
+import { Header } from '../../components/Layout/Header'
+import { Footer } from '../../components/Layout/Footer'
+import { Cards } from './Cards'
+import { Hero } from './Hero'
 
 export const Landing: FC = () => {
   return (
@@ -13,5 +13,5 @@ export const Landing: FC = () => {
         <Cards />
       </Layout>
     </div>
-  );
-};
+  )
+}

@@ -1,50 +1,41 @@
-import { type FC, lazy, Suspense } from 'react';
+import { type FC, lazy, Suspense } from 'react'
 
 const TextAreaFallback = ({ value }: { value?: string }) => (
-  <textarea
-    readOnly
-    value={value}
-    className="w-full h-full bg-background text-foreground overflow-hidden"
-  />
-);
+  <textarea readOnly value={value} className="w-full h-full bg-background text-foreground overflow-hidden" />
+)
 
 const MonacoEditor = lazy(async () => {
   try {
-    const monaco = await import('monaco-editor');
-    const monacoReact = await import('@monaco-editor/react');
+    const monaco = await import('monaco-editor')
+    const monacoReact = await import('@monaco-editor/react')
     window.MonacoEnvironment = {
       getWorker() {
         return new Worker(
-          new URL(
-            '../../../node_modules/monaco-editor/esm/vs/editor/editor.worker.js',
-            import.meta.url
-          ),
-          { type: 'module' }
-        );
+          new URL('../../../node_modules/monaco-editor/esm/vs/editor/editor.worker.js', import.meta.url),
+          { type: 'module' },
+        )
       },
-    };
-    monacoReact.loader.config({ monaco });
+    }
+    monacoReact.loader.config({ monaco })
 
-    return monacoReact;
+    return monacoReact
   } catch {
-    console.error(
-      'monaco-editor wrapper failed to load. Using <textarea> instead'
-    );
+    console.error('monaco-editor wrapper failed to load. Using <textarea> instead')
     return {
-      default: ((props) => (
+      default: (props => (
         <TextAreaFallback value={props.value || props.defaultValue} />
       )) as typeof import('@monaco-editor/react').default,
-    };
+    }
   }
-});
+})
 
 type CodeDisplayProps = {
-  data: string;
-};
+  data: string
+}
 
 const CodeDisplay: FC<CodeDisplayProps> = ({ data }) => {
   if (!data) {
-    return null;
+    return null
   }
 
   return (
@@ -65,15 +56,15 @@ const CodeDisplay: FC<CodeDisplayProps> = ({ data }) => {
         </Suspense>
       </div>
     </div>
-  );
-};
+  )
+}
 
 type YamlCodeProps = {
-  data: string | undefined;
-};
+  data: string | undefined
+}
 
 export const YamlCode: FC<YamlCodeProps> = ({ data }) => {
-  if (!data) return null;
+  if (!data) return null
 
-  return <CodeDisplay data={data} />;
-};
+  return <CodeDisplay data={data} />
+}

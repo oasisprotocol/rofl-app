@@ -1,30 +1,30 @@
-import { useEffect, useCallback, type FC } from 'react';
-import { CreateLayout } from './CreateLayout';
-import { CreateFormHeader } from './CreateFormHeader';
-import { CreateFormNavigation } from './CreateFormNavigation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
-import { Label } from '@oasisprotocol/ui-library/src/components/ui/label';
-import { RadioGroup } from '@oasisprotocol/ui-library/src/components/ui/radio-group';
-import { buildFormSchema, type BuildFormData } from './types';
-import { SelectFormField } from './SelectFormField';
-import { useNetwork } from '../../hooks/useNetwork';
-import { getWhitelistedProviders } from '../../utils/providers';
+import { useEffect, useCallback, type FC } from 'react'
+import { CreateLayout } from './CreateLayout'
+import { CreateFormHeader } from './CreateFormHeader'
+import { CreateFormNavigation } from './CreateFormNavigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm } from 'react-hook-form'
+import { Label } from '@oasisprotocol/ui-library/src/components/ui/label'
+import { RadioGroup } from '@oasisprotocol/ui-library/src/components/ui/radio-group'
+import { buildFormSchema, type BuildFormData } from './types'
+import { SelectFormField } from './SelectFormField'
+import { useNetwork } from '../../hooks/useNetwork'
+import { getWhitelistedProviders } from '../../utils/providers'
 import {
   useGetRuntimeRoflmarketProviders,
   useGetRuntimeRoflmarketProvidersAddressOffers,
-} from '../../nexus/api';
-import { InputFormField } from './InputFormField';
-import { BuildStepOffers } from './BuildStepOffers';
-import * as oasisRT from '@oasisprotocol/client-rt';
+} from '../../nexus/api'
+import { InputFormField } from './InputFormField'
+import { BuildStepOffers } from './BuildStepOffers'
+import * as oasisRT from '@oasisprotocol/client-rt'
 
 type AgentStepProps = {
-  handleNext: () => void;
-  handleBack: () => void;
-  build?: BuildFormData;
-  setAppDataForm: (data: { build: BuildFormData }) => void;
-  selectedTemplateName?: string;
-};
+  handleNext: () => void
+  handleBack: () => void
+  build?: BuildFormData
+  setAppDataForm: (data: { build: BuildFormData }) => void
+  selectedTemplateName?: string
+}
 
 export const BuildStep: FC<AgentStepProps> = ({
   handleNext,
@@ -33,73 +33,73 @@ export const BuildStep: FC<AgentStepProps> = ({
   setAppDataForm,
   selectedTemplateName,
 }) => {
-  const network = useNetwork();
-  const providersQuery = useGetRuntimeRoflmarketProviders(network, 'sapphire');
-  const { data } = providersQuery;
-  const providers = data?.data.providers;
-  const whitelistedProviders = getWhitelistedProviders(providers, network);
-  const providerOptions = whitelistedProviders?.map((provider) => ({
+  const network = useNetwork()
+  const providersQuery = useGetRuntimeRoflmarketProviders(network, 'sapphire')
+  const { data } = providersQuery
+  const providers = data?.data.providers
+  const whitelistedProviders = getWhitelistedProviders(providers, network)
+  const providerOptions = whitelistedProviders?.map(provider => ({
     value: provider.address,
-    label:
-      (provider.metadata?.['net.oasis.provider.name'] as string) ||
-      provider.address,
-  }));
+    label: (provider.metadata?.['net.oasis.provider.name'] as string) || provider.address,
+  }))
   const form = useForm<BuildFormData>({
     resolver: zodResolver(buildFormSchema),
     defaultValues: { ...build },
-  });
+  })
   const handleCostCalculated = useCallback(
     (roseCostInBaseUnits: string) => {
-      form.setValue('roseCostInBaseUnits', roseCostInBaseUnits);
+      form.setValue('roseCostInBaseUnits', roseCostInBaseUnits)
     },
-    [form]
-  );
+    [form],
+  )
 
   useEffect(() => {
-    form.reset({ ...build });
-  }, [build, form]);
+    form.reset({ ...build })
+  }, [build, form])
 
   useEffect(() => {
     if (providerOptions.length === 1 && !form.getValues('provider')) {
-      form.setValue('provider', providerOptions[0].value);
+      form.setValue('provider', providerOptions[0].value)
     }
-  }, [providerOptions, form]);
+  }, [providerOptions, form])
 
-  const providerValue = form.watch('provider');
+  const providerValue = form.watch('provider')
   const providersOffersQuery = useGetRuntimeRoflmarketProvidersAddressOffers(
     network,
     'sapphire',
-    providerValue
-  );
-  const offers = providersOffersQuery.data?.data.offers.filter((offer) => offer.resources.tee === oasisRT.types.RoflmarketTeeType.TDX)
+    providerValue,
+  )
+  const offers = providersOffersQuery.data?.data.offers.filter(
+    offer => offer.resources.tee === oasisRT.types.RoflmarketTeeType.TDX,
+  )
 
   // API terms are like 1=hour, 2=month, 3=year, but only hour is mandatory
   // Testnet provider provide only hourly terms
   const hasMonthlyTerms = offers?.some(
-    (offer) =>
+    offer =>
       (offer.payment?.native as { terms?: Record<oasisRT.types.RoflmarketTerm, string> })?.terms?.[
         oasisRT.types.RoflmarketTerm.MONTH
-      ]
-  );
+      ],
+  )
 
-  const durationOptions: { value: BuildFormData['duration'], label: string }[] = [
+  const durationOptions: { value: BuildFormData['duration']; label: string }[] = [
     { value: 'hours', label: 'Hours' },
     { value: 'days', label: 'Days' },
-    ...(hasMonthlyTerms ? [{ value: 'months', label: 'Months' }] as const : []),
-  ];
+    ...(hasMonthlyTerms ? ([{ value: 'months', label: 'Months' }] as const) : []),
+  ]
 
   const onSubmit = (values: BuildFormData) => {
-    setAppDataForm({ build: values });
-    handleNext();
-  };
+    setAppDataForm({ build: values })
+    handleNext()
+  }
 
   const handleFormSubmit = () => {
-    form.trigger().then((isValid) => {
+    form.trigger().then(isValid => {
       if (isValid) {
-        form.handleSubmit(onSubmit)();
+        form.handleSubmit(onSubmit)()
       }
-    });
-  };
+    })
+  }
 
   return (
     <CreateLayout
@@ -118,10 +118,7 @@ export const BuildStep: FC<AgentStepProps> = ({
         description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
       />
 
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 mb-6 w-full"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
         <SelectFormField
           control={form.control}
           name="provider"
@@ -149,13 +146,11 @@ export const BuildStep: FC<AgentStepProps> = ({
               type="number"
               min={1}
             />
-            {form.watch('duration') === 'hours' &&
-              Number(form.watch('number')) === 1 && (
-                <div className="text-sm text-warning leading-tight mt-2">
-                  1 hour is a very short period of time for a ROFL app. It may
-                  not be enough for debugging.
-                </div>
-              )}
+            {form.watch('duration') === 'hours' && Number(form.watch('number')) === 1 && (
+              <div className="text-sm text-warning leading-tight mt-2">
+                1 hour is a very short period of time for a ROFL app. It may not be enough for debugging.
+              </div>
+            )}
           </div>
         </div>
 
@@ -166,12 +161,8 @@ export const BuildStep: FC<AgentStepProps> = ({
             name="resources"
             render={({ field, fieldState }) => (
               <>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  className="space-y-2"
-                >
-                  {offers?.map((offer) => (
+                <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
+                  {offers?.map(offer => (
                     <BuildStepOffers
                       key={offer.id}
                       offer={offer}
@@ -183,9 +174,7 @@ export const BuildStep: FC<AgentStepProps> = ({
                   ))}
                 </RadioGroup>
                 {fieldState.error && (
-                  <div className="text-destructive text-sm">
-                    {fieldState.error.message}
-                  </div>
+                  <div className="text-destructive text-sm">{fieldState.error.message}</div>
                 )}
               </>
             )}
@@ -198,5 +187,5 @@ export const BuildStep: FC<AgentStepProps> = ({
         />
       </form>
     </CreateLayout>
-  );
-};
+  )
+}

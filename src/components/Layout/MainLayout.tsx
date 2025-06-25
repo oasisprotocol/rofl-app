@@ -1,7 +1,7 @@
-import type { FC } from 'react';
-import { Header } from './Header';
-import { Footer } from './Footer';
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import type { FC } from 'react'
+import { Header } from './Header'
+import { Footer } from './Footer'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   Sidebar,
   SidebarContent,
@@ -12,25 +12,25 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
   SidebarGroup,
-} from '@oasisprotocol/ui-library/src/components/ui/sidebar';
-import { Compass, LayoutDashboard } from 'lucide-react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
-import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout';
+} from '@oasisprotocol/ui-library/src/components/ui/sidebar'
+import { Compass, LayoutDashboard } from 'lucide-react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout'
 import {
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbSeparator,
-} from '@oasisprotocol/ui-library/src/components/ui/breadcrumb';
-import { ErrorBoundary } from '../ErrorBoundary';
+} from '@oasisprotocol/ui-library/src/components/ui/breadcrumb'
+import { ErrorBoundary } from '../ErrorBoundary'
 
 const navItems = {
   dashboard: { label: 'Dashboard', path: '/dashboard' },
   myApps: { label: 'My Apps', path: '/dashboard/apps' },
   machines: { label: 'Machines', path: '/dashboard/machines' },
   explore: { label: 'Explore', path: '/explore' },
-};
+}
 
 const breadcrumbConfigs = [
   {
@@ -53,26 +53,26 @@ const breadcrumbConfigs = [
     breadcrumbs: [navItems.dashboard],
     matchType: 'exact',
   },
-];
+]
 
 export const MainLayout: FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const getBreadcrumbConfig = () => {
-    const pathname = location.pathname.toLowerCase();
+    const pathname = location.pathname.toLowerCase()
 
-    return breadcrumbConfigs.find((config) => {
+    return breadcrumbConfigs.find(config => {
       if (config.matchType === 'exact') {
-        return pathname === config.pattern;
+        return pathname === config.pattern
       } else {
-        return pathname.startsWith(config.pattern);
+        return pathname.startsWith(config.pattern)
       }
-    });
-  };
+    })
+  }
 
-  const breadcrumbConfig = getBreadcrumbConfig();
-  const breadcrumbs = breadcrumbConfig?.breadcrumbs || [];
+  const breadcrumbConfig = getBreadcrumbConfig()
+  const breadcrumbs = breadcrumbConfig?.breadcrumbs || []
 
   return (
     <Layout
@@ -85,23 +85,18 @@ export const MainLayout: FC = () => {
                 const elements = [
                   <BreadcrumbItem key={breadcrumb.label + i}>
                     <BreadcrumbLink asChild>
-                      <NavLink
-                        to={breadcrumb.path}
-                        className="text-foreground text-sm font-normal"
-                      >
+                      <NavLink to={breadcrumb.path} className="text-foreground text-sm font-normal">
                         {breadcrumb.label}
                       </NavLink>
                     </BreadcrumbLink>
                   </BreadcrumbItem>,
-                ];
+                ]
 
                 if (i + 1 < breadcrumbs.length) {
-                  elements.push(
-                    <BreadcrumbSeparator key={`sep-${breadcrumb.label}-${i}`} />
-                  );
+                  elements.push(<BreadcrumbSeparator key={`sep-${breadcrumb.label}-${i}`} />)
                 }
 
-                return elements;
+                return elements
               })}
             </BreadcrumbList>
           </Breadcrumb>
@@ -171,5 +166,5 @@ export const MainLayout: FC = () => {
         </ErrorBoundary>
       </div>
     </Layout>
-  );
-};
+  )
+}

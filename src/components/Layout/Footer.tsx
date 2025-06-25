@@ -1,11 +1,9 @@
-import type { FC } from 'react';
+import type { FC } from 'react'
 
 export const Footer: FC = () => {
   return (
     <footer className="w-full flex items-center justify-between">
-      <p className="text-xs text-muted-foreground">
-        Copyright @ OASIS {new Date().getFullYear()}
-      </p>
+      <p className="text-xs text-muted-foreground">Copyright @ OASIS {new Date().getFullYear()}</p>
 
       <div className="flex items-center gap-2.5">
         <p className="text-xs text-muted-foreground">
@@ -24,5 +22,5 @@ export const Footer: FC = () => {
         </a>
       </div>
     </footer>
-  );
-};
+  )
+}

@@ -9,69 +9,64 @@
 
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from '@tanstack/react-query';
-import type {
-  QueryFunction,
-  QueryKey,
-  UseQueryOptions,
-  UseQueryResult,
-} from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query'
+import type { QueryFunction, QueryKey, UseQueryOptions, UseQueryResult } from '@tanstack/react-query'
 
-import getStatusMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusTotalSupplyRawMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusCirculatingSupplyRawMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusBlocksMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusBlocksHeightMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusTransactionsMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusTransactionsTxHashMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusEventsMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusRoothashMessagesMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusEntitiesMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusEntitiesAddressMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusEntitiesAddressNodesMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusEntitiesAddressNodesNodeIdMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusValidatorsMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusValidatorsAddressMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusValidatorsAddressHistoryMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusAccountsMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusAccountsAddressMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusAccountsAddressDelegationsMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusAccountsAddressDelegationsToMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusAccountsAddressDebondingDelegationsMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusAccountsAddressDebondingDelegationsToMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusEpochsMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusEpochsEpochMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusProposalsMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusProposalsProposalIdMutator from '../replaceNetworkWithBaseURL';
-import GetConsensusProposalsProposalIdVotesMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeBlocksMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeTransactionsMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeTransactionsTxHashMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeEventsMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeEvmTokensMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeEvmTokensAddressMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeEvmTokensAddressHoldersMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeEvmTokensAddressNftsMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeEvmTokensAddressNftsIdMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeAccountsAddressMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeAccountsAddressNftsMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeStatusMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflAppsMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflAppsIdMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflAppsIdTransactionsMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflAppsIdInstanceTransactionsMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflAppsIdInstancesMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflAppsIdInstancesRakMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflAppsIdInstancesRakTransactionsMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflmarketProvidersMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflmarketProvidersAddressMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflmarketProvidersAddressOffersMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflmarketProvidersAddressOffersIdMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflmarketProvidersAddressInstancesIdMutator from '../replaceNetworkWithBaseURL';
-import GetRuntimeRoflmarketInstancesMutator from '../replaceNetworkWithBaseURL';
-import GetLayerStatsTxVolumeMutator from '../replaceNetworkWithBaseURL';
-import GetLayerStatsActiveAccountsMutator from '../replaceNetworkWithBaseURL';
-export type Layer = (typeof Layer)[keyof typeof Layer];
+import getStatusMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusTotalSupplyRawMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusCirculatingSupplyRawMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusBlocksMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusBlocksHeightMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusTransactionsMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusTransactionsTxHashMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusEventsMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusRoothashMessagesMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusEntitiesMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusEntitiesAddressMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusEntitiesAddressNodesMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusEntitiesAddressNodesNodeIdMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusValidatorsMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusValidatorsAddressMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusValidatorsAddressHistoryMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusAccountsMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusAccountsAddressMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusAccountsAddressDelegationsMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusAccountsAddressDelegationsToMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusAccountsAddressDebondingDelegationsMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusAccountsAddressDebondingDelegationsToMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusEpochsMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusEpochsEpochMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusProposalsMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusProposalsProposalIdMutator from '../replaceNetworkWithBaseURL'
+import GetConsensusProposalsProposalIdVotesMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeBlocksMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeTransactionsMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeTransactionsTxHashMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeEventsMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeEvmTokensMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeEvmTokensAddressMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeEvmTokensAddressHoldersMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeEvmTokensAddressNftsMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeEvmTokensAddressNftsIdMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeAccountsAddressMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeAccountsAddressNftsMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeStatusMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflAppsMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflAppsIdMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflAppsIdTransactionsMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflAppsIdInstanceTransactionsMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflAppsIdInstancesMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflAppsIdInstancesRakMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflAppsIdInstancesRakTransactionsMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflmarketProvidersMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflmarketProvidersAddressMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflmarketProvidersAddressOffersMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflmarketProvidersAddressOffersIdMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflmarketProvidersAddressInstancesIdMutator from '../replaceNetworkWithBaseURL'
+import GetRuntimeRoflmarketInstancesMutator from '../replaceNetworkWithBaseURL'
+import GetLayerStatsTxVolumeMutator from '../replaceNetworkWithBaseURL'
+import GetLayerStatsActiveAccountsMutator from '../replaceNetworkWithBaseURL'
+export type Layer = (typeof Layer)[keyof typeof Layer]
 
 export const Layer = {
   emerald: 'emerald',
@@ -80,9 +75,9 @@ export const Layer = {
   pontusxdev: 'pontusxdev',
   cipher: 'cipher',
   consensus: 'consensus',
-} as const;
+} as const
 
-export type Runtime = (typeof Runtime)[keyof typeof Runtime];
+export type Runtime = (typeof Runtime)[keyof typeof Runtime]
 
 export const Runtime = {
   emerald: 'emerald',
@@ -90,68 +85,68 @@ export const Runtime = {
   pontusxtest: 'pontusxtest',
   pontusxdev: 'pontusxdev',
   cipher: 'cipher',
-} as const;
+} as const
 
 /**
  * An Oasis-style (bech32) address.
  * @pattern ^oasis1[a-z0-9]{40}$
  */
-export type StakingAddress = string;
+export type StakingAddress = string
 
 /**
  * @pattern ^-?[0-9]+$
  */
-export type TextBigInt = string;
+export type TextBigInt = string
 
 /**
  * An Oasis-style (bech32) address.
  * @pattern ^oasis1[a-z0-9]{40}$
  */
-export type Address = string;
+export type Address = string
 
 /**
  * @pattern ^oasis1[a-z0-9]{40}$|^(0x)?[0-9a-fA-F]{40}$
  */
-export type EthOrOasisAddress = string;
+export type EthOrOasisAddress = string
 
 /**
  * A base64-encoded ed25519 public key.
  */
-export type Ed25519PubKey = string;
+export type Ed25519PubKey = string
 
-export type CallFormat = string;
+export type CallFormat = string
 
 export interface List {
   /** The total number of records that match the query, i.e. the number of records
 the query would return with limit=infinity.
  */
-  total_count: number;
+  total_count: number
   /** Whether total_count is clipped for performance reasons. */
-  is_total_count_clipped: boolean;
+  is_total_count_clipped: boolean
 }
 
 export interface Status {
   /** The height of the most recent indexed block. Compare with latest_node_block to measure
 how far behind Nexus is from the chain.
  */
-  latest_block: number;
+  latest_block: number
   /** The height of the most recently produced block on-chain as seen by Nexus. */
-  latest_node_block: number;
+  latest_node_block: number
   /** The RFC 3339 formatted consensus time of when the most recently indexed block was produced. */
-  latest_block_time: string;
+  latest_block_time: string
   /** The number of milliseconds since Nexus processed the latest block. */
-  latest_update_age_ms: number;
+  latest_update_age_ms: number
 }
 
 export type BlockListAllOf = {
-  blocks: Block[];
-};
+  blocks: Block[]
+}
 
 /**
  * A list of consensus blocks.
 
  */
-export type BlockList = List & BlockListAllOf;
+export type BlockList = List & BlockListAllOf
 
 /**
  * A consensus block.
@@ -159,29 +154,29 @@ export type BlockList = List & BlockListAllOf;
  */
 export interface Block {
   /** The block height. */
-  height: number;
+  height: number
   /** The block header hash. */
-  hash: string;
+  hash: string
   /** The second-granular consensus time. */
-  timestamp: string;
+  timestamp: string
   /** Number of transactions in the block. */
-  num_transactions: number;
+  num_transactions: number
   /** The gas limit for the block. A gas limit 0 means that the max block gas was unlimited.
 Blocks from Cobalt, Damask, and early Eden had no gas limit as their sizes were only
 restricted by byte size until an upgrade during Eden introduced a gas limit.
  */
-  gas_limit: TextBigInt;
+  gas_limit: TextBigInt
   /** The size limit for the block in bytes.
    */
-  size_limit?: TextBigInt;
+  size_limit?: TextBigInt
   /** The epoch number of the epoch in which the block was produced. */
-  epoch: number;
+  epoch: number
   /** The Merkle root of the state tree after applying the block. */
-  state_root: string;
+  state_root: string
   /** The entity that proposed this block. */
-  proposer: EntityInfo;
+  proposer: EntityInfo
   /** A list of the entities that signed the block. */
-  signers?: EntityInfo[];
+  signers?: EntityInfo[]
 }
 
 /**
@@ -189,9 +184,9 @@ restricted by byte size until an upgrade during Eden introduced a gas limit.
  */
 export interface EntityInfo {
   /** The ID of the entity owning the node; this corresponds to the entity's public key in base64. */
-  entity_id?: string;
+  entity_id?: string
   /** Address of the entity owning the node, in Bech32 format (`oasis1...`). */
-  entity_address?: string;
+  entity_address?: string
   /** Metadata about an entity, if available. See [the metadata registry](https://github.com/oasisprotocol/metadata-registry) for details.
 
 When available, it is an object with some subset of the following fields:
@@ -204,7 +199,7 @@ When available, it is an object with some subset of the following fields:
 - `keybase`: Tne entity's keybase.io handle.
 - `twitter`: The twitter handle associated with the entity.
  */
-  entity_metadata?: unknown;
+  entity_metadata?: unknown
 }
 
 /**
@@ -213,13 +208,13 @@ When available, it is an object with some subset of the following fields:
  */
 export interface Delegation {
   /** The amount of tokens delegated in base units. */
-  amount: TextBigInt;
+  amount: TextBigInt
   /** The shares of tokens delegated. */
-  shares: TextBigInt;
+  shares: TextBigInt
   /** The delegatee (validator) address. */
-  validator: string;
+  validator: string
   /** The delegator address. */
-  delegator: string;
+  delegator: string
 }
 
 /**
@@ -227,10 +222,10 @@ export interface Delegation {
 
  */
 export type DelegationListAllOf = {
-  delegations: Delegation[];
-};
+  delegations: Delegation[]
+}
 
-export type DelegationList = List & DelegationListAllOf;
+export type DelegationList = List & DelegationListAllOf
 
 /**
  * A debonding delegation.
@@ -238,15 +233,15 @@ export type DelegationList = List & DelegationListAllOf;
  */
 export interface DebondingDelegation {
   /** The amount of tokens delegated in base units. */
-  amount: TextBigInt;
+  amount: TextBigInt
   /** The shares of tokens delegated. */
-  shares: TextBigInt;
+  shares: TextBigInt
   /** The delegatee (validator) address. */
-  validator: string;
+  validator: string
   /** The delegator address. */
-  delegator: string;
+  delegator: string
   /** The epoch at which the debonding ends. */
-  debond_end: number;
+  debond_end: number
 }
 
 /**
@@ -254,13 +249,12 @@ export interface DebondingDelegation {
 
  */
 export type DebondingDelegationListAllOf = {
-  debonding_delegations: DebondingDelegation[];
-};
+  debonding_delegations: DebondingDelegation[]
+}
 
-export type DebondingDelegationList = List & DebondingDelegationListAllOf;
+export type DebondingDelegationList = List & DebondingDelegationListAllOf
 
-export type ConsensusTxMethod =
-  (typeof ConsensusTxMethod)[keyof typeof ConsensusTxMethod];
+export type ConsensusTxMethod = (typeof ConsensusTxMethod)[keyof typeof ConsensusTxMethod]
 
 export const ConsensusTxMethod = {
   beaconPVSSCommit: 'beacon.PVSSCommit',
@@ -296,22 +290,22 @@ export const ConsensusTxMethod = {
   vaultAuthorizeAction: 'vault.AuthorizeAction',
   vaultCancelAction: 'vault.CancelAction',
   vaultCreate: 'vault.Create',
-} as const;
+} as const
 
 /**
  * A list of consensus transactions.
 
  */
 export type TransactionListAllOf = {
-  transactions: Transaction[];
-};
+  transactions: Transaction[]
+}
 
-export type TransactionList = List & TransactionListAllOf;
+export type TransactionList = List & TransactionListAllOf
 
 /**
  * The method call body. This spec does not encode the many possible types; instead, see [the Go API](https://pkg.go.dev/github.com/oasisprotocol/oasis-core/go) of oasis-core. This object will conform to one of the types passed to variable instantiations using `NewMethodName` two levels down the hierarchy, e.g. `MethodTransfer` from `oasis-core/go/staking/api` seen [here](https://pkg.go.dev/github.com/oasisprotocol/oasis-core/go@v0.2300.10/staking/api#pkg-variables).
  */
-export type TransactionBody = { [key: string]: unknown };
+export type TransactionBody = { [key: string]: unknown }
 
 /**
  * A consensus transaction.
@@ -319,41 +313,41 @@ export type TransactionBody = { [key: string]: unknown };
  */
 export interface Transaction {
   /** The block height at which this transaction was executed. */
-  block: number;
+  block: number
   /** 0-based index of this transaction in its block */
-  index: number;
+  index: number
   /** The second-granular consensus time of this tx's block, i.e. roughly when the
 [block was proposed](https://github.com/tendermint/tendermint/blob/v0.34.x/spec/core/data_structures.md#header).
  */
-  timestamp: string;
+  timestamp: string
   /** The cryptographic hash of this transaction's encoding. */
-  hash: string;
+  hash: string
   /** The address of who sent this transaction. */
-  sender: string;
+  sender: string
   /** The nonce used with this transaction, to prevent replay. */
-  nonce: number;
+  nonce: number
   /** The fee that this transaction's sender committed
 to pay to execute it.
  */
-  fee: TextBigInt;
+  fee: TextBigInt
   /** The maximum gas that a transaction can use.
    */
-  gas_limit: TextBigInt;
+  gas_limit: TextBigInt
   /** The method that was called. */
-  method: ConsensusTxMethod;
+  method: ConsensusTxMethod
   /** The method call body. This spec does not encode the many possible types; instead, see [the Go API](https://pkg.go.dev/github.com/oasisprotocol/oasis-core/go) of oasis-core. This object will conform to one of the types passed to variable instantiations using `NewMethodName` two levels down the hierarchy, e.g. `MethodTransfer` from `oasis-core/go/staking/api` seen [here](https://pkg.go.dev/github.com/oasisprotocol/oasis-core/go@v0.2300.10/staking/api#pkg-variables). */
-  body: TransactionBody;
+  body: TransactionBody
   /** Whether this transaction successfully executed. */
-  success: boolean;
+  success: boolean
   /** Error details of a failed transaction. */
-  error?: TxError;
+  error?: TxError
 }
 
 export interface TxError {
   /** The module of a failed transaction. */
-  module?: string;
+  module?: string
   /** The status code of a failed transaction. */
-  code: number;
+  code: number
   /** The message of a failed transaction.
 This field, like `code` and `module`, can represent an error that originated
 anywhere in the paratime, i.e. either inside or outside a smart contract.
@@ -366,7 +360,7 @@ will be true:
 - `message` will contain the best-effort human-readable revert reason.
 - `raw_message` will contain the raw revert reason. This is useful for cases where the `message` parsing fails
  */
-  message?: string;
+  message?: string
   /** The error parameters, as decoded using the contract abi. Present only when
 - the error originated from within a smart contract (e.g. via `revert` in Solidity), and
 - the contract is verified or the revert reason is a plain String.
@@ -374,14 +368,13 @@ If this field is present, `message` will include the name of the error, e.g. 'In
 Note that users should be cautious when evaluating error data since the
 data origin is not tracked and error information can be faked.
  */
-  revert_params?: EvmAbiParam[];
+  revert_params?: EvmAbiParam[]
   /** The unparsed transaction error message.
    */
-  raw_message?: string;
+  raw_message?: string
 }
 
-export type ConsensusEventType =
-  (typeof ConsensusEventType)[keyof typeof ConsensusEventType];
+export type ConsensusEventType = (typeof ConsensusEventType)[keyof typeof ConsensusEventType]
 
 export const ConsensusEventType = {
   governanceproposal_executed: 'governance.proposal_executed',
@@ -405,17 +398,17 @@ export const ConsensusEventType = {
   stakingescrowreclaim: 'staking.escrow.reclaim',
   stakingescrowtake: 'staking.escrow.take',
   stakingtransfer: 'staking.transfer',
-} as const;
+} as const
 
 /**
  * A list of consensus events.
 
  */
 export type ConsensusEventListAllOf = {
-  events: ConsensusEvent[];
-};
+  events: ConsensusEvent[]
+}
 
-export type ConsensusEventList = List & ConsensusEventListAllOf;
+export type ConsensusEventList = List & ConsensusEventListAllOf
 
 /**
  * The event contents. This spec does not encode the many possible types;
@@ -424,7 +417,7 @@ This object will conform to one of the `*Event` types two levels down
 the hierarchy, e.g. `TransferEvent` from `Event > staking.Event > TransferEvent`
 
  */
-export type ConsensusEventBody = { [key: string]: unknown };
+export type ConsensusEventBody = { [key: string]: unknown }
 
 /**
  * An event emitted by the consensus layer.
@@ -432,44 +425,43 @@ export type ConsensusEventBody = { [key: string]: unknown };
  */
 export interface ConsensusEvent {
   /** The block height at which this event was generated. */
-  block: number;
+  block: number
   /** 0-based index of this event's originating transaction within its block.
 Absent if the event did not originate from a transaction.
  */
-  tx_index?: number;
+  tx_index?: number
   /** Hash of this event's originating transaction.
 Absent if the event did not originate from a transaction.
  */
-  tx_hash?: string;
+  tx_hash?: string
   /** The ID of the runtime to which the event relates, encoded in hex.
 Present only for events of type `roothash.*`.
  */
-  roothash_runtime_id?: string;
+  roothash_runtime_id?: string
   /** The runtime to which the event relates.
 Present only for events of type `roothash.*`.
  */
-  roothash_runtime?: Runtime;
+  roothash_runtime?: Runtime
   /** When applicable, the round in the runtime to which this event
 relates.
 Present only for events of type `roothash.*` except for
 `roothash.execution_discrepancy` before Eden.
  */
-  roothash_runtime_round?: number;
+  roothash_runtime_round?: number
   /** The second-granular consensus time of this event's block.
    */
-  timestamp?: string;
+  timestamp?: string
   /** The type of the event. */
-  type: ConsensusEventType;
+  type: ConsensusEventType
   /** The event contents. This spec does not encode the many possible types;
 instead, see [the Go API](https://pkg.go.dev/github.com/oasisprotocol/oasis-core/go/consensus/api/transaction/results#Event) of oasis-core.
 This object will conform to one of the `*Event` types two levels down
 the hierarchy, e.g. `TransferEvent` from `Event > staking.Event > TransferEvent`
  */
-  body: ConsensusEventBody;
+  body: ConsensusEventBody
 }
 
-export type RoothashMessageType =
-  (typeof RoothashMessageType)[keyof typeof RoothashMessageType];
+export type RoothashMessageType = (typeof RoothashMessageType)[keyof typeof RoothashMessageType]
 
 export const RoothashMessageType = {
   stakingtransfer: 'staking.transfer',
@@ -479,13 +471,13 @@ export const RoothashMessageType = {
   registryupdate_runtime: 'registry.update_runtime',
   governancecast_vote: 'governance.cast_vote',
   governancesubmit_proposal: 'governance.submit_proposal',
-} as const;
+} as const
 
 export type RoothashMessageListAllOf = {
-  roothash_messages: RoothashMessage[];
-};
+  roothash_messages: RoothashMessage[]
+}
 
-export type RoothashMessageList = List & RoothashMessageListAllOf;
+export type RoothashMessageList = List & RoothashMessageListAllOf
 
 /**
  * The "body" of a message is a structure within the
@@ -500,21 +492,21 @@ structure
 with `from` and `amount` fields in JSON.
 
  */
-export type RoothashMessageBody = { [key: string]: unknown };
+export type RoothashMessageBody = { [key: string]: unknown }
 
 export interface RoothashMessage {
   /** The runtime that sent this message.
    */
-  runtime: string;
+  runtime: string
   /** The block round when the runtime sent this message.
    */
-  round: number;
+  round: number
   /** The 0-based index of this message in the block.
    */
-  index: number;
+  index: number
   /** The type of this message.
    */
-  type?: RoothashMessageType;
+  type?: RoothashMessageType
   /** The "body" of a message is a structure within the
 `github.com/oasisprotocol/oasis-core/go/roothash/api/message`
 `Message` structure
@@ -526,15 +518,15 @@ structure
 (https://pkg.go.dev/github.com/oasisprotocol/oasis-core/go/staking/api#Withdraw),
 with `from` and `amount` fields in JSON.
  */
-  body?: RoothashMessageBody;
+  body?: RoothashMessageBody
   /** If executing this message resulted in an error, this is the
 error's module.
  */
-  error_module?: string;
+  error_module?: string
   /** If executing this message resulted in an error, this is the
 error's code.
  */
-  error_code?: number;
+  error_code?: number
   /** A result value that consensus provided after executing this
 message. These aren't centrally registered anywhere, so look at
 the consensus apps' `ExecuteMessage`
@@ -547,7 +539,7 @@ implementations to see what they return. For example, a
 with `owner`, `beneficiary`, `allowance`, and `amount_change`
 fields.
  */
-  result?: unknown;
+  result?: unknown
 }
 
 /**
@@ -555,10 +547,10 @@ fields.
 
  */
 export type EntityListAllOf = {
-  entities: Entity[];
-};
+  entities: Entity[]
+}
 
-export type EntityList = List & EntityListAllOf;
+export type EntityList = List & EntityListAllOf
 
 /**
  * An entity registered at the consensus layer.
@@ -566,17 +558,17 @@ export type EntityList = List & EntityListAllOf;
  */
 export interface Entity {
   /** The public key identifying this entity. */
-  id: string;
+  id: string
   /** The staking address belonging to this entity; derived from the entity's public key. */
-  address: string;
+  address: string
   /** The vector of nodes owned by this entity. */
-  nodes: string[];
+  nodes: string[]
 }
 
 export interface ValidatorsResponse {
-  validator_list: ValidatorList;
+  validator_list: ValidatorList
   /** Summary statistics across all consensus validators. */
-  stats: ValidatorAggStats;
+  stats: ValidatorAggStats
 }
 
 /**
@@ -585,42 +577,42 @@ statistics across all consensus validators.
 
  */
 export type ValidatorListAllOf = {
-  validators: Validator[];
+  validators: Validator[]
   /** Summary statistics across all consensus validators. */
-  stats: ValidatorAggStats;
-};
+  stats: ValidatorAggStats
+}
 
-export type ValidatorList = List & ValidatorListAllOf;
+export type ValidatorList = List & ValidatorListAllOf
 
 export interface ValidatorAggStats {
   /** The total voting power across all validators. */
-  total_voting_power: number;
+  total_voting_power: number
   /** The total number of delegators in the network. */
-  total_delegators: number;
+  total_delegators: number
   /** The total amount of token staked to validators. */
-  total_staked_balance: TextBigInt;
+  total_staked_balance: TextBigInt
 }
 
 export interface ValidatorCommissionBound {
-  lower: number;
-  upper: number;
-  epoch_start: number;
-  epoch_end: number;
+  lower: number
+  upper: number
+  epoch_start: number
+  epoch_end: number
 }
 
 export interface ValidatorMedia {
   /** An URL associated with the entity. */
-  url?: string;
+  url?: string
   /** An email address associated with the entity. */
-  email?: string;
+  email?: string
   /** Twitter handle. */
-  twitter?: string;
+  twitter?: string
   /** Keybase handle. */
-  keybase?: string;
+  keybase?: string
   /** The human-readable name of this entity. */
-  name?: string;
+  name?: string
   /** URL to a logo image for the entity. */
-  logoUrl?: string;
+  logoUrl?: string
 }
 
 /**
@@ -629,31 +621,31 @@ export interface ValidatorMedia {
  */
 export interface Validator {
   /** The staking address identifying this validator. */
-  entity_address: string;
+  entity_address: string
   /** The public key identifying this validator. */
-  entity_id: string;
+  entity_id: string
   /** The public key identifying this validator's node. */
-  node_id?: string;
+  node_id?: string
   /** The escrow account data for this validator. */
-  escrow: Escrow;
+  escrow: Escrow
   /** The voting power of this validator. */
-  voting_power: number;
+  voting_power: number
   /** The cumulative voting power of this validator and all other validators ranked higher than itself. */
-  voting_power_cumulative?: number;
+  voting_power_cumulative?: number
   /** Whether the entity has a node that is registered for being a validator, node is up to date, and has successfully registered itself. It may or may not be part of validator set. */
-  active: boolean;
+  active: boolean
   /** The second-granular consensus time. */
-  start_date: string;
+  start_date: string
   /** The rank of the validator, determined by voting power. */
-  rank: number;
+  rank: number
   /** Whether the entity is part of the validator set (top <scheduler.params.max_validators> by stake among active entities). */
-  in_validator_set: boolean;
-  media?: ValidatorMedia;
+  in_validator_set: boolean
+  media?: ValidatorMedia
   /** Commission rate. */
-  current_rate: number;
-  current_commission_bound: ValidatorCommissionBound;
+  current_rate: number
+  current_commission_bound: ValidatorCommissionBound
   /** An array containing details of the last 100 consensus blocks, indicating whether each block was signed by the validator. Only available when querying a single validator. */
-  signed_blocks?: ValidatorSignedBlock[];
+  signed_blocks?: ValidatorSignedBlock[]
 }
 
 /**
@@ -662,28 +654,28 @@ export interface Validator {
  */
 export interface ValidatorSignedBlock {
   /** The block height. */
-  height: number;
+  height: number
   /** Whether the validator signed the block. */
-  signed: boolean;
+  signed: boolean
 }
 
 export interface Escrow {
   /** The amount of tokens that are delegated to this validator account, and are NOT in the process of debonding. */
-  active_balance?: TextBigInt;
+  active_balance?: TextBigInt
   /** The shares of tokens that are delegated to this validator account, and are NOT in the process of debonding. */
-  active_shares?: TextBigInt;
+  active_shares?: TextBigInt
   /** The amount of tokens that are delegated to this validator account, but are also in the process of debonding (i.e. they will be unstaked within ~2 weeks). */
-  debonding_balance?: TextBigInt;
+  debonding_balance?: TextBigInt
   /** The shares of tokens that are delegated to this validator account, but are also in the process of debonding (i.e. they will be unstaked within ~2 weeks). */
-  debonding_shares?: TextBigInt;
+  debonding_shares?: TextBigInt
   /** The amount of token this validator has delegated to itself, and are NOT in the process of debonding. */
-  self_delegation_balance?: TextBigInt;
+  self_delegation_balance?: TextBigInt
   /** The shares of tokens this validator has delegated to itself, and are NOT in the process of debonding. */
-  self_delegation_shares?: TextBigInt;
+  self_delegation_shares?: TextBigInt
   /** The active_balance of this validator account 24 hours ago. */
-  active_balance_24?: TextBigInt;
+  active_balance_24?: TextBigInt
   /** The number of accounts that have delegated token to this account. */
-  num_delegators?: number;
+  num_delegators?: number
 }
 
 /**
@@ -691,35 +683,35 @@ export interface Escrow {
  */
 export type ValidatorHistoryAllOf = {
   /** The staking address of the validator. */
-  address?: string;
-  history: ValidatorHistoryPoint[];
-};
+  address?: string
+  history: ValidatorHistoryPoint[]
+}
 
-export type ValidatorHistory = List & ValidatorHistoryAllOf;
+export type ValidatorHistory = List & ValidatorHistoryAllOf
 
 export interface ValidatorHistoryPoint {
   /** The epoch number. */
-  epoch: number;
+  epoch: number
   /** The amount of tokens that were delegated to this validator account,
 at the start of this epoch, and are NOT in the process of debonding.
  */
-  active_balance?: TextBigInt;
+  active_balance?: TextBigInt
   /** The shares of tokens that were delegated to this validator account,
 at the start of this epoch, and are NOT in the process of debonding.
  */
-  active_shares?: TextBigInt;
+  active_shares?: TextBigInt
   /** The amount of tokens that were delegated to this validator account
 at the start of this epoch, but are also in the process of debonding
 (i.e. they will be unstaked within ~2 weeks).
  */
-  debonding_balance?: TextBigInt;
+  debonding_balance?: TextBigInt
   /** The shares of tokens that were delegated to this validator account
 at the start of this epoch, but are also in the process of debonding
 (i.e. they will be unstaked within ~2 weeks).
  */
-  debonding_shares?: TextBigInt;
+  debonding_shares?: TextBigInt
   /** The number of accounts that have delegated token to this account. */
-  num_delegators?: number;
+  num_delegators?: number
 }
 
 /**
@@ -727,11 +719,11 @@ at the start of this epoch, but are also in the process of debonding
 
  */
 export type NodeListAllOf = {
-  entity_id: string;
-  nodes: Node[];
-};
+  entity_id: string
+  nodes: Node[]
+}
 
-export type NodeList = List & NodeListAllOf;
+export type NodeList = List & NodeListAllOf
 
 /**
  * A node registered at the consensus layer.
@@ -739,24 +731,24 @@ export type NodeList = List & NodeListAllOf;
  */
 export interface Node {
   /** The public key identifying this node. */
-  id: string;
+  id: string
   /** The public key identifying the entity controlling this node.
    */
-  entity_id: string;
+  entity_id: string
   /** The epoch in which this node's commitment expires. */
-  expiration: number;
+  expiration: number
   /** The public key used for establishing TLS connections. */
-  tls_pubkey: string;
+  tls_pubkey: string
   /** The public key that will be used for establishing TLS connections
 upon rotation.
  */
-  tls_next_pubkey: string;
+  tls_next_pubkey: string
   /** The unique identifier of this node on the P2P transport. */
-  p2p_pubkey: string;
+  p2p_pubkey: string
   /** The unique identifier of this node as a consensus member */
-  consensus_pubkey: string;
+  consensus_pubkey: string
   /** A bitmask representing this node's roles. */
-  roles: string;
+  roles: string
 }
 
 /**
@@ -764,23 +756,22 @@ upon rotation.
 
  */
 export type AccountListAllOf = {
-  accounts: Account[];
-};
+  accounts: Account[]
+}
 
-export type AccountList = List & AccountListAllOf;
+export type AccountList = List & AccountListAllOf
 
 export type AddressDerivationContext =
-  (typeof AddressDerivationContext)[keyof typeof AddressDerivationContext];
+  (typeof AddressDerivationContext)[keyof typeof AddressDerivationContext]
 
 export const AddressDerivationContext = {
   'oasis-core/address:_staking': 'oasis-core/address: staking',
-  'oasis-runtime-sdk/address:_secp256k1eth':
-    'oasis-runtime-sdk/address: secp256k1eth',
+  'oasis-runtime-sdk/address:_secp256k1eth': 'oasis-runtime-sdk/address: secp256k1eth',
   'oasis-runtime-sdk/address:_sr25519': 'oasis-runtime-sdk/address: sr25519',
   'oasis-runtime-sdk/address:_multisig': 'oasis-runtime-sdk/address: multisig',
   'oasis-runtime-sdk/address:_module': 'oasis-runtime-sdk/address: module',
   'oasis-runtime-sdk/address:_runtime': 'oasis-runtime-sdk/address: runtime',
-} as const;
+} as const
 
 /**
  * The data from which a consensus-style address (`oasis1...`)
@@ -803,14 +794,14 @@ ERC20 tokens or tools such as Metamask cannot interact with staking addresses.
 export interface AddressPreimage {
   /** The method by which the Oasis address was derived from `address_data`.
    */
-  context: AddressDerivationContext;
+  context: AddressDerivationContext
   /** Version of the `context`. */
-  context_version?: number;
+  context_version?: number
   /** The base64-encoded data from which the Oasis address was derived.
 When `context = "oasis-runtime-sdk/address: secp256k1eth"`, this
 is the Ethereum address (in base64, not hex!).
  */
-  address_data: string;
+  address_data: string
 }
 
 /**
@@ -818,11 +809,11 @@ is the Ethereum address (in base64, not hex!).
  */
 export interface RuntimeSdkBalance {
   /** Number of tokens held, in base units. */
-  balance: TextBigInt;
+  balance: TextBigInt
   /** The token ticker symbol. Unique across all oasis-sdk tokens in the same runtime. */
-  token_symbol: string;
+  token_symbol: string
   /** The number of decimals of precision for this token. */
-  token_decimals: number;
+  token_decimals: number
 }
 
 /**
@@ -830,18 +821,18 @@ export interface RuntimeSdkBalance {
  */
 export interface RuntimeEvmBalance {
   /** Number of tokens held, in base units. */
-  balance: TextBigInt;
+  balance: TextBigInt
   /** The Oasis address of this token's contract. */
-  token_contract_addr: string;
+  token_contract_addr: string
   /** The EVM address of this token's contract. */
-  token_contract_addr_eth: string;
+  token_contract_addr_eth: string
   /** The token ticker symbol. Not guaranteed to be unique across distinct EVM tokens. */
-  token_symbol?: string;
+  token_symbol?: string
   /** The name of the token. Not guaranteed to be unique across distinct EVM tokens. */
-  token_name?: string;
-  token_type: EvmTokenType;
+  token_name?: string
+  token_type: EvmTokenType
   /** The number of decimals of precision for this token. */
-  token_decimals: number;
+  token_decimals: number
 }
 
 /**
@@ -849,10 +840,10 @@ export interface RuntimeEvmBalance {
 
  */
 export type TokenHolderListAllOf = {
-  holders: BareTokenHolder[];
-};
+  holders: BareTokenHolder[]
+}
 
-export type TokenHolderList = List & TokenHolderListAllOf;
+export type TokenHolderList = List & TokenHolderListAllOf
 
 /**
  * Balance of an account for a specific (implied) runtime and token.
@@ -860,11 +851,11 @@ export type TokenHolderList = List & TokenHolderListAllOf;
  */
 export interface BareTokenHolder {
   /** The Oasis address of the account holder. */
-  holder_address: string;
+  holder_address: string
   /** The Ethereum address of the same account holder, if meaningfully defined. */
-  eth_holder_address?: string;
+  eth_holder_address?: string
   /** Number of tokens held, in base units. */
-  balance: TextBigInt;
+  balance: TextBigInt
 }
 
 /**
@@ -873,41 +864,41 @@ export interface BareTokenHolder {
  */
 export interface Account {
   /** The staking address for this account. */
-  address: string;
+  address: string
   /** The expected nonce for the next transaction (= last used nonce + 1) */
-  nonce: number;
+  nonce: number
   /** The available balance, in base units. */
-  available: TextBigInt;
+  available: TextBigInt
   /** Amount delegated to this validator, in base units. */
-  escrow: TextBigInt;
+  escrow: TextBigInt
   /** Amount debonding from this validator, in base units. */
-  debonding: TextBigInt;
+  debonding: TextBigInt
   /** The balance of this accounts' (outgoing) delegations, in base units. */
-  delegations_balance: TextBigInt;
+  delegations_balance: TextBigInt
   /** The balance of this accounts' (outgoing) debonding delegations, in base units. */
-  debonding_delegations_balance: TextBigInt;
+  debonding_delegations_balance: TextBigInt
   /** The second-granular consensus time of the block in which this account was first active.
 Dates before Cobalt (2021-04-28) are approximate.
  */
-  first_activity?: string;
+  first_activity?: string
   /** The allowances made by this account.
 This field is omitted when listing multiple accounts.
  */
-  allowances: Allowance[];
-  stats: AccountStats;
+  allowances: Allowance[]
+  stats: AccountStats
   /** The entity address, if this account is a node belonging to an entity. Only present when querying a single account. */
-  entity_node_for?: string;
+  entity_node_for?: string
   /** The entity address, if this account *is* an entity. If present, this address should match the queried address. */
-  entity?: string;
+  entity?: string
 }
 
 export interface Allowance {
   /** The allowed account. */
-  address: string;
+  address: string
   /** The amount allowed for the allowed account.
 This field is omitted when listing multiple accounts.
  */
-  amount: TextBigInt;
+  amount: TextBigInt
 }
 
 /**
@@ -915,10 +906,10 @@ This field is omitted when listing multiple accounts.
 
  */
 export type EpochListAllOf = {
-  epochs: Epoch[];
-};
+  epochs: Epoch[]
+}
 
-export type EpochList = List & EpochListAllOf;
+export type EpochList = List & EpochListAllOf
 
 /**
  * A consensus epoch.
@@ -926,11 +917,11 @@ export type EpochList = List & EpochListAllOf;
  */
 export interface Epoch {
   /** The epoch number. */
-  id: number;
+  id: number
   /** The (inclusive) height at which this epoch started. */
-  start_height: number;
+  start_height: number
   /** The (inclusive) height at which this epoch ended. Omitted if the epoch is still active. */
-  end_height?: number;
+  end_height?: number
 }
 
 /**
@@ -938,31 +929,31 @@ export interface Epoch {
 
  */
 export type ProposalListAllOf = {
-  proposals: Proposal[];
-};
+  proposals: Proposal[]
+}
 
-export type ProposalList = List & ProposalListAllOf;
+export type ProposalList = List & ProposalListAllOf
 
 /**
  * The target protocol versions for this upgrade proposal.
  */
 export interface ProposalTarget {
-  consensus_protocol?: string;
-  runtime_host_protocol?: string;
-  runtime_committee_protocol?: string;
+  consensus_protocol?: string
+  runtime_host_protocol?: string
+  runtime_committee_protocol?: string
 }
 
 /**
  * The state of the proposal.
  */
-export type ProposalState = (typeof ProposalState)[keyof typeof ProposalState];
+export type ProposalState = (typeof ProposalState)[keyof typeof ProposalState]
 
 export const ProposalState = {
   active: 'active',
   passed: 'passed',
   failed: 'failed',
   rejected: 'rejected',
-} as const;
+} as const
 
 /**
  * A governance proposal.
@@ -970,38 +961,38 @@ export const ProposalState = {
  */
 export interface Proposal {
   /** The unique identifier of the proposal. */
-  id: number;
+  id: number
   /** The staking address of the proposal submitter. */
-  submitter: string;
-  state: ProposalState;
+  submitter: string
+  state: ProposalState
   /** The deposit attached to this proposal. */
-  deposit: TextBigInt;
+  deposit: TextBigInt
   /** The (optional) title of the proposal. */
-  title?: string;
+  title?: string
   /** The (optional) description of the proposal. */
-  description?: string;
+  description?: string
   /** The name of the upgrade handler. */
-  handler?: string;
-  target?: ProposalTarget;
+  handler?: string
+  target?: ProposalTarget
   /** The epoch at which the proposed upgrade will happen. */
-  epoch?: number;
+  epoch?: number
   /** The proposal to cancel, if this proposal proposes
 cancelling an existing proposal.
  */
-  cancels?: number;
+  cancels?: number
   /** The name of the module whose parameters are to be changed
 by this 'parameters_change' proposal.
  */
-  parameters_change_module?: string;
+  parameters_change_module?: string
   /** The parameters change proposal body. This spec does not encode the many possible types; instead, see [the Go API](https://pkg.go.dev/github.com/oasisprotocol/oasis-core/go) of oasis-core. This object will conform to one of the `ConsensusParameterChanges` types, depending on the `parameters_change_module`. */
-  parameters_change?: unknown;
+  parameters_change?: unknown
   /** The epoch at which this proposal was created. */
-  created_at: number;
+  created_at: number
   /** The epoch at which voting for this proposal will close. */
-  closes_at: number;
+  closes_at: number
   /** The number of invalid votes for this proposal, after tallying.
    */
-  invalid_votes: TextBigInt;
+  invalid_votes: TextBigInt
 }
 
 /**
@@ -1010,22 +1001,22 @@ by this 'parameters_change' proposal.
  */
 export type ProposalVotesAllOf = {
   /** The unique identifier of the proposal. */
-  proposal_id: number;
+  proposal_id: number
   /** The list of votes for the proposal. */
-  votes: ProposalVote[];
-};
+  votes: ProposalVote[]
+}
 
-export type ProposalVotes = List & ProposalVotesAllOf;
+export type ProposalVotes = List & ProposalVotesAllOf
 
 export interface ProposalVote {
   /** The staking address casting this vote. */
-  address: string;
+  address: string
   /** The vote cast. */
-  vote: string;
+  vote: string
   /** The block height at which this vote was recorded. */
-  height?: number;
+  height?: number
   /** The second-granular consensus time of the block in which this vote was cast. */
-  timestamp?: string;
+  timestamp?: string
 }
 
 /**
@@ -1033,10 +1024,10 @@ export interface ProposalVote {
 
  */
 export type RuntimeBlockListAllOf = {
-  blocks: RuntimeBlock[];
-};
+  blocks: RuntimeBlock[]
+}
 
-export type RuntimeBlockList = List & RuntimeBlockListAllOf;
+export type RuntimeBlockList = List & RuntimeBlockListAllOf
 
 /**
  * A ParaTime block.
@@ -1044,19 +1035,19 @@ export type RuntimeBlockList = List & RuntimeBlockListAllOf;
  */
 export interface RuntimeBlock {
   /** The block round. */
-  round: number;
+  round: number
   /** The block header hash. */
-  hash: string;
+  hash: string
   /** The second-granular consensus time. */
-  timestamp: string;
+  timestamp: string
   /** The number of transactions in the block. */
-  num_transactions: number;
+  num_transactions: number
   /** The total byte size of all transactions in the block. */
-  size: number;
+  size: number
   /** The total gas used by all transactions in the block. */
-  gas_used: number;
+  gas_used: number
   /** The minimum gas price for the block, in base units. */
-  min_gas_price?: TextBigInt;
+  min_gas_price?: TextBigInt
 }
 
 /**
@@ -1064,10 +1055,10 @@ export interface RuntimeBlock {
 
  */
 export type RuntimeEventListAllOf = {
-  events: RuntimeEvent[];
-};
+  events: RuntimeEvent[]
+}
 
-export type RuntimeEventList = List & RuntimeEventListAllOf;
+export type RuntimeEventList = List & RuntimeEventListAllOf
 
 /**
  * The decoded event contents, possibly augmented with additional address info.
@@ -1079,31 +1070,31 @@ will add a field specifying the corresponding Ethereum address, if known. Curren
 the only such possible fields are `from_eth`, `to_eth`, and `owner_eth`.
 
  */
-export type RuntimeEventBody = { [key: string]: unknown };
+export type RuntimeEventBody = { [key: string]: unknown }
 
 /**
  * An event emitted by the runtime layer
  */
 export interface RuntimeEvent {
   /** The block height at which this event was generated. */
-  round: number;
+  round: number
   /** 0-based index of this event's originating transaction within its block.
 Absent if the event did not originate from a transaction.
  */
-  tx_index?: number;
+  tx_index?: number
   /** Hash of this event's originating transaction.
 Absent if the event did not originate from a transaction.
  */
-  tx_hash?: string;
+  tx_hash?: string
   /** Ethereum transaction hash of this event's originating transaction.
 Absent if the event did not originate from an EVM transaction.
  */
-  eth_tx_hash?: string;
+  eth_tx_hash?: string
   /** The second-granular consensus time of this event's block.
    */
-  timestamp: string;
+  timestamp: string
   /** The type of the event. */
-  type: RuntimeEventType;
+  type: RuntimeEventType
   /** The decoded event contents, possibly augmented with additional address info.
 This spec does not encode the many possible types; instead, see [the Go API](https://pkg.go.dev/github.com/oasisprotocol/oasis-sdk/client-sdk/go/modules).
 This object will conform to one of the `*Event` types two levels down
@@ -1112,21 +1103,20 @@ OR `evm > Event`. For object fields that specify an oasis-style address, Nexus
 will add a field specifying the corresponding Ethereum address, if known. Currently,
 the only such possible fields are `from_eth`, `to_eth`, and `owner_eth`.
  */
-  body: RuntimeEventBody;
+  body: RuntimeEventBody
   /** If the event type is `evm.log`, this field describes the human-readable type of
 evm event, e.g. `Transfer`.
 Absent if the event type is not `evm.log`.
  */
-  evm_log_name?: string;
+  evm_log_name?: string
   /** The decoded `evm.log` event data.
 Absent if the event type is not `evm.log`.
  */
-  evm_log_params?: EvmAbiParam[];
-  evm_token?: EvmEventToken;
+  evm_log_params?: EvmAbiParam[]
+  evm_token?: EvmEventToken
 }
 
-export type RuntimeEventType =
-  (typeof RuntimeEventType)[keyof typeof RuntimeEventType];
+export type RuntimeEventType = (typeof RuntimeEventType)[keyof typeof RuntimeEventType]
 
 export const RuntimeEventType = {
   accountstransfer: 'accounts.transfer',
@@ -1152,7 +1142,7 @@ export const RuntimeEventType = {
   roflmarketinstance_cancelled: 'roflmarket.instance_cancelled',
   roflmarketinstance_removed: 'roflmarket.instance_removed',
   roflmarketinstance_command_queued: 'roflmarket.instance_command_queued',
-} as const;
+} as const
 
 /**
  * A decoded parameter of an event or error emitted from an EVM runtime.
@@ -1164,11 +1154,11 @@ Values of other EVM types (integer types, strings, arrays, etc.) are represented
  */
 export interface EvmAbiParam {
   /** The parameter name. */
-  name: string;
+  name: string
   /** The solidity type of the parameter. */
-  evm_type: string;
+  evm_type: string
   /** The parameter value. */
-  value: unknown;
+  value: unknown
 }
 
 /**
@@ -1176,14 +1166,14 @@ export interface EvmAbiParam {
 
  */
 export interface EvmEventToken {
-  type?: EvmTokenType;
+  type?: EvmTokenType
   /** Symbol of the token, as provided by token contract's `symbol()` method. */
-  symbol?: string;
+  symbol?: string
   /** The number of least significant digits in base units that should be displayed as
 decimals when displaying tokens. `tokens = base_units / (10**decimals)`.
 Affects display only. Often equals 18, to match ETH.
  */
-  decimals?: number;
+  decimals?: number
 }
 
 export interface RuntimeEvmContract {
@@ -1191,29 +1181,29 @@ export interface RuntimeEvmContract {
 Can be omitted for contracts that were created by another contract, as opposed
 to a direct `Create` call.
  */
-  creation_tx?: string;
+  creation_tx?: string
   /** The Ethereum transaction hash of the transaction in `creation_tx`.
 Encoded as a lowercase hex string.
  */
-  eth_creation_tx?: string;
+  eth_creation_tx?: string
   /** The creation bytecode of the smart contract. This includes the constructor logic
 and the constructor parameters. When run, this code generates the runtime bytecode.
 Can be omitted for contracts that were created by another contract, as opposed
 to a direct `Create` call.
  */
-  creation_bytecode?: string;
+  creation_bytecode?: string
   /** The runtime bytecode of the smart contract. This is the code stored on-chain that
 describes a smart contract. Every contract has this info, but Nexus fetches
 it separately, so the field may be missing for very fresh contracts (or if the fetching
 process is stalled).
  */
-  runtime_bytecode?: string;
+  runtime_bytecode?: string
   /** The total amount of gas used to create or call this contract. */
-  gas_used: number;
+  gas_used: number
   /** Additional information obtained from contract verification. Only available for smart
 contracts that have been verified successfully by Sourcify.
  */
-  verification?: RuntimeEvmContractVerification;
+  verification?: RuntimeEvmContractVerification
 }
 
 /**
@@ -1222,13 +1212,12 @@ An absence of this field means that the contract has not been verified.
 See also https://docs.sourcify.dev/docs/full-vs-partial-match/
 
  */
-export type VerificationLevel =
-  (typeof VerificationLevel)[keyof typeof VerificationLevel];
+export type VerificationLevel = (typeof VerificationLevel)[keyof typeof VerificationLevel]
 
 export const VerificationLevel = {
   partial: 'partial',
   full: 'full',
-} as const;
+} as const
 
 /**
  * The smart contract's [metadata.json](https://docs.soliditylang.org/en/latest/metadata.html) file in JSON format as defined by Solidity.
@@ -1236,22 +1225,22 @@ Includes the smart contract's [ABI](https://docs.soliditylang.org/en/develop/abi
 
  */
 export type RuntimeEvmContractVerificationCompilationMetadata = {
-  [key: string]: unknown;
-};
+  [key: string]: unknown
+}
 
 export type RuntimeEvmContractVerificationSourceFilesItem = {
-  [key: string]: unknown;
-};
+  [key: string]: unknown
+}
 
 export interface RuntimeEvmContractVerification {
-  verification_level?: VerificationLevel;
+  verification_level?: VerificationLevel
   /** The smart contract's [metadata.json](https://docs.soliditylang.org/en/latest/metadata.html) file in JSON format as defined by Solidity.
 Includes the smart contract's [ABI](https://docs.soliditylang.org/en/develop/abi-spec.html).
  */
-  compilation_metadata?: RuntimeEvmContractVerificationCompilationMetadata;
+  compilation_metadata?: RuntimeEvmContractVerificationCompilationMetadata
   /** Array of all contract source files, in JSON format as returned by [Sourcify](https://sourcify.dev/server/api-docs/#/Repository/get_files_any__chain___address_).
    */
-  source_files?: RuntimeEvmContractVerificationSourceFilesItem[];
+  source_files?: RuntimeEvmContractVerificationSourceFilesItem[]
 }
 
 /**
@@ -1259,15 +1248,15 @@ Includes the smart contract's [ABI](https://docs.soliditylang.org/en/develop/abi
 
  */
 export type RuntimeTransactionListAllOf = {
-  transactions: RuntimeTransaction[];
-};
+  transactions: RuntimeTransaction[]
+}
 
-export type RuntimeTransactionList = List & RuntimeTransactionListAllOf;
+export type RuntimeTransactionList = List & RuntimeTransactionListAllOf
 
 /**
  * The method call body. May be null if the transaction was malformed.
  */
-export type RuntimeTransactionBody = { [key: string]: unknown };
+export type RuntimeTransactionBody = { [key: string]: unknown }
 
 /**
  * A runtime transaction.
@@ -1275,19 +1264,19 @@ export type RuntimeTransactionBody = { [key: string]: unknown };
  */
 export interface RuntimeTransaction {
   /** The block round at which this transaction was executed. */
-  round: number;
+  round: number
   /** The 0-based index of this transaction in the block. */
-  index: number;
+  index: number
   /** The second-granular consensus time when this tx's block was proposed. */
-  timestamp: string;
+  timestamp: string
   /** The Oasis cryptographic hash of this transaction's encoding. */
-  hash: string;
+  hash: string
   /** The Ethereum cryptographic hash of this transaction's encoding.
 Absent for non-Ethereum-format transactions.
  */
-  eth_hash?: string;
+  eth_hash?: string
   /** The signers of this transaction. */
-  signers: RuntimeTransactionSigner[];
+  signers: RuntimeTransactionSigner[]
   /**
    * The Oasis address of this transaction's 0th signer.
 Unlike Ethereum, Oasis natively supports multiple-signature transactions.
@@ -1296,53 +1285,53 @@ DEPRECATED: This field will be removed in the future in favor of the signers fie
 
    * @deprecated
    */
-  sender_0: Address;
+  sender_0: Address
   /**
    * The Ethereum address of this transaction's 0th signer.
 DEPRECATED: This field will be removed in the future in favor of the signers field.
 
    * @deprecated
    */
-  sender_0_eth?: string;
+  sender_0_eth?: string
   /**
    * The nonce used with this transaction's 0th signer, to prevent replay.
 DEPRECATED: This field will be removed in the future in favor of the signers field.
 
    * @deprecated
    */
-  nonce_0: number;
+  nonce_0: number
   /** The fee that this transaction's sender committed to pay to execute
 it (total ParaTime base units, as a string).
  */
-  fee: string;
+  fee: string
   /** The denomination of the fee.
    */
-  fee_symbol: string;
+  fee_symbol: string
   /** The module of the fee proxy.
    */
-  fee_proxy_module?: string;
+  fee_proxy_module?: string
   /** the base64-encoded id of the fee proxy.
    */
-  fee_proxy_id?: string;
+  fee_proxy_id?: string
   /** The maximum gas that this transaction's sender committed to use to
 execute it.
  */
-  gas_limit: number;
+  gas_limit: number
   /** The total gas used by the transaction. */
-  gas_used: number;
+  gas_used: number
   /** The fee that was charged for the transaction execution (total, native denomination,
 ParaTime base units, as a string).
 For EVM transactions this is calculated as `gas_price * gas_used`, where `gas_price = fee / gas_limit`, for compatibility with Ethereum.
 For other transactions this equals to `fee`.
  */
-  charged_fee: string;
+  charged_fee: string
   /** The total byte size of the transaction. */
-  size: number;
+  size: number
   /** The data relevant to the Oasis-style encrypted transaction.
 Note: The term "envelope" in this context refers to the [Oasis-style encryption envelopes](https://github.com/oasisprotocol/oasis-sdk/blob/c36a7ee194abf4ca28fdac0edbefe3843b39bf69/runtime-sdk/src/types/callformat.rs)
 which differ slightly from [digital envelopes](https://en.wikipedia.org/wiki/Hybrid_cryptosystem#Envelope_encryption).
  */
-  oasis_encryption_envelope?: RuntimeTransactionEncryptionEnvelope;
+  oasis_encryption_envelope?: RuntimeTransactionEncryptionEnvelope
   /** The method that was called. Defined by the runtime. In theory, this could be any string as the runtimes evolve.
 In practice, Nexus currently expects only the following methods:
   - "accounts.Transfer"
@@ -1366,9 +1355,9 @@ In practice, Nexus currently expects only the following methods:
   - "roflmarket.InstanceExecuteCmds"
 May be null if the transaction was malformed or encrypted.
  */
-  method?: string;
+  method?: string
   /** The method call body. May be null if the transaction was malformed. */
-  body?: RuntimeTransactionBody;
+  body?: RuntimeTransactionBody
   /** Whether this transaction likely represents a native token transfer.
 This is based on a heuristic, and can change at any time without warning and possibly without updating the documentation.
 The current heuristic sets this to `true` for:
@@ -1376,7 +1365,7 @@ The current heuristic sets this to `true` for:
  - Transactions with method "evm.Call" that have no `data` field in their `body`. Those tend to be transfers, but the runtimes provides no reliable visibility into whether a transfer happened.
 Note: Other transactions with method "evm.Call", and possibly "evm.Create", may also be (or include) native token transfers. The heuristic will be `false` for those.
  */
-  is_likely_native_token_transfer: boolean;
+  is_likely_native_token_transfer: boolean
   /** A reasonable "to" Oasis address associated with this transaction,
 if applicable. The meaning varies based on the transaction method. Some notable examples:
   - For `method = "accounts.Transfer"`, this is the paratime account receiving the funds.
@@ -1387,171 +1376,171 @@ if applicable. The meaning varies based on the transaction method. Some notable 
   - For `method = "evm.Create"`, this is the address of the newly created smart contract.
   - For `method = "evm.Call"`, this is the address of the called smart contract
  */
-  to?: Address;
+  to?: Address
   /** A reasonable "to" Ethereum address associated with this transaction,
    */
-  to_eth?: string;
+  to_eth?: string
   /** A reasonable "amount" associated with this transaction, if
 applicable. The meaning varies based on the transaction method.
 Usually in native denomination, ParaTime units. As a string.
  */
-  amount?: string;
+  amount?: string
   /** The denomination of the "amount" associated with this transaction, if applicable.
    */
-  amount_symbol?: string;
+  amount_symbol?: string
   /** The data relevant to the EVM encrypted transaction. Only present for encrypted
 transactions in confidential EVM runtimes like Sapphire.
 Note: The term "envelope" in this context refers to the [Oasis-style encryption envelopes](https://github.com/oasisprotocol/oasis-sdk/blob/c36a7ee194abf4ca28fdac0edbefe3843b39bf69/runtime-sdk/src/types/callformat.rs)
 which differ slightly from [digital envelopes](https://en.wikipedia.org/wiki/Hybrid_cryptosystem#Envelope_encryption).
  */
-  encryption_envelope?: RuntimeTransactionEncryptionEnvelope;
+  encryption_envelope?: RuntimeTransactionEncryptionEnvelope
   /** Whether this transaction successfully executed.
 Is absent in multi-step runtime transactions (`consensus.Deposit`, `consensus.Withdraw`,
 `consensus.Delegate`, and `consensus.Undelegate`) until the second step is completed.
 Can be absent (meaning "unknown") for confidential runtimes.
  */
-  success?: boolean;
+  success?: boolean
   /** The name of the smart contract function called by the transaction.
 Only present for `evm.log` transaction calls to contracts that have been verified.
  */
-  evm_fn_name?: string;
+  evm_fn_name?: string
   /** The decoded parameters with which the smart contract function was called.
 Only present for `evm.log` transaction calls to contracts that have been verified.
  */
-  evm_fn_params?: EvmAbiParam[];
+  evm_fn_params?: EvmAbiParam[]
   /** Error details of a failed transaction. */
-  error?: TxError;
+  error?: TxError
 }
 
 export interface RuntimeTransactionEncryptionEnvelope {
   /** The format of the encrypted evm transaction envelope. */
-  format: CallFormat;
+  format: CallFormat
   /** The base64-encoded public key used to encrypt the transaction. */
-  public_key?: string;
+  public_key?: string
   /** The base64-encoded nonce used to encrypt the transaction data. */
-  data_nonce?: string;
+  data_nonce?: string
   /** The base64-encoded encrypted transaction data. */
-  data?: string;
+  data?: string
   /** The base64-encoded nonce used to encrypt the transaction results. */
-  result_nonce?: string;
+  result_nonce?: string
   /** The base64-encoded encrypted result data. */
-  result?: string;
+  result?: string
 }
 
 export interface RuntimeTransactionSigner {
   /** The Oasis address of the transaction signer.
    */
-  address: Address;
+  address: Address
   /** The Ethereum address of this transaction signer.
    */
-  address_eth?: string;
+  address_eth?: string
   /** The transaction signer nonce. */
-  nonce: number;
+  nonce: number
 }
 
 export interface RuntimeAccount {
   /** The staking address for this account. */
-  address: string;
-  address_preimage?: AddressPreimage;
+  address: string
+  address_preimage?: AddressPreimage
   /** The balance(s) of this account in this runtime. Most runtimes use only one denomination, and thus
 produce only one balance here. These balances do not include "layer (n+1) tokens", i.e. tokens
 managed by smart contracts deployed in this runtime. For example, in EVM-compatible runtimes,
 this does not include ERC-20 tokens
  */
-  balances: RuntimeSdkBalance[];
+  balances: RuntimeSdkBalance[]
   /** Data on the EVM smart contract associated with this account address. Only present for accounts
 that represent a smart contract on EVM.
  */
-  evm_contract?: RuntimeEvmContract;
+  evm_contract?: RuntimeEvmContract
   /** The balances of this account in each runtime, as managed by EVM smart contracts (notably, ERC-20).
 NOTE: This field is limited to 1000 entries. If you need more, please let us know in a GitHub issue.
  */
-  evm_balances: RuntimeEvmBalance[];
-  stats: AccountStats;
+  evm_balances: RuntimeEvmBalance[]
+  stats: AccountStats
 }
 
 export interface RuntimeStatus {
   /** The number of compute nodes that are registered and can run the runtime. */
-  active_nodes: number;
+  active_nodes: number
   /** The height of the most recent indexed block (also sometimes referred to as "round") for this runtime. Query a synced Oasis node for the latest block produced. */
-  latest_block: number;
+  latest_block: number
   /** The RFC 3339 formatted consensus time of when the latest indexed block for this runtime was produced. */
-  latest_block_time: string;
+  latest_block_time: string
   /** The number of milliseconds since Nexus processed the latest block. */
-  latest_update_age_ms: number;
+  latest_update_age_ms: number
 }
 
 /**
  * The type of a EVM token.
 
  */
-export type EvmTokenType = (typeof EvmTokenType)[keyof typeof EvmTokenType];
+export type EvmTokenType = (typeof EvmTokenType)[keyof typeof EvmTokenType]
 
 export const EvmTokenType = {
   ERC20: 'ERC20',
   ERC721: 'ERC721',
-} as const;
+} as const
 
 /**
  * A list of tokens in a runtime.
  */
 export type EvmTokenListAllOf = {
   /** A list of L2 EVM tokens (ERC-20, ERC-721, ...). */
-  evm_tokens: EvmToken[];
-};
+  evm_tokens: EvmToken[]
+}
 
-export type EvmTokenList = List & EvmTokenListAllOf;
+export type EvmTokenList = List & EvmTokenListAllOf
 
 export interface EvmToken {
   /** The Oasis address of this token's contract. */
-  contract_addr: string;
+  contract_addr: string
   /** The Ethereum address of this token's contract. */
-  eth_contract_addr: string;
+  eth_contract_addr: string
   /** Name of the token, as provided by token contract's `name()` method. */
-  name?: string;
+  name?: string
   /** Symbol of the token, as provided by token contract's `symbol()` method. */
-  symbol?: string;
+  symbol?: string
   /** The number of least significant digits in base units that should be displayed as
 decimals when displaying tokens. `tokens = base_units / (10**decimals)`.
 Affects display only. Often equals 18, to match ETH.
  */
-  decimals?: number;
+  decimals?: number
   /** The heuristically determined interface that the token contract implements.
 A less specialized variant of the token might be detected; for example, an
 ERC-1363 token might be labeled as ERC-20 here. If the type cannot be
 detected or is not supported, this field will be null/absent.
  */
-  type: EvmTokenType;
+  type: EvmTokenType
   /** The total number of base units available. */
-  total_supply?: TextBigInt;
+  total_supply?: TextBigInt
   /** The total number of transfers of this token.
    */
-  num_transfers?: number;
+  num_transfers?: number
   /** The number of addresses that have a nonzero balance of this token.
    */
-  num_holders: number;
+  num_holders: number
   /** Information about a swap contract between this token and a
 reference token. The relative price and relative total value of
 this token are estimated based on this swap contract.
  */
-  ref_swap?: EvmTokenSwap;
+  ref_swap?: EvmTokenSwap
   /** Information about the reference token. The relative price and
 relative total value are expressed in this reference token's base
 unit.
  */
-  ref_token?: EvmRefToken;
+  ref_token?: EvmRefToken
   /** The relative price and relative total value are expressed in this
 reference token's base unit.
  */
-  relative_token_address?: string;
+  relative_token_address?: string
   /** The relative price of one base unit of this token is this many of
 the relative token's base unit.
  */
-  relative_price?: number;
+  relative_price?: number
   /** The relative price of this token multiplied by this token's total
 supply, in the relative token's base unit.
  */
-  relative_total_value?: number;
+  relative_total_value?: number
   /**
    * Whether the contract has been successfully verified by Sourcify.
 Additional information on verified contracts is available via
@@ -1560,47 +1549,47 @@ DEPRECATED: This field will be removed in the future in favor of verification_le
 
    * @deprecated
    */
-  is_verified: boolean;
-  verification_level?: VerificationLevel;
+  is_verified: boolean
+  verification_level?: VerificationLevel
 }
 
 export interface EvmTokenSwap {
   /** The Oasis address of the swap pair contract.
    */
-  pair_address: string;
+  pair_address: string
   /** The Ethereum-compatible address of the swap pair contract.
    */
-  pair_address_eth?: string;
+  pair_address_eth?: string
   /** The Oasis address of the swap factory contract.
    */
-  factory_address?: string;
+  factory_address?: string
   /** The Ethereum-compatible address of the swap factory contract.
    */
-  factory_address_eth?: string;
+  factory_address_eth?: string
   /** The Oasis address of the first token in this swap.
    */
-  token0_address?: string;
+  token0_address?: string
   /** The Ethereum-compatible address of the first token in this swap
    */
-  token0_address_eth?: string;
+  token0_address_eth?: string
   /** The Oasis address of the second token in this swap.
    */
-  token1_address?: string;
+  token1_address?: string
   /** The Ethereum-compatible address of the second token in this swap.
    */
-  token1_address_eth?: string;
+  token1_address_eth?: string
   /** The round when this swap pair was created.
    */
-  create_round?: number;
+  create_round?: number
   /** The swap's liquidity pool of the first token, in that token's base units.
    */
-  reserve0?: TextBigInt;
+  reserve0?: TextBigInt
   /** The swap's liquidity pool of the second token, in that token's base units.
    */
-  reserve1?: TextBigInt;
+  reserve1?: TextBigInt
   /** The round when this swap pair last updated its reserves.
    */
-  last_sync_round?: number;
+  last_sync_round?: number
 }
 
 export interface EvmRefToken {
@@ -1609,16 +1598,16 @@ A less specialized variant of the token might be detected; for example, an
 ERC-1363 token might be labeled as ERC-20 here. If the type cannot be
 detected or is not supported, this field will be null/absent.
  */
-  type: EvmTokenType;
+  type: EvmTokenType
   /** Name of the token, as provided by token contract's `name()` method. */
-  name?: string;
+  name?: string
   /** Symbol of the token, as provided by token contract's `symbol()` method. */
-  symbol?: string;
+  symbol?: string
   /** The number of least significant digits in base units that should be displayed as
 decimals when displaying tokens. `tokens = base_units / (10**decimals)`.
 Affects display only. Often equals 18, to match ETH.
  */
-  decimals?: number;
+  decimals?: number
 }
 
 /**
@@ -1626,37 +1615,37 @@ Affects display only. Often equals 18, to match ETH.
  */
 export type EvmNftListAllOf = {
   /** A list of L2 EVM NFT (ERC-721, ...) instances. */
-  evm_nfts: EvmNft[];
-};
+  evm_nfts: EvmNft[]
+}
 
-export type EvmNftList = List & EvmNftListAllOf;
+export type EvmNftList = List & EvmNftListAllOf
 
 export interface EvmNft {
-  token: EvmToken;
+  token: EvmToken
   /** The instance ID of this NFT within the collection represented by `token`. */
-  id: TextBigInt;
+  id: TextBigInt
   /** The Oasis address of this NFT instance's owner. */
-  owner?: Address;
+  owner?: Address
   /** The Ethereum address of this NFT instance's owner. */
-  owner_eth?: string;
+  owner_eth?: string
   /** The total number of transfers of this NFT instance.
    */
-  num_transfers?: number;
-  metadata_uri?: string;
-  metadata_accessed?: string;
+  num_transfers?: number
+  metadata_uri?: string
+  metadata_accessed?: string
   /** A metadata document for this NFT instance.
 Currently only ERC-721 is supported, where the document is an Asset Metadata from the ERC721 Metadata JSON Schema.
  */
-  metadata?: unknown;
+  metadata?: unknown
   /** Identifies the asset which this NFT represents */
-  name?: string;
+  name?: string
   /** Describes the asset which this NFT represents */
-  description?: string;
+  description?: string
   /** A URI pointing to a resource with mime type image/* representing
 the asset which this NFT represents. (Additional
 non-descriptive text from ERC-721 omitted.)
  */
-  image?: string;
+  image?: string
 }
 
 export interface AccountStats {
@@ -1667,7 +1656,7 @@ certain actions which subtract/add tokens.
 
    * @deprecated
    */
-  total_sent?: TextBigInt;
+  total_sent?: TextBigInt
   /**
    * The total amount of native tokens received, in base units.
 DEPRECATED: This field might be inaccurate. Nexus is currently not able to track
@@ -1675,9 +1664,9 @@ certain actions which subtract/add tokens.
 
    * @deprecated
    */
-  total_received?: TextBigInt;
+  total_received?: TextBigInt
   /** The total number of transactions this account was involved with. */
-  num_txns: number;
+  num_txns: number
 }
 
 /**
@@ -1685,16 +1674,16 @@ certain actions which subtract/add tokens.
 
  */
 export interface TxVolumeList {
-  window_size_seconds: number;
+  window_size_seconds: number
   /** The list of daily transaction volumes. */
-  windows: TxVolume[];
+  windows: TxVolume[]
 }
 
 export interface TxVolume {
   /** The end timestamp for this daily transaction volume measurement. */
-  window_end: string;
+  window_end: string
   /** The transaction volume for this window. */
-  tx_volume: number;
+  tx_volume: number
 }
 
 /**
@@ -1702,16 +1691,16 @@ export interface TxVolume {
 
  */
 export interface ActiveAccountsList {
-  window_size_seconds: number;
+  window_size_seconds: number
   /** The list of daily unique active account windows. */
-  windows: ActiveAccounts[];
+  windows: ActiveAccounts[]
 }
 
 export interface ActiveAccounts {
   /** The date for the end of the daily active accounts measurement window. */
-  window_end: string;
+  window_end: string
   /** The number of active accounts for the 24hour window ending at window_end. */
-  active_accounts: number;
+  active_accounts: number
 }
 
 /**
@@ -1719,341 +1708,341 @@ export interface ActiveAccounts {
 
  */
 export type RoflAppListAllOf = {
-  rofl_apps: RoflApp[];
-};
+  rofl_apps: RoflApp[]
+}
 
-export type RoflAppList = List & RoflAppListAllOf;
+export type RoflAppList = List & RoflAppListAllOf
 
 /**
  * The application authentication policy.
  */
-export type RoflAppPolicy = { [key: string]: unknown };
+export type RoflAppPolicy = { [key: string]: unknown }
 
 /**
  * Arbitrary key-value pairs.
  */
-export type RoflAppMetadata = { [key: string]: unknown };
+export type RoflAppMetadata = { [key: string]: unknown }
 
 /**
  * Arbitrary SEK-encrypted key-value pairs.
  */
-export type RoflAppSecrets = { [key: string]: unknown };
+export type RoflAppSecrets = { [key: string]: unknown }
 
 export interface RoflApp {
   /** The identifier of the ROFL application. */
-  id: string;
+  id: string
   /** The application administrator address. */
-  admin: string;
+  admin: string
   /** The Ethereum address of the application administrator (only provided if known). */
-  admin_eth?: string;
+  admin_eth?: string
   /** The amount of stake in escrow by the administrator. */
-  stake: TextBigInt;
+  stake: TextBigInt
   /** The application authentication policy. */
-  policy: RoflAppPolicy;
+  policy: RoflAppPolicy
   /** The secrets encryption public key. */
-  sek: string;
+  sek: string
   /** Arbitrary key-value pairs. */
-  metadata: RoflAppMetadata;
+  metadata: RoflAppMetadata
   /** Arbitrary SEK-encrypted key-value pairs. */
-  secrets: RoflAppSecrets;
+  secrets: RoflAppSecrets
   /** Whether the application has been removed. */
-  removed: boolean;
+  removed: boolean
   /** The date and time when the application was created. */
-  date_created: string;
+  date_created: string
   /** The date and time when the application was last active. */
-  last_activity: string;
+  last_activity: string
   /** The most recent transaction associated with this ROFL app.
 This field is only present when querying a single ROFL app.
  */
-  last_activity_tx?: RuntimeTransaction;
+  last_activity_tx?: RuntimeTransaction
   /** The number of currently active instances of the application. */
-  num_active_instances: number;
+  num_active_instances: number
   /** Registered application instances. Only active instances are returned.
 Use the `{runtime}/rofl_apps/{id}/instances` endpoint to retrieve all instances.
  */
-  active_instances: RoflInstance[];
+  active_instances: RoflInstance[]
 }
 
 export interface RoflInstance {
   /** The runtime attestation public key (Ed25519). */
-  rak: string;
+  rak: string
   /** The runtime encryption public key (x25519). */
-  rek: string;
+  rek: string
   /** The identifier of the endorsing node. */
-  endorsing_node_id: string;
+  endorsing_node_id: string
   /** The optional identifier of the endorsing entity. */
-  endorsing_entity_id?: string;
+  endorsing_entity_id?: string
   /** The epoch at which the instance expires. */
-  expiration_epoch: number;
+  expiration_epoch: number
   /** The extra endorsed public keys. Extra keys can be Ed25519, Secp256k1, or Sr25519. And
 are stored as json with included type information.
  */
-  extra_keys: string[];
+  extra_keys: string[]
 }
 
 export type RoflAppInstanceListAllOf = {
-  instances: RoflInstance[];
-};
+  instances: RoflInstance[]
+}
 
-export type RoflAppInstanceList = List & RoflAppInstanceListAllOf;
+export type RoflAppInstanceList = List & RoflAppInstanceListAllOf
 
 /**
  * The payment address configuration for this provider.
  */
-export type RoflMarketProviderPaymentAddress = { [key: string]: unknown };
+export type RoflMarketProviderPaymentAddress = { [key: string]: unknown }
 
 /**
  * Arbitrary metadata key-value pairs, assigned by the provider.
  */
-export type RoflMarketProviderMetadata = { [key: string]: unknown };
+export type RoflMarketProviderMetadata = { [key: string]: unknown }
 
 export interface RoflMarketProvider {
   /** The address of the ROFL market provider. */
-  address: string;
+  address: string
   /** The nodes that are part of the ROFL market provider. */
-  nodes: string[];
+  nodes: string[]
   /** The authorized scheduler ROFL app ID for this provider. */
-  scheduler: string;
+  scheduler: string
   /** The payment address configuration for this provider. */
-  payment_address: RoflMarketProviderPaymentAddress;
+  payment_address: RoflMarketProviderPaymentAddress
   /** Arbitrary metadata key-value pairs, assigned by the provider. */
-  metadata: RoflMarketProviderMetadata;
+  metadata: RoflMarketProviderMetadata
   /** The amount staked for provider registration. */
-  stake: TextBigInt;
+  stake: TextBigInt
   /** The next offer ID for this provider. */
-  offers_next_id: string;
+  offers_next_id: string
   /** The number of offers. */
-  offers_count: number;
+  offers_count: number
   /** The next instance ID for this provider. */
-  instances_next_id: string;
+  instances_next_id: string
   /** The number of instances. */
-  instances_count: number;
+  instances_count: number
   /** The date and time when the provider was created. */
-  created_at: string;
+  created_at: string
   /** The date and time when the provider was last updated. */
-  updated_at: string;
+  updated_at: string
   /** Whether the provider has been removed. */
-  removed: boolean;
+  removed: boolean
 }
 
 export type RoflMarketProviderListAllOf = {
-  providers: RoflMarketProvider[];
-};
+  providers: RoflMarketProvider[]
+}
 
-export type RoflMarketProviderList = List & RoflMarketProviderListAllOf;
+export type RoflMarketProviderList = List & RoflMarketProviderListAllOf
 
 /**
  * The offered resources by this offer.
  */
-export type RoflMarketOfferResources = { [key: string]: unknown };
+export type RoflMarketOfferResources = { [key: string]: unknown }
 
 /**
  * The payment configuration for this offer.
  */
-export type RoflMarketOfferPayment = { [key: string]: unknown };
+export type RoflMarketOfferPayment = { [key: string]: unknown }
 
 /**
  * Arbitrary metadata key-value pairs assigned by the provider.
  */
-export type RoflMarketOfferMetadata = { [key: string]: unknown };
+export type RoflMarketOfferMetadata = { [key: string]: unknown }
 
 export interface RoflMarketOffer {
   /** Unique offer identifier. */
-  id: string;
+  id: string
   /** The address of the ROFL market provider that created this offer. */
-  provider: string;
+  provider: string
   /** The offered resources by this offer. */
-  resources: RoflMarketOfferResources;
+  resources: RoflMarketOfferResources
   /** The payment configuration for this offer. */
-  payment: RoflMarketOfferPayment;
+  payment: RoflMarketOfferPayment
   /** Amount of available instances for this offer. */
-  capacity: number;
+  capacity: number
   /** Arbitrary metadata key-value pairs assigned by the provider. */
-  metadata: RoflMarketOfferMetadata;
+  metadata: RoflMarketOfferMetadata
   /** Whether the offer has been removed. */
-  removed: boolean;
+  removed: boolean
 }
 
 export type RoflMarketOfferListAllOf = {
-  offers: RoflMarketOffer[];
-};
+  offers: RoflMarketOffer[]
+}
 
-export type RoflMarketOfferList = List & RoflMarketOfferListAllOf;
+export type RoflMarketOfferList = List & RoflMarketOfferListAllOf
 
 /**
  * Arbitrary metadata key-value pairs assigned by the provider.
  */
-export type RoflMarketInstanceMetadata = { [key: string]: unknown };
+export type RoflMarketInstanceMetadata = { [key: string]: unknown }
 
 /**
  * The resources allocated to this instance.
  */
-export type RoflMarketInstanceResources = { [key: string]: unknown };
+export type RoflMarketInstanceResources = { [key: string]: unknown }
 
 /**
  * The deployment configuration for this instance.
  */
-export type RoflMarketInstanceDeployment = { [key: string]: unknown };
+export type RoflMarketInstanceDeployment = { [key: string]: unknown }
 
 /**
  * The payment information for this instance.
  */
-export type RoflMarketInstancePayment = { [key: string]: unknown };
+export type RoflMarketInstancePayment = { [key: string]: unknown }
 
 /**
  * The commands for this instance.
  */
-export type RoflMarketInstanceCmdsItem = { [key: string]: unknown };
+export type RoflMarketInstanceCmdsItem = { [key: string]: unknown }
 
 export interface RoflMarketInstance {
   /** Unique instance identifier. */
-  id: string;
+  id: string
   /** The address of the ROFL market provider that created this instance. */
-  provider: string;
+  provider: string
   /** The identifier of the offer that this instance belongs to. */
-  offer_id: string;
+  offer_id: string
   /** The status of the instance. */
-  status: number;
+  status: number
   /** The address of the creator of the instance. */
-  creator: string;
+  creator: string
   /** The address of the administrator of the instance. */
-  admin: string;
+  admin: string
   /** the optional identifier of the node where the instance has been provisioned. */
-  node_id?: string;
+  node_id?: string
   /** Arbitrary metadata key-value pairs assigned by the provider. */
-  metadata: RoflMarketInstanceMetadata;
+  metadata: RoflMarketInstanceMetadata
   /** The resources allocated to this instance. */
-  resources: RoflMarketInstanceResources;
+  resources: RoflMarketInstanceResources
   /** The deployment configuration for this instance. */
-  deployment: RoflMarketInstanceDeployment;
+  deployment: RoflMarketInstanceDeployment
   /** The date and time when the instance was created. */
-  created_at: string;
+  created_at: string
   /** The date and time when the instance was last updated. */
-  updated_at: string;
+  updated_at: string
   /** The date and time from which the instance has been paid for and not yet claimed by the provider. */
-  paid_from: string;
+  paid_from: string
   /** The date and time until which the instance has been paid for. */
-  paid_until: string;
+  paid_until: string
   /** The payment information for this instance. */
-  payment: RoflMarketInstancePayment;
+  payment: RoflMarketInstancePayment
   /** The payment address for this instance. */
-  payment_address: string;
+  payment_address: string
   /** The method-specific refund information. */
-  refund_data: string;
+  refund_data: string
   /** The next command ID for this instance. */
-  cmd_next_id: string;
+  cmd_next_id: string
   /** The number of commands for this instance. */
-  cmd_count: number;
-  cmds?: RoflMarketInstanceCmdsItem[];
+  cmd_count: number
+  cmds?: RoflMarketInstanceCmdsItem[]
   /** Whether the instance has been removed. */
-  removed: boolean;
+  removed: boolean
 }
 
 export type RoflMarketInstanceListAllOf = {
-  instances: RoflMarketInstance[];
-};
+  instances: RoflMarketInstance[]
+}
 
-export type RoflMarketInstanceList = List & RoflMarketInstanceListAllOf;
+export type RoflMarketInstanceList = List & RoflMarketInstanceListAllOf
 
 export type HumanReadableErrorResponse = {
   /** An error message. */
-  msg: string;
-};
+  msg: string
+}
 
 /**
  * An empty response indicating that the requested resource was not found.
  */
-export type NotFoundErrorResponse = unknown;
+export type NotFoundErrorResponse = unknown
 
 export type GetConsensusBlocksParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on minimum block height, inclusive.
    */
-  from?: number;
+  from?: number
   /**
    * A filter on maximum block height, inclusive.
    */
-  to?: number;
+  to?: number
   /**
    * A filter on minimum block time, inclusive.
    */
-  after?: string;
+  after?: string
   /**
    * A filter on maximum block time, exclusive.
    */
-  before?: string;
+  before?: string
   /**
    * A filter on the block hash.
    */
-  hash?: string;
+  hash?: string
   /**
    * A filter on the proposer of the block.
    */
-  proposed_by?: StakingAddress;
-};
+  proposed_by?: StakingAddress
+}
 
 export type GetConsensusTransactionsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on block height.
    */
-  block?: number;
+  block?: number
   /**
    * A filter on transaction method.
    */
-  method?: ConsensusTxMethod;
+  method?: ConsensusTxMethod
   /**
    * A filter on transaction sender.
    */
-  sender?: StakingAddress;
+  sender?: StakingAddress
   /**
    * A filter on related accounts.
    */
-  rel?: string;
+  rel?: string
   /**
    * A filter on minimum transaction time, inclusive.
    */
-  after?: string;
+  after?: string
   /**
    * A filter on maximum transaction time, exclusive.
    */
-  before?: string;
-};
+  before?: string
+}
 
 export type GetConsensusEventsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on block height.
    */
-  block?: number;
+  block?: number
   /**
  * A filter on transaction index. The returned events all need to originate
 from a transaction that appeared in `tx_index`-th position in the block.
@@ -2062,278 +2051,278 @@ Specifying `tx_index` and `block` is an alternative to specifying `tx_hash`;
 either works to fetch events from a specific transaction.
 
  */
-  tx_index?: number;
+  tx_index?: number
   /**
  * A filter on the hash of the transaction that originated the events.
 Specifying `tx_index` and `block` is an alternative to specifying `tx_hash`;
 either works to fetch events from a specific transaction.
 
  */
-  tx_hash?: string;
+  tx_hash?: string
   /**
  * A filter on related accounts. Every returned event will refer to
 this account. For example, for a `Transfer` event, this will be the
 the sender or the recipient of tokens.
 
  */
-  rel?: StakingAddress;
+  rel?: StakingAddress
   /**
    * A filter on the event type.
    */
-  type?: ConsensusEventType;
-};
+  type?: ConsensusEventType
+}
 
 export type GetConsensusRoothashMessagesParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-  runtime: Runtime;
-  round?: number;
-  type?: RoothashMessageType;
-  rel?: StakingAddress;
-};
+  offset?: number
+  runtime: Runtime
+  round?: number
+  type?: RoothashMessageType
+  rel?: StakingAddress
+}
 
 export type GetConsensusEntitiesParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetConsensusEntitiesAddressNodesParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetConsensusValidatorsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
  * A filter on the validator name. Every returned validator will have
 a name that is a superstring of the input param.
 
  */
-  name?: string;
-};
+  name?: string
+}
 
 export type GetConsensusValidatorsAddressHistoryParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on minimum epoch number, inclusive.
    */
-  from?: number;
+  from?: number
   /**
    * A filter on maximum epoch number, inclusive.
    */
-  to?: number;
-};
+  to?: number
+}
 
 export type GetConsensusAccountsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetConsensusAccountsAddressDelegationsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetConsensusAccountsAddressDelegationsToParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetConsensusAccountsAddressDebondingDelegationsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetConsensusAccountsAddressDebondingDelegationsToParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetConsensusEpochsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetConsensusProposalsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * Filter on the submitter of the proposal.
    */
-  submitter?: StakingAddress;
+  submitter?: StakingAddress
   /**
    * Filter on the state of the proposal.
    */
-  state?: ProposalState;
-};
+  state?: ProposalState
+}
 
 export type GetConsensusProposalsProposalIdVotesParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetRuntimeBlocksParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on minimum block height, inclusive.
    */
-  from?: number;
+  from?: number
   /**
    * A filter on maximum block height, inclusive.
    */
-  to?: number;
+  to?: number
   /**
    * A filter on minimum block time, inclusive.
    */
-  after?: string;
+  after?: string
   /**
    * A filter on maximum block time, exclusive.
    */
-  before?: string;
+  before?: string
   /**
    * A filter on the block hash.
    */
-  hash?: string;
-};
+  hash?: string
+}
 
 export type GetRuntimeTransactionsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on block round.
    */
-  block?: number;
+  block?: number
   /**
    * A filter on minimum transaction time, inclusive.
    */
-  after?: string;
+  after?: string
   /**
    * A filter on maximum transaction time, exclusive.
    */
-  before?: string;
+  before?: string
   /**
  * A filter on related accounts. Every returned transaction will refer to
 this account in a way. For example, for an `accounts.Transfer` tx, this will be
@@ -2342,7 +2331,7 @@ Nexus detects related accounts inside EVM transactions and events on a
 best-effort basis. For example, it inspects ERC20 methods inside `evm.Call` txs.
 
  */
-  rel?: EthOrOasisAddress;
+  rel?: EthOrOasisAddress
   /**
  * A filter on the runtime transaction method.
 
@@ -2353,24 +2342,24 @@ In addition to the existing method names, the following special values are suppo
   - 'evm.Call_no_native': Returns EVM calls that are "not likely to be native transfers".
 
  */
-  method?: string;
-};
+  method?: string
+}
 
 export type GetRuntimeEventsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on block round.
    */
-  block?: number;
+  block?: number
   /**
  * A filter on transaction index. The returned events all need to originate
 from a transaction that appeared in `tx_index`-th position in the block.
@@ -2379,7 +2368,7 @@ Specifying `tx_index` and `round` is an alternative to specifying `tx_hash`;
 either works to fetch events from a specific transaction.
 
  */
-  tx_index?: number;
+  tx_index?: number
   /**
  * A filter on the hash of the transaction that originated the events.
 Specifying `tx_index` and `round` is an alternative to specifying `tx_hash`;
@@ -2388,30 +2377,30 @@ This can be an Ethereum transaction hash; the query will compare against
 both a transaction's regular tx_hash and eth_tx_hash (if it exists).
 
  */
-  tx_hash?: string;
+  tx_hash?: string
   /**
    * A filter on the event type.
    */
-  type?: RuntimeEventType;
+  type?: RuntimeEventType
   /**
  * A filter on related accounts. Every returned event will refer to
 this account. For example, for a `accounts.Transfer` event, this will be
 the sender or the recipient of tokens.
 
  */
-  rel?: EthOrOasisAddress;
+  rel?: EthOrOasisAddress
   /**
  * A filter on the evm log signatures.
 Note: The filter will only match on parsed (verified) EVM events.
 
  */
-  evm_log_signature?: string;
+  evm_log_signature?: string
   /**
  * A filter on a smart contract. Every returned event will have been
 emitted by the contract at this address.
 
  */
-  contract_address?: EthOrOasisAddress;
+  contract_address?: EthOrOasisAddress
   /**
  * A filter on NFT events. Every returned event will be specifically
 about this NFT instance ID. You must specify the contract_address
@@ -2426,120 +2415,120 @@ Using an evm_log_signature filter with this set to any other value
 will match no events.
 
  */
-  nft_id?: string;
-};
+  nft_id?: string
+}
 
 export type GetRuntimeEvmTokensParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on the name, the name or symbol must contain this value as a substring. If multiple names are provided, the token must match all of them.
    */
-  name?: string[];
+  name?: string[]
   /**
  * The field to sort the tokens by.
 If unset, the tokens will be sorted by number of holders.
 
  */
-  sort_by?: GetRuntimeEvmTokensSortBy;
+  sort_by?: GetRuntimeEvmTokensSortBy
   /**
  * The type of tokens to return.
 
  */
-  type?: EvmTokenType;
-};
+  type?: EvmTokenType
+}
 
 export type GetRuntimeEvmTokensSortBy =
-  (typeof GetRuntimeEvmTokensSortBy)[keyof typeof GetRuntimeEvmTokensSortBy];
+  (typeof GetRuntimeEvmTokensSortBy)[keyof typeof GetRuntimeEvmTokensSortBy]
 
 export const GetRuntimeEvmTokensSortBy = {
   total_holders: 'total_holders',
   market_cap: 'market_cap',
-} as const;
+} as const
 
 export type GetRuntimeEvmTokensAddressHoldersParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetRuntimeEvmTokensAddressNftsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetRuntimeAccountsAddressNftsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * Only return NFT instances from the token contract at the given staking address.
    */
-  token_address?: EthOrOasisAddress;
-};
+  token_address?: EthOrOasisAddress
+}
 
 export type GetRuntimeRoflAppsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on the admin of the ROFL app.
    */
-  admin?: EthOrOasisAddress;
+  admin?: EthOrOasisAddress
   /**
    * A filter on the name of the ROFL app. If multiple names are provided, the ROFL App must match all of them.
    */
-  name?: string[];
-};
+  name?: string[]
+}
 
 export type GetRuntimeRoflAppsIdTransactionsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
  * A filter on the runtime transaction method.
 
@@ -2550,20 +2539,20 @@ In addition to the existing method names, the following special values are suppo
   - 'evm.Call_no_native': Returns EVM calls that are "not likely to be native transfers".
 
  */
-  method?: string;
-};
+  method?: string
+}
 
 export type GetRuntimeRoflAppsIdInstanceTransactionsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
  * A filter on the runtime transaction method.
 
@@ -2574,33 +2563,33 @@ In addition to the existing method names, the following special values are suppo
   - 'evm.Call_no_native': Returns EVM calls that are "not likely to be native transfers".
 
  */
-  method?: string;
-};
+  method?: string
+}
 
 export type GetRuntimeRoflAppsIdInstancesParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetRuntimeRoflAppsIdInstancesRakTransactionsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
  * A filter on the runtime transaction method.
 
@@ -2611,112 +2600,112 @@ In addition to the existing method names, the following special values are suppo
   - 'evm.Call_no_native': Returns EVM calls that are "not likely to be native transfers".
 
  */
-  method?: string;
-};
+  method?: string
+}
 
 export type GetRuntimeRoflmarketProvidersParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetRuntimeRoflmarketProvidersAddressOffersParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
-};
+  offset?: number
+}
 
 export type GetRuntimeRoflmarketInstancesParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
    * A filter on the provider of the ROFL market instance.
    */
-  provider?: StakingAddress;
+  provider?: StakingAddress
   /**
    * A filter on the admin of the ROFL market instance.
    */
-  admin?: EthOrOasisAddress;
+  admin?: EthOrOasisAddress
   /**
    * A filter on the deployed app ID of the ROFL market instance.
    */
-  deployed_app_id?: string;
-};
+  deployed_app_id?: string
+}
 
 export type GetLayerStatsTxVolumeParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
  * The size of windows into which the statistic is grouped, in seconds.
 The backend supports a limited number of window sizes: 300 (5 minutes) and
 86400 (1 day). Requests with other values may be rejected.
 
  */
-  window_size_seconds?: number;
+  window_size_seconds?: number
   /**
  * The size of the step between returned statistic windows, in seconds.
 The backend supports a limited number of step sizes: 300 (5 minutes) and
 86400 (1 day). Requests with other values may be rejected.
 
  */
-  window_step_seconds?: number;
-};
+  window_step_seconds?: number
+}
 
 export type GetLayerStatsActiveAccountsParams = {
   /**
  * The maximum numbers of items to return.
 
  */
-  limit?: number;
+  limit?: number
   /**
  * The number of items to skip before starting to collect the result set.
 
  */
-  offset?: number;
+  offset?: number
   /**
  * The size of the step between returned statistic windows, in seconds.
 The backend supports a limited number of step sizes: 300 (5 minutes) and
 86400 (1 day). Requests with other values may be rejected.
 
  */
-  window_step_seconds?: number;
-};
+  window_step_seconds?: number
+}
 
-type AwaitedInput<T> = PromiseLike<T> | T;
+type AwaitedInput<T> = PromiseLike<T> | T
 
-type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 /**
  * @summary Returns the status of indexing.
@@ -2724,39 +2713,31 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 export const getStatus = (
   network: 'mainnet' | 'testnet',
   options?: SecondParameter<typeof getStatusMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return getStatusMutator<Status>(
     { url: `/${encodeURIComponent(String(network))}/`, method: 'GET', signal },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetStatusQueryKey = (network: 'mainnet' | 'testnet') => {
-  return [`/${network}/`] as const;
-};
+  return [`/${network}/`] as const
+}
 
-export const getGetStatusQueryOptions = <
-  TData = Awaited<ReturnType<typeof getStatus>>,
-  TError = void
->(
+export const getGetStatusQueryOptions = <TData = Awaited<ReturnType<typeof getStatus>>, TError = void>(
   network: 'mainnet' | 'testnet',
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getStatus>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof getStatusMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof getStatus>>, TError, TData>
+    request?: SecondParameter<typeof getStatusMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetStatusQueryKey(network);
+  const queryKey = queryOptions?.queryKey ?? getGetStatusQueryKey(network)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStatus>>> = ({
-    signal,
-  }) => getStatus(network, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStatus>>> = ({ signal }) =>
+    getStatus(network, requestOptions, signal)
 
   return {
     queryKey,
@@ -2764,42 +2745,33 @@ export const getGetStatusQueryOptions = <
     enabled: !!network,
     ...queryOptions,
   } as UseQueryOptions<Awaited<ReturnType<typeof getStatus>>, TError, TData> & {
-    queryKey: QueryKey;
-  };
-};
+    queryKey: QueryKey
+  }
+}
 
-export type GetStatusQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getStatus>>
->;
-export type GetStatusQueryError = void;
+export type GetStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getStatus>>>
+export type GetStatusQueryError = void
 
 /**
  * @summary Returns the status of indexing.
  */
 
-export function useGetStatus<
-  TData = Awaited<ReturnType<typeof getStatus>>,
-  TError = void
->(
+export function useGetStatus<TData = Awaited<ReturnType<typeof getStatus>>, TError = void>(
   network: 'mainnet' | 'testnet',
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getStatus>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof getStatusMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof getStatus>>, TError, TData>
+    request?: SecondParameter<typeof getStatusMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetStatusQueryOptions(network, options);
+  const queryOptions = getGetStatusQueryOptions(network, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -2808,7 +2780,7 @@ export function useGetStatus<
 export const GetConsensusTotalSupplyRaw = (
   network: 'mainnet' | 'testnet',
   options?: SecondParameter<typeof GetConsensusTotalSupplyRawMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusTotalSupplyRawMutator<string>(
     {
@@ -2816,56 +2788,45 @@ export const GetConsensusTotalSupplyRaw = (
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
-export const getGetConsensusTotalSupplyRawQueryKey = (
-  network: 'mainnet' | 'testnet'
-) => {
-  return [`/${network}/consensus/total_supply_raw`] as const;
-};
+export const getGetConsensusTotalSupplyRawQueryKey = (network: 'mainnet' | 'testnet') => {
+  return [`/${network}/consensus/total_supply_raw`] as const
+}
 
 export const getGetConsensusTotalSupplyRawQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>,
-  TError = unknown
+  TError = unknown,
 >(
   network: 'mainnet' | 'testnet',
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusTotalSupplyRawMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusTotalSupplyRawMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetConsensusTotalSupplyRawQueryKey(network);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusTotalSupplyRawQueryKey(network)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>
-  > = ({ signal }) =>
-    GetConsensusTotalSupplyRaw(network, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>> = ({ signal }) =>
+    GetConsensusTotalSupplyRaw(network, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusTotalSupplyRawQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>
->;
-export type GetConsensusTotalSupplyRawQueryError = unknown;
+>
+export type GetConsensusTotalSupplyRawQueryError = unknown
 
 /**
  * @summary Returns the total supply of the consensus layer token in token units.
@@ -2873,30 +2834,23 @@ export type GetConsensusTotalSupplyRawQueryError = unknown;
 
 export function useGetConsensusTotalSupplyRaw<
   TData = Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>,
-  TError = unknown
+  TError = unknown,
 >(
   network: 'mainnet' | 'testnet',
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusTotalSupplyRawMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusTotalSupplyRawMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusTotalSupplyRawQueryOptions(
-    network,
-    options
-  );
+  const queryOptions = getGetConsensusTotalSupplyRawQueryOptions(network, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -2905,67 +2859,53 @@ export function useGetConsensusTotalSupplyRaw<
 export const GetConsensusCirculatingSupplyRaw = (
   network: 'mainnet' | 'testnet',
   options?: SecondParameter<typeof GetConsensusCirculatingSupplyRawMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusCirculatingSupplyRawMutator<string>(
     {
-      url: `/${encodeURIComponent(
-        String(network)
-      )}/consensus/circulating_supply_raw`,
+      url: `/${encodeURIComponent(String(network))}/consensus/circulating_supply_raw`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
-export const getGetConsensusCirculatingSupplyRawQueryKey = (
-  network: 'mainnet' | 'testnet'
-) => {
-  return [`/${network}/consensus/circulating_supply_raw`] as const;
-};
+export const getGetConsensusCirculatingSupplyRawQueryKey = (network: 'mainnet' | 'testnet') => {
+  return [`/${network}/consensus/circulating_supply_raw`] as const
+}
 
 export const getGetConsensusCirculatingSupplyRawQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>,
-  TError = unknown
+  TError = unknown,
 >(
   network: 'mainnet' | 'testnet',
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusCirculatingSupplyRawMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusCirculatingSupplyRawMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusCirculatingSupplyRawQueryKey(network);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusCirculatingSupplyRawQueryKey(network)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>
-  > = ({ signal }) =>
-    GetConsensusCirculatingSupplyRaw(network, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>> = ({ signal }) =>
+    GetConsensusCirculatingSupplyRaw(network, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusCirculatingSupplyRawQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>
->;
-export type GetConsensusCirculatingSupplyRawQueryError = unknown;
+>
+export type GetConsensusCirculatingSupplyRawQueryError = unknown
 
 /**
  * @summary Returns the circulating supply of the consensus layer token in token units.
@@ -2973,30 +2913,23 @@ export type GetConsensusCirculatingSupplyRawQueryError = unknown;
 
 export function useGetConsensusCirculatingSupplyRaw<
   TData = Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>,
-  TError = unknown
+  TError = unknown,
 >(
   network: 'mainnet' | 'testnet',
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusCirculatingSupplyRawMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusCirculatingSupplyRawMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusCirculatingSupplyRawQueryOptions(
-    network,
-    options
-  );
+  const queryOptions = getGetConsensusCirculatingSupplyRawQueryOptions(network, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -3006,7 +2939,7 @@ export const GetConsensusBlocks = (
   network: 'mainnet' | 'testnet',
   params?: GetConsensusBlocksParams,
   options?: SecondParameter<typeof GetConsensusBlocksMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusBlocksMutator<BlockList>(
     {
@@ -3015,91 +2948,67 @@ export const GetConsensusBlocks = (
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusBlocksQueryKey = (
   network: 'mainnet' | 'testnet',
-  params?: GetConsensusBlocksParams
+  params?: GetConsensusBlocksParams,
 ) => {
-  return [`/${network}/consensus/blocks`, ...(params ? [params] : [])] as const;
-};
+  return [`/${network}/consensus/blocks`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusBlocksQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusBlocks>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusBlocksParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusBlocks>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusBlocksMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusBlocks>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusBlocksMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetConsensusBlocksQueryKey(network, params);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusBlocksQueryKey(network, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusBlocks>>
-  > = ({ signal }) =>
-    GetConsensusBlocks(network, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusBlocks>>> = ({ signal }) =>
+    GetConsensusBlocks(network, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusBlocks>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusBlocks>>, TError, TData> & { queryKey: QueryKey }
+}
 
-export type GetConsensusBlocksQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetConsensusBlocks>>
->;
-export type GetConsensusBlocksQueryError = void;
+export type GetConsensusBlocksQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusBlocks>>>
+export type GetConsensusBlocksQueryError = void
 
 /**
  * @summary Returns a list of consensus blocks, sorted from most to least recent.
  */
 
-export function useGetConsensusBlocks<
-  TData = Awaited<ReturnType<typeof GetConsensusBlocks>>,
-  TError = void
->(
+export function useGetConsensusBlocks<TData = Awaited<ReturnType<typeof GetConsensusBlocks>>, TError = void>(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusBlocksParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusBlocks>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusBlocksMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusBlocks>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusBlocksMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusBlocksQueryOptions(
-    network,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusBlocksQueryOptions(network, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -3109,69 +3018,54 @@ export const GetConsensusBlocksHeight = (
   network: 'mainnet' | 'testnet',
   height: number,
   options?: SecondParameter<typeof GetConsensusBlocksHeightMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusBlocksHeightMutator<Block>(
     {
-      url: `/${encodeURIComponent(
-        String(network)
-      )}/consensus/blocks/${encodeURIComponent(String(height))}`,
+      url: `/${encodeURIComponent(String(network))}/consensus/blocks/${encodeURIComponent(String(height))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
-export const getGetConsensusBlocksHeightQueryKey = (
-  network: 'mainnet' | 'testnet',
-  height: number
-) => {
-  return [`/${network}/consensus/blocks/${height}`] as const;
-};
+export const getGetConsensusBlocksHeightQueryKey = (network: 'mainnet' | 'testnet', height: number) => {
+  return [`/${network}/consensus/blocks/${height}`] as const
+}
 
 export const getGetConsensusBlocksHeightQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusBlocksHeight>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   height: number,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusBlocksHeight>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusBlocksHeightMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusBlocksHeight>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusBlocksHeightMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusBlocksHeightQueryKey(network, height);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusBlocksHeightQueryKey(network, height)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusBlocksHeight>>
-  > = ({ signal }) =>
-    GetConsensusBlocksHeight(network, height, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusBlocksHeight>>> = ({ signal }) =>
+    GetConsensusBlocksHeight(network, height, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && height),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusBlocksHeight>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusBlocksHeight>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusBlocksHeightQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusBlocksHeight>>
->;
-export type GetConsensusBlocksHeightQueryError = void;
+>
+export type GetConsensusBlocksHeightQueryError = void
 
 /**
  * @summary Returns a consensus block.
@@ -3179,32 +3073,24 @@ export type GetConsensusBlocksHeightQueryError = void;
 
 export function useGetConsensusBlocksHeight<
   TData = Awaited<ReturnType<typeof GetConsensusBlocksHeight>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   height: number,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusBlocksHeight>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusBlocksHeightMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusBlocksHeight>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusBlocksHeightMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusBlocksHeightQueryOptions(
-    network,
-    height,
-    options
-  );
+  const queryOptions = getGetConsensusBlocksHeightQueryOptions(network, height, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -3214,7 +3100,7 @@ export const GetConsensusTransactions = (
   network: 'mainnet' | 'testnet',
   params?: GetConsensusTransactionsParams,
   options?: SecondParameter<typeof GetConsensusTransactionsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusTransactionsMutator<TransactionList>(
     {
@@ -3223,62 +3109,49 @@ export const GetConsensusTransactions = (
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusTransactionsQueryKey = (
   network: 'mainnet' | 'testnet',
-  params?: GetConsensusTransactionsParams
+  params?: GetConsensusTransactionsParams,
 ) => {
-  return [
-    `/${network}/consensus/transactions`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/transactions`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusTransactionsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusTransactions>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusTransactionsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusTransactions>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusTransactionsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTransactions>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusTransactionsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusTransactionsQueryKey(network, params);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusTransactionsQueryKey(network, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusTransactions>>
-  > = ({ signal }) =>
-    GetConsensusTransactions(network, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusTransactions>>> = ({ signal }) =>
+    GetConsensusTransactions(network, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusTransactions>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTransactions>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusTransactionsQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusTransactions>>
->;
-export type GetConsensusTransactionsQueryError = void;
+>
+export type GetConsensusTransactionsQueryError = void
 
 /**
  * @summary Returns a list of consensus transactions.
@@ -3286,32 +3159,24 @@ export type GetConsensusTransactionsQueryError = void;
 
 export function useGetConsensusTransactions<
   TData = Awaited<ReturnType<typeof GetConsensusTransactions>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusTransactionsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusTransactions>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusTransactionsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTransactions>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusTransactionsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusTransactionsQueryOptions(
-    network,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusTransactionsQueryOptions(network, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -3321,69 +3186,56 @@ export const GetConsensusTransactionsTxHash = (
   network: 'mainnet' | 'testnet',
   txHash: string,
   options?: SecondParameter<typeof GetConsensusTransactionsTxHashMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusTransactionsTxHashMutator<TransactionList>(
     {
       url: `/${encodeURIComponent(
-        String(network)
+        String(network),
       )}/consensus/transactions/${encodeURIComponent(String(txHash))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
-export const getGetConsensusTransactionsTxHashQueryKey = (
-  network: 'mainnet' | 'testnet',
-  txHash: string
-) => {
-  return [`/${network}/consensus/transactions/${txHash}`] as const;
-};
+export const getGetConsensusTransactionsTxHashQueryKey = (network: 'mainnet' | 'testnet', txHash: string) => {
+  return [`/${network}/consensus/transactions/${txHash}`] as const
+}
 
 export const getGetConsensusTransactionsTxHashQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   txHash: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusTransactionsTxHashMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusTransactionsTxHashMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusTransactionsTxHashQueryKey(network, txHash);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusTransactionsTxHashQueryKey(network, txHash)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>
-  > = ({ signal }) =>
-    GetConsensusTransactionsTxHash(network, txHash, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>> = ({ signal }) =>
+    GetConsensusTransactionsTxHash(network, txHash, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && txHash),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusTransactionsTxHashQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>
->;
-export type GetConsensusTransactionsTxHashQueryError = void;
+>
+export type GetConsensusTransactionsTxHashQueryError = void
 
 /**
  * @summary Returns consensus transactions with the given transaction hash.
@@ -3391,32 +3243,24 @@ export type GetConsensusTransactionsTxHashQueryError = void;
 
 export function useGetConsensusTransactionsTxHash<
   TData = Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   txHash: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusTransactionsTxHashMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusTransactionsTxHashMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusTransactionsTxHashQueryOptions(
-    network,
-    txHash,
-    options
-  );
+  const queryOptions = getGetConsensusTransactionsTxHashQueryOptions(network, txHash, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -3426,7 +3270,7 @@ export const GetConsensusEvents = (
   network: 'mainnet' | 'testnet',
   params?: GetConsensusEventsParams,
   options?: SecondParameter<typeof GetConsensusEventsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusEventsMutator<ConsensusEventList>(
     {
@@ -3435,193 +3279,146 @@ export const GetConsensusEvents = (
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusEventsQueryKey = (
   network: 'mainnet' | 'testnet',
-  params?: GetConsensusEventsParams
+  params?: GetConsensusEventsParams,
 ) => {
-  return [`/${network}/consensus/events`, ...(params ? [params] : [])] as const;
-};
+  return [`/${network}/consensus/events`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusEventsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusEvents>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusEventsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEvents>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEventsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEvents>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEventsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetConsensusEventsQueryKey(network, params);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusEventsQueryKey(network, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusEvents>>
-  > = ({ signal }) =>
-    GetConsensusEvents(network, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEvents>>> = ({ signal }) =>
+    GetConsensusEvents(network, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusEvents>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEvents>>, TError, TData> & { queryKey: QueryKey }
+}
 
-export type GetConsensusEventsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetConsensusEvents>>
->;
-export type GetConsensusEventsQueryError = void;
+export type GetConsensusEventsQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusEvents>>>
+export type GetConsensusEventsQueryError = void
 
 /**
  * @summary Returns a list of consensus events.
  */
 
-export function useGetConsensusEvents<
-  TData = Awaited<ReturnType<typeof GetConsensusEvents>>,
-  TError = void
->(
+export function useGetConsensusEvents<TData = Awaited<ReturnType<typeof GetConsensusEvents>>, TError = void>(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusEventsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEvents>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEventsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEvents>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEventsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusEventsQueryOptions(
-    network,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusEventsQueryOptions(network, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 export const GetConsensusRoothashMessages = (
   network: 'mainnet' | 'testnet',
   params: GetConsensusRoothashMessagesParams,
   options?: SecondParameter<typeof GetConsensusRoothashMessagesMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusRoothashMessagesMutator<RoothashMessageList>(
     {
-      url: `/${encodeURIComponent(
-        String(network)
-      )}/consensus/roothash_messages`,
+      url: `/${encodeURIComponent(String(network))}/consensus/roothash_messages`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusRoothashMessagesQueryKey = (
   network: 'mainnet' | 'testnet',
-  params: GetConsensusRoothashMessagesParams
+  params: GetConsensusRoothashMessagesParams,
 ) => {
-  return [
-    `/${network}/consensus/roothash_messages`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/roothash_messages`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusRoothashMessagesQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusRoothashMessages>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params: GetConsensusRoothashMessagesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusRoothashMessages>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusRoothashMessagesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusRoothashMessages>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusRoothashMessagesMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusRoothashMessagesQueryKey(network, params);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusRoothashMessagesQueryKey(network, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusRoothashMessages>>
-  > = ({ signal }) =>
-    GetConsensusRoothashMessages(network, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusRoothashMessages>>> = ({ signal }) =>
+    GetConsensusRoothashMessages(network, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusRoothashMessages>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusRoothashMessages>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusRoothashMessagesQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusRoothashMessages>>
->;
-export type GetConsensusRoothashMessagesQueryError = void;
+>
+export type GetConsensusRoothashMessagesQueryError = void
 
 export function useGetConsensusRoothashMessages<
   TData = Awaited<ReturnType<typeof GetConsensusRoothashMessages>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params: GetConsensusRoothashMessagesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusRoothashMessages>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusRoothashMessagesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusRoothashMessages>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusRoothashMessagesMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusRoothashMessagesQueryOptions(
-    network,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusRoothashMessagesQueryOptions(network, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -3631,7 +3428,7 @@ export const GetConsensusEntities = (
   network: 'mainnet' | 'testnet',
   params?: GetConsensusEntitiesParams,
   options?: SecondParameter<typeof GetConsensusEntitiesMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusEntitiesMutator<EntityList>(
     {
@@ -3640,61 +3437,47 @@ export const GetConsensusEntities = (
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusEntitiesQueryKey = (
   network: 'mainnet' | 'testnet',
-  params?: GetConsensusEntitiesParams
+  params?: GetConsensusEntitiesParams,
 ) => {
-  return [
-    `/${network}/consensus/entities`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/entities`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusEntitiesQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusEntities>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusEntitiesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEntities>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEntitiesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntities>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEntitiesMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetConsensusEntitiesQueryKey(network, params);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusEntitiesQueryKey(network, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusEntities>>
-  > = ({ signal }) =>
-    GetConsensusEntities(network, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEntities>>> = ({ signal }) =>
+    GetConsensusEntities(network, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusEntities>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntities>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
-export type GetConsensusEntitiesQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetConsensusEntities>>
->;
-export type GetConsensusEntitiesQueryError = void;
+export type GetConsensusEntitiesQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusEntities>>>
+export type GetConsensusEntitiesQueryError = void
 
 /**
  * @summary Returns a list of entities registered at the consensus layer.
@@ -3702,32 +3485,24 @@ export type GetConsensusEntitiesQueryError = void;
 
 export function useGetConsensusEntities<
   TData = Awaited<ReturnType<typeof GetConsensusEntities>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusEntitiesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEntities>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEntitiesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntities>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEntitiesMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusEntitiesQueryOptions(
-    network,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusEntitiesQueryOptions(network, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -3737,69 +3512,59 @@ export const GetConsensusEntitiesAddress = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   options?: SecondParameter<typeof GetConsensusEntitiesAddressMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusEntitiesAddressMutator<Entity>(
     {
       url: `/${encodeURIComponent(
-        String(network)
+        String(network),
       )}/consensus/entities/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusEntitiesAddressQueryKey = (
   network: 'mainnet' | 'testnet',
-  address: StakingAddress
+  address: StakingAddress,
 ) => {
-  return [`/${network}/consensus/entities/${address}`] as const;
-};
+  return [`/${network}/consensus/entities/${address}`] as const
+}
 
 export const getGetConsensusEntitiesAddressQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEntitiesAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEntitiesAddressMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusEntitiesAddressQueryKey(network, address);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusEntitiesAddressQueryKey(network, address)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>
-  > = ({ signal }) =>
-    GetConsensusEntitiesAddress(network, address, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>> = ({ signal }) =>
+    GetConsensusEntitiesAddress(network, address, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusEntitiesAddressQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>
->;
-export type GetConsensusEntitiesAddressQueryError = void;
+>
+export type GetConsensusEntitiesAddressQueryError = void
 
 /**
  * @summary Returns an entity registered at the consensus layer.
@@ -3807,32 +3572,24 @@ export type GetConsensusEntitiesAddressQueryError = void;
 
 export function useGetConsensusEntitiesAddress<
   TData = Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEntitiesAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEntitiesAddressMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusEntitiesAddressQueryOptions(
-    network,
-    address,
-    options
-  );
+  const queryOptions = getGetConsensusEntitiesAddressQueryOptions(network, address, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -3843,81 +3600,63 @@ export const GetConsensusEntitiesAddressNodes = (
   address: StakingAddress,
   params?: GetConsensusEntitiesAddressNodesParams,
   options?: SecondParameter<typeof GetConsensusEntitiesAddressNodesMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusEntitiesAddressNodesMutator<NodeList>(
     {
       url: `/${encodeURIComponent(
-        String(network)
+        String(network),
       )}/consensus/entities/${encodeURIComponent(String(address))}/nodes`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusEntitiesAddressNodesQueryKey = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
-  params?: GetConsensusEntitiesAddressNodesParams
+  params?: GetConsensusEntitiesAddressNodesParams,
 ) => {
-  return [
-    `/${network}/consensus/entities/${address}/nodes`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/entities/${address}/nodes`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusEntitiesAddressNodesQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusEntitiesAddressNodesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEntitiesAddressNodesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEntitiesAddressNodesMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusEntitiesAddressNodesQueryKey(network, address, params);
+    queryOptions?.queryKey ?? getGetConsensusEntitiesAddressNodesQueryKey(network, address, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>
-  > = ({ signal }) =>
-    GetConsensusEntitiesAddressNodes(
-      network,
-      address,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>> = ({ signal }) =>
+    GetConsensusEntitiesAddressNodes(network, address, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusEntitiesAddressNodesQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>
->;
-export type GetConsensusEntitiesAddressNodesQueryError = void;
+>
+export type GetConsensusEntitiesAddressNodesQueryError = void
 
 /**
  * @summary Returns a list of nodes registered at the consensus layer.
@@ -3925,34 +3664,25 @@ export type GetConsensusEntitiesAddressNodesQueryError = void;
 
 export function useGetConsensusEntitiesAddressNodes<
   TData = Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusEntitiesAddressNodesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEntitiesAddressNodesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEntitiesAddressNodesMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusEntitiesAddressNodesQueryOptions(
-    network,
-    address,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusEntitiesAddressNodesQueryOptions(network, address, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -3962,84 +3692,64 @@ export const GetConsensusEntitiesAddressNodesNodeId = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   nodeId: Ed25519PubKey,
-  options?: SecondParameter<
-    typeof GetConsensusEntitiesAddressNodesNodeIdMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetConsensusEntitiesAddressNodesNodeIdMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetConsensusEntitiesAddressNodesNodeIdMutator<Node>(
     {
-      url: `/${encodeURIComponent(
-        String(network)
-      )}/consensus/entities/${encodeURIComponent(
-        String(address)
+      url: `/${encodeURIComponent(String(network))}/consensus/entities/${encodeURIComponent(
+        String(address),
       )}/nodes/${encodeURIComponent(String(nodeId))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusEntitiesAddressNodesNodeIdQueryKey = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
-  nodeId: Ed25519PubKey
+  nodeId: Ed25519PubKey,
 ) => {
-  return [`/${network}/consensus/entities/${address}/nodes/${nodeId}`] as const;
-};
+  return [`/${network}/consensus/entities/${address}/nodes/${nodeId}`] as const
+}
 
 export const getGetConsensusEntitiesAddressNodesNodeIdQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   nodeId: Ed25519PubKey,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusEntitiesAddressNodesNodeIdMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEntitiesAddressNodesNodeIdMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusEntitiesAddressNodesNodeIdQueryKey(network, address, nodeId);
+    queryOptions?.queryKey ?? getGetConsensusEntitiesAddressNodesNodeIdQueryKey(network, address, nodeId)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>
-  > = ({ signal }) =>
-    GetConsensusEntitiesAddressNodesNodeId(
-      network,
-      address,
-      nodeId,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>> = ({
+    signal,
+  }) => GetConsensusEntitiesAddressNodesNodeId(network, address, nodeId, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && address && nodeId),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusEntitiesAddressNodesNodeIdQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>
->;
-export type GetConsensusEntitiesAddressNodesNodeIdQueryError = void;
+>
+export type GetConsensusEntitiesAddressNodesNodeIdQueryError = void
 
 /**
  * @summary Returns a node registered at the consensus layer.
@@ -4047,36 +3757,30 @@ export type GetConsensusEntitiesAddressNodesNodeIdQueryError = void;
 
 export function useGetConsensusEntitiesAddressNodesNodeId<
   TData = Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   nodeId: Ed25519PubKey,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusEntitiesAddressNodesNodeIdMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEntitiesAddressNodesNodeIdMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusEntitiesAddressNodesNodeIdQueryOptions(
     network,
     address,
     nodeId,
-    options
-  );
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -4086,7 +3790,7 @@ export const GetConsensusValidators = (
   network: 'mainnet' | 'testnet',
   params?: GetConsensusValidatorsParams,
   options?: SecondParameter<typeof GetConsensusValidatorsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusValidatorsMutator<ValidatorList>(
     {
@@ -4095,62 +3799,49 @@ export const GetConsensusValidators = (
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusValidatorsQueryKey = (
   network: 'mainnet' | 'testnet',
-  params?: GetConsensusValidatorsParams
+  params?: GetConsensusValidatorsParams,
 ) => {
-  return [
-    `/${network}/consensus/validators`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/validators`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusValidatorsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusValidators>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusValidatorsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusValidators>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusValidatorsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidators>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusValidatorsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusValidatorsQueryKey(network, params);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusValidatorsQueryKey(network, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusValidators>>
-  > = ({ signal }) =>
-    GetConsensusValidators(network, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusValidators>>> = ({ signal }) =>
+    GetConsensusValidators(network, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusValidators>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidators>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusValidatorsQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusValidators>>
->;
-export type GetConsensusValidatorsQueryError = void;
+>
+export type GetConsensusValidatorsQueryError = void
 
 /**
  * @summary Returns a list of validators registered at the consensus layer (the list includes all registered entities, even those without a currently active validator node).
@@ -4158,32 +3849,24 @@ export type GetConsensusValidatorsQueryError = void;
 
 export function useGetConsensusValidators<
   TData = Awaited<ReturnType<typeof GetConsensusValidators>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusValidatorsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusValidators>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusValidatorsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidators>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusValidatorsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusValidatorsQueryOptions(
-    network,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusValidatorsQueryOptions(network, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -4193,69 +3876,59 @@ export const GetConsensusValidatorsAddress = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   options?: SecondParameter<typeof GetConsensusValidatorsAddressMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusValidatorsAddressMutator<ValidatorList>(
     {
       url: `/${encodeURIComponent(
-        String(network)
+        String(network),
       )}/consensus/validators/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusValidatorsAddressQueryKey = (
   network: 'mainnet' | 'testnet',
-  address: StakingAddress
+  address: StakingAddress,
 ) => {
-  return [`/${network}/consensus/validators/${address}`] as const;
-};
+  return [`/${network}/consensus/validators/${address}`] as const
+}
 
 export const getGetConsensusValidatorsAddressQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusValidatorsAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusValidatorsAddressMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusValidatorsAddressQueryKey(network, address);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusValidatorsAddressQueryKey(network, address)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>
-  > = ({ signal }) =>
-    GetConsensusValidatorsAddress(network, address, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>> = ({ signal }) =>
+    GetConsensusValidatorsAddress(network, address, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusValidatorsAddressQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>
->;
-export type GetConsensusValidatorsAddressQueryError = void;
+>
+export type GetConsensusValidatorsAddressQueryError = void
 
 /**
  * @summary Returns a validator registered at the consensus layer.
@@ -4263,32 +3936,24 @@ export type GetConsensusValidatorsAddressQueryError = void;
 
 export function useGetConsensusValidatorsAddress<
   TData = Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusValidatorsAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusValidatorsAddressMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusValidatorsAddressQueryOptions(
-    network,
-    address,
-    options
-  );
+  const queryOptions = getGetConsensusValidatorsAddressQueryOptions(network, address, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -4299,83 +3964,64 @@ export const GetConsensusValidatorsAddressHistory = (
   address: StakingAddress,
   params?: GetConsensusValidatorsAddressHistoryParams,
   options?: SecondParameter<typeof GetConsensusValidatorsAddressHistoryMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusValidatorsAddressHistoryMutator<ValidatorHistory>(
     {
       url: `/${encodeURIComponent(
-        String(network)
+        String(network),
       )}/consensus/validators/${encodeURIComponent(String(address))}/history`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusValidatorsAddressHistoryQueryKey = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
-  params?: GetConsensusValidatorsAddressHistoryParams
+  params?: GetConsensusValidatorsAddressHistoryParams,
 ) => {
-  return [
-    `/${network}/consensus/validators/${address}/history`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/validators/${address}/history`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusValidatorsAddressHistoryQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusValidatorsAddressHistoryParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusValidatorsAddressHistoryMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusValidatorsAddressHistoryMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusValidatorsAddressHistoryQueryKey(network, address, params);
+    queryOptions?.queryKey ?? getGetConsensusValidatorsAddressHistoryQueryKey(network, address, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>
-  > = ({ signal }) =>
-    GetConsensusValidatorsAddressHistory(
-      network,
-      address,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>> = ({
+    signal,
+  }) => GetConsensusValidatorsAddressHistory(network, address, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusValidatorsAddressHistoryQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>
->;
-export type GetConsensusValidatorsAddressHistoryQueryError = void;
+>
+export type GetConsensusValidatorsAddressHistoryQueryError = void
 
 /**
  * @summary Returns historical information for a single validator.
@@ -4383,36 +4029,25 @@ export type GetConsensusValidatorsAddressHistoryQueryError = void;
 
 export function useGetConsensusValidatorsAddressHistory<
   TData = Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusValidatorsAddressHistoryParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusValidatorsAddressHistoryMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusValidatorsAddressHistoryMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusValidatorsAddressHistoryQueryOptions(
-    network,
-    address,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusValidatorsAddressHistoryQueryOptions(network, address, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -4426,7 +4061,7 @@ export const GetConsensusAccounts = (
   network: 'mainnet' | 'testnet',
   params?: GetConsensusAccountsParams,
   options?: SecondParameter<typeof GetConsensusAccountsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusAccountsMutator<AccountList>(
     {
@@ -4435,61 +4070,47 @@ export const GetConsensusAccounts = (
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusAccountsQueryKey = (
   network: 'mainnet' | 'testnet',
-  params?: GetConsensusAccountsParams
+  params?: GetConsensusAccountsParams,
 ) => {
-  return [
-    `/${network}/consensus/accounts`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/accounts`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusAccountsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusAccounts>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusAccountsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusAccounts>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusAccountsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccounts>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusAccountsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetConsensusAccountsQueryKey(network, params);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusAccountsQueryKey(network, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusAccounts>>
-  > = ({ signal }) =>
-    GetConsensusAccounts(network, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusAccounts>>> = ({ signal }) =>
+    GetConsensusAccounts(network, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusAccounts>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccounts>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
-export type GetConsensusAccountsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetConsensusAccounts>>
->;
-export type GetConsensusAccountsQueryError = void;
+export type GetConsensusAccountsQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusAccounts>>>
+export type GetConsensusAccountsQueryError = void
 
 /**
  * @summary Returns a list of consensus layer accounts.
@@ -4501,32 +4122,24 @@ query the single-account endpoint.
 
 export function useGetConsensusAccounts<
   TData = Awaited<ReturnType<typeof GetConsensusAccounts>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusAccountsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusAccounts>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusAccountsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccounts>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusAccountsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusAccountsQueryOptions(
-    network,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusAccountsQueryOptions(network, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -4536,69 +4149,59 @@ export const GetConsensusAccountsAddress = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   options?: SecondParameter<typeof GetConsensusAccountsAddressMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusAccountsAddressMutator<Account>(
     {
       url: `/${encodeURIComponent(
-        String(network)
+        String(network),
       )}/consensus/accounts/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusAccountsAddressQueryKey = (
   network: 'mainnet' | 'testnet',
-  address: StakingAddress
+  address: StakingAddress,
 ) => {
-  return [`/${network}/consensus/accounts/${address}`] as const;
-};
+  return [`/${network}/consensus/accounts/${address}`] as const
+}
 
 export const getGetConsensusAccountsAddressQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusAccountsAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusAccountsAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusAccountsAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccountsAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusAccountsAddressMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusAccountsAddressQueryKey(network, address);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusAccountsAddressQueryKey(network, address)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusAccountsAddress>>
-  > = ({ signal }) =>
-    GetConsensusAccountsAddress(network, address, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusAccountsAddress>>> = ({ signal }) =>
+    GetConsensusAccountsAddress(network, address, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusAccountsAddress>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccountsAddress>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusAccountsAddressQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusAccountsAddress>>
->;
-export type GetConsensusAccountsAddressQueryError = void;
+>
+export type GetConsensusAccountsAddressQueryError = void
 
 /**
  * @summary Returns a consensus layer account.
@@ -4606,32 +4209,24 @@ export type GetConsensusAccountsAddressQueryError = void;
 
 export function useGetConsensusAccountsAddress<
   TData = Awaited<ReturnType<typeof GetConsensusAccountsAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusAccountsAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusAccountsAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccountsAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusAccountsAddressMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusAccountsAddressQueryOptions(
-    network,
-    address,
-    options
-  );
+  const queryOptions = getGetConsensusAccountsAddressQueryOptions(network, address, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -4641,86 +4236,65 @@ export const GetConsensusAccountsAddressDelegations = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusAccountsAddressDelegationsParams,
-  options?: SecondParameter<
-    typeof GetConsensusAccountsAddressDelegationsMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetConsensusAccountsAddressDelegationsMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetConsensusAccountsAddressDelegationsMutator<DelegationList>(
     {
       url: `/${encodeURIComponent(
-        String(network)
+        String(network),
       )}/consensus/accounts/${encodeURIComponent(String(address))}/delegations`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusAccountsAddressDelegationsQueryKey = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
-  params?: GetConsensusAccountsAddressDelegationsParams
+  params?: GetConsensusAccountsAddressDelegationsParams,
 ) => {
-  return [
-    `/${network}/consensus/accounts/${address}/delegations`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/accounts/${address}/delegations`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusAccountsAddressDelegationsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusAccountsAddressDelegationsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusAccountsAddressDelegationsMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusAccountsAddressDelegationsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusAccountsAddressDelegationsQueryKey(network, address, params);
+    queryOptions?.queryKey ?? getGetConsensusAccountsAddressDelegationsQueryKey(network, address, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>
-  > = ({ signal }) =>
-    GetConsensusAccountsAddressDelegations(
-      network,
-      address,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>> = ({
+    signal,
+  }) => GetConsensusAccountsAddressDelegations(network, address, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusAccountsAddressDelegationsQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>
->;
-export type GetConsensusAccountsAddressDelegationsQueryError = void;
+>
+export type GetConsensusAccountsAddressDelegationsQueryError = void
 
 /**
  * @summary Returns an account's delegations.
@@ -4728,36 +4302,30 @@ export type GetConsensusAccountsAddressDelegationsQueryError = void;
 
 export function useGetConsensusAccountsAddressDelegations<
   TData = Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusAccountsAddressDelegationsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusAccountsAddressDelegationsMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusAccountsAddressDelegationsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusAccountsAddressDelegationsQueryOptions(
     network,
     address,
     params,
-    options
-  );
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -4767,40 +4335,33 @@ export const GetConsensusAccountsAddressDelegationsTo = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusAccountsAddressDelegationsToParams,
-  options?: SecondParameter<
-    typeof GetConsensusAccountsAddressDelegationsToMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetConsensusAccountsAddressDelegationsToMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetConsensusAccountsAddressDelegationsToMutator<DelegationList>(
     {
-      url: `/${encodeURIComponent(
-        String(network)
-      )}/consensus/accounts/${encodeURIComponent(
-        String(address)
+      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(
+        String(address),
       )}/delegations_to`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusAccountsAddressDelegationsToQueryKey = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
-  params?: GetConsensusAccountsAddressDelegationsToParams
+  params?: GetConsensusAccountsAddressDelegationsToParams,
 ) => {
-  return [
-    `/${network}/consensus/accounts/${address}/delegations_to`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/accounts/${address}/delegations_to`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusAccountsAddressDelegationsToQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegationsTo>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
@@ -4810,32 +4371,18 @@ export const getGetConsensusAccountsAddressDelegationsToQueryOptions = <
       Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegationsTo>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusAccountsAddressDelegationsToMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetConsensusAccountsAddressDelegationsToMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusAccountsAddressDelegationsToQueryKey(
-      network,
-      address,
-      params
-    );
+    queryOptions?.queryKey ?? getGetConsensusAccountsAddressDelegationsToQueryKey(network, address, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegationsTo>>
-  > = ({ signal }) =>
-    GetConsensusAccountsAddressDelegationsTo(
-      network,
-      address,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegationsTo>>> = ({
+    signal,
+  }) => GetConsensusAccountsAddressDelegationsTo(network, address, params, requestOptions, signal)
 
   return {
     queryKey,
@@ -4846,13 +4393,13 @@ export const getGetConsensusAccountsAddressDelegationsToQueryOptions = <
     Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegationsTo>>,
     TError,
     TData
-  > & { queryKey: QueryKey };
-};
+  > & { queryKey: QueryKey }
+}
 
 export type GetConsensusAccountsAddressDelegationsToQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegationsTo>>
->;
-export type GetConsensusAccountsAddressDelegationsToQueryError = void;
+>
+export type GetConsensusAccountsAddressDelegationsToQueryError = void
 
 /**
  * @summary Returns a list of delegations to an account.
@@ -4860,7 +4407,7 @@ export type GetConsensusAccountsAddressDelegationsToQueryError = void;
 
 export function useGetConsensusAccountsAddressDelegationsTo<
   TData = Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegationsTo>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
@@ -4870,26 +4417,24 @@ export function useGetConsensusAccountsAddressDelegationsTo<
       Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegationsTo>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusAccountsAddressDelegationsToMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetConsensusAccountsAddressDelegationsToMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusAccountsAddressDelegationsToQueryOptions(
     network,
     address,
     params,
-    options
-  );
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -4899,79 +4444,59 @@ export const GetConsensusAccountsAddressDebondingDelegations = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusAccountsAddressDebondingDelegationsParams,
-  options?: SecondParameter<
-    typeof GetConsensusAccountsAddressDebondingDelegationsMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetConsensusAccountsAddressDebondingDelegationsMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetConsensusAccountsAddressDebondingDelegationsMutator<DebondingDelegationList>(
     {
-      url: `/${encodeURIComponent(
-        String(network)
-      )}/consensus/accounts/${encodeURIComponent(
-        String(address)
+      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(
+        String(address),
       )}/debonding_delegations`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusAccountsAddressDebondingDelegationsQueryKey = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
-  params?: GetConsensusAccountsAddressDebondingDelegationsParams
+  params?: GetConsensusAccountsAddressDebondingDelegationsParams,
 ) => {
   return [
     `/${network}/consensus/accounts/${address}/debonding_delegations`,
     ...(params ? [params] : []),
-  ] as const;
-};
+  ] as const
+}
 
 export const getGetConsensusAccountsAddressDebondingDelegationsQueryOptions = <
-  TData = Awaited<
-    ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusAccountsAddressDebondingDelegationsParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<
-        ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>
-      >,
+      Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusAccountsAddressDebondingDelegationsMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetConsensusAccountsAddressDebondingDelegationsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
     queryOptions?.queryKey ??
-    getGetConsensusAccountsAddressDebondingDelegationsQueryKey(
-      network,
-      address,
-      params
-    );
+    getGetConsensusAccountsAddressDebondingDelegationsQueryKey(network, address, params)
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>>
   > = ({ signal }) =>
-    GetConsensusAccountsAddressDebondingDelegations(
-      network,
-      address,
-      params,
-      requestOptions,
-      signal
-    );
+    GetConsensusAccountsAddressDebondingDelegations(network, address, params, requestOptions, signal)
 
   return {
     queryKey,
@@ -4982,56 +4507,48 @@ export const getGetConsensusAccountsAddressDebondingDelegationsQueryOptions = <
     Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>>,
     TError,
     TData
-  > & { queryKey: QueryKey };
-};
+  > & { queryKey: QueryKey }
+}
 
-export type GetConsensusAccountsAddressDebondingDelegationsQueryResult =
-  NonNullable<
-    Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>>
-  >;
-export type GetConsensusAccountsAddressDebondingDelegationsQueryError = void;
+export type GetConsensusAccountsAddressDebondingDelegationsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>>
+>
+export type GetConsensusAccountsAddressDebondingDelegationsQueryError = void
 
 /**
  * @summary Returns an account's debonding delegations.
  */
 
 export function useGetConsensusAccountsAddressDebondingDelegations<
-  TData = Awaited<
-    ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusAccountsAddressDebondingDelegationsParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<
-        ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>
-      >,
+      Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusAccountsAddressDebondingDelegationsMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetConsensusAccountsAddressDebondingDelegationsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions =
-    getGetConsensusAccountsAddressDebondingDelegationsQueryOptions(
-      network,
-      address,
-      params,
-      options
-    );
+  const queryOptions = getGetConsensusAccountsAddressDebondingDelegationsQueryOptions(
+    network,
+    address,
+    params,
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -5041,146 +4558,111 @@ export const GetConsensusAccountsAddressDebondingDelegationsTo = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusAccountsAddressDebondingDelegationsToParams,
-  options?: SecondParameter<
-    typeof GetConsensusAccountsAddressDebondingDelegationsToMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetConsensusAccountsAddressDebondingDelegationsToMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetConsensusAccountsAddressDebondingDelegationsToMutator<DebondingDelegationList>(
     {
-      url: `/${encodeURIComponent(
-        String(network)
-      )}/consensus/accounts/${encodeURIComponent(
-        String(address)
+      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(
+        String(address),
       )}/debonding_delegations_to`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusAccountsAddressDebondingDelegationsToQueryKey = (
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
-  params?: GetConsensusAccountsAddressDebondingDelegationsToParams
+  params?: GetConsensusAccountsAddressDebondingDelegationsToParams,
 ) => {
   return [
     `/${network}/consensus/accounts/${address}/debonding_delegations_to`,
     ...(params ? [params] : []),
-  ] as const;
-};
+  ] as const
+}
 
-export const getGetConsensusAccountsAddressDebondingDelegationsToQueryOptions =
-  <
-    TData = Awaited<
-      ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>
-    >,
-    TError = void
-  >(
-    network: 'mainnet' | 'testnet',
-    address: StakingAddress,
-    params?: GetConsensusAccountsAddressDebondingDelegationsToParams,
-    options?: {
-      query?: UseQueryOptions<
-        Awaited<
-          ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>
-        >,
-        TError,
-        TData
-      >;
-      request?: SecondParameter<
-        typeof GetConsensusAccountsAddressDebondingDelegationsToMutator
-      >;
-    }
-  ) => {
-    const { query: queryOptions, request: requestOptions } = options ?? {};
-
-    const queryKey =
-      queryOptions?.queryKey ??
-      getGetConsensusAccountsAddressDebondingDelegationsToQueryKey(
-        network,
-        address,
-        params
-      );
-
-    const queryFn: QueryFunction<
-      Awaited<
-        ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>
-      >
-    > = ({ signal }) =>
-      GetConsensusAccountsAddressDebondingDelegationsTo(
-        network,
-        address,
-        params,
-        requestOptions,
-        signal
-      );
-
-    return {
-      queryKey,
-      queryFn,
-      enabled: !!(network && address),
-      ...queryOptions,
-    } as UseQueryOptions<
-      Awaited<
-        ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>
-      >,
-      TError,
-      TData
-    > & { queryKey: QueryKey };
-  };
-
-export type GetConsensusAccountsAddressDebondingDelegationsToQueryResult =
-  NonNullable<
-    Awaited<
-      ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>
-    >
-  >;
-export type GetConsensusAccountsAddressDebondingDelegationsToQueryError = void;
-
-/**
- * @summary Returns a list of debonding delegations to an account.
- */
-
-export function useGetConsensusAccountsAddressDebondingDelegationsTo<
-  TData = Awaited<
-    ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>
-  >,
-  TError = void
+export const getGetConsensusAccountsAddressDebondingDelegationsToQueryOptions = <
+  TData = Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   address: StakingAddress,
   params?: GetConsensusAccountsAddressDebondingDelegationsToParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<
-        ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>
-      >,
+      Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusAccountsAddressDebondingDelegationsToMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetConsensusAccountsAddressDebondingDelegationsToMutator>
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetConsensusAccountsAddressDebondingDelegationsToQueryKey(network, address, params)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>>
+  > = ({ signal }) =>
+    GetConsensusAccountsAddressDebondingDelegationsTo(network, address, params, requestOptions, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(network && address),
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
+}
+
+export type GetConsensusAccountsAddressDebondingDelegationsToQueryResult = NonNullable<
+  Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>>
+>
+export type GetConsensusAccountsAddressDebondingDelegationsToQueryError = void
+
+/**
+ * @summary Returns a list of debonding delegations to an account.
+ */
+
+export function useGetConsensusAccountsAddressDebondingDelegationsTo<
+  TData = Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>>,
+  TError = void,
+>(
+  network: 'mainnet' | 'testnet',
+  address: StakingAddress,
+  params?: GetConsensusAccountsAddressDebondingDelegationsToParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>>,
+      TError,
+      TData
+    >
+    request?: SecondParameter<typeof GetConsensusAccountsAddressDebondingDelegationsToMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions =
-    getGetConsensusAccountsAddressDebondingDelegationsToQueryOptions(
-      network,
-      address,
-      params,
-      options
-    );
+  const queryOptions = getGetConsensusAccountsAddressDebondingDelegationsToQueryOptions(
+    network,
+    address,
+    params,
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -5190,7 +4672,7 @@ export const GetConsensusEpochs = (
   network: 'mainnet' | 'testnet',
   params?: GetConsensusEpochsParams,
   options?: SecondParameter<typeof GetConsensusEpochsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusEpochsMutator<EpochList>(
     {
@@ -5199,91 +4681,67 @@ export const GetConsensusEpochs = (
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusEpochsQueryKey = (
   network: 'mainnet' | 'testnet',
-  params?: GetConsensusEpochsParams
+  params?: GetConsensusEpochsParams,
 ) => {
-  return [`/${network}/consensus/epochs`, ...(params ? [params] : [])] as const;
-};
+  return [`/${network}/consensus/epochs`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusEpochsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusEpochs>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusEpochsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEpochs>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEpochsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEpochs>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEpochsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetConsensusEpochsQueryKey(network, params);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusEpochsQueryKey(network, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusEpochs>>
-  > = ({ signal }) =>
-    GetConsensusEpochs(network, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEpochs>>> = ({ signal }) =>
+    GetConsensusEpochs(network, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusEpochs>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEpochs>>, TError, TData> & { queryKey: QueryKey }
+}
 
-export type GetConsensusEpochsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetConsensusEpochs>>
->;
-export type GetConsensusEpochsQueryError = void;
+export type GetConsensusEpochsQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusEpochs>>>
+export type GetConsensusEpochsQueryError = void
 
 /**
  * @summary Returns a list of consensus epochs.
  */
 
-export function useGetConsensusEpochs<
-  TData = Awaited<ReturnType<typeof GetConsensusEpochs>>,
-  TError = void
->(
+export function useGetConsensusEpochs<TData = Awaited<ReturnType<typeof GetConsensusEpochs>>, TError = void>(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusEpochsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEpochs>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEpochsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEpochs>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEpochsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusEpochsQueryOptions(
-    network,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusEpochsQueryOptions(network, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -5293,69 +4751,54 @@ export const GetConsensusEpochsEpoch = (
   network: 'mainnet' | 'testnet',
   epoch: number,
   options?: SecondParameter<typeof GetConsensusEpochsEpochMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusEpochsEpochMutator<Epoch>(
     {
-      url: `/${encodeURIComponent(
-        String(network)
-      )}/consensus/epochs/${encodeURIComponent(String(epoch))}`,
+      url: `/${encodeURIComponent(String(network))}/consensus/epochs/${encodeURIComponent(String(epoch))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
-export const getGetConsensusEpochsEpochQueryKey = (
-  network: 'mainnet' | 'testnet',
-  epoch: number
-) => {
-  return [`/${network}/consensus/epochs/${epoch}`] as const;
-};
+export const getGetConsensusEpochsEpochQueryKey = (network: 'mainnet' | 'testnet', epoch: number) => {
+  return [`/${network}/consensus/epochs/${epoch}`] as const
+}
 
 export const getGetConsensusEpochsEpochQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   epoch: number,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEpochsEpochMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEpochsEpochMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusEpochsEpochQueryKey(network, epoch);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusEpochsEpochQueryKey(network, epoch)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>
-  > = ({ signal }) =>
-    GetConsensusEpochsEpoch(network, epoch, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>> = ({ signal }) =>
+    GetConsensusEpochsEpoch(network, epoch, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && epoch),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusEpochsEpochQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>
->;
-export type GetConsensusEpochsEpochQueryError = void;
+>
+export type GetConsensusEpochsEpochQueryError = void
 
 /**
  * @summary Returns a consensus epoch.
@@ -5363,32 +4806,24 @@ export type GetConsensusEpochsEpochQueryError = void;
 
 export function useGetConsensusEpochsEpoch<
   TData = Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   epoch: number,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusEpochsEpochMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusEpochsEpochMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusEpochsEpochQueryOptions(
-    network,
-    epoch,
-    options
-  );
+  const queryOptions = getGetConsensusEpochsEpochQueryOptions(network, epoch, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -5398,7 +4833,7 @@ export const GetConsensusProposals = (
   network: 'mainnet' | 'testnet',
   params?: GetConsensusProposalsParams,
   options?: SecondParameter<typeof GetConsensusProposalsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusProposalsMutator<ProposalList>(
     {
@@ -5407,61 +4842,47 @@ export const GetConsensusProposals = (
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusProposalsQueryKey = (
   network: 'mainnet' | 'testnet',
-  params?: GetConsensusProposalsParams
+  params?: GetConsensusProposalsParams,
 ) => {
-  return [
-    `/${network}/consensus/proposals`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/proposals`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusProposalsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusProposals>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusProposalsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusProposals>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusProposalsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposals>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusProposalsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetConsensusProposalsQueryKey(network, params);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusProposalsQueryKey(network, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusProposals>>
-  > = ({ signal }) =>
-    GetConsensusProposals(network, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusProposals>>> = ({ signal }) =>
+    GetConsensusProposals(network, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!network,
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusProposals>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposals>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
-export type GetConsensusProposalsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetConsensusProposals>>
->;
-export type GetConsensusProposalsQueryError = void;
+export type GetConsensusProposalsQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusProposals>>>
+export type GetConsensusProposalsQueryError = void
 
 /**
  * @summary Returns a list of governance proposals.
@@ -5469,32 +4890,24 @@ export type GetConsensusProposalsQueryError = void;
 
 export function useGetConsensusProposals<
   TData = Awaited<ReturnType<typeof GetConsensusProposals>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   params?: GetConsensusProposalsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusProposals>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusProposalsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposals>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusProposalsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusProposalsQueryOptions(
-    network,
-    params,
-    options
-  );
+  const queryOptions = getGetConsensusProposalsQueryOptions(network, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -5504,74 +4917,59 @@ export const GetConsensusProposalsProposalId = (
   network: 'mainnet' | 'testnet',
   proposalId: number,
   options?: SecondParameter<typeof GetConsensusProposalsProposalIdMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusProposalsProposalIdMutator<Proposal>(
     {
       url: `/${encodeURIComponent(
-        String(network)
+        String(network),
       )}/consensus/proposals/${encodeURIComponent(String(proposalId))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusProposalsProposalIdQueryKey = (
   network: 'mainnet' | 'testnet',
-  proposalId: number
+  proposalId: number,
 ) => {
-  return [`/${network}/consensus/proposals/${proposalId}`] as const;
-};
+  return [`/${network}/consensus/proposals/${proposalId}`] as const
+}
 
 export const getGetConsensusProposalsProposalIdQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   proposalId: number,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusProposalsProposalIdMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusProposalsProposalIdMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusProposalsProposalIdQueryKey(network, proposalId);
+  const queryKey = queryOptions?.queryKey ?? getGetConsensusProposalsProposalIdQueryKey(network, proposalId)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>
-  > = ({ signal }) =>
-    GetConsensusProposalsProposalId(
-      network,
-      proposalId,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>> = ({ signal }) =>
+    GetConsensusProposalsProposalId(network, proposalId, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && proposalId),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusProposalsProposalIdQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>
->;
-export type GetConsensusProposalsProposalIdQueryError = void;
+>
+export type GetConsensusProposalsProposalIdQueryError = void
 
 /**
  * @summary Returns a governance proposal.
@@ -5579,32 +4977,24 @@ export type GetConsensusProposalsProposalIdQueryError = void;
 
 export function useGetConsensusProposalsProposalId<
   TData = Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   proposalId: number,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetConsensusProposalsProposalIdMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusProposalsProposalIdMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetConsensusProposalsProposalIdQueryOptions(
-    network,
-    proposalId,
-    options
-  );
+  const queryOptions = getGetConsensusProposalsProposalIdQueryOptions(network, proposalId, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -5615,87 +5005,64 @@ export const GetConsensusProposalsProposalIdVotes = (
   proposalId: number,
   params?: GetConsensusProposalsProposalIdVotesParams,
   options?: SecondParameter<typeof GetConsensusProposalsProposalIdVotesMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetConsensusProposalsProposalIdVotesMutator<ProposalVotes>(
     {
       url: `/${encodeURIComponent(
-        String(network)
+        String(network),
       )}/consensus/proposals/${encodeURIComponent(String(proposalId))}/votes`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetConsensusProposalsProposalIdVotesQueryKey = (
   network: 'mainnet' | 'testnet',
   proposalId: number,
-  params?: GetConsensusProposalsProposalIdVotesParams
+  params?: GetConsensusProposalsProposalIdVotesParams,
 ) => {
-  return [
-    `/${network}/consensus/proposals/${proposalId}/votes`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/consensus/proposals/${proposalId}/votes`, ...(params ? [params] : [])] as const
+}
 
 export const getGetConsensusProposalsProposalIdVotesQueryOptions = <
   TData = Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   proposalId: number,
   params?: GetConsensusProposalsProposalIdVotesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusProposalsProposalIdVotesMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusProposalsProposalIdVotesMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetConsensusProposalsProposalIdVotesQueryKey(
-      network,
-      proposalId,
-      params
-    );
+    queryOptions?.queryKey ?? getGetConsensusProposalsProposalIdVotesQueryKey(network, proposalId, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>
-  > = ({ signal }) =>
-    GetConsensusProposalsProposalIdVotes(
-      network,
-      proposalId,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>> = ({
+    signal,
+  }) => GetConsensusProposalsProposalIdVotes(network, proposalId, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && proposalId),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetConsensusProposalsProposalIdVotesQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>
->;
-export type GetConsensusProposalsProposalIdVotesQueryError = void;
+>
+export type GetConsensusProposalsProposalIdVotesQueryError = void
 
 /**
  * @summary Returns a list of votes for a governance proposal.
@@ -5703,36 +5070,30 @@ export type GetConsensusProposalsProposalIdVotesQueryError = void;
 
 export function useGetConsensusProposalsProposalIdVotes<
   TData = Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   proposalId: number,
   params?: GetConsensusProposalsProposalIdVotesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetConsensusProposalsProposalIdVotesMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>, TError, TData>
+    request?: SecondParameter<typeof GetConsensusProposalsProposalIdVotesMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusProposalsProposalIdVotesQueryOptions(
     network,
     proposalId,
     params,
-    options
-  );
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -5743,110 +5104,79 @@ export const GetRuntimeBlocks = (
   runtime: Runtime,
   params?: GetRuntimeBlocksParams,
   options?: SecondParameter<typeof GetRuntimeBlocksMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeBlocksMutator<RuntimeBlockList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
-      )}/blocks`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/blocks`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeBlocksQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  params?: GetRuntimeBlocksParams
+  params?: GetRuntimeBlocksParams,
 ) => {
-  return [
-    `/${network}/${runtime}/blocks`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/blocks`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeBlocksQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeBlocks>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeBlocksParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeBlocks>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeBlocksMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeBlocks>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeBlocksMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeBlocksQueryKey(network, runtime, params);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeBlocksQueryKey(network, runtime, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeBlocks>>
-  > = ({ signal }) =>
-    GetRuntimeBlocks(network, runtime, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeBlocks>>> = ({ signal }) =>
+    GetRuntimeBlocks(network, runtime, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeBlocks>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeBlocks>>, TError, TData> & { queryKey: QueryKey }
+}
 
-export type GetRuntimeBlocksQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetRuntimeBlocks>>
->;
-export type GetRuntimeBlocksQueryError = void;
+export type GetRuntimeBlocksQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeBlocks>>>
+export type GetRuntimeBlocksQueryError = void
 
 /**
  * @summary Returns a list of Runtime blocks.
  */
 
-export function useGetRuntimeBlocks<
-  TData = Awaited<ReturnType<typeof GetRuntimeBlocks>>,
-  TError = void
->(
+export function useGetRuntimeBlocks<TData = Awaited<ReturnType<typeof GetRuntimeBlocks>>, TError = void>(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeBlocksParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeBlocks>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeBlocksMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeBlocks>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeBlocksMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeBlocksQueryOptions(
-    network,
-    runtime,
-    params,
-    options
-  );
+  const queryOptions = getGetRuntimeBlocksQueryOptions(network, runtime, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -5857,75 +5187,60 @@ export const GetRuntimeTransactions = (
   runtime: Runtime,
   params?: GetRuntimeTransactionsParams,
   options?: SecondParameter<typeof GetRuntimeTransactionsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeTransactionsMutator<RuntimeTransactionList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
-      )}/transactions`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/transactions`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeTransactionsQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  params?: GetRuntimeTransactionsParams
+  params?: GetRuntimeTransactionsParams,
 ) => {
-  return [
-    `/${network}/${runtime}/transactions`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/transactions`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeTransactionsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeTransactions>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeTransactionsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeTransactions>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeTransactionsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeTransactions>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeTransactionsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeTransactionsQueryKey(network, runtime, params);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeTransactionsQueryKey(network, runtime, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeTransactions>>
-  > = ({ signal }) =>
-    GetRuntimeTransactions(network, runtime, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeTransactions>>> = ({ signal }) =>
+    GetRuntimeTransactions(network, runtime, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeTransactions>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeTransactions>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeTransactionsQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeTransactions>>
->;
-export type GetRuntimeTransactionsQueryError = void;
+>
+export type GetRuntimeTransactionsQueryError = void
 
 /**
  * @summary Returns a list of Runtime transactions.
@@ -5933,34 +5248,25 @@ export type GetRuntimeTransactionsQueryError = void;
 
 export function useGetRuntimeTransactions<
   TData = Awaited<ReturnType<typeof GetRuntimeTransactions>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeTransactionsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeTransactions>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeTransactionsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeTransactions>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeTransactionsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeTransactionsQueryOptions(
-    network,
-    runtime,
-    params,
-    options
-  );
+  const queryOptions = getGetRuntimeTransactionsQueryOptions(network, runtime, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -5971,77 +5277,61 @@ export const GetRuntimeTransactionsTxHash = (
   runtime: Runtime,
   txHash: string,
   options?: SecondParameter<typeof GetRuntimeTransactionsTxHashMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeTransactionsTxHashMutator<RuntimeTransactionList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/transactions/${encodeURIComponent(String(txHash))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeTransactionsTxHashQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  txHash: string
+  txHash: string,
 ) => {
-  return [`/${network}/${runtime}/transactions/${txHash}`] as const;
-};
+  return [`/${network}/${runtime}/transactions/${txHash}`] as const
+}
 
 export const getGetRuntimeTransactionsTxHashQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   txHash: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeTransactionsTxHashMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeTransactionsTxHashMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeTransactionsTxHashQueryKey(network, runtime, txHash);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeTransactionsTxHashQueryKey(network, runtime, txHash)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>
-  > = ({ signal }) =>
-    GetRuntimeTransactionsTxHash(
-      network,
-      runtime,
-      txHash,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>> = ({ signal }) =>
+    GetRuntimeTransactionsTxHash(network, runtime, txHash, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && txHash),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeTransactionsTxHashQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>
->;
-export type GetRuntimeTransactionsTxHashQueryError = void;
+>
+export type GetRuntimeTransactionsTxHashQueryError = void
 
 /**
  * @summary Returns runtime transactions with the given transaction hash.
@@ -6049,34 +5339,25 @@ export type GetRuntimeTransactionsTxHashQueryError = void;
 
 export function useGetRuntimeTransactionsTxHash<
   TData = Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   txHash: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeTransactionsTxHashMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeTransactionsTxHashMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeTransactionsTxHashQueryOptions(
-    network,
-    runtime,
-    txHash,
-    options
-  );
+  const queryOptions = getGetRuntimeTransactionsTxHashQueryOptions(network, runtime, txHash, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -6087,110 +5368,79 @@ export const GetRuntimeEvents = (
   runtime: Runtime,
   params?: GetRuntimeEventsParams,
   options?: SecondParameter<typeof GetRuntimeEventsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeEventsMutator<RuntimeEventList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
-      )}/events`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/events`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeEventsQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  params?: GetRuntimeEventsParams
+  params?: GetRuntimeEventsParams,
 ) => {
-  return [
-    `/${network}/${runtime}/events`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/events`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeEventsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeEvents>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeEventsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvents>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEventsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvents>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEventsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeEventsQueryKey(network, runtime, params);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeEventsQueryKey(network, runtime, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeEvents>>
-  > = ({ signal }) =>
-    GetRuntimeEvents(network, runtime, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeEvents>>> = ({ signal }) =>
+    GetRuntimeEvents(network, runtime, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeEvents>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvents>>, TError, TData> & { queryKey: QueryKey }
+}
 
-export type GetRuntimeEventsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetRuntimeEvents>>
->;
-export type GetRuntimeEventsQueryError = void;
+export type GetRuntimeEventsQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeEvents>>>
+export type GetRuntimeEventsQueryError = void
 
 /**
  * @summary Returns a list of runtime events.
  */
 
-export function useGetRuntimeEvents<
-  TData = Awaited<ReturnType<typeof GetRuntimeEvents>>,
-  TError = void
->(
+export function useGetRuntimeEvents<TData = Awaited<ReturnType<typeof GetRuntimeEvents>>, TError = void>(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeEventsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvents>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEventsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvents>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEventsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeEventsQueryOptions(
-    network,
-    runtime,
-    params,
-    options
-  );
+  const queryOptions = getGetRuntimeEventsQueryOptions(network, runtime, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -6201,75 +5451,58 @@ export const GetRuntimeEvmTokens = (
   runtime: Runtime,
   params?: GetRuntimeEvmTokensParams,
   options?: SecondParameter<typeof GetRuntimeEvmTokensMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeEvmTokensMutator<EvmTokenList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
-      )}/evm_tokens`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/evm_tokens`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeEvmTokensQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  params?: GetRuntimeEvmTokensParams
+  params?: GetRuntimeEvmTokensParams,
 ) => {
-  return [
-    `/${network}/${runtime}/evm_tokens`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/evm_tokens`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeEvmTokensQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokens>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeEvmTokensParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokens>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokens>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeEvmTokensQueryKey(network, runtime, params);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeEvmTokensQueryKey(network, runtime, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokens>>
-  > = ({ signal }) =>
-    GetRuntimeEvmTokens(network, runtime, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeEvmTokens>>> = ({ signal }) =>
+    GetRuntimeEvmTokens(network, runtime, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokens>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokens>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
-export type GetRuntimeEvmTokensQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetRuntimeEvmTokens>>
->;
-export type GetRuntimeEvmTokensQueryError = void;
+export type GetRuntimeEvmTokensQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeEvmTokens>>>
+export type GetRuntimeEvmTokensQueryError = void
 
 /**
  * @summary Returns a list of EVM (ERC-20, ...) tokens on the runtime.
@@ -6277,34 +5510,25 @@ export type GetRuntimeEvmTokensQueryError = void;
 
 export function useGetRuntimeEvmTokens<
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokens>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeEvmTokensParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokens>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokens>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeEvmTokensQueryOptions(
-    network,
-    runtime,
-    params,
-    options
-  );
+  const queryOptions = getGetRuntimeEvmTokensQueryOptions(network, runtime, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -6315,77 +5539,61 @@ export const GetRuntimeEvmTokensAddress = (
   runtime: Runtime,
   address: EthOrOasisAddress,
   options?: SecondParameter<typeof GetRuntimeEvmTokensAddressMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeEvmTokensAddressMutator<EvmToken>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/evm_tokens/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeEvmTokensAddressQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  address: EthOrOasisAddress
+  address: EthOrOasisAddress,
 ) => {
-  return [`/${network}/${runtime}/evm_tokens/${address}`] as const;
-};
+  return [`/${network}/${runtime}/evm_tokens/${address}`] as const
+}
 
 export const getGetRuntimeEvmTokensAddressQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeEvmTokensAddressQueryKey(network, runtime, address);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeEvmTokensAddressQueryKey(network, runtime, address)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>
-  > = ({ signal }) =>
-    GetRuntimeEvmTokensAddress(
-      network,
-      runtime,
-      address,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>> = ({ signal }) =>
+    GetRuntimeEvmTokensAddress(network, runtime, address, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeEvmTokensAddressQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>
->;
-export type GetRuntimeEvmTokensAddressQueryError = void;
+>
+export type GetRuntimeEvmTokensAddressQueryError = void
 
 /**
  * @summary Returns info on an EVM (ERC-20, ...) token on the runtime.
@@ -6393,34 +5601,25 @@ export type GetRuntimeEvmTokensAddressQueryError = void;
 
 export function useGetRuntimeEvmTokensAddress<
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeEvmTokensAddressQueryOptions(
-    network,
-    runtime,
-    address,
-    options
-  );
+  const queryOptions = getGetRuntimeEvmTokensAddressQueryOptions(network, runtime, address, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -6434,89 +5633,66 @@ export const GetRuntimeEvmTokensAddressHolders = (
   address: EthOrOasisAddress,
   params?: GetRuntimeEvmTokensAddressHoldersParams,
   options?: SecondParameter<typeof GetRuntimeEvmTokensAddressHoldersMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeEvmTokensAddressHoldersMutator<TokenHolderList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/evm_tokens/${encodeURIComponent(String(address))}/holders`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeEvmTokensAddressHoldersQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
-  params?: GetRuntimeEvmTokensAddressHoldersParams
+  params?: GetRuntimeEvmTokensAddressHoldersParams,
 ) => {
-  return [
-    `/${network}/${runtime}/evm_tokens/${address}/holders`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/evm_tokens/${address}/holders`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeEvmTokensAddressHoldersQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   params?: GetRuntimeEvmTokensAddressHoldersParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressHoldersMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressHoldersMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeEvmTokensAddressHoldersQueryKey(
-      network,
-      runtime,
-      address,
-      params
-    );
+    queryOptions?.queryKey ?? getGetRuntimeEvmTokensAddressHoldersQueryKey(network, runtime, address, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>
-  > = ({ signal }) =>
-    GetRuntimeEvmTokensAddressHolders(
-      network,
-      runtime,
-      address,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>> = ({
+    signal,
+  }) => GetRuntimeEvmTokensAddressHolders(network, runtime, address, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeEvmTokensAddressHoldersQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>
->;
-export type GetRuntimeEvmTokensAddressHoldersQueryError = void;
+>
+export type GetRuntimeEvmTokensAddressHoldersQueryError = void
 
 /**
  * @summary Returns the list of holders of an EVM (ERC-20, ...) token.
@@ -6526,36 +5702,32 @@ This endpoint does not verify that `address` is actually an EVM token; if it is 
 
 export function useGetRuntimeEvmTokensAddressHolders<
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   params?: GetRuntimeEvmTokensAddressHoldersParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressHoldersMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressHolders>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressHoldersMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeEvmTokensAddressHoldersQueryOptions(
     network,
     runtime,
     address,
     params,
-    options
-  );
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -6569,89 +5741,65 @@ export const GetRuntimeEvmTokensAddressNfts = (
   address: EthOrOasisAddress,
   params?: GetRuntimeEvmTokensAddressNftsParams,
   options?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeEvmTokensAddressNftsMutator<EvmNftList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/evm_tokens/${encodeURIComponent(String(address))}/nfts`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeEvmTokensAddressNftsQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
-  params?: GetRuntimeEvmTokensAddressNftsParams
+  params?: GetRuntimeEvmTokensAddressNftsParams,
 ) => {
-  return [
-    `/${network}/${runtime}/evm_tokens/${address}/nfts`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/evm_tokens/${address}/nfts`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeEvmTokensAddressNftsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   params?: GetRuntimeEvmTokensAddressNftsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeEvmTokensAddressNftsQueryKey(
-      network,
-      runtime,
-      address,
-      params
-    );
+    queryOptions?.queryKey ?? getGetRuntimeEvmTokensAddressNftsQueryKey(network, runtime, address, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>
-  > = ({ signal }) =>
-    GetRuntimeEvmTokensAddressNfts(
-      network,
-      runtime,
-      address,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>> = ({ signal }) =>
+    GetRuntimeEvmTokensAddressNfts(network, runtime, address, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeEvmTokensAddressNftsQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>
->;
-export type GetRuntimeEvmTokensAddressNftsQueryError = void;
+>
+export type GetRuntimeEvmTokensAddressNftsQueryError = void
 
 /**
  * @summary Returns the list of non-fungible token (NFT) instances of an EVM (ERC-721, ...) token.
@@ -6661,36 +5809,32 @@ This endpoint does not verify that `address` is actually an EVM token; if it is 
 
 export function useGetRuntimeEvmTokensAddressNfts<
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   params?: GetRuntimeEvmTokensAddressNftsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNfts>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeEvmTokensAddressNftsQueryOptions(
     network,
     runtime,
     address,
     params,
-    options
-  );
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -6703,82 +5847,64 @@ export const GetRuntimeEvmTokensAddressNftsId = (
   address: EthOrOasisAddress,
   id: TextBigInt,
   options?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsIdMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeEvmTokensAddressNftsIdMutator<EvmNft>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
-      )}/evm_tokens/${encodeURIComponent(
-        String(address)
-      )}/nfts/${encodeURIComponent(String(id))}`,
+        String(runtime),
+      )}/evm_tokens/${encodeURIComponent(String(address))}/nfts/${encodeURIComponent(String(id))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeEvmTokensAddressNftsIdQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
-  id: TextBigInt
+  id: TextBigInt,
 ) => {
-  return [`/${network}/${runtime}/evm_tokens/${address}/nfts/${id}`] as const;
-};
+  return [`/${network}/${runtime}/evm_tokens/${address}/nfts/${id}`] as const
+}
 
 export const getGetRuntimeEvmTokensAddressNftsIdQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   id: TextBigInt,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsIdMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsIdMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeEvmTokensAddressNftsIdQueryKey(network, runtime, address, id);
+    queryOptions?.queryKey ?? getGetRuntimeEvmTokensAddressNftsIdQueryKey(network, runtime, address, id)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>
-  > = ({ signal }) =>
-    GetRuntimeEvmTokensAddressNftsId(
-      network,
-      runtime,
-      address,
-      id,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>> = ({ signal }) =>
+    GetRuntimeEvmTokensAddressNftsId(network, runtime, address, id, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && address && id),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeEvmTokensAddressNftsIdQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>
->;
-export type GetRuntimeEvmTokensAddressNftsIdQueryError = void;
+>
+export type GetRuntimeEvmTokensAddressNftsIdQueryError = void
 
 /**
  * @summary Returns the non-fungible token (NFT) instance of an EVM (ERC-721, ...) token.
@@ -6787,36 +5913,26 @@ export type GetRuntimeEvmTokensAddressNftsIdQueryError = void;
 
 export function useGetRuntimeEvmTokensAddressNftsId<
   TData = Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   id: TextBigInt,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsIdMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokensAddressNftsId>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeEvmTokensAddressNftsIdMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeEvmTokensAddressNftsIdQueryOptions(
-    network,
-    runtime,
-    address,
-    id,
-    options
-  );
+  const queryOptions = getGetRuntimeEvmTokensAddressNftsIdQueryOptions(network, runtime, address, id, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -6827,77 +5943,61 @@ export const GetRuntimeAccountsAddress = (
   runtime: Runtime,
   address: EthOrOasisAddress,
   options?: SecondParameter<typeof GetRuntimeAccountsAddressMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeAccountsAddressMutator<RuntimeAccount>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/accounts/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeAccountsAddressQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  address: EthOrOasisAddress
+  address: EthOrOasisAddress,
 ) => {
-  return [`/${network}/${runtime}/accounts/${address}`] as const;
-};
+  return [`/${network}/${runtime}/accounts/${address}`] as const
+}
 
 export const getGetRuntimeAccountsAddressQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeAccountsAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeAccountsAddressMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeAccountsAddressQueryKey(network, runtime, address);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeAccountsAddressQueryKey(network, runtime, address)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>
-  > = ({ signal }) =>
-    GetRuntimeAccountsAddress(
-      network,
-      runtime,
-      address,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>> = ({ signal }) =>
+    GetRuntimeAccountsAddress(network, runtime, address, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeAccountsAddressQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>
->;
-export type GetRuntimeAccountsAddressQueryError = void;
+>
+export type GetRuntimeAccountsAddressQueryError = void
 
 /**
  * @summary Returns a runtime account.
@@ -6905,34 +6005,25 @@ export type GetRuntimeAccountsAddressQueryError = void;
 
 export function useGetRuntimeAccountsAddress<
   TData = Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeAccountsAddressMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeAccountsAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeAccountsAddressMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeAccountsAddressQueryOptions(
-    network,
-    runtime,
-    address,
-    options
-  );
+  const queryOptions = getGetRuntimeAccountsAddressQueryOptions(network, runtime, address, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -6945,84 +6036,65 @@ export const GetRuntimeAccountsAddressNfts = (
   address: EthOrOasisAddress,
   params?: GetRuntimeAccountsAddressNftsParams,
   options?: SecondParameter<typeof GetRuntimeAccountsAddressNftsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeAccountsAddressNftsMutator<EvmNftList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/accounts/${encodeURIComponent(String(address))}/nfts`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeAccountsAddressNftsQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
-  params?: GetRuntimeAccountsAddressNftsParams
+  params?: GetRuntimeAccountsAddressNftsParams,
 ) => {
-  return [
-    `/${network}/${runtime}/accounts/${address}/nfts`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/accounts/${address}/nfts`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeAccountsAddressNftsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   params?: GetRuntimeAccountsAddressNftsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeAccountsAddressNftsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeAccountsAddressNftsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeAccountsAddressNftsQueryKey(network, runtime, address, params);
+    queryOptions?.queryKey ?? getGetRuntimeAccountsAddressNftsQueryKey(network, runtime, address, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>
-  > = ({ signal }) =>
-    GetRuntimeAccountsAddressNfts(
-      network,
-      runtime,
-      address,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>> = ({ signal }) =>
+    GetRuntimeAccountsAddressNfts(network, runtime, address, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeAccountsAddressNftsQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>
->;
-export type GetRuntimeAccountsAddressNftsQueryError = void;
+>
+export type GetRuntimeAccountsAddressNftsQueryError = void
 
 /**
  * @summary Returns the list of non-fungible token (NFT) instances owned by an account.
@@ -7031,36 +6103,32 @@ export type GetRuntimeAccountsAddressNftsQueryError = void;
 
 export function useGetRuntimeAccountsAddressNfts<
   TData = Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: EthOrOasisAddress,
   params?: GetRuntimeAccountsAddressNftsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeAccountsAddressNftsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeAccountsAddressNfts>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeAccountsAddressNftsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeAccountsAddressNftsQueryOptions(
     network,
     runtime,
     address,
     params,
-    options
-  );
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -7070,101 +6138,72 @@ export const GetRuntimeStatus = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   options?: SecondParameter<typeof GetRuntimeStatusMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeStatusMutator<RuntimeStatus>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
-      )}/status`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/status`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
-export const getGetRuntimeStatusQueryKey = (
-  network: 'mainnet' | 'testnet',
-  runtime: Runtime
-) => {
-  return [`/${network}/${runtime}/status`] as const;
-};
+export const getGetRuntimeStatusQueryKey = (network: 'mainnet' | 'testnet', runtime: Runtime) => {
+  return [`/${network}/${runtime}/status`] as const
+}
 
 export const getGetRuntimeStatusQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeStatus>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeStatus>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeStatusMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeStatus>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeStatusMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetRuntimeStatusQueryKey(network, runtime);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeStatusQueryKey(network, runtime)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeStatus>>
-  > = ({ signal }) =>
-    GetRuntimeStatus(network, runtime, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeStatus>>> = ({ signal }) =>
+    GetRuntimeStatus(network, runtime, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeStatus>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeStatus>>, TError, TData> & { queryKey: QueryKey }
+}
 
-export type GetRuntimeStatusQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetRuntimeStatus>>
->;
-export type GetRuntimeStatusQueryError = void;
+export type GetRuntimeStatusQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeStatus>>>
+export type GetRuntimeStatusQueryError = void
 
 /**
  * @summary Returns the runtime status.
  */
 
-export function useGetRuntimeStatus<
-  TData = Awaited<ReturnType<typeof GetRuntimeStatus>>,
-  TError = void
->(
+export function useGetRuntimeStatus<TData = Awaited<ReturnType<typeof GetRuntimeStatus>>, TError = void>(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeStatus>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeStatusMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeStatus>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeStatusMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeStatusQueryOptions(
-    network,
-    runtime,
-    options
-  );
+  const queryOptions = getGetRuntimeStatusQueryOptions(network, runtime, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -7175,110 +6214,79 @@ export const GetRuntimeRoflApps = (
   runtime: Runtime,
   params?: GetRuntimeRoflAppsParams,
   options?: SecondParameter<typeof GetRuntimeRoflAppsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflAppsMutator<RoflAppList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
-      )}/rofl_apps`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/rofl_apps`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflAppsQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  params?: GetRuntimeRoflAppsParams
+  params?: GetRuntimeRoflAppsParams,
 ) => {
-  return [
-    `/${network}/${runtime}/rofl_apps`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/rofl_apps`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeRoflAppsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeRoflApps>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeRoflAppsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflApps>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflApps>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeRoflAppsQueryKey(network, runtime, params);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeRoflAppsQueryKey(network, runtime, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflApps>>
-  > = ({ signal }) =>
-    GetRuntimeRoflApps(network, runtime, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflApps>>> = ({ signal }) =>
+    GetRuntimeRoflApps(network, runtime, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeRoflApps>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflApps>>, TError, TData> & { queryKey: QueryKey }
+}
 
-export type GetRuntimeRoflAppsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetRuntimeRoflApps>>
->;
-export type GetRuntimeRoflAppsQueryError = void;
+export type GetRuntimeRoflAppsQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeRoflApps>>>
+export type GetRuntimeRoflAppsQueryError = void
 
 /**
  * @summary Returns a list of ROFL apps on the runtime.
  */
 
-export function useGetRuntimeRoflApps<
-  TData = Awaited<ReturnType<typeof GetRuntimeRoflApps>>,
-  TError = void
->(
+export function useGetRuntimeRoflApps<TData = Awaited<ReturnType<typeof GetRuntimeRoflApps>>, TError = void>(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeRoflAppsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflApps>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflApps>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeRoflAppsQueryOptions(
-    network,
-    runtime,
-    params,
-    options
-  );
+  const queryOptions = getGetRuntimeRoflAppsQueryOptions(network, runtime, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -7289,71 +6297,59 @@ export const GetRuntimeRoflAppsId = (
   runtime: Runtime,
   id: string,
   options?: SecondParameter<typeof GetRuntimeRoflAppsIdMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflAppsIdMutator<RoflApp>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/rofl_apps/${encodeURIComponent(String(id))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflAppsIdQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  id: string
+  id: string,
 ) => {
-  return [`/${network}/${runtime}/rofl_apps/${id}`] as const;
-};
+  return [`/${network}/${runtime}/rofl_apps/${id}`] as const
+}
 
 export const getGetRuntimeRoflAppsIdQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsIdMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeRoflAppsIdQueryKey(network, runtime, id);
+  const queryKey = queryOptions?.queryKey ?? getGetRuntimeRoflAppsIdQueryKey(network, runtime, id)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>
-  > = ({ signal }) =>
-    GetRuntimeRoflAppsId(network, runtime, id, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>> = ({ signal }) =>
+    GetRuntimeRoflAppsId(network, runtime, id, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && id),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
-export type GetRuntimeRoflAppsIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>
->;
-export type GetRuntimeRoflAppsIdQueryError = void;
+export type GetRuntimeRoflAppsIdQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>>
+export type GetRuntimeRoflAppsIdQueryError = void
 
 /**
  * @summary Returns a specific ROFL app.
@@ -7361,34 +6357,25 @@ export type GetRuntimeRoflAppsIdQueryError = void;
 
 export function useGetRuntimeRoflAppsId<
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsIdMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeRoflAppsIdQueryOptions(
-    network,
-    runtime,
-    id,
-    options
-  );
+  const queryOptions = getGetRuntimeRoflAppsIdQueryOptions(network, runtime, id, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -7403,84 +6390,65 @@ export const GetRuntimeRoflAppsIdTransactions = (
   id: string,
   params?: GetRuntimeRoflAppsIdTransactionsParams,
   options?: SecondParameter<typeof GetRuntimeRoflAppsIdTransactionsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflAppsIdTransactionsMutator<RuntimeTransactionList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/rofl_apps/${encodeURIComponent(String(id))}/transactions`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflAppsIdTransactionsQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
-  params?: GetRuntimeRoflAppsIdTransactionsParams
+  params?: GetRuntimeRoflAppsIdTransactionsParams,
 ) => {
-  return [
-    `/${network}/${runtime}/rofl_apps/${id}/transactions`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/rofl_apps/${id}/transactions`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeRoflAppsIdTransactionsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
   params?: GetRuntimeRoflAppsIdTransactionsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsIdTransactionsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdTransactionsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeRoflAppsIdTransactionsQueryKey(network, runtime, id, params);
+    queryOptions?.queryKey ?? getGetRuntimeRoflAppsIdTransactionsQueryKey(network, runtime, id, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>
-  > = ({ signal }) =>
-    GetRuntimeRoflAppsIdTransactions(
-      network,
-      runtime,
-      id,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>> = ({ signal }) =>
+    GetRuntimeRoflAppsIdTransactions(network, runtime, id, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && id),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeRoflAppsIdTransactionsQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>
->;
-export type GetRuntimeRoflAppsIdTransactionsQueryError = void;
+>
+export type GetRuntimeRoflAppsIdTransactionsQueryError = void
 
 /**
  * @summary Returns a list of "managing" transactions of the ROFL app.
@@ -7491,36 +6459,26 @@ the `/rofl_apps/{id}/instance_transactions` endpoint.
 
 export function useGetRuntimeRoflAppsIdTransactions<
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
   params?: GetRuntimeRoflAppsIdTransactionsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsIdTransactionsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdTransactionsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeRoflAppsIdTransactionsQueryOptions(
-    network,
-    runtime,
-    id,
-    params,
-    options
-  );
+  const queryOptions = getGetRuntimeRoflAppsIdTransactionsQueryOptions(network, runtime, id, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -7531,39 +6489,37 @@ export const GetRuntimeRoflAppsIdInstanceTransactions = (
   runtime: Runtime,
   id: string,
   params?: GetRuntimeRoflAppsIdInstanceTransactionsParams,
-  options?: SecondParameter<
-    typeof GetRuntimeRoflAppsIdInstanceTransactionsMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetRuntimeRoflAppsIdInstanceTransactionsMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflAppsIdInstanceTransactionsMutator<RuntimeTransactionList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/rofl_apps/${encodeURIComponent(String(id))}/instance_transactions`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflAppsIdInstanceTransactionsQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
-  params?: GetRuntimeRoflAppsIdInstanceTransactionsParams
+  params?: GetRuntimeRoflAppsIdInstanceTransactionsParams,
 ) => {
   return [
     `/${network}/${runtime}/rofl_apps/${id}/instance_transactions`,
     ...(params ? [params] : []),
-  ] as const;
-};
+  ] as const
+}
 
 export const getGetRuntimeRoflAppsIdInstanceTransactionsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstanceTransactions>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -7574,34 +6530,19 @@ export const getGetRuntimeRoflAppsIdInstanceTransactionsQueryOptions = <
       Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstanceTransactions>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflAppsIdInstanceTransactionsMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstanceTransactionsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
     queryOptions?.queryKey ??
-    getGetRuntimeRoflAppsIdInstanceTransactionsQueryKey(
-      network,
-      runtime,
-      id,
-      params
-    );
+    getGetRuntimeRoflAppsIdInstanceTransactionsQueryKey(network, runtime, id, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstanceTransactions>>
-  > = ({ signal }) =>
-    GetRuntimeRoflAppsIdInstanceTransactions(
-      network,
-      runtime,
-      id,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstanceTransactions>>> = ({
+    signal,
+  }) => GetRuntimeRoflAppsIdInstanceTransactions(network, runtime, id, params, requestOptions, signal)
 
   return {
     queryKey,
@@ -7612,13 +6553,13 @@ export const getGetRuntimeRoflAppsIdInstanceTransactionsQueryOptions = <
     Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstanceTransactions>>,
     TError,
     TData
-  > & { queryKey: QueryKey };
-};
+  > & { queryKey: QueryKey }
+}
 
 export type GetRuntimeRoflAppsIdInstanceTransactionsQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstanceTransactions>>
->;
-export type GetRuntimeRoflAppsIdInstanceTransactionsQueryError = void;
+>
+export type GetRuntimeRoflAppsIdInstanceTransactionsQueryError = void
 
 /**
  * @summary Returns a list of transactions submitted by instances of the ROFL app.
@@ -7626,7 +6567,7 @@ export type GetRuntimeRoflAppsIdInstanceTransactionsQueryError = void;
 
 export function useGetRuntimeRoflAppsIdInstanceTransactions<
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstanceTransactions>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -7637,27 +6578,25 @@ export function useGetRuntimeRoflAppsIdInstanceTransactions<
       Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstanceTransactions>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflAppsIdInstanceTransactionsMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstanceTransactionsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeRoflAppsIdInstanceTransactionsQueryOptions(
     network,
     runtime,
     id,
     params,
-    options
-  );
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -7669,84 +6608,65 @@ export const GetRuntimeRoflAppsIdInstances = (
   id: string,
   params?: GetRuntimeRoflAppsIdInstancesParams,
   options?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflAppsIdInstancesMutator<RoflAppInstanceList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/rofl_apps/${encodeURIComponent(String(id))}/instances`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflAppsIdInstancesQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
-  params?: GetRuntimeRoflAppsIdInstancesParams
+  params?: GetRuntimeRoflAppsIdInstancesParams,
 ) => {
-  return [
-    `/${network}/${runtime}/rofl_apps/${id}/instances`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/rofl_apps/${id}/instances`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeRoflAppsIdInstancesQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>,
-  TError = unknown
+  TError = unknown,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
   params?: GetRuntimeRoflAppsIdInstancesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeRoflAppsIdInstancesQueryKey(network, runtime, id, params);
+    queryOptions?.queryKey ?? getGetRuntimeRoflAppsIdInstancesQueryKey(network, runtime, id, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>
-  > = ({ signal }) =>
-    GetRuntimeRoflAppsIdInstances(
-      network,
-      runtime,
-      id,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>> = ({ signal }) =>
+    GetRuntimeRoflAppsIdInstances(network, runtime, id, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && id),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeRoflAppsIdInstancesQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>
->;
-export type GetRuntimeRoflAppsIdInstancesQueryError = unknown;
+>
+export type GetRuntimeRoflAppsIdInstancesQueryError = unknown
 
 /**
  * @summary Returns a list of instances of the given ROFL app.
@@ -7754,36 +6674,26 @@ export type GetRuntimeRoflAppsIdInstancesQueryError = unknown;
 
 export function useGetRuntimeRoflAppsIdInstances<
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>,
-  TError = unknown
+  TError = unknown,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
   params?: GetRuntimeRoflAppsIdInstancesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeRoflAppsIdInstancesQueryOptions(
-    network,
-    runtime,
-    id,
-    params,
-    options
-  );
+  const queryOptions = getGetRuntimeRoflAppsIdInstancesQueryOptions(network, runtime, id, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -7795,82 +6705,64 @@ export const GetRuntimeRoflAppsIdInstancesRak = (
   id: string,
   rak: string,
   options?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesRakMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflAppsIdInstancesRakMutator<RoflInstance>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
-      )}/rofl_apps/${encodeURIComponent(
-        String(id)
-      )}/instances/${encodeURIComponent(String(rak))}`,
+        String(runtime),
+      )}/rofl_apps/${encodeURIComponent(String(id))}/instances/${encodeURIComponent(String(rak))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflAppsIdInstancesRakQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
-  rak: string
+  rak: string,
 ) => {
-  return [`/${network}/${runtime}/rofl_apps/${id}/instances/${rak}`] as const;
-};
+  return [`/${network}/${runtime}/rofl_apps/${id}/instances/${rak}`] as const
+}
 
 export const getGetRuntimeRoflAppsIdInstancesRakQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
   rak: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesRakMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesRakMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeRoflAppsIdInstancesRakQueryKey(network, runtime, id, rak);
+    queryOptions?.queryKey ?? getGetRuntimeRoflAppsIdInstancesRakQueryKey(network, runtime, id, rak)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>
-  > = ({ signal }) =>
-    GetRuntimeRoflAppsIdInstancesRak(
-      network,
-      runtime,
-      id,
-      rak,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>> = ({ signal }) =>
+    GetRuntimeRoflAppsIdInstancesRak(network, runtime, id, rak, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && id && rak),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeRoflAppsIdInstancesRakQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>
->;
-export type GetRuntimeRoflAppsIdInstancesRakQueryError = void;
+>
+export type GetRuntimeRoflAppsIdInstancesRakQueryError = void
 
 /**
  * @summary Returns a specific ROFL instance.
@@ -7878,36 +6770,26 @@ export type GetRuntimeRoflAppsIdInstancesRakQueryError = void;
 
 export function useGetRuntimeRoflAppsIdInstancesRak<
   TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
   rak: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesRakMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRak>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesRakMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeRoflAppsIdInstancesRakQueryOptions(
-    network,
-    runtime,
-    id,
-    rak,
-    options
-  );
+  const queryOptions = getGetRuntimeRoflAppsIdInstancesRakQueryOptions(network, runtime, id, rak, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -7919,44 +6801,40 @@ export const GetRuntimeRoflAppsIdInstancesRakTransactions = (
   id: string,
   rak: string,
   params?: GetRuntimeRoflAppsIdInstancesRakTransactionsParams,
-  options?: SecondParameter<
-    typeof GetRuntimeRoflAppsIdInstancesRakTransactionsMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesRakTransactionsMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflAppsIdInstancesRakTransactionsMutator<RuntimeTransactionList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/rofl_apps/${encodeURIComponent(
-        String(id)
+        String(id),
       )}/instances/${encodeURIComponent(String(rak))}/transactions`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflAppsIdInstancesRakTransactionsQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   id: string,
   rak: string,
-  params?: GetRuntimeRoflAppsIdInstancesRakTransactionsParams
+  params?: GetRuntimeRoflAppsIdInstancesRakTransactionsParams,
 ) => {
   return [
     `/${network}/${runtime}/rofl_apps/${id}/instances/${rak}/transactions`,
     ...(params ? [params] : []),
-  ] as const;
-};
+  ] as const
+}
 
 export const getGetRuntimeRoflAppsIdInstancesRakTransactionsQueryOptions = <
-  TData = Awaited<
-    ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -7968,36 +6846,20 @@ export const getGetRuntimeRoflAppsIdInstancesRakTransactionsQueryOptions = <
       Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflAppsIdInstancesRakTransactionsMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesRakTransactionsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
     queryOptions?.queryKey ??
-    getGetRuntimeRoflAppsIdInstancesRakTransactionsQueryKey(
-      network,
-      runtime,
-      id,
-      rak,
-      params
-    );
+    getGetRuntimeRoflAppsIdInstancesRakTransactionsQueryKey(network, runtime, id, rak, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>>
-  > = ({ signal }) =>
-    GetRuntimeRoflAppsIdInstancesRakTransactions(
-      network,
-      runtime,
-      id,
-      rak,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>>> = ({
+    signal,
+  }) =>
+    GetRuntimeRoflAppsIdInstancesRakTransactions(network, runtime, id, rak, params, requestOptions, signal)
 
   return {
     queryKey,
@@ -8008,24 +6870,21 @@ export const getGetRuntimeRoflAppsIdInstancesRakTransactionsQueryOptions = <
     Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>>,
     TError,
     TData
-  > & { queryKey: QueryKey };
-};
+  > & { queryKey: QueryKey }
+}
 
-export type GetRuntimeRoflAppsIdInstancesRakTransactionsQueryResult =
-  NonNullable<
-    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>>
-  >;
-export type GetRuntimeRoflAppsIdInstancesRakTransactionsQueryError = void;
+export type GetRuntimeRoflAppsIdInstancesRakTransactionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>>
+>
+export type GetRuntimeRoflAppsIdInstancesRakTransactionsQueryError = void
 
 /**
  * @summary Returns a list of transactions submitted by the given ROFL instance.
  */
 
 export function useGetRuntimeRoflAppsIdInstancesRakTransactions<
-  TData = Awaited<
-    ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -8037,29 +6896,26 @@ export function useGetRuntimeRoflAppsIdInstancesRakTransactions<
       Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstancesRakTransactions>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflAppsIdInstancesRakTransactionsMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflAppsIdInstancesRakTransactionsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions =
-    getGetRuntimeRoflAppsIdInstancesRakTransactionsQueryOptions(
-      network,
-      runtime,
-      id,
-      rak,
-      params,
-      options
-    );
+  const queryOptions = getGetRuntimeRoflAppsIdInstancesRakTransactionsQueryOptions(
+    network,
+    runtime,
+    id,
+    rak,
+    params,
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -8070,81 +6926,63 @@ export const GetRuntimeRoflmarketProviders = (
   runtime: Runtime,
   params?: GetRuntimeRoflmarketProvidersParams,
   options?: SecondParameter<typeof GetRuntimeRoflmarketProvidersMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflmarketProvidersMutator<RoflMarketProviderList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/roflmarket_providers`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflmarketProvidersQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  params?: GetRuntimeRoflmarketProvidersParams
+  params?: GetRuntimeRoflmarketProvidersParams,
 ) => {
-  return [
-    `/${network}/${runtime}/roflmarket_providers`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/roflmarket_providers`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeRoflmarketProvidersQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeRoflmarketProvidersParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeRoflmarketProvidersQueryKey(network, runtime, params);
+    queryOptions?.queryKey ?? getGetRuntimeRoflmarketProvidersQueryKey(network, runtime, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>
-  > = ({ signal }) =>
-    GetRuntimeRoflmarketProviders(
-      network,
-      runtime,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>> = ({ signal }) =>
+    GetRuntimeRoflmarketProviders(network, runtime, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeRoflmarketProvidersQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>
->;
-export type GetRuntimeRoflmarketProvidersQueryError = void;
+>
+export type GetRuntimeRoflmarketProvidersQueryError = void
 
 /**
  * @summary Returns a list of ROFL market providers.
@@ -8152,34 +6990,25 @@ export type GetRuntimeRoflmarketProvidersQueryError = void;
 
 export function useGetRuntimeRoflmarketProviders<
   TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeRoflmarketProvidersParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeRoflmarketProvidersQueryOptions(
-    network,
-    runtime,
-    params,
-    options
-  );
+  const queryOptions = getGetRuntimeRoflmarketProvidersQueryOptions(network, runtime, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -8190,79 +7019,63 @@ export const GetRuntimeRoflmarketProvidersAddress = (
   runtime: Runtime,
   address: StakingAddress,
   options?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflmarketProvidersAddressMutator<RoflMarketProvider>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/roflmarket_providers/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflmarketProvidersAddressQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  address: StakingAddress
+  address: StakingAddress,
 ) => {
-  return [`/${network}/${runtime}/roflmarket_providers/${address}`] as const;
-};
+  return [`/${network}/${runtime}/roflmarket_providers/${address}`] as const
+}
 
 export const getGetRuntimeRoflmarketProvidersAddressQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: StakingAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflmarketProvidersAddressMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeRoflmarketProvidersAddressQueryKey(network, runtime, address);
+    queryOptions?.queryKey ?? getGetRuntimeRoflmarketProvidersAddressQueryKey(network, runtime, address)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>
-  > = ({ signal }) =>
-    GetRuntimeRoflmarketProvidersAddress(
-      network,
-      runtime,
-      address,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>> = ({
+    signal,
+  }) => GetRuntimeRoflmarketProvidersAddress(network, runtime, address, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime && address),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeRoflmarketProvidersAddressQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>
->;
-export type GetRuntimeRoflmarketProvidersAddressQueryError = void;
+>
+export type GetRuntimeRoflmarketProvidersAddressQueryError = void
 
 /**
  * @summary Returns a specific ROFL market provider.
@@ -8270,36 +7083,25 @@ export type GetRuntimeRoflmarketProvidersAddressQueryError = void;
 
 export function useGetRuntimeRoflmarketProvidersAddress<
   TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: StakingAddress,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflmarketProvidersAddressMutator
-    >;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddress>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeRoflmarketProvidersAddressQueryOptions(
-    network,
-    runtime,
-    address,
-    options
-  );
+  const queryOptions = getGetRuntimeRoflmarketProvidersAddressQueryOptions(network, runtime, address, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -8310,41 +7112,37 @@ export const GetRuntimeRoflmarketProvidersAddressOffers = (
   runtime: Runtime,
   address: StakingAddress,
   params?: GetRuntimeRoflmarketProvidersAddressOffersParams,
-  options?: SecondParameter<
-    typeof GetRuntimeRoflmarketProvidersAddressOffersMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressOffersMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflmarketProvidersAddressOffersMutator<RoflMarketOfferList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/roflmarket_providers/${encodeURIComponent(String(address))}/offers`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflmarketProvidersAddressOffersQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: StakingAddress,
-  params?: GetRuntimeRoflmarketProvidersAddressOffersParams
+  params?: GetRuntimeRoflmarketProvidersAddressOffersParams,
 ) => {
   return [
     `/${network}/${runtime}/roflmarket_providers/${address}/offers`,
     ...(params ? [params] : []),
-  ] as const;
-};
+  ] as const
+}
 
 export const getGetRuntimeRoflmarketProvidersAddressOffersQueryOptions = <
-  TData = Awaited<
-    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -8355,34 +7153,19 @@ export const getGetRuntimeRoflmarketProvidersAddressOffersQueryOptions = <
       Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflmarketProvidersAddressOffersMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressOffersMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
     queryOptions?.queryKey ??
-    getGetRuntimeRoflmarketProvidersAddressOffersQueryKey(
-      network,
-      runtime,
-      address,
-      params
-    );
+    getGetRuntimeRoflmarketProvidersAddressOffersQueryKey(network, runtime, address, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>>
-  > = ({ signal }) =>
-    GetRuntimeRoflmarketProvidersAddressOffers(
-      network,
-      runtime,
-      address,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>>> = ({
+    signal,
+  }) => GetRuntimeRoflmarketProvidersAddressOffers(network, runtime, address, params, requestOptions, signal)
 
   return {
     queryKey,
@@ -8393,23 +7176,21 @@ export const getGetRuntimeRoflmarketProvidersAddressOffersQueryOptions = <
     Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>>,
     TError,
     TData
-  > & { queryKey: QueryKey };
-};
+  > & { queryKey: QueryKey }
+}
 
 export type GetRuntimeRoflmarketProvidersAddressOffersQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>>
->;
-export type GetRuntimeRoflmarketProvidersAddressOffersQueryError = void;
+>
+export type GetRuntimeRoflmarketProvidersAddressOffersQueryError = void
 
 /**
  * @summary Returns a list of ROFL market offers for a specific provider.
  */
 
 export function useGetRuntimeRoflmarketProvidersAddressOffers<
-  TData = Awaited<
-    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -8420,28 +7201,25 @@ export function useGetRuntimeRoflmarketProvidersAddressOffers<
       Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffers>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflmarketProvidersAddressOffersMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressOffersMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions =
-    getGetRuntimeRoflmarketProvidersAddressOffersQueryOptions(
-      network,
-      runtime,
-      address,
-      params,
-      options
-    );
+  const queryOptions = getGetRuntimeRoflmarketProvidersAddressOffersQueryOptions(
+    network,
+    runtime,
+    address,
+    params,
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -8452,41 +7230,35 @@ export const GetRuntimeRoflmarketProvidersAddressOffersId = (
   runtime: Runtime,
   address: StakingAddress,
   id: string,
-  options?: SecondParameter<
-    typeof GetRuntimeRoflmarketProvidersAddressOffersIdMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressOffersIdMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflmarketProvidersAddressOffersIdMutator<RoflMarketOffer>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/roflmarket_providers/${encodeURIComponent(
-        String(address)
+        String(address),
       )}/offers/${encodeURIComponent(String(id))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflmarketProvidersAddressOffersIdQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: StakingAddress,
-  id: string
+  id: string,
 ) => {
-  return [
-    `/${network}/${runtime}/roflmarket_providers/${address}/offers/${id}`,
-  ] as const;
-};
+  return [`/${network}/${runtime}/roflmarket_providers/${address}/offers/${id}`] as const
+}
 
 export const getGetRuntimeRoflmarketProvidersAddressOffersIdQueryOptions = <
-  TData = Awaited<
-    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -8497,34 +7269,19 @@ export const getGetRuntimeRoflmarketProvidersAddressOffersIdQueryOptions = <
       Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflmarketProvidersAddressOffersIdMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressOffersIdMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
     queryOptions?.queryKey ??
-    getGetRuntimeRoflmarketProvidersAddressOffersIdQueryKey(
-      network,
-      runtime,
-      address,
-      id
-    );
+    getGetRuntimeRoflmarketProvidersAddressOffersIdQueryKey(network, runtime, address, id)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>
-  > = ({ signal }) =>
-    GetRuntimeRoflmarketProvidersAddressOffersId(
-      network,
-      runtime,
-      address,
-      id,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>> = ({
+    signal,
+  }) => GetRuntimeRoflmarketProvidersAddressOffersId(network, runtime, address, id, requestOptions, signal)
 
   return {
     queryKey,
@@ -8535,24 +7292,21 @@ export const getGetRuntimeRoflmarketProvidersAddressOffersIdQueryOptions = <
     Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>,
     TError,
     TData
-  > & { queryKey: QueryKey };
-};
+  > & { queryKey: QueryKey }
+}
 
-export type GetRuntimeRoflmarketProvidersAddressOffersIdQueryResult =
-  NonNullable<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>
-  >;
-export type GetRuntimeRoflmarketProvidersAddressOffersIdQueryError = void;
+export type GetRuntimeRoflmarketProvidersAddressOffersIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>
+>
+export type GetRuntimeRoflmarketProvidersAddressOffersIdQueryError = void
 
 /**
  * @summary Returns a specific ROFL market offer.
  */
 
 export function useGetRuntimeRoflmarketProvidersAddressOffersId<
-  TData = Awaited<
-    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -8563,28 +7317,25 @@ export function useGetRuntimeRoflmarketProvidersAddressOffersId<
       Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressOffersId>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflmarketProvidersAddressOffersIdMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressOffersIdMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions =
-    getGetRuntimeRoflmarketProvidersAddressOffersIdQueryOptions(
-      network,
-      runtime,
-      address,
-      id,
-      options
-    );
+  const queryOptions = getGetRuntimeRoflmarketProvidersAddressOffersIdQueryOptions(
+    network,
+    runtime,
+    address,
+    id,
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -8595,41 +7346,35 @@ export const GetRuntimeRoflmarketProvidersAddressInstancesId = (
   runtime: Runtime,
   address: StakingAddress,
   id: string,
-  options?: SecondParameter<
-    typeof GetRuntimeRoflmarketProvidersAddressInstancesIdMutator
-  >,
-  signal?: AbortSignal
+  options?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressInstancesIdMutator>,
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflmarketProvidersAddressInstancesIdMutator<RoflMarketInstance>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/roflmarket_providers/${encodeURIComponent(
-        String(address)
+        String(address),
       )}/instances/${encodeURIComponent(String(id))}`,
       method: 'GET',
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   address: StakingAddress,
-  id: string
+  id: string,
 ) => {
-  return [
-    `/${network}/${runtime}/roflmarket_providers/${address}/instances/${id}`,
-  ] as const;
-};
+  return [`/${network}/${runtime}/roflmarket_providers/${address}/instances/${id}`] as const
+}
 
 export const getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryOptions = <
-  TData = Awaited<
-    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -8637,39 +7382,23 @@ export const getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryOptions = <
   id: string,
   options?: {
     query?: UseQueryOptions<
-      Awaited<
-        ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>
-      >,
+      Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflmarketProvidersAddressInstancesIdMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressInstancesIdMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
     queryOptions?.queryKey ??
-    getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryKey(
-      network,
-      runtime,
-      address,
-      id
-    );
+    getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryKey(network, runtime, address, id)
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>
   > = ({ signal }) =>
-    GetRuntimeRoflmarketProvidersAddressInstancesId(
-      network,
-      runtime,
-      address,
-      id,
-      requestOptions,
-      signal
-    );
+    GetRuntimeRoflmarketProvidersAddressInstancesId(network, runtime, address, id, requestOptions, signal)
 
   return {
     queryKey,
@@ -8680,24 +7409,21 @@ export const getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryOptions = <
     Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>,
     TError,
     TData
-  > & { queryKey: QueryKey };
-};
+  > & { queryKey: QueryKey }
+}
 
-export type GetRuntimeRoflmarketProvidersAddressInstancesIdQueryResult =
-  NonNullable<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>
-  >;
-export type GetRuntimeRoflmarketProvidersAddressInstancesIdQueryError = void;
+export type GetRuntimeRoflmarketProvidersAddressInstancesIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>
+>
+export type GetRuntimeRoflmarketProvidersAddressInstancesIdQueryError = void
 
 /**
  * @summary Returns a specific ROFL market instance.
  */
 
 export function useGetRuntimeRoflmarketProvidersAddressInstancesId<
-  TData = Awaited<
-    ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>
-  >,
-  TError = void
+  TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>,
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
@@ -8705,33 +7431,28 @@ export function useGetRuntimeRoflmarketProvidersAddressInstancesId<
   id: string,
   options?: {
     query?: UseQueryOptions<
-      Awaited<
-        ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>
-      >,
+      Awaited<ReturnType<typeof GetRuntimeRoflmarketProvidersAddressInstancesId>>,
       TError,
       TData
-    >;
-    request?: SecondParameter<
-      typeof GetRuntimeRoflmarketProvidersAddressInstancesIdMutator
-    >;
-  }
+    >
+    request?: SecondParameter<typeof GetRuntimeRoflmarketProvidersAddressInstancesIdMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions =
-    getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryOptions(
-      network,
-      runtime,
-      address,
-      id,
-      options
-    );
+  const queryOptions = getGetRuntimeRoflmarketProvidersAddressInstancesIdQueryOptions(
+    network,
+    runtime,
+    address,
+    id,
+    options,
+  )
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -8742,81 +7463,63 @@ export const GetRuntimeRoflmarketInstances = (
   runtime: Runtime,
   params?: GetRuntimeRoflmarketInstancesParams,
   options?: SecondParameter<typeof GetRuntimeRoflmarketInstancesMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetRuntimeRoflmarketInstancesMutator<RoflMarketInstanceList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime)
+        String(runtime),
       )}/roflmarket_instances`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetRuntimeRoflmarketInstancesQueryKey = (
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
-  params?: GetRuntimeRoflmarketInstancesParams
+  params?: GetRuntimeRoflmarketInstancesParams,
 ) => {
-  return [
-    `/${network}/${runtime}/roflmarket_instances`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${runtime}/roflmarket_instances`, ...(params ? [params] : [])] as const
+}
 
 export const getGetRuntimeRoflmarketInstancesQueryOptions = <
   TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeRoflmarketInstancesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflmarketInstancesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflmarketInstancesMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getGetRuntimeRoflmarketInstancesQueryKey(network, runtime, params);
+    queryOptions?.queryKey ?? getGetRuntimeRoflmarketInstancesQueryKey(network, runtime, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>
-  > = ({ signal }) =>
-    GetRuntimeRoflmarketInstances(
-      network,
-      runtime,
-      params,
-      requestOptions,
-      signal
-    );
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>> = ({ signal }) =>
+    GetRuntimeRoflmarketInstances(network, runtime, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && runtime),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetRuntimeRoflmarketInstancesQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>
->;
-export type GetRuntimeRoflmarketInstancesQueryError = void;
+>
+export type GetRuntimeRoflmarketInstancesQueryError = void
 
 /**
  * @summary Returns a list of ROFL market instances.
@@ -8824,34 +7527,25 @@ export type GetRuntimeRoflmarketInstancesQueryError = void;
 
 export function useGetRuntimeRoflmarketInstances<
   TData = Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   runtime: Runtime,
   params?: GetRuntimeRoflmarketInstancesParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetRuntimeRoflmarketInstancesMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>, TError, TData>
+    request?: SecondParameter<typeof GetRuntimeRoflmarketInstancesMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetRuntimeRoflmarketInstancesQueryOptions(
-    network,
-    runtime,
-    params,
-    options
-  );
+  const queryOptions = getGetRuntimeRoflmarketInstancesQueryOptions(network, runtime, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -8864,75 +7558,58 @@ export const GetLayerStatsTxVolume = (
   layer: Layer,
   params?: GetLayerStatsTxVolumeParams,
   options?: SecondParameter<typeof GetLayerStatsTxVolumeMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetLayerStatsTxVolumeMutator<TxVolumeList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(layer)
-      )}/stats/tx_volume`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(layer))}/stats/tx_volume`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetLayerStatsTxVolumeQueryKey = (
   network: 'mainnet' | 'testnet',
   layer: Layer,
-  params?: GetLayerStatsTxVolumeParams
+  params?: GetLayerStatsTxVolumeParams,
 ) => {
-  return [
-    `/${network}/${layer}/stats/tx_volume`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${layer}/stats/tx_volume`, ...(params ? [params] : [])] as const
+}
 
 export const getGetLayerStatsTxVolumeQueryOptions = <
   TData = Awaited<ReturnType<typeof GetLayerStatsTxVolume>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   layer: Layer,
   params?: GetLayerStatsTxVolumeParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetLayerStatsTxVolume>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetLayerStatsTxVolumeMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetLayerStatsTxVolume>>, TError, TData>
+    request?: SecondParameter<typeof GetLayerStatsTxVolumeMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetLayerStatsTxVolumeQueryKey(network, layer, params);
+  const queryKey = queryOptions?.queryKey ?? getGetLayerStatsTxVolumeQueryKey(network, layer, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetLayerStatsTxVolume>>
-  > = ({ signal }) =>
-    GetLayerStatsTxVolume(network, layer, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetLayerStatsTxVolume>>> = ({ signal }) =>
+    GetLayerStatsTxVolume(network, layer, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && layer),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetLayerStatsTxVolume>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetLayerStatsTxVolume>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
-export type GetLayerStatsTxVolumeQueryResult = NonNullable<
-  Awaited<ReturnType<typeof GetLayerStatsTxVolume>>
->;
-export type GetLayerStatsTxVolumeQueryError = void;
+export type GetLayerStatsTxVolumeQueryResult = NonNullable<Awaited<ReturnType<typeof GetLayerStatsTxVolume>>>
+export type GetLayerStatsTxVolumeQueryError = void
 
 /**
  * @summary Returns a timeline of the transaction volume at the chosen granularity,
@@ -8942,34 +7619,25 @@ for either consensus or one of the paratimes.
 
 export function useGetLayerStatsTxVolume<
   TData = Awaited<ReturnType<typeof GetLayerStatsTxVolume>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   layer: Layer,
   params?: GetLayerStatsTxVolumeParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetLayerStatsTxVolume>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetLayerStatsTxVolumeMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetLayerStatsTxVolume>>, TError, TData>
+    request?: SecondParameter<typeof GetLayerStatsTxVolumeMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetLayerStatsTxVolumeQueryOptions(
-    network,
-    layer,
-    params,
-    options
-  );
+  const queryOptions = getGetLayerStatsTxVolumeQueryOptions(network, layer, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }
 
 /**
@@ -8982,75 +7650,62 @@ export const GetLayerStatsActiveAccounts = (
   layer: Layer,
   params?: GetLayerStatsActiveAccountsParams,
   options?: SecondParameter<typeof GetLayerStatsActiveAccountsMutator>,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) => {
   return GetLayerStatsActiveAccountsMutator<ActiveAccountsList>(
     {
       url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(layer)
+        String(layer),
       )}/stats/active_accounts`,
       method: 'GET',
       params,
       signal,
     },
-    options
-  );
-};
+    options,
+  )
+}
 
 export const getGetLayerStatsActiveAccountsQueryKey = (
   network: 'mainnet' | 'testnet',
   layer: Layer,
-  params?: GetLayerStatsActiveAccountsParams
+  params?: GetLayerStatsActiveAccountsParams,
 ) => {
-  return [
-    `/${network}/${layer}/stats/active_accounts`,
-    ...(params ? [params] : []),
-  ] as const;
-};
+  return [`/${network}/${layer}/stats/active_accounts`, ...(params ? [params] : [])] as const
+}
 
 export const getGetLayerStatsActiveAccountsQueryOptions = <
   TData = Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   layer: Layer,
   params?: GetLayerStatsActiveAccountsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetLayerStatsActiveAccountsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>, TError, TData>
+    request?: SecondParameter<typeof GetLayerStatsActiveAccountsMutator>
+  },
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetLayerStatsActiveAccountsQueryKey(network, layer, params);
+  const queryKey = queryOptions?.queryKey ?? getGetLayerStatsActiveAccountsQueryKey(network, layer, params)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>
-  > = ({ signal }) =>
-    GetLayerStatsActiveAccounts(network, layer, params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>> = ({ signal }) =>
+    GetLayerStatsActiveAccounts(network, layer, params, requestOptions, signal)
 
   return {
     queryKey,
     queryFn,
     enabled: !!(network && layer),
     ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  } as UseQueryOptions<Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>, TError, TData> & {
+    queryKey: QueryKey
+  }
+}
 
 export type GetLayerStatsActiveAccountsQueryResult = NonNullable<
   Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>
->;
-export type GetLayerStatsActiveAccountsQueryError = void;
+>
+export type GetLayerStatsActiveAccountsQueryError = void
 
 /**
  * @summary Returns a (sliding) timeline of the recorded daily unique active accounts for
@@ -9060,32 +7715,23 @@ either consensus or one of the paratimes.
 
 export function useGetLayerStatsActiveAccounts<
   TData = Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>,
-  TError = void
+  TError = void,
 >(
   network: 'mainnet' | 'testnet',
   layer: Layer,
   params?: GetLayerStatsActiveAccountsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof GetLayerStatsActiveAccountsMutator>;
-  }
+    query?: UseQueryOptions<Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>, TError, TData>
+    request?: SecondParameter<typeof GetLayerStatsActiveAccountsMutator>
+  },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetLayerStatsActiveAccountsQueryOptions(
-    network,
-    layer,
-    params,
-    options
-  );
+  const queryOptions = getGetLayerStatsActiveAccountsQueryOptions(network, layer, params, options)
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+    queryKey: QueryKey
+  }
 
-  query.queryKey = queryOptions.queryKey;
+  query.queryKey = queryOptions.queryKey
 
-  return query;
+  return query
 }

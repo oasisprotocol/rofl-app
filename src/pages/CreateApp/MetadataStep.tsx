@@ -1,18 +1,18 @@
-import { type FC, useEffect } from 'react';
-import { CreateLayout } from './CreateLayout';
-import { CreateFormHeader } from './CreateFormHeader';
-import { CreateFormNavigation } from './CreateFormNavigation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { MetadataFormFields } from '../../components/MetadataFormFields';
-import { metadataFormSchema, type MetadataFormData } from './types';
+import { type FC, useEffect } from 'react'
+import { CreateLayout } from './CreateLayout'
+import { CreateFormHeader } from './CreateFormHeader'
+import { CreateFormNavigation } from './CreateFormNavigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { MetadataFormFields } from '../../components/MetadataFormFields'
+import { metadataFormSchema, type MetadataFormData } from './types'
 
 type MetadataStepProps = {
-  handleNext: () => void;
-  setAppDataForm: (data: { metadata: MetadataFormData }) => void;
-  metadata?: MetadataFormData;
-  selectedTemplateName?: string;
-};
+  handleNext: () => void
+  setAppDataForm: (data: { metadata: MetadataFormData }) => void
+  metadata?: MetadataFormData
+  selectedTemplateName?: string
+}
 
 export const MetadataStep: FC<MetadataStepProps> = ({
   handleNext,
@@ -23,24 +23,24 @@ export const MetadataStep: FC<MetadataStepProps> = ({
   const form = useForm<MetadataFormData>({
     resolver: zodResolver(metadataFormSchema),
     defaultValues: { ...metadata },
-  });
+  })
 
   useEffect(() => {
-    form.reset({ ...metadata });
-  }, [metadata, form]);
+    form.reset({ ...metadata })
+  }, [metadata, form])
 
   const onSubmit = (values: MetadataFormData) => {
-    setAppDataForm({ metadata: values });
-    handleNext();
-  };
+    setAppDataForm({ metadata: values })
+    handleNext()
+  }
 
   const handleFormSubmit = () => {
-    form.trigger().then((isValid) => {
+    form.trigger().then(isValid => {
       if (isValid) {
-        form.handleSubmit(onSubmit)();
+        form.handleSubmit(onSubmit)()
       }
-    });
-  };
+    })
+  }
 
   return (
     <CreateLayout
@@ -60,17 +60,11 @@ export const MetadataStep: FC<MetadataStepProps> = ({
           vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
       />
 
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 mb-6 w-full"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
         <MetadataFormFields control={form.control} />
 
-        <CreateFormNavigation
-          handleNext={handleFormSubmit}
-          disabled={form.formState.isSubmitting}
-        />
+        <CreateFormNavigation handleNext={handleFormSubmit} disabled={form.formState.isSubmitting} />
       </form>
     </CreateLayout>
-  );
-};
+  )
+}

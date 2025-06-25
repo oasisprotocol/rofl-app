@@ -1,24 +1,19 @@
-import { type FC } from 'react';
-import { Link } from 'react-router-dom';
-import { type RoflApp } from '../../nexus/api';
-import { Badge } from '@oasisprotocol/ui-library/src/components/ui/badge';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@oasisprotocol/ui-library/src/components/ui/card';
-import { ArrowUpRight } from 'lucide-react';
-import { AppStatusIcon } from '../AppStatusIcon';
-import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
-import { trimLongString } from '../../utils/trimLongString';
+import { type FC } from 'react'
+import { Link } from 'react-router-dom'
+import { type RoflApp } from '../../nexus/api'
+import { Badge } from '@oasisprotocol/ui-library/src/components/ui/badge'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@oasisprotocol/ui-library/src/components/ui/card'
+import { ArrowUpRight } from 'lucide-react'
+import { AppStatusIcon } from '../AppStatusIcon'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
+import { trimLongString } from '../../utils/trimLongString'
 
 type AppCardProps = {
-  app: RoflApp;
-  network: string;
-  type?: 'explore' | 'dashboard';
-};
+  app: RoflApp
+  network: string
+  type?: 'explore' | 'dashboard'
+}
 
 export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
   return (
@@ -26,14 +21,9 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
       <CardHeader className="">
         <div className="flex items-start justify-between">
           <h3 className="text-lg font-semibold text-foreground pr-2 break-all">
-            <>
-              {app.metadata?.['net.oasis.rofl.name'] || trimLongString(app.id)}
-            </>
+            <>{app.metadata?.['net.oasis.rofl.name'] || trimLongString(app.id)}</>
           </h3>
-          <AppStatusIcon
-            hasActiveInstances={!!app.num_active_instances}
-            removed={app.removed}
-          />
+          <AppStatusIcon hasActiveInstances={!!app.num_active_instances} removed={app.removed} />
         </div>
       </CardHeader>
       <CardContent className="flex-1">
@@ -49,9 +39,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
                 <>{app.metadata?.['net.oasis.rofl.version']}</>
               </Badge>
             )}
-            <span className="text-xs text-muted-foreground break-all">
-              {app.id}
-            </span>
+            <span className="text-xs text-muted-foreground break-all">{app.id}</span>
           </div>
         )}
       </CardContent>
@@ -62,11 +50,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
           </Button>
         )}
 
-        <Button
-          variant="secondary"
-          asChild
-          className={cn('bg-background', type === 'explore' && 'w-full')}
-        >
+        <Button variant="secondary" asChild className={cn('bg-background', type === 'explore' && 'w-full')}>
           <a
             href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${app.id}`}
             target="_blank"
@@ -80,5 +64,5 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
         </Button>
       </CardFooter>
     </Card>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { defineChain } from 'viem';
-import { sapphireTestnet } from 'viem/chains';
+import { getDefaultConfig } from '@rainbow-me/rainbowkit'
+import { defineChain } from 'viem'
+import { sapphireTestnet } from 'viem/chains'
 
 export const SAPPHIRE_1RPC_CHAIN_CONFIG = defineChain({
   id: 23294,
@@ -24,23 +24,22 @@ export const SAPPHIRE_1RPC_CHAIN_CONFIG = defineChain({
       blockCreated: 734531,
     },
   },
-});
+})
 
-const { VITE_WALLET_CONNECT_PROJECT_ID } = import.meta.env;
+const { VITE_WALLET_CONNECT_PROJECT_ID } = import.meta.env
 
 declare module 'wagmi' {
   interface Register {
-    config: ReturnType<typeof getDefaultConfig>;
+    config: ReturnType<typeof getDefaultConfig>
   }
 }
 
-export const wagmiConfig: ReturnType<typeof getDefaultConfig> =
-  getDefaultConfig({
-    appName: 'ROSE Stake',
-    projectId: VITE_WALLET_CONNECT_PROJECT_ID,
-    chains: [SAPPHIRE_1RPC_CHAIN_CONFIG, sapphireTestnet],
-    ssr: false,
-    batch: {
-      multicall: false,
-    },
-  });
+export const wagmiConfig: ReturnType<typeof getDefaultConfig> = getDefaultConfig({
+  appName: 'ROSE Stake',
+  projectId: VITE_WALLET_CONNECT_PROJECT_ID,
+  chains: [SAPPHIRE_1RPC_CHAIN_CONFIG, sapphireTestnet],
+  ssr: false,
+  batch: {
+    multicall: false,
+  },
+})

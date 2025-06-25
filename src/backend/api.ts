@@ -1,65 +1,65 @@
-import axios from 'axios';
-import type { AxiosError } from 'axios';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import type { Template } from '../pages/CreateApp/BootstrapStep';
-import type { AppData } from '../pages/CreateApp/types';
-import * as yaml from 'yaml';
-import * as oasis from '@oasisprotocol/client';
-import * as oasisRT from '@oasisprotocol/client-rt';
-import { GetRuntimeEvents } from '../nexus/api';
-import { useConfig, useSendTransaction } from 'wagmi';
-import { waitForTransactionReceipt } from '@wagmi/core';
+import axios from 'axios'
+import type { AxiosError } from 'axios'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import type { Template } from '../pages/CreateApp/BootstrapStep'
+import type { AppData } from '../pages/CreateApp/types'
+import * as yaml from 'yaml'
+import * as oasis from '@oasisprotocol/client'
+import * as oasisRT from '@oasisprotocol/client-rt'
+import { GetRuntimeEvents } from '../nexus/api'
+import { useConfig, useSendTransaction } from 'wagmi'
+import { waitForTransactionReceipt } from '@wagmi/core'
 
-const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND;
+const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
 type NonceResponse = {
-  nonce: string;
-};
+  nonce: string
+}
 
 type LoginResponse = {
-  token: string;
-};
+  token: string
+}
 
 type LoginRequest = {
-  message: string;
-  signature: string;
-};
+  message: string
+  signature: string
+}
 
 type MeResponse = {
-  address: string;
-  [key: string]: unknown;
-};
+  address: string
+  [key: string]: unknown
+}
 
 type RoflBuildRequest = {
-  manifest: string;
-  compose: string;
-};
+  manifest: string
+  compose: string
+}
 
 type RoflBuildResponse = {
-  task_id: string;
-};
+  task_id: string
+}
 
 type RoflBuildResultsResponse = {
-  manifest: string | null;
-  oci_reference: string;
-  manifest_hash: string;
-  logs: string;
-  err: string;
-};
+  manifest: string | null
+  oci_reference: string
+  manifest_hash: string
+  logs: string
+  err: string
+}
 
 type ArtifactUploadRequest = {
-  id: string;
-  file: File | Blob;
-};
+  id: string
+  file: File | Blob
+}
 
-type ArtifactDownloadResponse = Blob;
+type ArtifactDownloadResponse = Blob
 
 const fetchNonce = async (address: string): Promise<string> => {
   const response = await axios.get<NonceResponse>(`${BACKEND_URL}/auth/nonce`, {
     params: { address },
-  });
-  return response.data.nonce;
-};
+  })
+  return response.data.nonce
+}
 
 const login = async ({ message, signature }: LoginRequest): Promise<string> => {
   const response = await axios.post<LoginResponse>(
@@ -68,21 +68,21 @@ const login = async ({ message, signature }: LoginRequest): Promise<string> => {
     {
       params: { sig: signature },
       headers: { 'Content-Type': 'application/json' },
-    }
-  );
-  return response.data.token;
-};
+    },
+  )
+  return response.data.token
+}
 
 const fetchMe = async (token: string): Promise<MeResponse> => {
   const response = await axios.get<MeResponse>(`${BACKEND_URL}/me`, {
     headers: { Authorization: `Bearer ${token}` },
-  });
-  return response.data;
-};
+  })
+  return response.data
+}
 
 const buildRofl = async (
   { manifest, compose }: RoflBuildRequest,
-  token: string
+  token: string,
 ): Promise<RoflBuildResponse> => {
   const response = await axios.post<RoflBuildResponse>(
     `${BACKEND_URL}/rofl/build`,
@@ -92,51 +92,39 @@ const buildRofl = async (
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-    }
-  );
-  return response.data;
-};
+    },
+  )
+  return response.data
+}
 
-const fetchRoflBuildResults = async (
-  taskId: string,
-  token: string
-): Promise<RoflBuildResultsResponse> => {
-  const response = await axios.get<RoflBuildResultsResponse>(
-    `${BACKEND_URL}/rofl/build/${taskId}/results`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return response.data;
-};
+const fetchRoflBuildResults = async (taskId: string, token: string): Promise<RoflBuildResultsResponse> => {
+  const response = await axios.get<RoflBuildResultsResponse>(`${BACKEND_URL}/rofl/build/${taskId}/results`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return response.data
+}
 
-const uploadArtifact = async (
-  { id, file }: ArtifactUploadRequest,
-  token: string
-): Promise<void> => {
+const uploadArtifact = async ({ id, file }: ArtifactUploadRequest, token: string): Promise<void> => {
   await axios.put(`${BACKEND_URL}/artifacts/${id}`, file, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/octet-stream',
     },
-    transformRequest: [(data) => data],
-  });
-};
+    transformRequest: [data => data],
+  })
+}
 
-const downloadArtifact = async (
-  id: string,
-  token: string
-): Promise<ArtifactDownloadResponse> => {
+const downloadArtifact = async (id: string, token: string): Promise<ArtifactDownloadResponse> => {
   const response = await axios.get(`${BACKEND_URL}/artifacts/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
     responseType: 'blob',
-  });
-  return response.data;
-};
+  })
+  return response.data
+}
 
 export function useGetNonce(address: string | undefined) {
   return useQuery<string, AxiosError<unknown>>({
@@ -145,14 +133,14 @@ export function useGetNonce(address: string | undefined) {
     enabled: !!address,
     staleTime: 0,
     throwOnError: false,
-  });
+  })
 }
 
 export function useLogin() {
   return useMutation<string, AxiosError<unknown>, LoginRequest>({
     mutationFn: login,
     throwOnError: false,
-  });
+  })
 }
 
 export function useGetMe(token: string | null) {
@@ -162,31 +150,27 @@ export function useGetMe(token: string | null) {
     enabled: !!token,
     staleTime: 1000 * 60 * 3, // 3 minutes
     throwOnError: false,
-  });
+  })
 }
 
 export function useUploadArtifact(token: string | null) {
   return useMutation<void, AxiosError<unknown>, ArtifactUploadRequest>({
-    mutationFn: (data) => uploadArtifact(data, token!),
+    mutationFn: data => uploadArtifact(data, token!),
     throwOnError: false,
-    onError: (error) => {
-      console.error('Error uploading artifact:', error);
+    onError: error => {
+      console.error('Error uploading artifact:', error)
     },
-  });
+  })
 }
 
-export function useDownloadArtifact(
-  id: string | null,
-  token: string | null,
-  enabled: boolean = true
-) {
+export function useDownloadArtifact(id: string | null, token: string | null, enabled: boolean = true) {
   return useQuery<ArtifactDownloadResponse, AxiosError<unknown>>({
     queryKey: ['artifact-download', id, token],
     queryFn: () => downloadArtifact(id!, token!),
     enabled: !!id && !!token && enabled,
     staleTime: 0,
     throwOnError: false,
-  });
+  })
 }
 
 async function waitForAppId(creationTxHash: string, network: 'mainnet' | 'testnet', timeout = 60_000) {
@@ -201,11 +185,11 @@ async function waitForAppId(creationTxHash: string, network: 'mainnet' | 'testne
       limit: 10,
       offset: 0,
     })
-    const appId = response.data.events?.[0]?.body?.id;
-    if (appId) return appId as `rofl1${string}`;
-    await new Promise((resolve) => setTimeout(resolve, interval));
+    const appId = response.data.events?.[0]?.body?.id
+    if (appId) return appId as `rofl1${string}`
+    await new Promise(resolve => setTimeout(resolve, interval))
   }
-  throw new Error('waitForAppId timed out');
+  throw new Error('waitForAppId timed out')
 }
 
 async function waitForBuildResults(taskId: string, token: string, timeout = 300_000) {
@@ -214,23 +198,32 @@ async function waitForBuildResults(taskId: string, token: string, timeout = 300_
   for (let i = 0; i < maxTries; i++) {
     const results = await fetchRoflBuildResults(taskId, token)
     if (results.err) throw new Error('Build failed ' + results.err)
-    if ('oci_reference' in results) return results;
-    await new Promise((resolve) => setTimeout(resolve, interval));
+    if ('oci_reference' in results) return results
+    await new Promise(resolve => setTimeout(resolve, interval))
   }
-  throw new Error('waitForBuildResults timed out');
+  throw new Error('waitForBuildResults timed out')
 }
 
 export function useCreateAndDeployApp() {
   const wagmiConfig = useConfig()
   const { sendTransactionAsync } = useSendTransaction()
 
-  return useMutation<string, AxiosError<unknown>, { token: string, template: Template, appData: AppData, network: 'mainnet' | 'testnet' }>({
+  return useMutation<
+    string,
+    AxiosError<unknown>,
+    { token: string; template: Template; appData: AppData; network: 'mainnet' | 'testnet' }
+  >({
     mutationFn: async ({ token, template, appData, network }) => {
-      const sapphireRuntimeId = network === 'mainnet' ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279') : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
-      const nic = new oasis.client.NodeInternal(network === 'mainnet' ? 'https://grpc.oasis.io' : 'https://testnet.grpc.oasis.io');
+      const sapphireRuntimeId =
+        network === 'mainnet'
+          ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
+          : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const nic = new oasis.client.NodeInternal(
+        network === 'mainnet' ? 'https://grpc.oasis.io' : 'https://testnet.grpc.oasis.io',
+      )
 
-      const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId);
-      const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId);
+      const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
+      const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId)
 
       const duration =
         appData.build!.duration === 'months'
@@ -252,59 +245,66 @@ export function useCreateAndDeployApp() {
       if (!duration) throw new Error('Invalid duration')
 
       let hash
-      console.log('create app?');
-      hash = await sendTransactionAsync(rofl
-        .callCreate()
-        .setBody({
-          scheme: oasisRT.types.IdentifierScheme.CreatorNonce,
-          policy: {
-            quotes: {
-              pcs: {
-                tcb_validity_period: 30,
-                min_tcb_evaluation_data_number: 18,
-                tdx: {},
+      console.log('create app?')
+      hash = await sendTransactionAsync(
+        rofl
+          .callCreate()
+          .setBody({
+            scheme: oasisRT.types.IdentifierScheme.CreatorNonce,
+            policy: {
+              quotes: {
+                pcs: {
+                  tcb_validity_period: 30,
+                  min_tcb_evaluation_data_number: 18,
+                  tdx: {},
+                },
               },
+              enclaves: [],
+              endorsements: [
+                {
+                  any: {},
+                },
+              ],
+              fees: oasisRT.types.FeePolicy.EndorsingNodePays,
+              max_expiration: 3,
             },
-            enclaves: [],
-            endorsements: [
-              {
-                any: {},
-              },
-            ],
-            fees: oasisRT.types.FeePolicy.EndorsingNodePays,
-            max_expiration: 3,
-          },
-          metadata: {
-            'net.oasis.rofl.name': appData.metadata?.name || '',
-            'net.oasis.rofl.author': appData.metadata?.author || '',
-            'net.oasis.rofl.description': appData.metadata?.description || '',
-            'net.oasis.rofl.version': appData.metadata?.version || '',
-            'net.oasis.rofl.homepage': appData.metadata?.homepage || '',
-            'net.oasis.rofl.license': appData.metadata?.license || '',
-          },
-        })
-        .toSubcall());
-      console.log('create app: tx hash', hash);
-      const appId = await waitForAppId(hash, network);
-      console.log('appId', appId);
+            metadata: {
+              'net.oasis.rofl.name': appData.metadata?.name || '',
+              'net.oasis.rofl.author': appData.metadata?.author || '',
+              'net.oasis.rofl.description': appData.metadata?.description || '',
+              'net.oasis.rofl.version': appData.metadata?.version || '',
+              'net.oasis.rofl.homepage': appData.metadata?.homepage || '',
+              'net.oasis.rofl.license': appData.metadata?.license || '',
+            },
+          })
+          .toSubcall(),
+      )
+      console.log('create app: tx hash', hash)
+      const appId = await waitForAppId(hash, network)
+      console.log('appId', appId)
 
-      const app = await rofl.queryApp().setArgs({ id: oasisRT.rofl.fromBech32(appId) }).query(nic);
-      console.log('App', app);
+      const app = await rofl
+        .queryApp()
+        .setArgs({ id: oasisRT.rofl.fromBech32(appId) })
+        .query(nic)
+      console.log('App', app)
 
-      const manifest = yaml.stringify(template.templateParser(appData.metadata!, network, appId));
+      const manifest = yaml.stringify(template.templateParser(appData.metadata!, network, appId))
       const compose = template.yaml.compose
-      console.log('Build?');
+      console.log('Build?')
       const { task_id } = await buildRofl({ manifest, compose }, token)
       const buildResults = await waitForBuildResults(task_id, token)
-      console.log('Build results:', buildResults);
+      console.log('Build results:', buildResults)
 
-      const enclaves = yaml.parse(atob(buildResults.manifest!)).deployments.default.policy.enclaves.map((e: { id: string }) => ({
-        // split https://github.com/oasisprotocol/oasis-core/blob/113878af787d6c6f8da22d6b8a33f6a249180c8b/go/common/sgx/common.go#L209-L221
-        mr_enclave: oasis.misc.fromBase64(e.id).slice(0, 32),
-        mr_signer: oasis.misc.fromBase64(e.id).slice(32),
-      }))
+      const enclaves = yaml
+        .parse(atob(buildResults.manifest!))
+        .deployments.default.policy.enclaves.map((e: { id: string }) => ({
+          // split https://github.com/oasisprotocol/oasis-core/blob/113878af787d6c6f8da22d6b8a33f6a249180c8b/go/common/sgx/common.go#L209-L221
+          mr_enclave: oasis.misc.fromBase64(e.id).slice(0, 32),
+          mr_signer: oasis.misc.fromBase64(e.id).slice(32),
+        }))
 
-      console.log('update app with enclaves and secrets?');
+      console.log('update app with enclaves and secrets?')
       hash = await sendTransactionAsync(
         rofl
           .callUpdate()
@@ -316,15 +316,22 @@ export function useCreateAndDeployApp() {
               ...app.policy,
               enclaves: enclaves,
             },
-            secrets: Object.fromEntries(Object.entries(appData.agent ?? {}).map(([key, value]) => {
-              return [key, oasis.misc.fromBase64(oasisRT.rofl.encryptSecret(key, oasis.misc.fromString(value), app.sek))]
-            })),
+            secrets: Object.fromEntries(
+              Object.entries(appData.agent ?? {}).map(([key, value]) => {
+                return [
+                  key,
+                  oasis.misc.fromBase64(
+                    oasisRT.rofl.encryptSecret(key, oasis.misc.fromString(value), app.sek),
+                  ),
+                ]
+              }),
+            ),
           })
           .toSubcall(),
-      );
+      )
       await waitForTransactionReceipt(wagmiConfig, { hash })
 
-      console.log('deploy app?');
+      console.log('deploy app?')
       hash = await sendTransactionAsync(
         roflmarket
           .callInstanceCreate()
@@ -335,29 +342,37 @@ export function useCreateAndDeployApp() {
               app_id: app.id,
               manifest_hash: oasis.misc.fromHex(buildResults.manifest_hash),
               metadata: {
-                "net.oasis.deployment.orc.ref": buildResults.oci_reference,
+                'net.oasis.deployment.orc.ref': buildResults.oci_reference,
               },
             },
             term: duration.term,
             term_count: duration.term_count,
           })
           .toSubcall(),
-      );
+      )
       await waitForTransactionReceipt(wagmiConfig, { hash })
-      console.log('deployed', appId);
+      console.log('deployed', appId)
 
       return appId
     },
-  });
+  })
 }
 
 export function useRemoveApp() {
   const { sendTransactionAsync } = useSendTransaction()
-  return useMutation<void, AxiosError<unknown>, { appId: `rofl1${string}`, network: 'mainnet' | 'testnet' }>({
+  return useMutation<void, AxiosError<unknown>, { appId: `rofl1${string}`; network: 'mainnet' | 'testnet' }>({
     mutationFn: async ({ appId, network }) => {
-      const sapphireRuntimeId = network === 'mainnet' ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279') : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
-      const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId);
-      await sendTransactionAsync(rofl.callRemove().setBody({ id: oasisRT.rofl.fromBech32(appId) }).toSubcall());
-    }
+      const sapphireRuntimeId =
+        network === 'mainnet'
+          ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
+          : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId)
+      await sendTransactionAsync(
+        rofl
+          .callRemove()
+          .setBody({ id: oasisRT.rofl.fromBech32(appId) })
+          .toSubcall(),
+      )
+    },
   })
 }

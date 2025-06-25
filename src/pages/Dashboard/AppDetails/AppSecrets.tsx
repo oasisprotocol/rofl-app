@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { type FC } from 'react'
 import {
   Table,
   TableHeader,
@@ -6,41 +6,37 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from '@oasisprotocol/ui-library/src/components/ui/table';
-import { LockKeyhole } from 'lucide-react';
-import { type RoflAppSecrets } from '../../../nexus/api';
-import { RemoveSecret } from './RemoveSecret';
-import { SecretDialog } from './SecretDialog';
-import { type ViewSecretsState } from './types';
+} from '@oasisprotocol/ui-library/src/components/ui/table'
+import { LockKeyhole } from 'lucide-react'
+import { type RoflAppSecrets } from '../../../nexus/api'
+import { RemoveSecret } from './RemoveSecret'
+import { SecretDialog } from './SecretDialog'
+import { type ViewSecretsState } from './types'
 
 type AppSecretsProps = {
-  secrets: RoflAppSecrets;
-  setViewSecretsState: (state: ViewSecretsState) => void;
-  editEnabled?: boolean;
-};
+  secrets: RoflAppSecrets
+  setViewSecretsState: (state: ViewSecretsState) => void
+  editEnabled?: boolean
+}
 
-export const AppSecrets: FC<AppSecretsProps> = ({
-  secrets,
-  setViewSecretsState,
-  editEnabled,
-}) => {
-  const hasSecrets = Object.keys(secrets).length > 0;
+export const AppSecrets: FC<AppSecretsProps> = ({ secrets, setViewSecretsState, editEnabled }) => {
+  const hasSecrets = Object.keys(secrets).length > 0
 
   function handleRemoveSecret(secret: string) {
-    const updatedSecrets = { ...secrets };
-    delete updatedSecrets[secret];
+    const updatedSecrets = { ...secrets }
+    delete updatedSecrets[secret]
     setViewSecretsState({
       isDirty: true,
       secrets: updatedSecrets,
-    });
+    })
   }
 
   function handleEditSecret(name: string, value: string) {
-    const updatedSecrets = { ...secrets, [name]: value };
+    const updatedSecrets = { ...secrets, [name]: value }
     setViewSecretsState({
       isDirty: true,
       secrets: updatedSecrets,
-    });
+    })
   }
 
   return (
@@ -56,7 +52,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Object.keys(secrets).map((key) => (
+            {Object.keys(secrets).map(key => (
               <TableRow key={key}>
                 <TableCell>
                   <LockKeyhole size={16} className="font-white" />
@@ -65,11 +61,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({
                   {key}: [{(secrets[key] as string).length} bytes]
                 </TableCell>
                 <TableCell className="w-10">
-                  <SecretDialog
-                    mode="edit"
-                    secret={key}
-                    handleEditSecret={handleEditSecret}
-                  />
+                  <SecretDialog mode="edit" secret={key} handleEditSecret={handleEditSecret} />
                 </TableCell>
                 <TableCell className="w-10">
                   <RemoveSecret
@@ -83,11 +75,7 @@ export const AppSecrets: FC<AppSecretsProps> = ({
           </TableBody>
         </Table>
       )}
-      <SecretDialog
-        mode="add"
-        handleAddSecret={handleEditSecret}
-        editEnabled={editEnabled}
-      />
+      <SecretDialog mode="add" handleAddSecret={handleEditSecret} editEnabled={editEnabled} />
     </div>
-  );
-};
+  )
+}

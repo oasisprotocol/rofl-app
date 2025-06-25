@@ -1,19 +1,15 @@
-import { type FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
-import { ArrowRight } from 'lucide-react';
-import { Link, type To } from 'react-router-dom';
+import { type FC } from 'react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { ArrowRight } from 'lucide-react'
+import { Link, type To } from 'react-router-dom'
 
 interface SectionHeaderProps {
-  title: string;
-  to: To;
-  disabled?: boolean;
+  title: string
+  to: To
+  disabled?: boolean
 }
 
-export const SectionHeader: FC<SectionHeaderProps> = ({
-  title,
-  to,
-  disabled = false,
-}) => {
+export const SectionHeader: FC<SectionHeaderProps> = ({ title, to, disabled = false }) => {
   return (
     <div className="flex items-center justify-between mb-4 border-b pb-4">
       <h2 className="text-xl font-semibold text-white">{title}</h2>
@@ -31,5 +27,5 @@ export const SectionHeader: FC<SectionHeaderProps> = ({
         </Button>
       )}
     </div>
-  );
-};
+  )
+}

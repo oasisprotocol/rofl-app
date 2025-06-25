@@ -1,17 +1,17 @@
-import { type FC } from 'react';
-import { CreateLayout } from './CreateLayout';
-import { CreateFormHeader } from './CreateFormHeader';
-import { CreateFormNavigation } from './CreateFormNavigation';
-import { type AppData } from './types';
-import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator';
-import { fromBaseUnits } from '../../utils/number-utils';
+import { type FC } from 'react'
+import { CreateLayout } from './CreateLayout'
+import { CreateFormHeader } from './CreateFormHeader'
+import { CreateFormNavigation } from './CreateFormNavigation'
+import { type AppData } from './types'
+import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator'
+import { fromBaseUnits } from '../../utils/number-utils'
 
 type AgentStepProps = {
-  handleNext: () => void;
-  handleBack: () => void;
-  selectedTemplateName?: string;
-  appData?: AppData;
-};
+  handleNext: () => void
+  handleBack: () => void
+  selectedTemplateName?: string
+  appData?: AppData
+}
 
 export const PaymentStep: FC<AgentStepProps> = ({
   handleNext,
@@ -67,5 +67,5 @@ export const PaymentStep: FC<AgentStepProps> = ({
 
       <CreateFormNavigation handleNext={handleNext} handleBack={handleBack} />
     </CreateLayout>
-  );
-};
+  )
+}

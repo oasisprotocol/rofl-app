@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import type { FC } from 'react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -9,8 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@oasisprotocol/ui-library/src/components/ui/dialog';
-import { CircleStop } from 'lucide-react';
+} from '@oasisprotocol/ui-library/src/components/ui/dialog'
+import { CircleStop } from 'lucide-react'
 
 export const MachineStop: FC = () => {
   return (
@@ -25,22 +25,18 @@ export const MachineStop: FC = () => {
         <DialogHeader>
           <DialogTitle>Please confirm your action</DialogTitle>
           <DialogDescription>
-            This action will stop the machine and your app will not longer use
-            this provider.
+            This action will stop the machine and your app will not longer use this provider.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button
-            variant="destructive"
-            onClick={() => console.log('trigger stop action')}
-          >
+          <Button variant="destructive" onClick={() => console.log('trigger stop action')}>
             Confirm
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

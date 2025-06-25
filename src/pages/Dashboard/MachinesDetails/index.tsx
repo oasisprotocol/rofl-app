@@ -1,38 +1,33 @@
-import type { FC } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@oasisprotocol/ui-library/src/components/ui/tabs';
-import { Clock, CircleArrowUp } from 'lucide-react';
-import { formatDistanceToNow, parseISO, isFuture } from 'date-fns';
-import { MachineStatusIcon } from '../../../components/MachineStatusIcon';
-import { DetailsSectionRow } from '../../../components/DetailsSectionRow';
-import { MachineStop } from './MachineStop';
-import { MachineRestart } from './MachineRestart';
-import { useNetwork } from '../../../hooks/useNetwork';
+import type { FC } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@oasisprotocol/ui-library/src/components/ui/tabs'
+import { Clock, CircleArrowUp } from 'lucide-react'
+import { formatDistanceToNow, parseISO, isFuture } from 'date-fns'
+import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
+import { DetailsSectionRow } from '../../../components/DetailsSectionRow'
+import { MachineStop } from './MachineStop'
+import { MachineRestart } from './MachineRestart'
+import { useNetwork } from '../../../hooks/useNetwork'
 import {
   useGetRuntimeRoflAppsId,
   useGetRuntimeRoflmarketProvidersAddressInstancesId,
-} from '../../../nexus/api';
-import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
-import { trimLongString } from '../../../utils/trimLongString';
-import { MachineResources } from '../../../components/MachineResources';
+} from '../../../nexus/api'
+import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
+import { trimLongString } from '../../../utils/trimLongString'
+import { MachineResources } from '../../../components/MachineResources'
 
 export const MachinesDetails: FC = () => {
-  const network = useNetwork();
-  const { provider, id } = useParams();
+  const network = useNetwork()
+  const { provider, id } = useParams()
   const roflMachinesQuery = useGetRuntimeRoflmarketProvidersAddressInstancesId(
     network,
     'sapphire',
     provider!,
-    id!
-  );
-  const { data, isLoading, isFetched } = roflMachinesQuery;
-  const machine = data?.data;
+    id!,
+  )
+  const { data, isLoading, isFetched } = roflMachinesQuery
+  const machine = data?.data
 
   return (
     <>
@@ -44,35 +39,24 @@ export const MachinesDetails: FC = () => {
               <>
                 <div className="flex items-center gap-2">
                   <h1 className="text-2xl font-bold">
-                    <>
-                      {machine.metadata?.['net.oasis.provider.name'] ||
-                        trimLongString(machine.provider)}
-                    </>
+                    <>{machine.metadata?.['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
                   </h1>
-                  <MachineStatusIcon
-                    removed={machine.removed}
-                    expirationDate={machine.paid_until}
-                  />
+                  <MachineStatusIcon removed={machine.removed} expirationDate={machine.paid_until} />
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <div className="flex items-center gap-2 text-orange-400 px-3 py-1.5 ">
-                    {machine.paid_until &&
-                      isFuture(parseISO(machine.paid_until)) && (
-                        <>
-                          <Clock className="h-4 w-4" />
-                          <span>
-                            {formatDistanceToNow(parseISO(machine.paid_until), {
-                              addSuffix: false,
-                            })}
-                          </span>
-                        </>
-                      )}
+                    {machine.paid_until && isFuture(parseISO(machine.paid_until)) && (
+                      <>
+                        <Clock className="h-4 w-4" />
+                        <span>
+                          {formatDistanceToNow(parseISO(machine.paid_until), {
+                            addSuffix: false,
+                          })}
+                        </span>
+                      </>
+                    )}
                   </div>
-                  <Button
-                    variant="outline"
-                    className="w-full md:w-auto"
-                    disabled
-                  >
+                  <Button variant="outline" className="w-full md:w-auto" disabled>
                     <CircleArrowUp />
                     Top up
                   </Button>
@@ -92,25 +76,13 @@ export const MachinesDetails: FC = () => {
               {isLoading && <Skeleton className="w-full h-[200px]" />}
               {isFetched && machine && (
                 <>
-                  <DetailsSectionRow
-                    label="App Running"
-                    className=" py-6 border-b"
-                  >
-                    <Link
-                      to={`/dashboard/apps/${machine.deployment?.app_id}`}
-                      className="text-primary"
-                    >
-                      <MachineAppDetails
-                        appId={machine.deployment?.app_id as string}
-                      />
+                  <DetailsSectionRow label="App Running" className=" py-6 border-b">
+                    <Link to={`/dashboard/apps/${machine.deployment?.app_id}`} className="text-primary">
+                      <MachineAppDetails appId={machine.deployment?.app_id as string} />
                     </Link>
                   </DetailsSectionRow>
-                  <DetailsSectionRow label="Provider">
-                    {machine.provider}
-                  </DetailsSectionRow>
-                  <DetailsSectionRow label="Instance ID">
-                    {machine.id}
-                  </DetailsSectionRow>
+                  <DetailsSectionRow label="Provider">{machine.provider}</DetailsSectionRow>
+                  <DetailsSectionRow label="Instance ID">{machine.id}</DetailsSectionRow>
                   <DetailsSectionRow label="Resources">
                     <MachineResources
                       cpus={machine.resources?.cpus}
@@ -133,16 +105,16 @@ export const MachinesDetails: FC = () => {
         </Tabs>
       </div>
     </>
-  );
-};
+  )
+}
 
 const MachineAppDetails: FC<{
-  appId: string;
+  appId: string
 }> = ({ appId }) => {
-  const network = useNetwork();
-  const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', appId);
-  const { data, isFetched } = roflAppQuery;
-  const roflAppName = data?.data.metadata['net.oasis.rofl.name'];
+  const network = useNetwork()
+  const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', appId)
+  const { data, isFetched } = roflAppQuery
+  const roflAppName = data?.data.metadata['net.oasis.rofl.name']
 
-  return <>{isFetched && <>{roflAppName || appId}</>}</>;
-};
+  return <>{isFetched && <>{roflAppName || appId}</>}</>
+}

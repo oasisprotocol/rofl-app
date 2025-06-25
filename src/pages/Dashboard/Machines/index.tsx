@@ -1,59 +1,46 @@
-import { useEffect, type FC } from 'react';
-import { MachinesEmptyState } from './emptyState';
-import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useInView } from 'react-intersection-observer';
-import { useAccount } from 'wagmi';
-import { useNetwork } from '../../../hooks/useNetwork';
-import {
-  getGetRuntimeRoflAppsQueryKey,
-  GetRuntimeRoflmarketInstances,
-} from '../../../nexus/api';
-import { MachineCard } from '../../../components/MachineCard';
+import { useEffect, type FC } from 'react'
+import { MachinesEmptyState } from './emptyState'
+import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInView } from 'react-intersection-observer'
+import { useAccount } from 'wagmi'
+import { useNetwork } from '../../../hooks/useNetwork'
+import { getGetRuntimeRoflAppsQueryKey, GetRuntimeRoflmarketInstances } from '../../../nexus/api'
+import { MachineCard } from '../../../components/MachineCard'
 
-const pageLimit = 9;
+const pageLimit = 9
 
 export const Machines: FC = () => {
-  const { address, isConnected } = useAccount();
-  const { ref, inView } = useInView();
-  const network = useNetwork();
+  const { address, isConnected } = useAccount()
+  const { ref, inView } = useInView()
+  const network = useNetwork()
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isFetched,
-  } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } = useInfiniteQuery({
     queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire')],
     queryFn: async ({ pageParam = 0 }) => {
       const result = await GetRuntimeRoflmarketInstances(network, 'sapphire', {
         limit: pageLimit,
         offset: pageParam,
         admin: address,
-      });
-      return result;
+      })
+      return result
     },
     initialPageParam: 0,
     enabled: isConnected,
     getNextPageParam: (lastPage, allPages) => {
-      const totalFetched = allPages.length * pageLimit;
-      return totalFetched < lastPage.data.total_count
-        ? totalFetched
-        : undefined;
+      const totalFetched = allPages.length * pageLimit
+      return totalFetched < lastPage.data.total_count ? totalFetched : undefined
     },
-  });
+  })
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
+      fetchNextPage()
     }
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage, inView]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, inView])
 
-  const allRoflInstances =
-    data?.pages.flatMap((page) => page.data.instances) || [];
-  const isEmpty = isFetched && allRoflInstances.length === 0;
+  const allRoflInstances = data?.pages.flatMap(page => page.data.instances) || []
+  const isEmpty = isFetched && allRoflInstances.length === 0
 
   return (
     <>
@@ -64,7 +51,7 @@ export const Machines: FC = () => {
             <Skeleton key={index} className="w-full h-[200px]" />
           ))}
 
-        {allRoflInstances.map((machine) => (
+        {allRoflInstances.map(machine => (
           <MachineCard key={machine.id} machine={machine} network={network} />
         ))}
 
@@ -76,5 +63,5 @@ export const Machines: FC = () => {
 
       <div ref={ref} className="h-10 w-full" />
     </>
-  );
-};
+  )
+}

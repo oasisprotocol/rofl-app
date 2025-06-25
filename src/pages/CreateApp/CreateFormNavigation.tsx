@@ -1,11 +1,11 @@
-import { type FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import { type FC } from 'react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 
 type CreateFormNavigationProps = {
-  handleNext: () => void;
-  handleBack?: () => void;
-  disabled?: boolean;
-};
+  handleNext: () => void
+  handleBack?: () => void
+  disabled?: boolean
+}
 
 export const CreateFormNavigation: FC<CreateFormNavigationProps> = ({
   handleNext,
@@ -23,5 +23,5 @@ export const CreateFormNavigation: FC<CreateFormNavigationProps> = ({
         Continue
       </Button>
     </div>
-  );
-};
+  )
+}

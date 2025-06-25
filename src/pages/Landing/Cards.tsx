@@ -1,14 +1,14 @@
-import { useEffect, useState, type FC } from 'react';
-import { CardWrapper } from '../../components/Card/index';
-import dashboardImage from './images/dashboard.png';
-import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
+import { useEffect, useState, type FC } from 'react'
+import { CardWrapper } from '../../components/Card/index'
+import dashboardImage from './images/dashboard.png'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
 export const Cards: FC = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+    setIsLoaded(true)
+  }, [])
 
   return (
     <div className="p-6 md:p-12">
@@ -18,7 +18,7 @@ export const Cards: FC = () => {
           {
             'opacity-100 ': isLoaded,
             'opacity-0 ': !isLoaded,
-          }
+          },
         )}
       >
         <CardWrapper
@@ -44,5 +44,5 @@ export const Cards: FC = () => {
         />
       </div>
     </div>
-  );
-};
+  )
+}

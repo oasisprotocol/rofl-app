@@ -1,49 +1,31 @@
-import { type FC } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  useGetRuntimeRoflAppsId,
-  type RoflMarketInstance,
-} from '../../nexus/api';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@oasisprotocol/ui-library/src/components/ui/card';
-import { MachineStatusIcon } from '../MachineStatusIcon';
-import { trimLongString } from '../../utils/trimLongString';
-import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
-import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
+import { type FC } from 'react'
+import { Link } from 'react-router-dom'
+import { useGetRuntimeRoflAppsId, type RoflMarketInstance } from '../../nexus/api'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@oasisprotocol/ui-library/src/components/ui/card'
+import { MachineStatusIcon } from '../MachineStatusIcon'
+import { trimLongString } from '../../utils/trimLongString'
+import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
 type ExploreAppCardProps = {
-  machine: RoflMarketInstance;
-  network: 'mainnet' | 'testnet';
-};
+  machine: RoflMarketInstance
+  network: 'mainnet' | 'testnet'
+}
 
 export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
-  const roflAppQuery = useGetRuntimeRoflAppsId(
-    network,
-    'sapphire',
-    machine.deployment?.app_id as string
-  );
-  const { data, isLoading, isFetched } = roflAppQuery;
-  const roflAppName = data?.data.metadata['net.oasis.rofl.name'];
+  const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', machine.deployment?.app_id as string)
+  const { data, isLoading, isFetched } = roflAppQuery
+  const roflAppName = data?.data.metadata['net.oasis.rofl.name']
 
   return (
     <Card className="rounded-md">
       <CardHeader className="">
         <div className="flex items-start justify-between">
           <h3 className="text-lg font-semibold text-foreground pr-2 break-all">
-            <>
-              {machine.metadata?.['net.oasis.provider.name'] ||
-                trimLongString(machine.provider)}
-            </>
+            <>{machine.metadata?.['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
           </h3>
-          <MachineStatusIcon
-            removed={machine.removed}
-            expirationDate={machine.paid_until}
-          />
+          <MachineStatusIcon removed={machine.removed} expirationDate={machine.paid_until} />
         </div>
       </CardHeader>
       <CardContent className="flex-1">
@@ -64,13 +46,9 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="secondary" asChild>
-          <Link
-            to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}
-          >
-            View details
-          </Link>
+          <Link to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}>View details</Link>
         </Button>
       </CardFooter>
     </Card>
-  );
-};
+  )
+}

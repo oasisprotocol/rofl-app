@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import type { FC } from 'react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -9,17 +9,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@oasisprotocol/ui-library/src/components/ui/dialog';
+} from '@oasisprotocol/ui-library/src/components/ui/dialog'
 
 type DiscardChangesProps = {
-  disabled: boolean;
-  onConfirm: () => void;
-};
+  disabled: boolean
+  onConfirm: () => void
+}
 
-export const DiscardChanges: FC<DiscardChangesProps> = ({
-  disabled,
-  onConfirm,
-}) => {
+export const DiscardChanges: FC<DiscardChangesProps> = ({ disabled, onConfirm }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -30,9 +27,7 @@ export const DiscardChanges: FC<DiscardChangesProps> = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Please confirm your action</DialogTitle>
-          <DialogDescription>
-            All temporary changes will be discarded.
-          </DialogDescription>
+          <DialogDescription>All temporary changes will be discarded.</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
@@ -46,5 +41,5 @@ export const DiscardChanges: FC<DiscardChangesProps> = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,12 +1,12 @@
-import { parse } from 'yaml';
-import tgbot from '../../../templates/tgbot/tgbot.png';
-import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw';
-import defaultDeployments from '../../../templates/default-deployments.yaml?raw';
-import type { MetadataFormData } from './types';
+import { parse } from 'yaml'
+import tgbot from '../../../templates/tgbot/tgbot.png'
+import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw'
+import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
+import type { MetadataFormData } from './types'
 
-const parsedDefaultDeployments = parse(defaultDeployments);
-const parsedTemplate = parse(tgbotTemplate);
-const { compose: tgbotCompose, ...tgbotRofl } = parsedTemplate;
+const parsedDefaultDeployments = parse(defaultDeployments)
+const parsedTemplate = parse(tgbotTemplate)
+const { compose: tgbotCompose, ...tgbotRofl } = parsedTemplate
 
 export const templates = [
   {
@@ -34,11 +34,7 @@ export const templates = [
       compose: tgbotCompose,
       rofl: tgbotRofl,
     },
-    templateParser: (
-      metadata: Partial<MetadataFormData>,
-      network: 'mainnet' | 'testnet',
-      appId: string
-    ) => {
+    templateParser: (metadata: Partial<MetadataFormData>, network: 'mainnet' | 'testnet', appId: string) => {
       return {
         ...tgbotRofl,
         title: metadata.name,
@@ -54,11 +50,11 @@ export const templates = [
             network,
           },
         },
-      };
+      }
     },
   },
-];
+]
 
 export const getTemplateById = (id: string | undefined) => {
-  return templates.find((template) => template.id === id);
-};
+  return templates.find(template => template.id === id)
+}

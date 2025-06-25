@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import type { FC } from 'react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -9,28 +9,20 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@oasisprotocol/ui-library/src/components/ui/dialog';
-import { Trash2 } from 'lucide-react';
+} from '@oasisprotocol/ui-library/src/components/ui/dialog'
+import { Trash2 } from 'lucide-react'
 
 type RemoveSecretProps = {
-  secret: string;
-  handleRemoveSecret: (secret: string) => void;
-  editEnabled?: boolean;
-};
+  secret: string
+  handleRemoveSecret: (secret: string) => void
+  editEnabled?: boolean
+}
 
-export const RemoveSecret: FC<RemoveSecretProps> = ({
-  secret,
-  handleRemoveSecret,
-  editEnabled,
-}) => {
+export const RemoveSecret: FC<RemoveSecretProps> = ({ secret, handleRemoveSecret, editEnabled }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          disabled={!editEnabled}
-          variant="ghost"
-          className="text-destructive hover:text-destructive"
-        >
+        <Button disabled={!editEnabled} variant="ghost" className="text-destructive hover:text-destructive">
           <Trash2 />
         </Button>
       </DialogTrigger>
@@ -46,15 +38,12 @@ export const RemoveSecret: FC<RemoveSecretProps> = ({
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button
-              variant="destructive"
-              onClick={() => handleRemoveSecret(secret)}
-            >
+            <Button variant="destructive" onClick={() => handleRemoveSecret(secret)}>
               Confirm
             </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

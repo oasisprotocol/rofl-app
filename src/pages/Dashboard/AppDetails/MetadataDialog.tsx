@@ -1,5 +1,5 @@
-import { useEffect, useState, type FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import { useEffect, useState, type FC } from 'react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -8,30 +8,23 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@oasisprotocol/ui-library/src/components/ui/dialog';
-import { SquarePen } from 'lucide-react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { MetadataFormFields } from '../../../components/MetadataFormFields';
-import {
-  metadataFormSchema,
-  type MetadataFormData,
-} from '../../CreateApp/types';
-import { type RoflAppMetadata } from '../../../nexus/api';
-import { type ViewMetadataState } from './types';
+} from '@oasisprotocol/ui-library/src/components/ui/dialog'
+import { SquarePen } from 'lucide-react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { MetadataFormFields } from '../../../components/MetadataFormFields'
+import { metadataFormSchema, type MetadataFormData } from '../../CreateApp/types'
+import { type RoflAppMetadata } from '../../../nexus/api'
+import { type ViewMetadataState } from './types'
 
 type MetadataDialogProps = {
-  metadata?: RoflAppMetadata;
-  setViewMetadataState: (state: ViewMetadataState) => void;
-  editEnabled?: boolean;
-};
+  metadata?: RoflAppMetadata
+  setViewMetadataState: (state: ViewMetadataState) => void
+  editEnabled?: boolean
+}
 
-export const MetadataDialog: FC<MetadataDialogProps> = ({
-  metadata,
-  setViewMetadataState,
-  editEnabled,
-}) => {
-  const [open, setOpen] = useState(false);
+export const MetadataDialog: FC<MetadataDialogProps> = ({ metadata, setViewMetadataState, editEnabled }) => {
+  const [open, setOpen] = useState(false)
 
   const form = useForm<MetadataFormData>({
     resolver: zodResolver(metadataFormSchema),
@@ -42,26 +35,26 @@ export const MetadataDialog: FC<MetadataDialogProps> = ({
       version: '',
       homepage: '',
     },
-  });
+  })
 
   useEffect(() => {
     if (metadata) {
       form.reset({
         ...metadata,
-      });
+      })
     }
-  }, [metadata, form]);
+  }, [metadata, form])
 
   function onCancel() {
-    form.reset();
-    setOpen(false);
+    form.reset()
+    setOpen(false)
   }
 
   function onOpenChange(newOpen: boolean) {
     if (!newOpen) {
-      onCancel();
+      onCancel()
     } else {
-      setOpen(newOpen);
+      setOpen(newOpen)
     }
   }
 
@@ -71,19 +64,15 @@ export const MetadataDialog: FC<MetadataDialogProps> = ({
       metadata: {
         ...values,
       },
-    });
-    form.reset();
-    setOpen(false);
+    })
+    form.reset()
+    setOpen(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button
-          disabled={!editEnabled}
-          variant="outline"
-          className="w-full md:w-auto md:ml-8 float-right"
-        >
+        <Button disabled={!editEnabled} variant="outline" className="w-full md:w-auto md:ml-8 float-right">
           <SquarePen />
           Edit
         </Button>
@@ -109,5 +98,5 @@ export const MetadataDialog: FC<MetadataDialogProps> = ({
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
