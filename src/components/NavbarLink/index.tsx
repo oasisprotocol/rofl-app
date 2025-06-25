@@ -1,5 +1,5 @@
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
-import { FC, PropsWithChildren } from 'react'
+import { type FC, type PropsWithChildren } from 'react'
 import { NavLink } from 'react-router-dom'
 
 interface NavbarLinkProps extends PropsWithChildren {

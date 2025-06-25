@@ -11,6 +11,7 @@ const initAppDataState: AppData = {
     description: '',
     version: '',
     homepage: '',
+    license: '',
   },
   agent: {
     OLLAMA_MODEL: '',
@@ -18,8 +19,9 @@ const initAppDataState: AppData = {
     OLLAMA_SYSTEM_PROMPT: '',
   },
   build: {
-    artifacts: '',
     provider: '',
+    duration: 'hours',
+    number: 2,
     resources: '',
   },
   payment: {},
