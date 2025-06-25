@@ -7,6 +7,8 @@ import { useCreateAndDeployApp } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { useNetwork } from '../../hooks/useNetwork'
 import { AnimatedStepText } from './AnimatedStepText'
+import { useArtifactUploads } from '../../hooks/useArtifactUploads'
+import * as yaml from 'yaml'
 
 // TEMP
 export type Template = {
@@ -48,10 +50,33 @@ export const BootstrapState = {
 
 export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => {
   const network = useNetwork()
+  const [appId, setAppId] = useState('')
   const [buildTriggered, setBuildTriggered] = useState(false)
   const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.CreateAndDeploy)
   const { token } = useRoflAppBackendAuthContext()
+
   const createAndDeployAppMutation = useCreateAndDeployApp()
+
+  const rofl =
+    appId && template && appData?.metadata ? template.templateParser(appData.metadata, network, appId) : {}
+  const roflYaml = yaml.stringify(rofl)
+  const composeYaml = template?.yaml.compose || ''
+
+  useArtifactUploads({
+    token,
+    appId,
+    roflYaml,
+    composeYaml,
+    enabled: bootstrapStep === BootstrapState.Artifacts && !!appId && !!token && !!appData && !!template,
+    onSuccess: () => {
+      console.log('Artifact uploads completed successfully')
+      setBootstrapStep(BootstrapState.Success)
+    },
+    onError: error => {
+      console.error('Failed to upload artifacts:', error)
+      setBootstrapStep(BootstrapState.Error)
+    },
+  })
 
   // Without useEffect onSuccess and onError will not be called
   useEffect(() => {
@@ -65,8 +90,10 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
           network,
         },
         {
-          onSuccess: () => {
-            setBootstrapStep(BootstrapState.Success) // Switch to artifacts step when hook is used
+          onSuccess: returnedAppId => {
+            setAppId(returnedAppId)
+            console.log('App created and deployed successfully with ID:', returnedAppId)
+            setBootstrapStep(BootstrapState.Artifacts)
           },
           onError: error => {
             console.log('Failed to create and deploy app:', error)
@@ -74,13 +101,8 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
           },
         },
       )
-      // TODO: useArtifactUploads
     }
   }, [buildTriggered, token, appData, template, network, createAndDeployAppMutation])
-
-  if (!appData || !template) {
-    throw new Error('Missing data to bootstrap the app')
-  }
 
   return (
     <Layout headerContent={<Header />} footerContent={<Footer />}>
