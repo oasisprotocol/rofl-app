@@ -4,11 +4,8 @@ deployments:
     network:
     paratime: sapphire
     policy:
-      quotes:
-        pcs:
-          tcb_validity_period: 30
-          min_tcb_evaluation_data_number: 18
-          tdx: {}
+      enclaves:
       endorsements:
         - any: {}
       fees: endorsing_node
+      max_expiration: 3
