@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { WagmiProvider } from 'wagmi'
@@ -91,22 +90,20 @@ const router = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <WagmiProvider config={wagmiConfig}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider
-          theme={rainbowKitTheme}
-          avatar={({ address, size }) => (
-            <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
-          )}
-        >
-          <RoflAppBackendAuthProvider>
-            <CreateContextProvider>
-              <RouterProvider router={router} />
-            </CreateContextProvider>
-          </RoflAppBackendAuthProvider>
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
-  </StrictMode>,
+  <WagmiProvider config={wagmiConfig}>
+    <QueryClientProvider client={queryClient}>
+      <RainbowKitProvider
+        theme={rainbowKitTheme}
+        avatar={({ address, size }) => (
+          <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
+        )}
+      >
+        <RoflAppBackendAuthProvider>
+          <CreateContextProvider>
+            <RouterProvider router={router} />
+          </CreateContextProvider>
+        </RoflAppBackendAuthProvider>
+      </RainbowKitProvider>
+    </QueryClientProvider>
+  </WagmiProvider>,
 )
