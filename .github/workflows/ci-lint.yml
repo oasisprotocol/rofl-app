@@ -49,6 +49,10 @@ jobs:
           yarn lint-git
         # Always run this step so that all linting errors can be seen at once.
         if: always()
+      - name: Prettier
+        run: yarn prettier-check
+        # Always run this step so that all linting errors can be seen at once.
+        if: always()
       - name: ESLint
         # Disallow warnings and always throw errors.
         run: yarn lint --max-warnings 0
