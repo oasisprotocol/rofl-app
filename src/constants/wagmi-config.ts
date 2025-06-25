@@ -1,30 +1,5 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit'
-import { defineChain } from 'viem'
-import { sapphireTestnet } from 'viem/chains'
-
-export const SAPPHIRE_1RPC_CHAIN_CONFIG = defineChain({
-  id: 23294,
-  name: 'Oasis Sapphire',
-  network: 'sapphire',
-  nativeCurrency: { name: 'Sapphire Rose', symbol: 'ROSE', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ['https://1rpc.io/oasis/sapphire'],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Oasis Explorer',
-      url: 'https://explorer.oasis.io/mainnet/sapphire',
-    },
-  },
-  contracts: {
-    multicall3: {
-      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
-      blockCreated: 734531,
-    },
-  },
-})
+import { sapphireTestnet, sapphire, mainnet } from 'viem/chains'
 
 const { VITE_WALLET_CONNECT_PROJECT_ID } = import.meta.env
 
@@ -35,9 +10,9 @@ declare module 'wagmi' {
 }
 
 export const wagmiConfig: ReturnType<typeof getDefaultConfig> = getDefaultConfig({
-  appName: 'ROSE Stake',
+  appName: 'ROFL App',
   projectId: VITE_WALLET_CONNECT_PROJECT_ID,
-  chains: [SAPPHIRE_1RPC_CHAIN_CONFIG, sapphireTestnet],
+  chains: [sapphire, sapphireTestnet, mainnet],
   ssr: false,
   batch: {
     multicall: false,

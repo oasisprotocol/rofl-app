@@ -1,8 +1,11 @@
 import { useAccount } from 'wagmi'
 import { AppError, AppErrors } from '../components/ErrorBoundary/errors'
+import { mainnet, sapphire, sapphireTestnet } from 'viem/chains'
+import { useRef } from 'react'
 
 export function useNetwork(fallback?: 'mainnet' | 'testnet') {
   const { isConnected, chainId } = useAccount()
+  const previousValueRef = useRef<'mainnet' | 'testnet' | null>(null)
 
   if (!isConnected) {
     if (!fallback) {
@@ -12,12 +15,19 @@ export function useNetwork(fallback?: 'mainnet' | 'testnet') {
     }
   }
 
-  if (chainId === 23294) {
+  if (chainId === sapphire.id) {
+    previousValueRef.current = 'mainnet'
     return 'mainnet'
   }
 
-  if (chainId === 23295) {
+  if (chainId === sapphireTestnet.id) {
+    previousValueRef.current = 'testnet'
     return 'testnet'
+  }
+
+  // Don't throw on "unsupported" chains, that are needed for payment
+  if (chainId === mainnet.id) {
+    return previousValueRef.current ?? fallback
   }
 
   if (fallback) {
