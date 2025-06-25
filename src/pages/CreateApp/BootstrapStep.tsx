@@ -6,6 +6,7 @@ import type { AppData, MetadataFormData } from './types'
 import { useCreateAndDeployApp } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { useNetwork } from '../../hooks/useNetwork'
+import { AnimatedStepText } from './AnimatedStepText'
 
 // TEMP
 export type Template = {
@@ -36,69 +37,50 @@ type BootstrapStepProps = {
   template: Template | undefined
 }
 
-const textContent = [
-  {
-    header: 'Building artifacts',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
-  },
-  {
-    header: 'Deploying ROFL app',
-    description:
-      'Nulla pretium dictum metus, in fringilla arcu tincidunt ut. Duis eget turpis at magna tempor interdum at ac ante.',
-  },
-  {
-    header: 'Submitting secrets',
-    description: 'Sed imperdiet libero sed arcu iaculis, et congue eros rhoncus.',
-  },
-  {
-    header: 'ROFL App is ready',
-    description:
-      'Donec lacinia a ante eu imperdiet. Sed nisi elit, hendrerit ut est nec, pharetra euismod odio.',
-  },
-]
+type BootstrapState = (typeof BootstrapState)[keyof typeof BootstrapState]
+
+export const BootstrapState = {
+  CreateAndDeploy: 'create_and_deploy',
+  Artifacts: 'artifacts',
+  Success: 'success',
+  Error: 'error',
+} as const
 
 export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => {
   const network = useNetwork()
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isVisible, setIsVisible] = useState(true)
   const [buildTriggered, setBuildTriggered] = useState(false)
+  const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.CreateAndDeploy)
   const { token } = useRoflAppBackendAuthContext()
   const createAndDeployAppMutation = useCreateAndDeployApp()
+
+  // Without useEffect onSuccess and onError will not be called
+  useEffect(() => {
+    if (!buildTriggered && token && appData && template && network) {
+      setBuildTriggered(true)
+      createAndDeployAppMutation.mutate(
+        {
+          token: token!,
+          template,
+          appData,
+          network,
+        },
+        {
+          onSuccess: () => {
+            setBootstrapStep(BootstrapState.Success) // Switch to artifacts step when hook is used
+          },
+          onError: error => {
+            console.log('Failed to create and deploy app:', error)
+            setBootstrapStep(BootstrapState.Error)
+          },
+        },
+      )
+      // TODO: useArtifactUploads
+    }
+  }, [buildTriggered, token, appData, template, network, createAndDeployAppMutation])
 
   if (!appData || !template) {
     throw new Error('Missing data to bootstrap the app')
   }
-
-  if (!buildTriggered && token && appData && template) {
-    setBuildTriggered(true)
-    createAndDeployAppMutation.mutate({
-      token: token!,
-      template,
-      appData,
-      network,
-    })
-    // TODO: useArtifactUploads
-  }
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsVisible(false)
-
-      setTimeout(() => {
-        setCurrentIndex(prevIndex => {
-          const nextIndex = prevIndex + 1
-          if (nextIndex >= textContent.length - 1) {
-            clearInterval(interval)
-          }
-          return Math.min(nextIndex, textContent.length - 1)
-        })
-        setIsVisible(true)
-      }, 400)
-    }, 3000)
-
-    return () => clearInterval(interval)
-  }, [])
 
   return (
     <Layout headerContent={<Header />} footerContent={<Footer />}>
@@ -111,22 +93,7 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
             </video>
           </div>
         </div>
-        <div className="mb-8">
-          <h1
-            className={`text-2xl font-white font-bold mb-2 text-center transition-all duration-800 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
-            }`}
-          >
-            {textContent[currentIndex].header}
-          </h1>
-          <p
-            className={`text-muted-foreground text-md max-w-md text-center transition-all duration-800 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`}
-          >
-            {textContent[currentIndex].description}
-          </p>
-        </div>
+        <AnimatedStepText bootstrapStep={bootstrapStep} />
       </div>
     </Layout>
   )
