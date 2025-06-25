@@ -1,45 +1,41 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { WagmiProvider } from "wagmi";
-import { CreateContextProvider } from "./pages/CreateApp/CreateContextProvider";
-import { Landing } from "./pages/Landing";
-import { Dashboard } from "./pages/Dashboard";
-import { MyApps } from "./pages/Dashboard/MyApps";
-import { AppDetails } from "./pages/Dashboard/AppDetails";
-import { Machines } from "./pages/Dashboard/Machines";
-import { MachinesDetails } from "./pages/Dashboard/MachinesDetails";
-import { Create } from "./pages/CreateApp";
-import { Explore } from "./pages/Explore";
-import { NotFound } from "./components/NotFound";
-import { wagmiConfig } from "./constants/wagmi-config.ts";
-import {
-  lightTheme,
-  RainbowKitProvider,
-  type Theme,
-} from "@rainbow-me/rainbowkit";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AccountAvatar } from "./components/AccountAvatar";
-import { MainLayout } from "./components/Layout/MainLayout";
-import { RoflAppBackendAuthProvider } from "./contexts/RoflAppBackendAuth/Provider";
-import { RootLayout } from "./components/RootLayout";
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { WagmiProvider } from 'wagmi'
+import { CreateContextProvider } from './pages/CreateApp/CreateContextProvider'
+import { Landing } from './pages/Landing'
+import { Dashboard } from './pages/Dashboard'
+import { MyApps } from './pages/Dashboard/MyApps'
+import { AppDetails } from './pages/Dashboard/AppDetails'
+import { Machines } from './pages/Dashboard/Machines'
+import { MachinesDetails } from './pages/Dashboard/MachinesDetails'
+import { Create } from './pages/CreateApp'
+import { Explore } from './pages/Explore'
+import { NotFound } from './components/NotFound'
+import { wagmiConfig } from './constants/wagmi-config.ts'
+import { lightTheme, RainbowKitProvider, type Theme } from '@rainbow-me/rainbowkit'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { AccountAvatar } from './components/AccountAvatar'
+import { MainLayout } from './components/Layout/MainLayout'
+import { RoflAppBackendAuthProvider } from './contexts/RoflAppBackendAuth/Provider'
+import { RootLayout } from './components/RootLayout'
 
-import "./index.css";
-import "@rainbow-me/rainbowkit/styles.css";
+import './index.css'
+import '@rainbow-me/rainbowkit/styles.css'
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 const rainbowKitTheme: Theme = {
   ...lightTheme({
     /* accentColor: 'var(--brand-extra-dark)' */
   }),
   fonts: {
-    body: "inherit",
+    body: 'inherit',
   },
-};
+}
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <RootLayout />,
     children: [
       {
@@ -47,7 +43,7 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: "dashboard",
+        path: 'dashboard',
         element: <MainLayout />,
         children: [
           {
@@ -55,29 +51,29 @@ const router = createBrowserRouter([
             element: <Dashboard />,
           },
           {
-            path: "apps",
+            path: 'apps',
             element: <MyApps />,
           },
           {
-            path: "apps/:id",
+            path: 'apps/:id',
             element: <AppDetails />,
           },
           {
-            path: "machines",
+            path: 'machines',
             element: <Machines />,
           },
           {
-            path: "machines/:provider/instances/:id",
+            path: 'machines/:provider/instances/:id',
             element: <MachinesDetails />,
           },
         ],
       },
       {
-        path: "create",
+        path: 'create',
         element: <Create />,
       },
       {
-        path: "explore",
+        path: 'explore',
         element: <MainLayout />,
         children: [
           {
@@ -87,24 +83,21 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "*",
+        path: '*',
         element: <NotFound />,
       },
     ],
   },
-]);
+])
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
           theme={rainbowKitTheme}
           avatar={({ address, size }) => (
-            <AccountAvatar
-              diameter={size}
-              account={{ address_eth: address as `0x${string}` }}
-            />
+            <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
           )}
         >
           <RoflAppBackendAuthProvider>
@@ -116,4 +109,4 @@ createRoot(document.getElementById("root")!).render(
       </QueryClientProvider>
     </WagmiProvider>
   </StrictMode>,
-);
+)

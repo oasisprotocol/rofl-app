@@ -1,5 +1,5 @@
-import { useState, type FC } from 'react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import { useState, type FC } from 'react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -8,12 +8,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@oasisprotocol/ui-library/src/components/ui/dialog';
-import { CirclePlus, SquarePen } from 'lucide-react';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { InputFormField } from '../../CreateApp/InputFormField';
+} from '@oasisprotocol/ui-library/src/components/ui/dialog'
+import { CirclePlus, SquarePen } from 'lucide-react'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { InputFormField } from '../../CreateApp/InputFormField'
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -22,15 +22,15 @@ const formSchema = z.object({
   value: z.string().min(1, {
     message: 'Secret is required.',
   }),
-});
+})
 
 type SecretDialogProps = {
-  mode: 'add' | 'edit';
-  secret?: string;
-  handleAddSecret?: (name: string, value: string) => void;
-  handleEditSecret?: (name: string, value: string) => void;
-  editEnabled?: boolean;
-};
+  mode: 'add' | 'edit'
+  secret?: string
+  handleAddSecret?: (name: string, value: string) => void
+  handleEditSecret?: (name: string, value: string) => void
+  editEnabled?: boolean
+}
 
 export const SecretDialog: FC<SecretDialogProps> = ({
   mode,
@@ -39,8 +39,8 @@ export const SecretDialog: FC<SecretDialogProps> = ({
   handleEditSecret,
   editEnabled,
 }) => {
-  const [open, setOpen] = useState(false);
-  const isEditMode = mode === 'edit';
+  const [open, setOpen] = useState(false)
+  const isEditMode = mode === 'edit'
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,43 +48,43 @@ export const SecretDialog: FC<SecretDialogProps> = ({
       name: '',
       value: '',
     },
-  });
+  })
 
   function onCancel() {
-    form.reset();
-    setOpen(false);
+    form.reset()
+    setOpen(false)
   }
 
   function onOpenChange(newOpen: boolean) {
     if (!newOpen) {
-      onCancel();
+      onCancel()
     } else {
       if (isEditMode && secret) {
         form.reset({
           name: secret,
           value: '',
-        });
+        })
       } else {
         form.reset({
           name: '',
           value: '',
-        });
+        })
       }
-      setOpen(newOpen);
+      setOpen(newOpen)
     }
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (mode === 'add') {
-      handleAddSecret?.(values.name, values.value);
+      handleAddSecret?.(values.name, values.value)
     }
 
     if (isEditMode && secret) {
-      handleEditSecret?.(secret, values.value);
+      handleEditSecret?.(secret, values.value)
     }
 
-    form.reset();
-    setOpen(false);
+    form.reset()
+    setOpen(false)
   }
 
   return (
@@ -95,11 +95,7 @@ export const SecretDialog: FC<SecretDialogProps> = ({
             <SquarePen />
           </Button>
         ) : (
-          <Button
-            variant="ghost"
-            className="text-primary"
-            disabled={!editEnabled}
-          >
+          <Button variant="ghost" className="text-primary" disabled={!editEnabled}>
             <CirclePlus />
             Add new
           </Button>
@@ -107,9 +103,7 @@ export const SecretDialog: FC<SecretDialogProps> = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>
-            {isEditMode ? 'Edit Secret' : 'Add New Secret'}
-          </DialogTitle>
+          <DialogTitle>{isEditMode ? 'Edit Secret' : 'Add New Secret'}</DialogTitle>
         </DialogHeader>
         <DialogDescription className="mb-6">
           {isEditMode
@@ -125,25 +119,18 @@ export const SecretDialog: FC<SecretDialogProps> = ({
             disabled={isEditMode}
           />
 
-          <InputFormField
-            control={form.control}
-            name="value"
-            label="Value"
-            type="password"
-          />
+          <InputFormField control={form.control} name="value" label="Value" type="password" />
 
           <DialogFooter>
             <div className="flex flex-1 justify-between">
               <Button variant="outline" onClick={onCancel} type="reset">
                 Cancel
               </Button>
-              <Button type="submit">
-                {isEditMode ? 'Replace' : 'Save Changes'}
-              </Button>
+              <Button type="submit">{isEditMode ? 'Replace' : 'Save Changes'}</Button>
             </div>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

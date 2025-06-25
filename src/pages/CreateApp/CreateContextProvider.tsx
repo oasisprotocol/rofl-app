@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
-import { useState } from 'react';
-import { CreateContext } from './CreateContext';
-import type { AppData } from './types';
+import type { ReactNode } from 'react'
+import { useState } from 'react'
+import { CreateContext } from './CreateContext'
+import type { AppData } from './types'
 
 const initAppDataState: AppData = {
   template: '',
@@ -23,22 +23,18 @@ const initAppDataState: AppData = {
     resources: '',
   },
   payment: {},
-};
+}
 
-export const CreateContextProvider = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [appData, setAppData] = useState<AppData>(initAppDataState);
+export const CreateContextProvider = ({ children }: { children: ReactNode }) => {
+  const [currentStep, setCurrentStep] = useState(0)
+  const [appData, setAppData] = useState<AppData>(initAppDataState)
   const setAppDataForm = (data: Partial<AppData>) => {
-    setAppData((prevData) => ({ ...prevData, ...data }));
-  };
+    setAppData(prevData => ({ ...prevData, ...data }))
+  }
   const resetStep = () => {
-    setCurrentStep(0);
-    setAppData(initAppDataState);
-  };
+    setCurrentStep(0)
+    setAppData(initAppDataState)
+  }
 
   return (
     <CreateContext.Provider
@@ -52,5 +48,5 @@ export const CreateContextProvider = ({
     >
       {children}
     </CreateContext.Provider>
-  );
-};
+  )
+}

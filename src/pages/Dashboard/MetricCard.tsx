@@ -1,20 +1,13 @@
-import { type FC } from 'react';
-import {
-  Card,
-  CardContent,
-} from '@oasisprotocol/ui-library/src/components/ui/card';
+import { type FC } from 'react'
+import { Card, CardContent } from '@oasisprotocol/ui-library/src/components/ui/card'
 
 type MetricCardProps = {
-  title: string;
-  value: string | number | undefined;
-  isTotalCountClipped?: boolean;
-};
+  title: string
+  value: string | number | undefined
+  isTotalCountClipped?: boolean
+}
 
-export const MetricCard: FC<MetricCardProps> = ({
-  title,
-  value,
-  isTotalCountClipped,
-}) => {
+export const MetricCard: FC<MetricCardProps> = ({ title, value, isTotalCountClipped }) => {
   return (
     <Card className="rounded-md p-0">
       <CardContent className="p-6">
@@ -25,5 +18,5 @@ export const MetricCard: FC<MetricCardProps> = ({
         <div className="text-sm text-muted-foreground">{title}</div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}

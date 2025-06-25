@@ -5,7 +5,7 @@
  * @param {import('openapi3-ts').OpenAPIObject} inputSchema
  * @return {import('openapi3-ts').OpenAPIObject}
  */
-const prependNetworkPath = (inputSchema) => ({
+const prependNetworkPath = inputSchema => ({
   ...inputSchema,
   paths: Object.entries(inputSchema.paths).reduce(
     (acc, [path, pathItem]) => ({
@@ -29,11 +29,11 @@ const prependNetworkPath = (inputSchema) => ({
             ],
           },
         }),
-        {}
+        {},
       ),
     }),
-    {}
+    {},
   ),
-});
+})
 
-export default prependNetworkPath;
+export default prependNetworkPath

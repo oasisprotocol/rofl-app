@@ -1,21 +1,21 @@
-import jazzicon from '@metamask/jazzicon';
-import { memo, useEffect, useRef } from 'react';
+import jazzicon from '@metamask/jazzicon'
+import { memo, useEffect, useRef } from 'react'
 
 interface JazzIconProps {
-  diameter: number;
-  seed: number;
+  diameter: number
+  seed: number
 }
 
 export const JazzIcon = memo(({ diameter, seed }: JazzIconProps) => {
-  const ref = useRef<HTMLSpanElement>(null);
+  const ref = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     if (ref?.current) {
-      const icon = jazzicon(diameter, seed);
+      const icon = jazzicon(diameter, seed)
 
-      ref.current.replaceChildren(icon);
+      ref.current.replaceChildren(icon)
     }
-  }, [diameter, seed]);
+  }, [diameter, seed])
 
-  return <span ref={ref} style={{ lineHeight: 0 }}></span>;
-});
+  return <span ref={ref} style={{ lineHeight: 0 }}></span>
+})

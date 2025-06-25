@@ -1,27 +1,27 @@
-import { type FC } from 'react';
-import { Link } from 'react-router-dom';
-import { DetailsSectionRow } from '../../../components/DetailsSectionRow';
+import { type FC } from 'react'
+import { Link } from 'react-router-dom'
+import { DetailsSectionRow } from '../../../components/DetailsSectionRow'
 import {
   useGetRuntimeRoflAppsIdTransactions,
   useGetRuntimeRoflmarketInstances,
   type RoflAppPolicy,
-} from '../../../nexus/api';
-import { useNetwork } from '../../../hooks/useNetwork';
-import { isUrlSafe } from '../../../utils/url';
-import { trimLongString } from '../../../utils/trimLongString';
-import { MetadataDialog } from './MetadataDialog';
-import { type ViewMetadataState } from './types';
-import { type MetadataFormData } from '../../CreateApp/types';
-import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
-import { MachineResources } from '../../../components/MachineResources';
+} from '../../../nexus/api'
+import { useNetwork } from '../../../hooks/useNetwork'
+import { isUrlSafe } from '../../../utils/url'
+import { trimLongString } from '../../../utils/trimLongString'
+import { MetadataDialog } from './MetadataDialog'
+import { type ViewMetadataState } from './types'
+import { type MetadataFormData } from '../../CreateApp/types'
+import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
+import { MachineResources } from '../../../components/MachineResources'
 
 type AppMetadataProps = {
-  id: string;
-  editableState: MetadataFormData;
-  policy: RoflAppPolicy;
-  setViewMetadataState: (state: ViewMetadataState) => void;
-  editEnabled?: boolean;
-};
+  id: string
+  editableState: MetadataFormData
+  policy: RoflAppPolicy
+  setViewMetadataState: (state: ViewMetadataState) => void
+  editEnabled?: boolean
+}
 
 export const AppMetadata: FC<AppMetadataProps> = ({
   id,
@@ -30,25 +30,20 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   setViewMetadataState,
   editEnabled,
 }) => {
-  const network = useNetwork();
-  const { data } = useGetRuntimeRoflAppsIdTransactions(
-    network,
-    'sapphire',
-    id,
-    {
-      limit: 1,
-      method: 'rofl.Update',
-    }
-  );
-  const transaction = data?.data.transactions[0];
+  const network = useNetwork()
+  const { data } = useGetRuntimeRoflAppsIdTransactions(network, 'sapphire', id, {
+    limit: 1,
+    method: 'rofl.Update',
+  })
+  const transaction = data?.data.transactions[0]
   const {
     data: machinesData,
     isLoading: isMachineLoading,
     isFetched: isMachineFetched,
   } = useGetRuntimeRoflmarketInstances(network, 'sapphire', {
     deployed_app_id: id,
-  });
-  const machines = machinesData?.data.instances;
+  })
+  const machines = machinesData?.data.instances
 
   return (
     <div className="space-y-4">
@@ -64,19 +59,13 @@ export const AppMetadata: FC<AppMetadataProps> = ({
                   to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}
                   className="text-primary"
                 >
-                  <>
-                    {machine.metadata['net.oasis.provider.name'] ||
-                      trimLongString(machine.provider)}
-                  </>
+                  <>{machine.metadata['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
                 </Link>
                 {index < machines.length - 1 && <>, </>}
               </>
             ))}
           </DetailsSectionRow>
-          <DetailsSectionRow
-            label="Machine(s) resources"
-            className=" pb-6 border-b"
-          >
+          <DetailsSectionRow label="Machine(s) resources" className=" pb-6 border-b">
             {machines.map((machine, index) => (
               <>
                 <MachineResources
@@ -91,9 +80,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
         </>
       ) : (
         <DetailsSectionRow label="Machine(s)" className="pb-6 border-b">
-          <span className="text-muted-foreground">
-            Machines data is not available.
-          </span>
+          <span className="text-muted-foreground">Machines data is not available.</span>
         </DetailsSectionRow>
       )}
       <DetailsSectionRow label="Explorer Link" className="pb-6 border-b">
@@ -122,12 +109,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
       </DetailsSectionRow>
       <DetailsSectionRow label="Homepage">
         {isUrlSafe(editableState.homepage) ? (
-          <a
-            href={editableState.homepage}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary"
-          >
+          <a href={editableState.homepage} target="_blank" rel="noopener noreferrer" className="text-primary">
             {editableState.homepage}
           </a>
         ) : undefined}
@@ -160,25 +142,25 @@ export const AppMetadata: FC<AppMetadataProps> = ({
         )}
       </DetailsSectionRow>
     </div>
-  );
-};
+  )
+}
 
 const Endorsements = ({ endorsements }: { endorsements: unknown }) => {
-  const items = endorsements as Array<{ node?: string; any?: boolean }>;
+  const items = endorsements as Array<{ node?: string; any?: boolean }>
 
-  if (items.some((item) => 'node' in item)) {
+  if (items.some(item => 'node' in item)) {
     return (
       <>
-        {items.map((item) => (
+        {items.map(item => (
           <div key={item.node}>{item.node}</div>
         ))}
       </>
-    );
+    )
   }
 
   if (items.length === 1 && 'any' in items[0]) {
-    return <>Any</>;
+    return <>Any</>
   }
 
-  return <></>;
-};
+  return <></>
+}

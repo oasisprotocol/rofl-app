@@ -1,13 +1,12 @@
-import prependNetworkPath from './prependNetworkPath.mjs';
-import removeNetworkFromName from './removeNetworkFromName.mjs';
+import prependNetworkPath from './prependNetworkPath.mjs'
+import removeNetworkFromName from './removeNetworkFromName.mjs'
 
 /** @type {import('@orval/core').Config} */
 const config = {
   nexus: {
     input: {
       // target: './v1.yaml',
-      target:
-        'https://raw.githubusercontent.com/oasisprotocol/nexus/main/api/spec/v1.yaml',
+      target: 'https://raw.githubusercontent.com/oasisprotocol/nexus/main/api/spec/v1.yaml',
       // target: 'https://nexus.stg.oasis.io/v1/spec/v1.yaml',
       // target: 'https://nexus.oasis.io/v1/spec/v1.yaml',
       override: {
@@ -31,6 +30,6 @@ const config = {
       },
     },
   },
-};
+}
 
-export default config;
+export default config

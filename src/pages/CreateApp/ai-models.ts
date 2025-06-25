@@ -32,7 +32,7 @@ export const anthropicModels = [
     label: 'Claude Opus 3',
     value: 'claude-3-opus-20240229',
   },
-];
+]
 
 // api.deepseek.com/v1/models
 export const deepseekModels = [
@@ -44,7 +44,7 @@ export const deepseekModels = [
     label: 'deepseek-reasoner',
     value: 'deepseek-reasoner',
   },
-];
+]
 
 // api.openai.com/v1/models
 export const openAiModels = [
@@ -176,4 +176,4 @@ export const openAiModels = [
     label: 'GPT-3.5 Turbo',
     value: 'gpt-3.5-turbo',
   },
-];
+]

@@ -1,8 +1,8 @@
-import { type FC } from 'react';
-import { Link } from 'react-router-dom';
-import { EmptyState } from '../../../components/EmptyState';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
-import { Plus } from 'lucide-react';
+import { type FC } from 'react'
+import { Link } from 'react-router-dom'
+import { EmptyState } from '../../../components/EmptyState'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { Plus } from 'lucide-react'
 
 export const MyAppsEmptyState: FC = () => {
   return (
@@ -17,5 +17,5 @@ export const MyAppsEmptyState: FC = () => {
         </Link>
       </Button>
     </EmptyState>
-  );
-};
+  )
+}

@@ -1,36 +1,32 @@
-import { useEffect, useState, type FC } from 'react';
-import { YamlCode } from '../../../components/CodeDisplay';
-import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton';
+import { useEffect, useState, type FC } from 'react'
+import { YamlCode } from '../../../components/CodeDisplay'
+import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 
 type AppArtifactsProps = {
-  isFetched?: boolean;
-  roflYaml?: Blob;
-  composeYaml?: Blob;
-};
+  isFetched?: boolean
+  roflYaml?: Blob
+  composeYaml?: Blob
+}
 
-export const AppArtifacts: FC<AppArtifactsProps> = ({
-  isFetched,
-  roflYaml,
-  composeYaml,
-}) => {
-  const [roflContent, setRoflContent] = useState<string>('');
-  const [composeContent, setComposeContent] = useState<string>('');
+export const AppArtifacts: FC<AppArtifactsProps> = ({ isFetched, roflYaml, composeYaml }) => {
+  const [roflContent, setRoflContent] = useState<string>('')
+  const [composeContent, setComposeContent] = useState<string>('')
 
   useEffect(() => {
     if (roflYaml) {
-      roflYaml.text().then((content) => {
-        setRoflContent(content);
-      });
+      roflYaml.text().then(content => {
+        setRoflContent(content)
+      })
     }
-  }, [roflYaml]);
+  }, [roflYaml])
 
   useEffect(() => {
     if (composeYaml) {
-      composeYaml.text().then((content) => {
-        setComposeContent(content);
-      });
+      composeYaml.text().then(content => {
+        setComposeContent(content)
+      })
     }
-  }, [composeYaml]);
+  }, [composeYaml])
 
   return (
     <div className="space-y-6">
@@ -52,5 +48,5 @@ export const AppArtifacts: FC<AppArtifactsProps> = ({
         </>
       )}
     </div>
-  );
-};
+  )
+}

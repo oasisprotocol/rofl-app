@@ -1,20 +1,20 @@
-import { type FC } from 'react';
-import { CreateLayout } from './CreateLayout';
-import { CreateFormHeader } from './CreateFormHeader';
-import { CreateFormNavigation } from './CreateFormNavigation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { InputFormField } from './InputFormField';
-import { SelectFormField } from './SelectFormField';
-import { agentFormSchema, type AgentFormData } from './types';
+import { type FC } from 'react'
+import { CreateLayout } from './CreateLayout'
+import { CreateFormHeader } from './CreateFormHeader'
+import { CreateFormNavigation } from './CreateFormNavigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { InputFormField } from './InputFormField'
+import { SelectFormField } from './SelectFormField'
+import { agentFormSchema, type AgentFormData } from './types'
 
 type AgentStepProps = {
-  handleNext: () => void;
-  handleBack: () => void;
-  agent?: AgentFormData;
-  setAppDataForm: (data: { agent: AgentFormData }) => void;
-  selectedTemplateName?: string;
-};
+  handleNext: () => void
+  handleBack: () => void
+  agent?: AgentFormData
+  setAppDataForm: (data: { agent: AgentFormData }) => void
+  selectedTemplateName?: string
+}
 
 export const AgentStep: FC<AgentStepProps> = ({
   handleNext,
@@ -26,20 +26,20 @@ export const AgentStep: FC<AgentStepProps> = ({
   const form = useForm<AgentFormData>({
     resolver: zodResolver(agentFormSchema),
     defaultValues: { ...agent },
-  });
+  })
 
   function onSubmit(values: AgentFormData) {
-    setAppDataForm({ agent: values });
-    handleNext();
+    setAppDataForm({ agent: values })
+    handleNext()
   }
 
   const handleFormSubmit = () => {
-    form.trigger().then((isValid) => {
+    form.trigger().then(isValid => {
       if (isValid) {
-        form.handleSubmit(onSubmit)();
+        form.handleSubmit(onSubmit)()
       }
-    });
-  };
+    })
+  }
 
   return (
     <CreateLayout
@@ -58,10 +58,7 @@ export const AgentStep: FC<AgentStepProps> = ({
         description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
       />
 
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 mb-6 w-full"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
         <SelectFormField
           control={form.control}
           name="OLLAMA_MODEL"
@@ -96,5 +93,5 @@ export const AgentStep: FC<AgentStepProps> = ({
         />
       </form>
     </CreateLayout>
-  );
-};
+  )
+}

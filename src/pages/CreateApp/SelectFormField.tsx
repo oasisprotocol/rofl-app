@@ -1,32 +1,27 @@
-import { type ReactNode } from 'react';
-import {
-  Controller,
-  type Control,
-  type FieldValues,
-  type Path,
-} from 'react-hook-form';
+import { type ReactNode } from 'react'
+import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@oasisprotocol/ui-library/src/components/ui/select';
-import { Label } from '@oasisprotocol/ui-library/src/components/ui/label';
+} from '@oasisprotocol/ui-library/src/components/ui/select'
+import { Label } from '@oasisprotocol/ui-library/src/components/ui/label'
 
 type SelectOption = {
-  value: string;
-  label: string;
-};
+  value: string
+  label: string
+}
 
 type SelectFormFieldProps<T extends FieldValues> = {
-  control: Control<T>;
-  name: Path<T>;
-  label: string;
-  options: SelectOption[];
-  placeholder?: string;
-  disabled?: boolean;
-};
+  control: Control<T>
+  name: Path<T>
+  label: string
+  options: SelectOption[]
+  placeholder?: string
+  disabled?: boolean
+}
 
 export const SelectFormField = <T extends FieldValues>({
   control,
@@ -50,29 +45,21 @@ export const SelectFormField = <T extends FieldValues>({
               value={field.value}
               disabled={disabled}
             >
-              <SelectTrigger
-                id={name}
-                aria-invalid={!!fieldState.error}
-                className="w-full"
-              >
+              <SelectTrigger id={name} aria-invalid={!!fieldState.error} className="w-full">
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
-                {options.map((option) => (
+                {options.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            {fieldState.error && (
-              <div className="text-destructive text-sm">
-                {fieldState.error.message}
-              </div>
-            )}
+            {fieldState.error && <div className="text-destructive text-sm">{fieldState.error.message}</div>}
           </>
         )}
       />
     </div>
-  );
-};
+  )
+}

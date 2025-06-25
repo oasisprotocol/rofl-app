@@ -1,27 +1,27 @@
-const validProtocols = ['http:', 'https:', 'ipfs:', 'data:'];
+const validProtocols = ['http:', 'https:', 'ipfs:', 'data:']
 
 export const isUrlSafe = (url: string | undefined): boolean => {
   if (!url) {
-    return false;
+    return false
   }
 
   try {
-    const parsedUrl = new URL(url);
-    return validProtocols.includes(parsedUrl.protocol);
+    const parsedUrl = new URL(url)
+    return validProtocols.includes(parsedUrl.protocol)
   } catch {
-    return false;
+    return false
   }
-};
+}
 
 export const getHostname = (url: string | undefined): string => {
   if (!url) {
-    return '';
+    return ''
   }
 
   try {
-    const parsedUrl = new URL(url);
-    return parsedUrl.hostname;
+    const parsedUrl = new URL(url)
+    return parsedUrl.hostname
   } catch {
-    return '';
+    return ''
   }
-};
+}

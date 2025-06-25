@@ -1,43 +1,40 @@
-import { useEffect, useState, type FC, type ReactNode } from 'react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { ChevronDown, Wallet } from 'lucide-react';
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button';
+import { useEffect, useState, type FC, type ReactNode } from 'react'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { ChevronDown, Wallet } from 'lucide-react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@oasisprotocol/ui-library/src/components/ui/dropdown-menu';
-import { AccountAvatar } from '../AccountAvatar';
-import { useAccount, useDisconnect } from 'wagmi';
-import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile';
-import { useNavigate } from 'react-router-dom';
-import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks';
+} from '@oasisprotocol/ui-library/src/components/ui/dropdown-menu'
+import { AccountAvatar } from '../AccountAvatar'
+import { useAccount, useDisconnect } from 'wagmi'
+import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
+import { useNavigate } from 'react-router-dom'
+import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 
-const TruncatedAddress: FC<{ address: string; className?: string }> = ({
-  address,
-  className = '',
-}) => {
+const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address, className = '' }) => {
   return (
     <div className={`flex overflow-hidden ${className}`}>
       <span className="flex-1 truncate min-w-0">{address.slice(0, -4)}</span>
       <span className="flex-shrink-0">{address.slice(-4)}</span>
     </div>
-  );
-};
+  )
+}
 
 interface Props {
-  onMobileClose?: () => void;
+  onMobileClose?: () => void
 }
 
 export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
-  const { login, isLoading, isAuthenticated } = useRoflAppBackendAuthContext();
-  const isMobile = useIsMobile();
-  const { disconnect } = useDisconnect();
-  const navigate = useNavigate();
-  const { chainId, isConnected, address } = useAccount();
-  const [selectedChainId, setSelectedChainId] = useState(chainId);
+  const { login, isLoading, isAuthenticated } = useRoflAppBackendAuthContext()
+  const isMobile = useIsMobile()
+  const { disconnect } = useDisconnect()
+  const navigate = useNavigate()
+  const { chainId, isConnected, address } = useAccount()
+  const [selectedChainId, setSelectedChainId] = useState(chainId)
 
   useEffect(() => {
     // Auth when wallet is connected, but only in development mode for now
@@ -45,42 +42,35 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
       const handleLogin = async () => {
         if (isConnected && address && !isLoading && !isAuthenticated) {
           try {
-            await login();
+            await login()
           } catch (error) {
-            console.error('Login failed:', error);
+            console.error('Login failed:', error)
           }
         }
-      };
+      }
 
-      handleLogin();
+      handleLogin()
     }
-  }, [isLoading, isAuthenticated, isConnected, address, login]);
+  }, [isLoading, isAuthenticated, isConnected, address, login])
 
   useEffect(() => {
     if (chainId && chainId !== selectedChainId) {
-      setSelectedChainId(chainId);
-      navigate('/dashboard');
+      setSelectedChainId(chainId)
+      navigate('/dashboard')
     }
-  }, [chainId, navigate, selectedChainId]);
+  }, [chainId, navigate, selectedChainId])
 
   const handleDisconnect = () => {
-    disconnect();
-    navigate('/');
-    onMobileClose?.();
-  };
+    disconnect()
+    navigate('/')
+    onMobileClose?.()
+  }
 
   return (
     <ConnectButton.Custom>
-      {({
-        account,
-        chain,
-        openAccountModal,
-        openChainModal,
-        openConnectModal,
-        mounted,
-      }) => {
-        const ready = mounted;
-        const connected = ready && account && chain;
+      {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
+        const ready = mounted
+        const connected = ready && account && chain
 
         return (
           <div
@@ -98,30 +88,30 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                 return (
                   <Button
                     onClick={() => {
-                      openConnectModal();
-                      onMobileClose?.();
+                      openConnectModal()
+                      onMobileClose?.()
                     }}
                     className="max-md:w-full"
                   >
                     <Wallet />
                     Connect Wallet
                   </Button>
-                );
+                )
               }
 
               if (chain.unsupported) {
                 return (
                   <Button
                     onClick={() => {
-                      openChainModal();
-                      onMobileClose?.();
+                      openChainModal()
+                      onMobileClose?.()
                     }}
                     variant="destructive"
                     className="max-md:w-full"
                   >
                     Wrong network
                   </Button>
-                );
+                )
               }
 
               if (isMobile) {
@@ -130,8 +120,8 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                     <button
                       className="p-2 flex items-center gap-3 w-full text-left hover:bg-accent/50 transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                       onClick={() => {
-                        openAccountModal();
-                        onMobileClose?.();
+                        openAccountModal()
+                        onMobileClose?.()
                       }}
                       aria-label={`Account ${account.address} with balance ${account.displayBalance}`}
                     >
@@ -146,9 +136,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                           address="0xbd4f609e4b14540b87caaf5efaaa5ced7eb469a6"
                           className="mono text-foreground text-base font-medium leading-6 w-full"
                         />
-                        <p className="text-muted-foreground text-sm leading-5">
-                          {account.displayBalance}
-                        </p>
+                        <p className="text-muted-foreground text-sm leading-5">{account.displayBalance}</p>
                       </div>
                     </button>
 
@@ -157,12 +145,10 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                       className="w-full justify-start rounded-md p-2.5 h-11"
                       onClick={handleDisconnect}
                     >
-                      <span className="text-destructive text-base font-medium leading-6">
-                        Sign out
-                      </span>
+                      <span className="text-destructive text-base font-medium leading-6">Sign out</span>
                     </Button>
                   </div>
-                );
+                )
               }
 
               return (
@@ -174,9 +160,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                         address_eth: account.address as `0x${string}`,
                       }}
                     />
-                    <span className="text-sm font-medium text-foreground">
-                      {account.displayName}
-                    </span>
+                    <span className="text-sm font-medium text-foreground">{account.displayName}</span>
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -189,47 +173,35 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={openAccountModal}>
-                        View Account
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          window.navigator.clipboard.writeText(account.address)
-                        }
-                      >
+                      <DropdownMenuItem onClick={openAccountModal}>View Account</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => window.navigator.clipboard.writeText(account.address)}>
                         Copy Address
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={openChainModal}>
-                        Switch network
-                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={openChainModal}>Switch network</DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleDisconnect}>
-                        Disconnect
-                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleDisconnect}>Disconnect</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-              );
+              )
             })()}
           </div>
-        );
+        )
       }}
     </ConnectButton.Custom>
-  );
-};
+  )
+}
 
 type SimpleRainbowKitConnectButtonProps = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
-export const SimpleRainbowKitConnectButton: FC<
-  SimpleRainbowKitConnectButtonProps
-> = ({ children }) => {
+export const SimpleRainbowKitConnectButton: FC<SimpleRainbowKitConnectButtonProps> = ({ children }) => {
   return (
     <ConnectButton.Custom>
       {({ account, chain, openChainModal, openConnectModal, mounted }) => {
-        const ready = mounted;
-        const connected = ready && account && chain;
+        const ready = mounted
+        const connected = ready && account && chain
 
         return (
           <div
@@ -247,13 +219,13 @@ export const SimpleRainbowKitConnectButton: FC<
                 return (
                   <Button
                     onClick={() => {
-                      openConnectModal();
+                      openConnectModal()
                     }}
                     size="lg"
                   >
                     {children}
                   </Button>
-                );
+                )
               }
 
               if (chain.unsupported) {
@@ -261,19 +233,19 @@ export const SimpleRainbowKitConnectButton: FC<
                   <Button
                     size="lg"
                     onClick={() => {
-                      openChainModal();
+                      openChainModal()
                     }}
                     variant="destructive"
                     className="max-md:w-full"
                   >
                     Wrong network
                   </Button>
-                );
+                )
               }
             })()}
           </div>
-        );
+        )
       }}
     </ConnectButton.Custom>
-  );
-};
+  )
+}
