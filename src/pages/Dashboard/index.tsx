@@ -32,12 +32,11 @@ export const Dashboard: FC = () => {
   const roflMachines = machinesData?.data.instances
   const appsNumber = data?.data.total_count
   const machinesNumber = machinesData?.data.total_count
-  const failuresNumber = 0
 
   return (
     <>
       <div className="space-y-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {isLoading && <Skeleton className="w-full h-[120px]" />}
           {isFetched && (
             <MetricCard
@@ -54,7 +53,6 @@ export const Dashboard: FC = () => {
               isTotalCountClipped={machinesData?.data.is_total_count_clipped}
             />
           )}
-          <MetricCard title="Failures" value={failuresNumber} />
         </div>
         <SectionHeader title="My ROFL Apps" to="/dashboard/apps" disabled={appsNumber === 0} />
         {isFetched && !appsNumber && <MyAppsEmptyState />}
