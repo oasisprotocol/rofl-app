@@ -13,8 +13,7 @@ import { useDownloadArtifact, useRemoveApp } from '../../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAuth/hooks'
 import { AppArtifacts } from './AppArtifacts'
 import { UnsavedChanges } from './UnsavedChanges'
-import { Trash2 } from 'lucide-react'
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { RemoveAppButton } from './RemoveAppButton'
 
 function setDefaultMetadataViewState(metadata: RoflAppMetadata | undefined = {}): ViewMetadataState {
   return {
@@ -112,13 +111,12 @@ export const AppDetails: FC = () => {
                 </div>
                 <div className="flex items-center gap-8">
                   {!roflApp?.removed && (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => removeApp({ appId: id as `rofl1${string}`, network })}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <RemoveAppButton
+                      onConfirm={() => {
+                        removeApp({ appId: id as `rofl1${string}`, network })
+                        roflAppQuery.refetch()
+                      }}
+                    />
                   )}
 
                   <div className="flex flex-wrap gap-3">
