@@ -10,19 +10,19 @@ import { AppCard } from '../../components/AppCard'
 import { MachineCard } from '../../components/MachineCard'
 import { useAccount } from 'wagmi'
 
-const pageLimit = 3
+const cardsLimit = 3
 
 export const Dashboard: FC = () => {
   const network = useNetwork()
   const { address } = useAccount()
   const roflAppsQuery = useGetRuntimeRoflApps(network, 'sapphire', {
-    limit: pageLimit,
+    limit: 1000,
     offset: 0,
     admin: address,
   })
 
   const roflMachinesQuery = useGetRuntimeRoflmarketInstances(network, 'sapphire', {
-    limit: pageLimit,
+    limit: 1000,
     offset: 0,
     admin: address,
   })
@@ -31,7 +31,9 @@ export const Dashboard: FC = () => {
   const { data: machinesData, isLoading: isMachinesLoading, isFetched: isMachinesFetched } = roflMachinesQuery
   const roflMachines = machinesData?.data.instances
   const appsNumber = data?.data.total_count
+  const runningAppsNumber = roflApps?.filter(app => app.num_active_instances > 0).length || 0
   const machinesNumber = machinesData?.data.total_count
+  const runningMachinesNumber = roflMachines?.filter(machine => !machine.removed).length || 0
 
   return (
     <>
@@ -41,7 +43,7 @@ export const Dashboard: FC = () => {
           {isFetched && (
             <MetricCard
               title="ROFL Apps Running"
-              value={appsNumber}
+              value={runningAppsNumber}
               isTotalCountClipped={data?.data.is_total_count_clipped}
             />
           )}
@@ -49,7 +51,7 @@ export const Dashboard: FC = () => {
           {isMachinesFetched && (
             <MetricCard
               title="Machines Running"
-              value={machinesNumber}
+              value={runningMachinesNumber}
               isTotalCountClipped={machinesData?.data.is_total_count_clipped}
             />
           )}
@@ -58,23 +60,25 @@ export const Dashboard: FC = () => {
         {isFetched && !appsNumber && <MyAppsEmptyState />}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {isLoading &&
-            Array.from({ length: pageLimit }).map((_, index) => (
+            Array.from({ length: cardsLimit }).map((_, index) => (
               <Skeleton key={index} className="w-full h-[200px]" />
             ))}
           {isFetched &&
-            roflApps?.map(app => <AppCard key={app.id} app={app} network={network} type="dashboard" />)}
+            roflApps
+              ?.slice(0, cardsLimit)
+              .map(app => <AppCard key={app.id} app={app} network={network} type="dashboard" />)}
         </div>
         <SectionHeader title="Machines" to="/dashboard/machines" disabled={machinesNumber === 0} />
         {isMachinesFetched && !machinesNumber && <MachinesEmptyState />}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {isMachinesLoading &&
-            Array.from({ length: pageLimit }).map((_, index) => (
+            Array.from({ length: cardsLimit }).map((_, index) => (
               <Skeleton key={index} className="w-full h-[200px]" />
             ))}
           {isFetched &&
-            roflMachines?.map(machine => (
-              <MachineCard key={machine.id} machine={machine} network={network} />
-            ))}
+            roflMachines
+              ?.slice(0, cardsLimit)
+              .map(machine => <MachineCard key={machine.id} machine={machine} network={network} />)}
         </div>
       </div>
     </>
