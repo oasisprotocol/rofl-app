@@ -107,7 +107,10 @@ export const AppDetails: FC = () => {
                   <h1 className="text-2xl font-bold">
                     <>{viewMetadataState.metadata.name || trimLongString(roflApp.id)}</>
                   </h1>
-                  <AppStatusIcon hasActiveInstances removed={false} />
+                  <AppStatusIcon
+                    hasActiveInstances={!!roflApp.num_active_instances}
+                    removed={roflApp.removed}
+                  />
                 </div>
                 <div className="flex items-center gap-8">
                   {!roflApp?.removed && (
