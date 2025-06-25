@@ -128,7 +128,7 @@ export const AppDetails: FC = () => {
                 </div>
                 <div className="flex items-center gap-8">
                   {
-                    roflApp?.removed && (
+                    !roflApp?.removed && (
                       <Button variant="outline" size="icon" onClick={() => removeApp({ appId: id as `rofl1${string}`, network })}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
