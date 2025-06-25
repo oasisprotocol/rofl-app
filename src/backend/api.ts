@@ -225,12 +225,31 @@ export function useCreateAndDeployApp() {
   const { sendTransactionAsync } = useSendTransaction()
 
   return useMutation<string, AxiosError<unknown>, { token: string, template: Template, appData: AppData, network: 'mainnet' | 'testnet' }>({
-    mutationFn: async ({ token, appData, network }) => {
+    mutationFn: async ({ token, template, appData, network }) => {
       const sapphireRuntimeId = network === 'mainnet' ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279') : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
       const nic = new oasis.client.NodeInternal(network === 'mainnet' ? 'https://grpc.oasis.io' : 'https://testnet.grpc.oasis.io');
 
       const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId);
       const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId);
+
+      const duration =
+        appData.build!.duration === 'months'
+          ? {
+              term: oasisRT.types.RoflmarketTerm.MONTH,
+              term_count: appData.build!.number,
+            }
+          : appData.build!.duration === 'days'
+            ? {
+                term: oasisRT.types.RoflmarketTerm.HOUR,
+                term_count: appData.build!.number * 24,
+              }
+            : appData.build!.duration === 'hours'
+              ? {
+                  term: oasisRT.types.RoflmarketTerm.HOUR,
+                  term_count: appData.build!.number,
+                }
+              : undefined
+      if (!duration) throw new Error('Invalid duration')
 
       let hash
       console.log('create app?');
@@ -256,11 +275,12 @@ export function useCreateAndDeployApp() {
             max_expiration: 3,
           },
           metadata: {
-            'net.oasis.rofl.license': 'Apache-2.0',
-            'net.oasis.rofl.name': 'create through subcall',
-            'net.oasis.rofl.repository':
-              'https://github.com/oasisprotocol/oasis-sdk/tree/main/client-sdk/ts-web',
-            'net.oasis.rofl.version': '0.1.0',
+            'net.oasis.rofl.name': appData.metadata?.name || '',
+            'net.oasis.rofl.author': appData.metadata?.author || '',
+            'net.oasis.rofl.description': appData.metadata?.description || '',
+            'net.oasis.rofl.version': appData.metadata?.version || '',
+            'net.oasis.rofl.homepage': appData.metadata?.homepage || '',
+            'net.oasis.rofl.license': appData.metadata?.license || '',
           },
         })
         .toSubcall());
@@ -271,88 +291,8 @@ export function useCreateAndDeployApp() {
       const app = await rofl.queryApp().setArgs({ id: oasisRT.rofl.fromBech32(appId) }).query(nic);
       console.log('App', app);
 
-      const manifest = `
-        name: simpler-demo-rofl
-        version: 0.1.1
-        repository: https://github.com/lukaw3d/simpler-demo-rofl
-        license: Apache-2.0
-        tee: tdx
-        kind: container
-        resources:
-          memory: 512
-          cpus: 1
-          storage:
-            kind: disk-persistent
-            size: 512
-        artifacts:
-          firmware: https://github.com/oasisprotocol/oasis-boot/releases/download/v0.5.0/ovmf.tdx.fd#db47100a7d6a0c1f6983be224137c3f8d7cb09b63bb1c7a5ee7829d8e994a42f
-          kernel: https://github.com/oasisprotocol/oasis-boot/releases/download/v0.5.0/stage1.bin#23877530413a661e9187aad2eccfc9660fc4f1a864a1fbad2f6c7d43512071ca
-          stage2: https://github.com/oasisprotocol/oasis-boot/releases/download/v0.5.0/stage2-podman.tar.bz2#631349bef06990dd6ae882812a0420f4b35f87f9fe945b274bcfb10fc08c4ea3
-          container:
-            runtime: https://github.com/oasisprotocol/oasis-sdk/releases/download/rofl-containers%2Fv0.5.1/rofl-containers#9afa712b939528d758294bf49181466fc2066bbe507f92777ddc3bce8af6ee37
-            compose: compose.yaml
-        deployments:
-          default:
-            app_id: ${appId}
-            network: ${network}
-            paratime: sapphire
-            policy:
-              enclaves:
-              endorsements:
-                - any: {}
-              fees: endorsing_node
-              max_expiration: 3
-      `;
-      const compose = `
-        services:
-          echo:
-            image: docker.io/denoland/deno:alpine
-            command: |
-              sh -c "deno run --allow-all - <<'EOF'
-
-              import { encodeFunctionData, parseAbi } from 'npm:viem'
-
-              // MESSAGE comes from: rofl.yaml secrets -> compose.yaml environment -> podman/docker
-              const MESSAGE = Deno.env.get('MESSAGE') ?? 'No message found'
-              const CONTRACT_ADDRESS = Deno.env.get('CONTRACT_ADDRESS')
-
-              const calldata = encodeFunctionData({
-                abi: parseAbi(['function emitMessage(string memory message) public']),
-                functionName: 'emitMessage',
-                args: [MESSAGE]
-              })
-
-              console.log({calldata})
-
-              // Submit it to the Sapphire contract Echo.sol on testnet
-              await fetch('http://localhost/rofl/v1/tx/sign-submit', {
-                method: 'POST',
-                body: JSON.stringify({
-                  'encrypt': true,
-                  'tx': {
-                    'kind': 'eth',
-                    'data': {
-                      'gas_limit': 200000,
-                      'to': CONTRACT_ADDRESS.replace('0x', ''),
-                      'value': 0,
-                      'data': calldata.replace('0x', '')
-                    }
-                  }
-                }),
-                client: Deno.createHttpClient({ proxy: { transport: 'unix', path: '/run/rofl-appd.sock' } }),
-              });
-
-              EOF
-              "
-            platform: linux/amd64
-            environment:
-              # Address of the Echo contract deployed on Sapphire.
-              # https://explorer.oasis.io/testnet/sapphire/address/0x5d683b980615A7A60B3cFf3DFC338A9985278fF3
-              - CONTRACT_ADDRESS=0x5d683b980615A7A60B3cFf3DFC338A9985278fF3
-              - MESSAGE=\${MESSAGE}
-            volumes:
-              - /run/rofl-appd.sock:/run/rofl-appd.sock
-      `
+      const manifest = yaml.stringify(template.templateParser(appData.metadata!, network, appId));
+      const compose = template.yaml.compose
       console.log('Build?');
       const { task_id } = await buildRofl({ manifest, compose }, token)
       const buildResults = await waitForBuildResults(task_id, token)
@@ -376,12 +316,9 @@ export function useCreateAndDeployApp() {
               ...app.policy,
               enclaves: enclaves,
             },
-            secrets: {
-              ...app.secrets,
-              MESSAGE: oasis.misc.fromBase64( // TODO: secrets
-                oasisRT.rofl.encryptSecret('MESSAGE', oasis.misc.fromString('secret'), app.sek),
-              ),
-            },
+            secrets: Object.fromEntries(Object.entries(appData.agent ?? {}).map(([key, value]) => {
+              return [key, oasis.misc.fromBase64(oasisRT.rofl.encryptSecret(key, oasis.misc.fromString(value), app.sek))]
+            })),
           })
           .toSubcall(),
       );
@@ -392,17 +329,17 @@ export function useCreateAndDeployApp() {
         roflmarket
           .callInstanceCreate()
           .setBody({
-            "provider": oasis.staking.addressFromBech32(appData.build!.provider!),
-            "offer": oasis.misc.fromHex("0000000000000003"), // TODO: appData.build.resources
-            "deployment": {
-              "app_id": app.id,
-              "manifest_hash": oasis.misc.fromHex(buildResults.manifest_hash),
-              "metadata": {
+            provider: oasis.staking.addressFromBech32(appData.build!.provider!),
+            offer: oasis.misc.fromHex(appData.build!.resources),
+            deployment: {
+              app_id: app.id,
+              manifest_hash: oasis.misc.fromHex(buildResults.manifest_hash),
+              metadata: {
                 "net.oasis.deployment.orc.ref": buildResults.oci_reference,
-              }
+              },
             },
-            "term": oasisRT.types.RoflmarketTerm.HOUR,
-            "term_count": 1, // TODO: how long to rent?
+            term: duration.term,
+            term_count: duration.term_count,
           })
           .toSubcall(),
       );
