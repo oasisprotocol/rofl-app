@@ -7,12 +7,14 @@ import { MachineResources } from '../../components/MachineResources';
 import { useGetRosePrice } from '../../coin-gecko/api';
 import { type RoflMarketOffer } from '../../nexus/api';
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils';
+import * as oasisRT from '@oasisprotocol/client-rt';
+import { type BuildFormData } from './types';
 
 type BuildStepOffersProps = {
   offer: RoflMarketOffer;
   fieldValue: string;
   multiplyNumber?: number;
-  duration: string;
+  duration: BuildFormData['duration'];
   onCostCalculated?: (roseCostInBaseUnits: string) => void;
 };
 
@@ -23,9 +25,9 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
   duration,
   onCostCalculated,
 }) => {
-  const targetTerms = duration === 'months' ? '2' : '1';
+  const targetTerms = duration === 'months' ? oasisRT.types.RoflmarketTerm.MONTH : oasisRT.types.RoflmarketTerm.HOUR;
   const targetTermsPrice = (
-    offer.payment?.native as { terms?: Record<string, string> }
+    offer.payment?.native as { terms?: Record<oasisRT.types.RoflmarketTerm, string> }
   )?.terms?.[targetTerms];
   const multiplyBy = duration === 'days' ? multiplyNumber * 24 : multiplyNumber;
   const {
