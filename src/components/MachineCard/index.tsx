@@ -37,7 +37,12 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
             })}
           >
             {isLoading && <Skeleton className="w-full h-[24px] w-full" />}
-            {isFetched && <>{roflAppName || 'Not provided'}</>}
+            {isFetched && !!roflAppName && (
+              <Link to={`/dashboard/apps/${data?.data.id}`}>
+                <>{roflAppName}</>
+              </Link>
+            )}
+            {isFetched && !roflAppName && <>Name not provided</>}
           </span>
           <span className="text-xs text-muted-foreground break-all">
             <>{machine.deployment?.app_id}</>
