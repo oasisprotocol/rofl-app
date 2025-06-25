@@ -27,7 +27,7 @@ export function useNetwork(fallback?: 'mainnet' | 'testnet') {
 
   // Don't throw on "unsupported" chains, that are needed for payment
   if (chainId === mainnet.id) {
-    return previousValueRef.current ?? fallback
+    return previousValueRef.current ?? fallback!
   }
 
   if (fallback) {
