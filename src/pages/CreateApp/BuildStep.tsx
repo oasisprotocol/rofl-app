@@ -77,15 +77,15 @@ export const BuildStep: FC<AgentStepProps> = ({
   // Testnet provider provide only hourly terms
   const hasMonthlyTerms = offers?.some(
     (offer) =>
-      (offer.payment?.native as { terms?: Record<string, string> })?.terms?.[
+      (offer.payment?.native as { terms?: Record<oasisRT.types.RoflmarketTerm, string> })?.terms?.[
         oasisRT.types.RoflmarketTerm.MONTH
       ]
   );
 
-  const durationOptions = [
+  const durationOptions: { value: BuildFormData['duration'], label: string }[] = [
     { value: 'hours', label: 'Hours' },
     { value: 'days', label: 'Days' },
-    ...(hasMonthlyTerms ? [{ value: 'months', label: 'Months' }] : []),
+    ...(hasMonthlyTerms ? [{ value: 'months', label: 'Months' }] as const : []),
   ];
 
   const onSubmit = (values: BuildFormData) => {

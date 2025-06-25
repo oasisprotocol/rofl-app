@@ -50,9 +50,7 @@ export const buildFormSchema = z.object({
   provider: z.string().min(1, {
     message: 'Provider is required.',
   }),
-  duration: z.string().min(1, {
-    message: 'Duration is required.',
-  }),
+  duration: z.enum(['hours', 'days', 'months']),
   number: z.coerce.number().int().positive({
     message: 'Number is required.',
   }),
