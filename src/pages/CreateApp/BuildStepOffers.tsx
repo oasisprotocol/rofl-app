@@ -9,6 +9,7 @@ import { type RoflMarketOffer } from '../../nexus/api'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import * as oasisRT from '@oasisprotocol/client-rt'
 import { type BuildFormData } from './types'
+import { useTicker } from '../../hooks/useTicker'
 
 type BuildStepOffersProps = {
   offer: RoflMarketOffer
@@ -25,6 +26,7 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
   duration,
   onCostCalculated,
 }) => {
+  const ticker = useTicker()
   const targetTerms =
     duration === 'months' ? oasisRT.types.RoflmarketTerm.MONTH : oasisRT.types.RoflmarketTerm.HOUR
   const targetTermsPrice = (offer.payment?.native as { terms?: Record<oasisRT.types.RoflmarketTerm, string> })
@@ -67,7 +69,7 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
             '-'
           ) : (
             <>
-              {roseCost} ROSE
+              {roseCost} {ticker}
               <span className="text-muted-foreground text-sm">
                 {isLoadingRosePrice && <Skeleton className="w-full h-[20px] w-[80px]" />}
                 {isFetchedRosePrice && rosePrice && (

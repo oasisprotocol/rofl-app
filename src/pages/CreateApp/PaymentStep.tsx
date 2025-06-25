@@ -5,6 +5,7 @@ import { CreateFormNavigation } from './CreateFormNavigation'
 import { type AppData } from './types'
 import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator'
 import { fromBaseUnits } from '../../utils/number-utils'
+import { useTicker } from '../../hooks/useTicker'
 
 type AgentStepProps = {
   handleNext: () => void
@@ -19,6 +20,8 @@ export const PaymentStep: FC<AgentStepProps> = ({
   selectedTemplateName,
   appData,
 }) => {
+  const ticker = useTicker()
+
   return (
     <CreateLayout
       currentStep={4}
@@ -41,7 +44,7 @@ export const PaymentStep: FC<AgentStepProps> = ({
           <span className="text-white text-sm">Machine cost</span>
           <span className="text-white text-sm">
             {appData?.build?.roseCostInBaseUnits
-              ? `${fromBaseUnits(appData.build.roseCostInBaseUnits)} ROSE`
+              ? `${fromBaseUnits(appData.build.roseCostInBaseUnits)} ${ticker}`
               : '-'}
           </span>
         </div>
@@ -59,7 +62,7 @@ export const PaymentStep: FC<AgentStepProps> = ({
           <span className="text-white text-sm font-medium">Total</span>
           <span className="text-white text-sm font-medium">
             {appData?.build?.roseCostInBaseUnits
-              ? `${fromBaseUnits(appData.build.roseCostInBaseUnits)} ROSE`
+              ? `${fromBaseUnits(appData.build.roseCostInBaseUnits)} ${ticker}`
               : '-'}
           </span>
         </div>
