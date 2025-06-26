@@ -192,7 +192,7 @@ async function waitForAppId(creationTxHash: string, network: 'mainnet' | 'testne
   throw new Error('waitForAppId timed out')
 }
 
-async function waitForBuildResults(taskId: string, token: string, timeout = 300_000) {
+async function waitForBuildResults(taskId: string, token: string, timeout = 600_000) {
   const interval = 3000
   const maxTries = timeout / interval
   for (let i = 0; i < maxTries; i++) {
