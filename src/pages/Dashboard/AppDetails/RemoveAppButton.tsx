@@ -11,12 +11,16 @@ import {
   DialogTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { Trash2 } from 'lucide-react'
+import { useTicker } from '../../../hooks/useTicker'
+import { fromBaseUnits } from '../../../utils/number-utils'
 
 type RemoveAppButtonProps = {
   onConfirm: () => void
+  stakedAmount: string
 }
 
-export const RemoveAppButton: FC<RemoveAppButtonProps> = ({ onConfirm }) => {
+export const RemoveAppButton: FC<RemoveAppButtonProps> = ({ stakedAmount, onConfirm }) => {
+  const ticker = useTicker()
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -28,7 +32,7 @@ export const RemoveAppButton: FC<RemoveAppButtonProps> = ({ onConfirm }) => {
         <DialogHeader>
           <DialogTitle>Confirm ROFL App Removal</DialogTitle>
           <DialogDescription>
-            This will permanently remove the ROFL app. This action cannot be undone.
+            This will permanently remove the ROFL app and get back {fromBaseUnits(stakedAmount)} {ticker}. This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

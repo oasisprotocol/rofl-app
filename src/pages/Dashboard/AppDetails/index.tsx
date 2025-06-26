@@ -116,8 +116,9 @@ export const AppDetails: FC = () => {
                   />
                 </div>
                 <div className="flex items-center gap-8">
-                  {!roflApp?.removed && (
+                  {roflApp && !roflApp?.removed && (
                     <RemoveAppButton
+                      stakedAmount={roflApp.stake}
                       onConfirm={() => {
                         removeApp({ appId: id as `rofl1${string}`, network })
                         roflAppQuery.refetch()
