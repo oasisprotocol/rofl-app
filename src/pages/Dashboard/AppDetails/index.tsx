@@ -83,6 +83,7 @@ export const AppDetails: FC = () => {
         <>
           <UnsavedChanges
             isDirty={viewMetadataState.isDirty || viewSecretsState.isDirty}
+            applyLabel={viewSecretsState.isDirty ? 'Apply and Restart Machine' : 'Apply'}
             onDiscard={() => {
               setViewMetadataState({
                 ...setDefaultMetadataViewState(roflApp.metadata),
