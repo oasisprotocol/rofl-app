@@ -28,7 +28,7 @@ export function useNetwork(fallback?: 'mainnet' | 'testnet') {
 
   // Allow payment-required chains without throwing errors
   if (chainId && ENABLED_CHAINS_IDS.includes(chainId.toString())) {
-    return previousValueRef.current ?? fallback!
+    if (previousValueRef.current) return previousValueRef.current
   }
 
   if (fallback) {
