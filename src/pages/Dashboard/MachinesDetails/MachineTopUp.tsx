@@ -32,7 +32,7 @@ export const MachineTopUp: FC<MachineTopUpProps> = ({ onConfirm, disabled }) => 
           <DialogDescription>At varius sit sit netus at integer vitae posuere id.</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>

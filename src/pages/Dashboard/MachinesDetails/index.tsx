@@ -14,8 +14,9 @@ import {
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { trimLongString } from '../../../utils/trimLongString'
 import { MachineResources } from '../../../components/MachineResources'
-import { useMachineExecuteRestartCmd } from '../../../backend/api'
+import { useMachineExecuteRestartCmd, useMachineExecuteStopCmd } from '../../../backend/api'
 import { MachineTopUp } from './MachineTopUp'
+import { MachineStop } from './MachineStop'
 
 export const MachinesDetails: FC = () => {
   const network = useNetwork()
@@ -29,6 +30,7 @@ export const MachinesDetails: FC = () => {
   const { data, isLoading, isFetched } = roflMachinesQuery
   const machine = data?.data
   const { mutateAsync: restartMachine } = useMachineExecuteRestartCmd()
+  const { mutateAsync: stopMachine } = useMachineExecuteStopCmd()
 
   return (
     <>
@@ -62,11 +64,14 @@ export const MachinesDetails: FC = () => {
                     disabled={machine.removed}
                     onConfirm={() => {
                       restartMachine({ machineId: machine.id, provider: machine.provider, network })
-                      roflMachinesQuery.refetch()
                     }}
                   />
-                  {/* Enable when when resume is supported? https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/cmd/rofl/machine/mgmt.go#L178-L193 */}
-                  {/* <MachineStop /> */}
+                  <MachineStop
+                    disabled={machine.removed}
+                    onConfirm={() => {
+                      stopMachine({ machineId: machine.id, provider: machine.provider, network })
+                    }}
+                  />
                   <TabsList className="w-full md:w-auto">
                     <TabsTrigger value="details">Details</TabsTrigger>
                     {/* <TabsTrigger value="logs">Logs</TabsTrigger> */}
