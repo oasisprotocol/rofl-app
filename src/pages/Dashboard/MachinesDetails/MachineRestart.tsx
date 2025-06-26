@@ -12,29 +12,36 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { RotateCcw } from 'lucide-react'
 
-export const MachineRestart: FC = () => {
+type MachineRestartProps = {
+  onConfirm: () => void
+  disabled?: boolean
+}
+
+export const MachineRestart: FC<MachineRestartProps> = ({ onConfirm, disabled }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full md:w-auto md:ml-8">
+        <Button variant="outline" className="w-full md:w-auto md:ml-8" disabled={disabled}>
           <RotateCcw />
           Restart
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Please confirm your action</DialogTitle>
+          <DialogTitle>Restart Machine</DialogTitle>
           <DialogDescription>
-            This action will restart the machine and your app will not be available during this process.
+            The machine and your app will be unavailable during the restart process.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button variant="destructive" onClick={() => console.log('trigger stop action')}>
-            Confirm
-          </Button>
+          <DialogClose asChild>
+            <Button variant="destructive" onClick={onConfirm}>
+              Confirm
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

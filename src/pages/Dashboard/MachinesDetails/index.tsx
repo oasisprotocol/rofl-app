@@ -16,6 +16,7 @@ import {
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { trimLongString } from '../../../utils/trimLongString'
 import { MachineResources } from '../../../components/MachineResources'
+import { useMachineExecuteRestartCmd } from '../../../backend/api'
 
 export const MachinesDetails: FC = () => {
   const network = useNetwork()
@@ -28,6 +29,7 @@ export const MachinesDetails: FC = () => {
   )
   const { data, isLoading, isFetched } = roflMachinesQuery
   const machine = data?.data
+  const { mutateAsync: restartMachine } = useMachineExecuteRestartCmd()
 
   return (
     <>
@@ -60,7 +62,13 @@ export const MachinesDetails: FC = () => {
                     <CircleArrowUp />
                     Top up
                   </Button>
-                  <MachineRestart />
+                  <MachineRestart
+                    disabled={machine.removed}
+                    onConfirm={() => {
+                      restartMachine({ machineId: machine.id, provider: machine.provider, network })
+                      roflMachinesQuery.refetch()
+                    }}
+                  />
                   <MachineStop />
 
                   <TabsList className="w-full md:w-auto">
