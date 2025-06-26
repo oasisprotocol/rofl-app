@@ -18,6 +18,7 @@ import { AccountAvatar } from './components/AccountAvatar'
 import { MainLayout } from './components/Layout/MainLayout'
 import { RoflAppBackendAuthProvider } from './contexts/RoflAppBackendAuth/Provider'
 import { RootLayout } from './components/RootLayout'
+import { sapphire } from 'viem/chains'
 
 import './index.css'
 import '@rainbow-me/rainbowkit/styles.css'
@@ -91,6 +92,7 @@ createRoot(document.getElementById('root')!).render(
   <WagmiProvider config={wagmiConfig}>
     <QueryClientProvider client={queryClient}>
       <RainbowKitProvider
+        initialChain={sapphire}
         theme={rainbowKitTheme}
         avatar={({ address, size }) => (
           <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
