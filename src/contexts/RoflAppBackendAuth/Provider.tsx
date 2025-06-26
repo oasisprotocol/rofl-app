@@ -18,7 +18,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const createSiweMessage = useCallback((address: string, nonce: string, chainId: number): string => {
     const domain = location.hostname
     const uri = location.host
-    const statement = `Sign in to ${domain}`
+    const statement = 'Sign in to ROFL App Backend'
     const version = '1'
     const issuedAt = new Date().toISOString()
 
