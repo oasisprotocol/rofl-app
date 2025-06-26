@@ -1,19 +1,25 @@
 import { type FC } from 'react'
-import { CircleCheck, CircleMinus } from 'lucide-react'
+import { CircleCheck, CircleMinus, CirclePause } from 'lucide-react'
 import { parseISO, addMinutes, isWithinInterval, isPast } from 'date-fns'
 import { Badge } from '@oasisprotocol/ui-library/src/components/ui/badge'
+import { RoflMarketInstance } from '../../nexus/api'
+import * as oasisRT from '@oasisprotocol/client-rt'
 
-type MachineStatusTypes = 'active' | 'removed' | 'expiring'
+type MachineStatusTypes = 'created' | 'active' | 'removed' | 'expiring'
 
-function getMachineStatus(removed: boolean, expiringSoon: boolean, expired: boolean): MachineStatusTypes {
-  if (removed || expired) return 'removed'
+function getMachineStatus(machine: RoflMarketInstance): MachineStatusTypes {
+  if (machine.status === oasisRT.types.RoflmarketInstanceStatus.CREATED) return 'created'
+  if (machine.status === oasisRT.types.RoflmarketInstanceStatus.CANCELLED) return 'removed'
+  // else oasisRT.types.RoflmarketInstanceStatus.ACCEPTED:
+  const expired = isExpired(machine.paid_until)
+  const expiringSoon = !expired && isExpiringSoon(machine.paid_until)
+  if (machine.removed || expired) return 'removed'
   if (expiringSoon) return 'expiring'
   return 'active'
 }
 
 type MachineStatusIconProps = {
-  removed: boolean
-  expirationDate: string
+  machine: RoflMarketInstance
 }
 
 const isExpiringSoon = (expirationDate: string) => {
@@ -40,12 +46,12 @@ const isExpired = (expirationDate: string) => {
   }
 }
 
-export const MachineStatusIcon: FC<MachineStatusIconProps> = ({ removed, expirationDate }) => {
-  const expired = isExpired(expirationDate)
-  const expiringSoon = !expired && isExpiringSoon(expirationDate)
-  const status = getMachineStatus(removed, expiringSoon, expired)
+export const MachineStatusIcon: FC<MachineStatusIconProps> = ({ machine }) => {
+  const status = getMachineStatus(machine)
   const getStatusIcon = (status: MachineStatusTypes) => {
     switch (status) {
+      case 'created':
+        return <CirclePause className="h-5 w-5" style={{ color: 'var(--warning)' }} />
       case 'active':
         return <CircleCheck className="h-5 w-5" style={{ color: 'var(--success)' }} />
       case 'removed':

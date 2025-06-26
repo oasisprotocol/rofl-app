@@ -25,7 +25,7 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
           <h3 className="text-lg font-semibold text-foreground pr-2 break-all">
             <>{machine.metadata?.['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
           </h3>
-          <MachineStatusIcon removed={machine.removed} expirationDate={machine.paid_until} />
+          <MachineStatusIcon machine={machine} />
         </div>
       </CardHeader>
       <CardContent className="flex-1">
