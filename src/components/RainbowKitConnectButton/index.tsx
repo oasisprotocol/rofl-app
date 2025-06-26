@@ -38,20 +38,17 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
   const [selectedChainId, setSelectedChainId] = useState(chainId)
 
   useEffect(() => {
-    // Auth when wallet is connected, but only in development mode for now
-    if (!import.meta.env.PROD) {
-      const handleLogin = async () => {
-        if (isConnected && address && !isLoading && !isAuthenticated) {
-          try {
-            await login()
-          } catch (error) {
-            console.error('Login failed:', error)
-          }
+    const handleLogin = async () => {
+      if (isConnected && address && !isLoading && !isAuthenticated) {
+        try {
+          await login()
+        } catch (error) {
+          console.error('Login failed:', error)
         }
       }
-
-      handleLogin()
     }
+
+    handleLogin()
   }, [isLoading, isAuthenticated, isConnected, address, login])
 
   useEffect(() => {
