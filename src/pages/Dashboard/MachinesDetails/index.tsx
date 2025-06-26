@@ -1,8 +1,7 @@
 import type { FC } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@oasisprotocol/ui-library/src/components/ui/tabs'
-import { Clock, CircleArrowUp } from 'lucide-react'
+import { Clock } from 'lucide-react'
 import { formatDistanceToNow, parseISO, isFuture } from 'date-fns'
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow'
@@ -16,6 +15,7 @@ import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { trimLongString } from '../../../utils/trimLongString'
 import { MachineResources } from '../../../components/MachineResources'
 import { useMachineExecuteRestartCmd } from '../../../backend/api'
+import { MachineTopUp } from './MachineTopUp'
 
 export const MachinesDetails: FC = () => {
   const network = useNetwork()
@@ -57,10 +57,7 @@ export const MachinesDetails: FC = () => {
                       </>
                     )}
                   </div>
-                  <Button variant="outline" className="w-full md:w-auto" disabled>
-                    <CircleArrowUp />
-                    Top up
-                  </Button>
+                  <MachineTopUp onConfirm={() => {}} disabled={machine.removed} />
                   <MachineRestart
                     disabled={machine.removed}
                     onConfirm={() => {
