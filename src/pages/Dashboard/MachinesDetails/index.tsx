@@ -6,7 +6,6 @@ import { Clock, CircleArrowUp } from 'lucide-react'
 import { formatDistanceToNow, parseISO, isFuture } from 'date-fns'
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow'
-import { MachineStop } from './MachineStop'
 import { MachineRestart } from './MachineRestart'
 import { useNetwork } from '../../../hooks/useNetwork'
 import {
@@ -69,8 +68,8 @@ export const MachinesDetails: FC = () => {
                       roflMachinesQuery.refetch()
                     }}
                   />
-                  <MachineStop />
-
+                  {/* Enable when when resume is supported? https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/cmd/rofl/machine/mgmt.go#L178-L193 */}
+                  {/* <MachineStop /> */}
                   <TabsList className="w-full md:w-auto">
                     <TabsTrigger value="details">Details</TabsTrigger>
                     {/* <TabsTrigger value="logs">Logs</TabsTrigger> */}
