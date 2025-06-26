@@ -524,7 +524,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                         <ChevronDown className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-[384px]">
+                    <DropdownMenuContent align="end" side="bottom" className="w-[384px]">
                       {chains
                         ?.filter(chain => chain.chainId !== DESTINATION_CHAIN_ID)
                         .map(chain => (
@@ -589,7 +589,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                           <ChevronDown className="w-4 h-4 text-foreground" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-[384px]">
+                      <DropdownMenuContent align="end" side="bottom" className="w-[384px]">
                         {selectedChainTokens?.map(token => (
                           <DropdownMenuItem
                             key={token.symbol}

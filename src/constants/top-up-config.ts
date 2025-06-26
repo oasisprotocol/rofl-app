@@ -1,5 +1,8 @@
-export const ENABLED_CHAINS_IDS = ['1', '23294']
-export const DESTINATION_CHAIN_ID = '23294'
+import { sapphire, mainnet, bsc, tron, base, arbitrum, avalanche, polygon } from 'viem/chains'
+
+export const ENABLED_CHAINS = [sapphire, mainnet, bsc, tron, base, arbitrum, avalanche, polygon]
+export const ENABLED_CHAINS_IDS = ENABLED_CHAINS.map(chain => chain.id.toString())
+export const DESTINATION_CHAIN_ID = sapphire.id.toString()
 export const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 export const ROUTER_PATHFINDER_API_URL = 'https://api-beta.pathfinder.routerprotocol.com/api/v2'
 export const ROUTER_SWAP_API_URL = 'https://api.nitroswap.routernitro.com'

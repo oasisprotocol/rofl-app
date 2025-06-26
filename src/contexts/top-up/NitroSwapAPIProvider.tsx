@@ -163,8 +163,8 @@ export const NitroSwapAPIContextProvider: FC<PropsWithChildren> = ({ children })
   }, [state.chains, getToken])
 
   const isLoading = useMemo(() => {
-    if (ENABLED_CHAINS_IDS.length !== state.chains?.length) return true
-    if (ENABLED_CHAINS_IDS.length !== state.nativeTokens?.length) return true
+    if (ENABLED_CHAINS_IDS.length > (state.chains?.length ?? 0)) return true
+    if (ENABLED_CHAINS_IDS.length > (state.nativeTokens?.length ?? 0)) return true
     return false
   }, [state.chains, state.nativeTokens])
 

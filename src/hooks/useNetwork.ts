@@ -1,7 +1,8 @@
 import { useAccount } from 'wagmi'
 import { AppError, AppErrors } from '../components/ErrorBoundary/errors'
-import { mainnet, sapphire, sapphireTestnet } from 'viem/chains'
+import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useRef } from 'react'
+import { ENABLED_CHAINS_IDS } from '../constants/top-up-config.ts'
 
 export function useNetwork(fallback?: 'mainnet' | 'testnet') {
   const { isConnected, chainId } = useAccount()
@@ -25,8 +26,8 @@ export function useNetwork(fallback?: 'mainnet' | 'testnet') {
     return 'testnet'
   }
 
-  // Don't throw on "unsupported" chains, that are needed for payment
-  if (chainId === mainnet.id) {
+  // Allow payment-required chains without throwing errors
+  if (chainId && ENABLED_CHAINS_IDS.includes(chainId.toString())) {
     return previousValueRef.current ?? fallback!
   }
 
