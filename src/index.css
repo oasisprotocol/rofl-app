@@ -11,3 +11,20 @@
   --foreground: #fafafa;
   --base-card: #18181b;
 }
+
+/*
+  [rainbowkit]: Hacky way to implement visible chains in switch modal dialog
+ */
+[data-rk] {
+  && {
+    [data-testid='rk-chain-option-1'],
+    [data-testid='rk-chain-option-56'],
+    [data-testid='rk-chain-option-728126428'],
+    [data-testid='rk-chain-option-8453'],
+    [data-testid='rk-chain-option-42161'],
+    [data-testid='rk-chain-option-43114'],
+    [data-testid='rk-chain-option-137'] {
+      display: none;
+    }
+  }
+}
