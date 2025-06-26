@@ -61,7 +61,12 @@ export const AppSecrets: FC<AppSecretsProps> = ({ secrets, setViewSecretsState, 
                   {key}: [{(secrets[key] as string).length} bytes]
                 </TableCell>
                 <TableCell className="w-10">
-                  <SecretDialog mode="edit" secret={key} handleEditSecret={handleEditSecret} />
+                  <SecretDialog
+                    mode="edit"
+                    secret={key}
+                    editEnabled={editEnabled}
+                    handleEditSecret={handleEditSecret}
+                  />
                 </TableCell>
                 <TableCell className="w-10">
                   <RemoveSecret

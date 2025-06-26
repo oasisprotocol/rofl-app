@@ -56,7 +56,7 @@ export const AppDetails: FC = () => {
     `${id}-compose-yaml`,
     token,
   )
-  const editEnabled = !!token && !!roflYaml && !!composeYaml
+  const editEnabled = !!token && !!roflYaml && !!composeYaml && !roflApp?.removed
   const { mutateAsync: removeApp } = useRemoveApp()
 
   useEffect(() => {
