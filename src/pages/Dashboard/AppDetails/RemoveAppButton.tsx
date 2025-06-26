@@ -32,7 +32,8 @@ export const RemoveAppButton: FC<RemoveAppButtonProps> = ({ stakedAmount, onConf
         <DialogHeader>
           <DialogTitle>Confirm ROFL App Removal</DialogTitle>
           <DialogDescription>
-            This will permanently remove the ROFL app and get back {fromBaseUnits(stakedAmount)} {ticker}. This action cannot be undone.
+            This will permanently remove the ROFL app and get back {fromBaseUnits(stakedAmount)} {ticker}.
+            This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
