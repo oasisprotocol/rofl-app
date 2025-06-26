@@ -13,4 +13,6 @@ export const FAUCET_URL = 'https://faucet.testnet.oasis.io/'
  * Each entry in the list is an array where the first element is a chain identifier
  * and the second element is the corresponding blacklisted token's address.
  */
-export const BLACKLIST_TOKENS: [string, string][] = [['1', '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48']]
+export const BLACKLIST_TOKENS: [string, string][] = [
+  // ['1', '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'], // ETH - $USDC
+]
