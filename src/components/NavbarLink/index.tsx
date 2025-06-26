@@ -16,15 +16,17 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ children, to, className, onCli
       asChild={!!to}
       onClick={onClick}
     >
-      {to ? (
-        <NavLink to={to}>
-          {({ isActive }) => (
-            <span className={isActive ? 'text-foreground' : 'text-muted-foreground'}>{children}</span>
-          )}
-        </NavLink>
-      ) : (
-        children
-      )}
+      <>
+        {to ? (
+          <NavLink to={to}>
+            {({ isActive }) => (
+              <span className={isActive ? 'text-foreground' : 'text-muted-foreground'}>{children}</span>
+            )}
+          </NavLink>
+        ) : (
+          children
+        )}
+      </>
     </Button>
   )
 }

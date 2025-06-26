@@ -376,3 +376,43 @@ export function useRemoveApp() {
     },
   })
 }
+
+export function useMachineExecuteRestartCmd() {
+  const { sendTransactionAsync } = useSendTransaction()
+  return useMutation<
+    void,
+    AxiosError<unknown>,
+    { machineId: string; provider: string; network: 'mainnet' | 'testnet' }
+  >({
+    mutationFn: async ({ machineId, provider, network }) => {
+      const sapphireRuntimeId =
+        network === 'mainnet'
+          ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
+          : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
+
+      const restartRequest = {
+        wipe_storage: false,
+      }
+
+      const command = {
+        // https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/build/rofl/scheduler/commands.go#L9-L42
+        method: 'Restart',
+        args: oasis.misc.toCBOR(restartRequest),
+      }
+
+      const encodedCommand = oasis.misc.toCBOR(command)
+
+      await sendTransactionAsync(
+        roflmarket
+          .callInstanceExecuteCmds()
+          .setBody({
+            provider: oasis.staking.addressFromBech32(provider),
+            id: oasis.misc.fromHex(machineId) as oasisRT.types.MachineID,
+            cmds: [encodedCommand],
+          })
+          .toSubcall(),
+      )
+    },
+  })
+}

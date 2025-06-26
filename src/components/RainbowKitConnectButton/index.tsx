@@ -226,7 +226,7 @@ export const SimpleRainbowKitConnectButton: FC<SimpleRainbowKitConnectButtonProp
                     }}
                     size="lg"
                   >
-                    {children}
+                    <>{children}</>
                   </Button>
                 )
               }
