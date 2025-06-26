@@ -1,12 +1,10 @@
 import type { FC } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@oasisprotocol/ui-library/src/components/ui/tabs'
-import { Clock, CircleArrowUp } from 'lucide-react'
+import { Clock } from 'lucide-react'
 import { formatDistanceToNow, parseISO, isFuture } from 'date-fns'
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow'
-import { MachineStop } from './MachineStop'
 import { MachineRestart } from './MachineRestart'
 import { useNetwork } from '../../../hooks/useNetwork'
 import {
@@ -17,6 +15,7 @@ import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { trimLongString } from '../../../utils/trimLongString'
 import { MachineResources } from '../../../components/MachineResources'
 import { useMachineExecuteRestartCmd } from '../../../backend/api'
+import { MachineTopUp } from './MachineTopUp'
 
 export const MachinesDetails: FC = () => {
   const network = useNetwork()
@@ -58,10 +57,7 @@ export const MachinesDetails: FC = () => {
                       </>
                     )}
                   </div>
-                  <Button variant="outline" className="w-full md:w-auto" disabled>
-                    <CircleArrowUp />
-                    Top up
-                  </Button>
+                  <MachineTopUp onConfirm={() => {}} disabled={machine.removed} />
                   <MachineRestart
                     disabled={machine.removed}
                     onConfirm={() => {
@@ -69,8 +65,8 @@ export const MachinesDetails: FC = () => {
                       roflMachinesQuery.refetch()
                     }}
                   />
-                  <MachineStop />
-
+                  {/* Enable when when resume is supported? https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/cmd/rofl/machine/mgmt.go#L178-L193 */}
+                  {/* <MachineStop /> */}
                   <TabsList className="w-full md:w-auto">
                     <TabsTrigger value="details">Details</TabsTrigger>
                     {/* <TabsTrigger value="logs">Logs</TabsTrigger> */}
