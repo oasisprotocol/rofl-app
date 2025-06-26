@@ -269,7 +269,7 @@ export function useCreateAndDeployApp() {
               max_expiration: 3,
             },
             metadata: {
-              'net.oasis.rofl.name': appData.metadata?.name || '',
+              'net.oasis.rofl.name': `Draft of ${appData.metadata?.name || ''}`,
               'net.oasis.rofl.author': appData.metadata?.author || '',
               'net.oasis.rofl.description': appData.metadata?.description || '',
               'net.oasis.rofl.version': appData.metadata?.version || '',
@@ -311,7 +311,10 @@ export function useCreateAndDeployApp() {
           .setBody({
             id: app.id,
             admin: app.admin,
-            metadata: app.metadata,
+            metadata: {
+              ...app.metadata,
+              'net.oasis.rofl.name': appData.metadata?.name || '',
+            },
             policy: {
               ...app.policy,
               enclaves: enclaves,
