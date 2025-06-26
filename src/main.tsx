@@ -12,7 +12,7 @@ import { Create } from './pages/CreateApp'
 import { Explore } from './pages/Explore'
 import { NotFound } from './components/NotFound'
 import { wagmiConfig } from './constants/wagmi-config.ts'
-import { lightTheme, RainbowKitProvider, type Theme } from '@rainbow-me/rainbowkit'
+import { darkTheme, RainbowKitProvider, type Theme } from '@rainbow-me/rainbowkit'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AccountAvatar } from './components/AccountAvatar'
 import { MainLayout } from './components/Layout/MainLayout'
@@ -24,9 +24,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 const queryClient = new QueryClient()
 const rainbowKitTheme: Theme = {
-  ...lightTheme({
-    /* accentColor: 'var(--brand-extra-dark)' */
-  }),
+  ...darkTheme(),
   fonts: {
     body: 'inherit',
   },
