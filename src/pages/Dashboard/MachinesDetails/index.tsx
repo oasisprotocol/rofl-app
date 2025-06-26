@@ -41,7 +41,7 @@ export const MachinesDetails: FC = () => {
                   <h1 className="text-2xl font-bold">
                     <>{machine.metadata?.['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
                   </h1>
-                  <MachineStatusIcon removed={machine.removed} expirationDate={machine.paid_until} />
+                  <MachineStatusIcon machine={machine} />
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <div className="flex items-center gap-2 text-orange-400 px-3 py-1.5 ">
