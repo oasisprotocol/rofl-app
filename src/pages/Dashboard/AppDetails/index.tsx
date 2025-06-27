@@ -127,8 +127,8 @@ export const AppDetails: FC = () => {
                   {roflApp && !roflApp?.removed && (
                     <RemoveAppButton
                       stakedAmount={roflApp.stake}
-                      onConfirm={() => {
-                        removeApp({ appId: id as `rofl1${string}`, network })
+                      onConfirm={async () => {
+                        await removeApp({ appId: id as `rofl1${string}`, network })
                         roflAppQuery.refetch()
                       }}
                     />
