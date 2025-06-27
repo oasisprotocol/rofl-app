@@ -4,6 +4,7 @@ import { EmptyState } from '../../../components/EmptyState'
 import { useMachineAccess } from '../../../hooks/useMachine'
 import { useScheduler } from '../../../hooks/useScheduler'
 import { RawCode } from '../../../components/CodeDisplay'
+import { RotateCw } from 'lucide-react'
 
 type MachineLogsProps = {
   provider: string
@@ -32,7 +33,16 @@ export const MachineLogs: FC<MachineLogsProps> = ({ provider, instance, logs, se
           <Button onClick={handleMachineAccess}>Access machine</Button>
         </EmptyState>
       )}
-      {hasLogs && <RawCode data={logs.join('\n')} className="h-[700px]" />}
+      {hasLogs && (
+        <>
+          <div className="flex justify-end mt-2 mb-4">
+            <Button variant="outline" onClick={() => fetchMachineLogs()} className="flex items-center">
+              <RotateCw className="ml-2 h-4 w-4" /> Refetch logs
+            </Button>
+          </div>
+          <RawCode data={logs.join('\n')} className="h-[700px]" />
+        </>
+      )}
     </>
   )
 }

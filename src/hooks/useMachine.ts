@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useAccount, useSignMessage, useChainId } from 'wagmi'
 import { createSiweMessage } from 'viem/siwe'
 
@@ -5,6 +6,7 @@ export const useMachineAccess = (schedulerApi: string, provider: string, instanc
   const { address } = useAccount()
   const { signMessageAsync } = useSignMessage()
   const chainId = useChainId()
+  const [token, setToken] = useState<string | null>(null)
 
   const authenticateWithSiwe = async () => {
     const domain = new URL(schedulerApi).hostname
@@ -42,6 +44,10 @@ export const useMachineAccess = (schedulerApi: string, provider: string, instanc
 
       const result = await response.json()
 
+      if (result.token) {
+        setToken(result.token)
+      }
+
       return result
     } catch (error) {
       console.error('Authentication error:', error)
@@ -50,13 +56,22 @@ export const useMachineAccess = (schedulerApi: string, provider: string, instanc
   }
 
   const fetchMachineLogs = async () => {
-    const { token } = await authenticateWithSiwe()
+    let currentToken = token
+
+    if (!currentToken) {
+      const authResult = await authenticateWithSiwe()
+      currentToken = authResult.token
+    }
+
+    if (!currentToken) {
+      throw new Error('Authentication failed - no token available')
+    }
 
     try {
       const response = await fetch(`${schedulerApi}/rofl-scheduler/v1/logs/get`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${currentToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
