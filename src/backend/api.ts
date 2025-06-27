@@ -10,6 +10,7 @@ import { GetRuntimeEvents, GetRuntimeRoflmarketInstances } from '../nexus/api'
 import { useConfig, useSendTransaction } from 'wagmi'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { ViewMetadataState, ViewSecretsState } from '../pages/Dashboard/AppDetails/types'
+import { useState } from 'react'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -208,8 +209,14 @@ async function waitForBuildResults(taskId: string, token: string, timeout = 600_
 export function useCreateAndDeployApp() {
   const wagmiConfig = useConfig()
   const { sendTransactionAsync } = useSendTransaction()
+  const steps = ['creating', 'building', 'updating', 'deploying'] as const
+  const [currentStep, setCurrentStep] = useState<(typeof steps)[number] | null>(null)
+  const stepEstimatedDurations: { [step in (typeof steps)[number]]?: number } = {
+    creating: 40_000,
+    building: 150_000,
+  }
 
-  return useMutation<
+  const mutation = useMutation<
     string,
     AxiosError<unknown>,
     { token: string; template: Template; appData: AppData; network: 'mainnet' | 'testnet' }
@@ -247,6 +254,7 @@ export function useCreateAndDeployApp() {
 
       let hash
       console.log('create app?')
+      setCurrentStep('creating')
       hash = await sendTransactionAsync(
         rofl
           .callCreate()
@@ -293,6 +301,7 @@ export function useCreateAndDeployApp() {
       const manifest = yaml.stringify(template.templateParser(appData.metadata!, network, appId))
       const compose = template.yaml.compose
       console.log('Build?')
+      setCurrentStep('building')
       const { task_id } = await buildRofl({ manifest, compose }, token)
       const buildResults = await waitForBuildResults(task_id, token)
       console.log('Build results:', buildResults)
@@ -306,6 +315,7 @@ export function useCreateAndDeployApp() {
         }))
 
       console.log('update app with enclaves and secrets?')
+      setCurrentStep('updating')
       hash = await sendTransactionAsync(
         rofl
           .callUpdate()
@@ -336,6 +346,7 @@ export function useCreateAndDeployApp() {
       await waitForTransactionReceipt(wagmiConfig, { hash })
 
       console.log('deploy app?')
+      setCurrentStep('deploying')
       hash = await sendTransactionAsync(
         roflmarket
           .callInstanceCreate()
@@ -360,6 +371,11 @@ export function useCreateAndDeployApp() {
       return appId
     },
   })
+
+  return {
+    ...mutation,
+    progress: { steps, currentStep, stepEstimatedDurations },
+  }
 }
 
 export function useUpdateApp() {
