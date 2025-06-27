@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import { useState, type FC } from 'react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import {
   Dialog,
@@ -13,13 +13,15 @@ import {
 import { RotateCcw } from 'lucide-react'
 
 type MachineRestartProps = {
-  onConfirm: () => void
+  onConfirm: () => Promise<void>
   disabled?: boolean
 }
 
 export const MachineRestart: FC<MachineRestartProps> = ({ onConfirm, disabled }) => {
+  const [open, setOpen] = useState(false)
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="w-full md:w-auto md:ml-8" disabled={disabled}>
           <RotateCcw />
@@ -38,7 +40,13 @@ export const MachineRestart: FC<MachineRestartProps> = ({ onConfirm, disabled })
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button variant="destructive" onClick={onConfirm}>
+            <Button
+              variant="destructive"
+              onClick={event => {
+                event.preventDefault()
+                onConfirm().then(() => setOpen(false))
+              }}
+            >
               Confirm
             </Button>
           </DialogClose>
