@@ -9,8 +9,8 @@ export const FaucetInfo: FC = () => {
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-foreground">Need $TEST Tokens?</h3>
         <p className="text-sm text-muted-foreground">
-          You're currently on the testnet. If you need test tokens to get started, you can use the official
-          faucet to top up your wallet.
+          You're currently on the testnet. If you need test tokens to get started, you can use the faucet to
+          top up your wallet.
         </p>
         <a
           href={FAUCET_URL}

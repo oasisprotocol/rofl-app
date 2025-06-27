@@ -407,10 +407,18 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
   const handleChainSelect = (chain: Chain) => {
     setValue('sourceChain', { chainId: chain.chainId, name: chain.name })
+
+    setSelectedChainTokens(null)
+    setValue('sourceToken', { symbol: '', chainId: '' })
+    setValue('amount', '0')
+    setQuote(null)
   }
 
   const handleTokenSelect = (token: TokenWithBalance) => {
     setValue('sourceToken', { symbol: token.symbol, chainId: token.chainId })
+
+    setValue('amount', '0')
+    setQuote(null)
   }
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {

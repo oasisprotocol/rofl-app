@@ -56,13 +56,13 @@ export abstract class FormatUtils {
   }
 
   static formatSourceAmount(quote: QuoteResponse | null): string {
-    if (!quote?.source?.tokenAmount) return '/'
+    if (!quote?.source?.tokenAmount) return '0'
 
     return NumberUtils.formatTokenAmount(quote.source.tokenAmount, quote.source.asset.decimals, 6)
   }
 
   static formatDestinationAmount(quote: QuoteResponse | null): string {
-    if (!quote?.destination?.tokenAmount) return '/'
+    if (!quote?.destination?.tokenAmount) return '0'
 
     return NumberUtils.formatTokenAmount(quote.destination.tokenAmount, quote.destination.asset.decimals, 6)
   }
