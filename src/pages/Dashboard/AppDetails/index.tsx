@@ -14,6 +14,7 @@ import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAu
 import { AppArtifacts } from './AppArtifacts'
 import { UnsavedChanges } from './UnsavedChanges'
 import { RemoveAppButton } from './RemoveAppButton'
+import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 
 function setDefaultMetadataViewState(metadata: RoflAppMetadata | undefined = {}): ViewMetadataState {
   return {
@@ -57,8 +58,10 @@ export const AppDetails: FC = () => {
     token,
   )
   const editEnabled = !!token && !!roflYaml && !!composeYaml && !roflApp?.removed
-  const { mutateAsync: removeApp } = useRemoveApp()
-  const { mutateAsync: updateApp } = useUpdateApp()
+  const removeApp = useRemoveApp()
+  const updateApp = useUpdateApp()
+
+  const showBlockingOverlay = removeApp.isPending || updateApp.isPending
 
   useEffect(() => {
     if (roflApp) {
@@ -82,6 +85,14 @@ export const AppDetails: FC = () => {
       )}
       {isFetched && roflApp && (
         <>
+          <Dialog open={showBlockingOverlay}>
+            <DialogContent className="w-auto">
+              {/* mitigate webm black background */}
+              <video className="mix-blend-lighten" width="310" height="310" autoPlay muted loop playsInline>
+                <source src="https://assets.oasis.io/webm/Oasis-Loader-310x310.webm" type="video/webm" />
+              </video>
+            </DialogContent>
+          </Dialog>
           <UnsavedChanges
             isDirty={viewMetadataState.isDirty || viewSecretsState.isDirty}
             applyLabel={viewSecretsState.isDirty ? 'Apply and Restart Machine' : 'Apply'}
@@ -94,7 +105,7 @@ export const AppDetails: FC = () => {
               })
             }}
             onConfirm={async () => {
-              await updateApp({
+              await updateApp.mutateAsync({
                 appId: id as `rofl1${string}`,
                 metadataViewState: viewMetadataState,
                 secretsViewState: viewSecretsState,
@@ -128,7 +139,7 @@ export const AppDetails: FC = () => {
                     <RemoveAppButton
                       stakedAmount={roflApp.stake}
                       onConfirm={async () => {
-                        await removeApp({ appId: id as `rofl1${string}`, network })
+                        await removeApp.mutateAsync({ appId: id as `rofl1${string}`, network })
                         roflAppQuery.refetch()
                       }}
                     />
