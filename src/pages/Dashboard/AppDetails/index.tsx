@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { trimLongString } from '../../../utils/trimLongString'
 import { type ViewMetadataState, type ViewSecretsState } from './types'
-import { useDownloadArtifact, useRemoveApp } from '../../../backend/api'
+import { useDownloadArtifact, useRemoveApp, useUpdateApp } from '../../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAuth/hooks'
 import { AppArtifacts } from './AppArtifacts'
 import { UnsavedChanges } from './UnsavedChanges'
@@ -56,8 +56,9 @@ export const AppDetails: FC = () => {
     `${id}-compose-yaml`,
     token,
   )
-  const editEnabled = !!token && !!roflYaml && !!composeYaml
+  const editEnabled = !!token && !!roflYaml && !!composeYaml && !roflApp?.removed
   const { mutateAsync: removeApp } = useRemoveApp()
+  const { mutateAsync: updateApp } = useUpdateApp()
 
   useEffect(() => {
     if (roflApp) {
@@ -83,6 +84,7 @@ export const AppDetails: FC = () => {
         <>
           <UnsavedChanges
             isDirty={viewMetadataState.isDirty || viewSecretsState.isDirty}
+            applyLabel={viewSecretsState.isDirty ? 'Apply and Restart Machine' : 'Apply'}
             onDiscard={() => {
               setViewMetadataState({
                 ...setDefaultMetadataViewState(roflApp.metadata),
@@ -91,7 +93,13 @@ export const AppDetails: FC = () => {
                 ...setDefaultSecretsViewState(roflApp.secrets),
               })
             }}
-            onConfirm={() => {
+            onConfirm={async () => {
+              await updateApp({
+                appId: id as `rofl1${string}`,
+                metadataViewState: viewMetadataState,
+                secretsViewState: viewSecretsState,
+                network,
+              })
               setViewMetadataState(prev => ({
                 ...prev,
                 isDirty: false,
@@ -146,6 +154,7 @@ export const AppDetails: FC = () => {
               </TabsContent>
               <TabsContent value="secrets">
                 <AppSecrets
+                  appSek={roflApp.sek}
                   secrets={viewSecretsState.secrets}
                   setViewSecretsState={setViewSecretsState}
                   editEnabled={editEnabled}

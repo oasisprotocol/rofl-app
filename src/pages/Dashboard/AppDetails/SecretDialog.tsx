@@ -91,7 +91,7 @@ export const SecretDialog: FC<SecretDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         {isEditMode ? (
-          <Button variant="ghost">
+          <Button variant="ghost" disabled={!editEnabled}>
             <SquarePen />
           </Button>
         ) : (

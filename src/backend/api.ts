@@ -6,9 +6,10 @@ import type { AppData } from '../pages/CreateApp/types'
 import * as yaml from 'yaml'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
-import { GetRuntimeEvents } from '../nexus/api'
+import { GetRuntimeEvents, GetRuntimeRoflmarketInstances } from '../nexus/api'
 import { useConfig, useSendTransaction } from 'wagmi'
 import { waitForTransactionReceipt } from '@wagmi/core'
+import { ViewMetadataState, ViewSecretsState } from '../pages/Dashboard/AppDetails/types'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -361,6 +362,78 @@ export function useCreateAndDeployApp() {
   })
 }
 
+export function useUpdateApp() {
+  const wagmiConfig = useConfig()
+  const { sendTransactionAsync } = useSendTransaction()
+  const { mutateAsync: restartMachine } = useMachineExecuteRestartCmd()
+
+  return useMutation<
+    string,
+    AxiosError<unknown>,
+    {
+      appId: `rofl1${string}`
+      metadataViewState: ViewMetadataState
+      secretsViewState: ViewSecretsState
+      network: 'mainnet' | 'testnet'
+    }
+  >({
+    mutationFn: async ({ appId, metadataViewState, secretsViewState, network }) => {
+      const sapphireRuntimeId =
+        network === 'mainnet'
+          ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
+          : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const nic = new oasis.client.NodeInternal(
+        network === 'mainnet' ? 'https://grpc.oasis.io' : 'https://testnet.grpc.oasis.io',
+      )
+
+      const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId)
+
+      const app = await rofl
+        .queryApp()
+        .setArgs({ id: oasisRT.rofl.fromBech32(appId) })
+        .query(nic)
+
+      console.log('update metadata/secrets?')
+      const hash = await sendTransactionAsync(
+        rofl
+          .callUpdate()
+          .setBody({
+            id: app.id,
+            admin: app.admin,
+            policy: app.policy,
+            metadata: {
+              'net.oasis.rofl.name': metadataViewState.metadata?.name || '',
+              'net.oasis.rofl.author': metadataViewState.metadata?.author || '',
+              'net.oasis.rofl.description': metadataViewState.metadata?.description || '',
+              'net.oasis.rofl.version': metadataViewState.metadata?.version || '',
+              'net.oasis.rofl.homepage': metadataViewState.metadata?.homepage || '',
+              'net.oasis.rofl.license': metadataViewState.metadata?.license || '',
+            },
+            secrets: secretsViewState.isDirty
+              ? Object.fromEntries(
+                  Object.entries(secretsViewState.secrets ?? {}).map(([key, value]) => {
+                    return [key, oasis.misc.fromBase64(value)]
+                  }),
+                )
+              : app.secrets,
+          })
+          .toSubcall(),
+      )
+      await waitForTransactionReceipt(wagmiConfig, { hash })
+
+      if (secretsViewState.isDirty) {
+        const machines = await GetRuntimeRoflmarketInstances(network, 'sapphire', { deployed_app_id: appId })
+        console.log('restart machines?', machines.data.instances)
+        for (const machine of machines.data.instances) {
+          const hash = await restartMachine({ machineId: machine.id, provider: machine.provider, network })
+          await waitForTransactionReceipt(wagmiConfig, { hash })
+        }
+      }
+      return appId
+    },
+  })
+}
+
 export function useRemoveApp() {
   const { sendTransactionAsync } = useSendTransaction()
   return useMutation<void, AxiosError<unknown>, { appId: `rofl1${string}`; network: 'mainnet' | 'testnet' }>({
@@ -383,7 +456,7 @@ export function useRemoveApp() {
 export function useMachineExecuteRestartCmd() {
   const { sendTransactionAsync } = useSendTransaction()
   return useMutation<
-    void,
+    `0x${string}`,
     AxiosError<unknown>,
     { machineId: string; provider: string; network: 'mainnet' | 'testnet' }
   >({
@@ -406,7 +479,7 @@ export function useMachineExecuteRestartCmd() {
 
       const encodedCommand = oasis.misc.toCBOR(command)
 
-      await sendTransactionAsync(
+      return await sendTransactionAsync(
         roflmarket
           .callInstanceExecuteCmds()
           .setBody({
@@ -416,6 +489,8 @@ export function useMachineExecuteRestartCmd() {
           })
           .toSubcall(),
       )
+      // Doesn't wait for transaction receipt
+      // Takes about 1 minute to complete after transaction receipt.
     },
   })
 }
@@ -456,6 +531,8 @@ export function useMachineExecuteStopCmd() {
           })
           .toSubcall(),
       )
+      // Doesn't wait for transaction receipt
+      // Takes about 1 minute to complete after transaction receipt
     },
   })
 }

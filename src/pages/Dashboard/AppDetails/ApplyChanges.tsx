@@ -14,13 +14,14 @@ import {
 type ApplyChangesProps = {
   disabled: boolean
   onConfirm: () => void
+  applyLabel?: string
 }
 
-export const ApplyChanges: FC<ApplyChangesProps> = ({ disabled, onConfirm }) => {
+export const ApplyChanges: FC<ApplyChangesProps> = ({ disabled, onConfirm, applyLabel = 'Apply' }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={disabled}>Apply</Button>
+        <Button disabled={disabled}>{applyLabel}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

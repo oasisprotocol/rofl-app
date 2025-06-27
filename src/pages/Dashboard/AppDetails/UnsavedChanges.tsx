@@ -8,9 +8,15 @@ type UnsavedChangesProps = {
   isDirty: boolean
   onDiscard: () => void
   onConfirm: () => void
+  applyLabel?: string
 }
 
-export const UnsavedChanges: FC<UnsavedChangesProps> = ({ isDirty, onDiscard, onConfirm }) => {
+export const UnsavedChanges: FC<UnsavedChangesProps> = ({
+  isDirty,
+  onDiscard,
+  onConfirm,
+  applyLabel = 'Apply',
+}) => {
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) => isDirty && currentLocation.pathname !== nextLocation.pathname,
   )
@@ -27,6 +33,7 @@ export const UnsavedChanges: FC<UnsavedChangesProps> = ({ isDirty, onDiscard, on
       <DiscardChanges disabled={!isDirty} onConfirm={onDiscard} />
       <ApplyChanges
         disabled={!isDirty}
+        applyLabel={applyLabel}
         onConfirm={() => {
           onConfirm()
         }}

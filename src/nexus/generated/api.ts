@@ -1726,7 +1726,7 @@ export type RoflAppMetadata = { [key: string]: unknown }
 /**
  * Arbitrary SEK-encrypted key-value pairs.
  */
-export type RoflAppSecrets = { [key: string]: unknown }
+export type RoflAppSecrets = { [key: string]: string /* base64 - manually changed */ }
 
 export interface RoflApp {
   /** The identifier of the ROFL application. */
