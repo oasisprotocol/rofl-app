@@ -18,6 +18,7 @@ import { useMachineExecuteRestartCmd, useMachineExecuteStopCmd } from '../../../
 import { MachineTopUp } from './MachineTopUp'
 import { MachineStop } from './MachineStop'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
+import { MachineLogs } from './MachineLogs'
 
 export const MachinesDetails: FC = () => {
   const network = useNetwork()
@@ -93,7 +94,7 @@ export const MachinesDetails: FC = () => {
                   />
                   <TabsList className="w-full md:w-auto">
                     <TabsTrigger value="details">Details</TabsTrigger>
-                    {/* <TabsTrigger value="logs">Logs</TabsTrigger> */}
+                    <TabsTrigger value="logs">Logs</TabsTrigger>
                   </TabsList>
                 </div>
               </>
@@ -125,11 +126,9 @@ export const MachinesDetails: FC = () => {
               )}
             </div>
           </TabsContent>
-          {/* <TabsContent value="logs">
-            <div className="whitespace-pre-wrap font-mono text-sm bg-card text-foreground mt-6 p-6 rounded-sm overflow-auto leading-relaxed">
-              [2024-01-15 10:30:25] INFO: Application started
-            </div>
-          </TabsContent> */}
+          <TabsContent value="logs">
+            {isFetched && machine && <MachineLogs provider={machine.provider} instance={machine.id} />}
+          </TabsContent>
         </Tabs>
       </div>
     </>
