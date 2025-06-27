@@ -1,3 +1,4 @@
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { type FC, lazy, Suspense } from 'react'
 
 const TextAreaFallback = ({ value }: { value?: string }) => (
@@ -31,40 +32,40 @@ const MonacoEditor = lazy(async () => {
 
 type CodeDisplayProps = {
   data: string
+  className?: string
 }
 
-const CodeDisplay: FC<CodeDisplayProps> = ({ data }) => {
+const CodeDisplay: FC<CodeDisplayProps> = ({ data, className }) => {
   if (!data) {
     return null
   }
 
   return (
-    <div className="flex-1 relative">
-      <div className="h-[550px] overflow-auto resize-y">
-        <Suspense fallback={<TextAreaFallback value={data} />}>
-          <MonacoEditor
-            loading={<TextAreaFallback value={data} />}
-            language="yaml"
-            value={data}
-            theme="vs-dark"
-            options={{
-              readOnly: true,
-              fontSize: 14,
-              wordWrap: 'on',
-            }}
-          />
-        </Suspense>
-      </div>
+    <div className={cn('flex-1 h-[550px] overflow-auto resize-y', className)}>
+      <Suspense fallback={<TextAreaFallback value={data} />}>
+        <MonacoEditor
+          loading={<TextAreaFallback value={data} />}
+          language="yaml"
+          value={data}
+          theme="vs-dark"
+          options={{
+            readOnly: true,
+            fontSize: 14,
+            wordWrap: 'on',
+          }}
+        />
+      </Suspense>
     </div>
   )
 }
 
-type YamlCodeProps = {
+type RawCodeProps = {
   data: string | undefined
+  className?: string
 }
 
-export const YamlCode: FC<YamlCodeProps> = ({ data }) => {
+export const RawCode: FC<RawCodeProps> = ({ data, className }) => {
   if (!data) return null
 
-  return <CodeDisplay data={data} />
+  return <CodeDisplay data={data} className={className} />
 }
