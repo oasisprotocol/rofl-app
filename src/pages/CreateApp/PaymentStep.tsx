@@ -29,6 +29,7 @@ export const PaymentStep: FC<AgentStepProps> = ({
 }) => {
   const { address } = useAccount()
   const network = useNetwork()
+  const isTestnet = network === 'testnet'
   const chain = network === 'mainnet' ? sapphire : sapphireTestnet
   const ticker = useTicker()
   const {
@@ -100,7 +101,9 @@ export const PaymentStep: FC<AgentStepProps> = ({
           )}
         </TopUp>
       )}
-      {hasEnoughBalance && <CreateFormNavigation handleNext={handleNext} handleBack={handleBack} />}
+      {(hasEnoughBalance || isTestnet) && (
+        <CreateFormNavigation handleNext={handleNext} handleBack={handleBack} disabled={isTestnet} />
+      )}
     </CreateLayout>
   )
 }
