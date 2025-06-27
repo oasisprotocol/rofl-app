@@ -2,6 +2,7 @@ import { useState, useCallback, type ReactNode } from 'react'
 import { useAccount, useSignMessage, useChainId } from 'wagmi'
 import { useGetNonce, useLogin } from '../../backend/api'
 import { RoflAppBackendAuthContext } from './Context'
+import { createSiweMessage } from 'viem/siwe'
 
 export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }) {
   const { address, isConnected } = useAccount()
@@ -15,23 +16,22 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const { refetch: refetchNonce } = useGetNonce(isConnected ? address : undefined)
   const loginMutation = useLogin()
 
-  const createSiweMessage = useCallback((address: string, nonce: string, chainId: number): string => {
-    const domain = location.hostname
-    const uri = location.host
+  const getSiweMessage = useCallback((address: `0x${string}`, nonce: string, chainId: number): string => {
+    const roflAppBackendUrl = new URL(import.meta.env.VITE_ROFL_APP_BACKEND)
+    const domain = roflAppBackendUrl.hostname
+    const uri = roflAppBackendUrl.origin
     const statement = 'Sign in to ROFL App Backend'
-    const version = '1'
-    const issuedAt = new Date().toISOString()
 
-    return `${domain} wants you to sign in with your Ethereum account:
-${address}
-
-${statement}
-
-URI: ${uri}
-Version: ${version}
-Chain ID: ${chainId}
-Nonce: ${nonce}
-Issued At: ${issuedAt}`
+    return createSiweMessage({
+      address,
+      domain,
+      statement: statement,
+      uri,
+      version: '1',
+      chainId,
+      issuedAt: new Date(),
+      nonce,
+    })
   }, [])
 
   const login = useCallback(async () => {
@@ -49,7 +49,7 @@ Issued At: ${issuedAt}`
         throw new Error('Failed to fetch nonce')
       }
 
-      const message = createSiweMessage(address, freshNonce, chainId || 1)
+      const message = getSiweMessage(address, freshNonce, chainId || 1)
       const signature = await signMessageAsync({ message })
 
       const jwtToken = await loginMutation.mutateAsync({
@@ -67,7 +67,7 @@ Issued At: ${issuedAt}`
     } finally {
       setIsLoading(false)
     }
-  }, [address, isConnected, refetchNonce, createSiweMessage, chainId, signMessageAsync, loginMutation])
+  }, [address, isConnected, refetchNonce, getSiweMessage, chainId, signMessageAsync, loginMutation])
 
   const logout = useCallback(() => {
     setToken(null)
