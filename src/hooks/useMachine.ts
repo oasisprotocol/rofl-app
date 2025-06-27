@@ -11,7 +11,7 @@ export const useMachineAccess = (schedulerApi: string, provider: string, instanc
   const authenticateWithSiwe = async () => {
     const domain = new URL(schedulerApi).hostname
     const message = createSiweMessage({
-      domain: domain,
+      domain: location.hostname,
       address: address!,
       statement: `Authenticate to ROFL provider ${provider} to manage your machines via API at ${domain}.`,
       uri: schedulerApi,
