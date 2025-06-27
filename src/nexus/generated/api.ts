@@ -1224,13 +1224,9 @@ export const VerificationLevel = {
 Includes the smart contract's [ABI](https://docs.soliditylang.org/en/develop/abi-spec.html).
 
  */
-export type RuntimeEvmContractVerificationCompilationMetadata = {
-  [key: string]: unknown
-}
+export type RuntimeEvmContractVerificationCompilationMetadata = { [key: string]: unknown }
 
-export type RuntimeEvmContractVerificationSourceFilesItem = {
-  [key: string]: unknown
-}
+export type RuntimeEvmContractVerificationSourceFilesItem = { [key: string]: unknown }
 
 export interface RuntimeEvmContractVerification {
   verification_level?: VerificationLevel
@@ -1763,6 +1759,11 @@ Use the `{runtime}/rofl_apps/{id}/instances` endpoint to retrieve all instances.
   active_instances: RoflInstance[]
 }
 
+/**
+ * Arbitrary metadata key-value pairs, assigned by the application.
+ */
+export type RoflInstanceMetadata = { [key: string]: unknown }
+
 export interface RoflInstance {
   /** The runtime attestation public key (Ed25519). */
   rak: string
@@ -1774,6 +1775,8 @@ export interface RoflInstance {
   endorsing_entity_id?: string
   /** The epoch at which the instance expires. */
   expiration_epoch: number
+  /** Arbitrary metadata key-value pairs, assigned by the application. */
+  metadata?: RoflInstanceMetadata
   /** The extra endorsed public keys. Extra keys can be Ed25519, Secp256k1, or Sr25519. And
 are stored as json with included type information.
  */
@@ -2739,14 +2742,11 @@ export const getGetStatusQueryOptions = <TData = Awaited<ReturnType<typeof getSt
   const queryFn: QueryFunction<Awaited<ReturnType<typeof getStatus>>> = ({ signal }) =>
     getStatus(network, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof getStatus>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getStatus>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getStatus>>>
@@ -2765,9 +2765,7 @@ export function useGetStatus<TData = Awaited<ReturnType<typeof getStatus>>, TErr
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetStatusQueryOptions(network, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -2783,11 +2781,7 @@ export const GetConsensusTotalSupplyRaw = (
   signal?: AbortSignal,
 ) => {
   return GetConsensusTotalSupplyRawMutator<string>(
-    {
-      url: `/${encodeURIComponent(String(network))}/consensus/total_supply_raw`,
-      method: 'GET',
-      signal,
-    },
+    { url: `/${encodeURIComponent(String(network))}/consensus/total_supply_raw`, method: 'GET', signal },
     options,
   )
 }
@@ -2813,14 +2807,11 @@ export const getGetConsensusTotalSupplyRawQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>> = ({ signal }) =>
     GetConsensusTotalSupplyRaw(network, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusTotalSupplyRaw>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusTotalSupplyRawQueryResult = NonNullable<
@@ -2844,9 +2835,7 @@ export function useGetConsensusTotalSupplyRaw<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusTotalSupplyRawQueryOptions(network, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -2892,14 +2881,11 @@ export const getGetConsensusCirculatingSupplyRawQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>> = ({ signal }) =>
     GetConsensusCirculatingSupplyRaw(network, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusCirculatingSupplyRaw>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusCirculatingSupplyRawQueryResult = NonNullable<
@@ -2923,9 +2909,7 @@ export function useGetConsensusCirculatingSupplyRaw<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusCirculatingSupplyRawQueryOptions(network, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -2942,12 +2926,7 @@ export const GetConsensusBlocks = (
   signal?: AbortSignal,
 ) => {
   return GetConsensusBlocksMutator<BlockList>(
-    {
-      url: `/${encodeURIComponent(String(network))}/consensus/blocks`,
-      method: 'GET',
-      params,
-      signal,
-    },
+    { url: `/${encodeURIComponent(String(network))}/consensus/blocks`, method: 'GET', params, signal },
     options,
   )
 }
@@ -2977,12 +2956,11 @@ export const getGetConsensusBlocksQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusBlocks>>> = ({ signal }) =>
     GetConsensusBlocks(network, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusBlocks>>, TError, TData> & { queryKey: QueryKey }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusBlocks>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusBlocksQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusBlocks>>>
@@ -3002,9 +2980,7 @@ export function useGetConsensusBlocks<TData = Awaited<ReturnType<typeof GetConse
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusBlocksQueryOptions(network, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3052,14 +3028,11 @@ export const getGetConsensusBlocksHeightQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusBlocksHeight>>> = ({ signal }) =>
     GetConsensusBlocksHeight(network, height, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && height),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusBlocksHeight>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && height), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusBlocksHeight>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusBlocksHeightQueryResult = NonNullable<
@@ -3084,9 +3057,7 @@ export function useGetConsensusBlocksHeight<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusBlocksHeightQueryOptions(network, height, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3103,12 +3074,7 @@ export const GetConsensusTransactions = (
   signal?: AbortSignal,
 ) => {
   return GetConsensusTransactionsMutator<TransactionList>(
-    {
-      url: `/${encodeURIComponent(String(network))}/consensus/transactions`,
-      method: 'GET',
-      params,
-      signal,
-    },
+    { url: `/${encodeURIComponent(String(network))}/consensus/transactions`, method: 'GET', params, signal },
     options,
   )
 }
@@ -3138,14 +3104,11 @@ export const getGetConsensusTransactionsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusTransactions>>> = ({ signal }) =>
     GetConsensusTransactions(network, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTransactions>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusTransactions>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusTransactionsQueryResult = NonNullable<
@@ -3170,9 +3133,7 @@ export function useGetConsensusTransactions<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusTransactionsQueryOptions(network, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3190,9 +3151,7 @@ export const GetConsensusTransactionsTxHash = (
 ) => {
   return GetConsensusTransactionsTxHashMutator<TransactionList>(
     {
-      url: `/${encodeURIComponent(
-        String(network),
-      )}/consensus/transactions/${encodeURIComponent(String(txHash))}`,
+      url: `/${encodeURIComponent(String(network))}/consensus/transactions/${encodeURIComponent(String(txHash))}`,
       method: 'GET',
       signal,
     },
@@ -3222,14 +3181,11 @@ export const getGetConsensusTransactionsTxHashQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>> = ({ signal }) =>
     GetConsensusTransactionsTxHash(network, txHash, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && txHash),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && txHash), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusTransactionsTxHash>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusTransactionsTxHashQueryResult = NonNullable<
@@ -3254,9 +3210,7 @@ export function useGetConsensusTransactionsTxHash<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusTransactionsTxHashQueryOptions(network, txHash, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3273,12 +3227,7 @@ export const GetConsensusEvents = (
   signal?: AbortSignal,
 ) => {
   return GetConsensusEventsMutator<ConsensusEventList>(
-    {
-      url: `/${encodeURIComponent(String(network))}/consensus/events`,
-      method: 'GET',
-      params,
-      signal,
-    },
+    { url: `/${encodeURIComponent(String(network))}/consensus/events`, method: 'GET', params, signal },
     options,
   )
 }
@@ -3308,12 +3257,11 @@ export const getGetConsensusEventsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEvents>>> = ({ signal }) =>
     GetConsensusEvents(network, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEvents>>, TError, TData> & { queryKey: QueryKey }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusEvents>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusEventsQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusEvents>>>
@@ -3333,9 +3281,7 @@ export function useGetConsensusEvents<TData = Awaited<ReturnType<typeof GetConse
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusEventsQueryOptions(network, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3384,14 +3330,11 @@ export const getGetConsensusRoothashMessagesQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusRoothashMessages>>> = ({ signal }) =>
     GetConsensusRoothashMessages(network, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusRoothashMessages>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusRoothashMessages>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusRoothashMessagesQueryResult = NonNullable<
@@ -3412,9 +3355,7 @@ export function useGetConsensusRoothashMessages<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusRoothashMessagesQueryOptions(network, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3431,12 +3372,7 @@ export const GetConsensusEntities = (
   signal?: AbortSignal,
 ) => {
   return GetConsensusEntitiesMutator<EntityList>(
-    {
-      url: `/${encodeURIComponent(String(network))}/consensus/entities`,
-      method: 'GET',
-      params,
-      signal,
-    },
+    { url: `/${encodeURIComponent(String(network))}/consensus/entities`, method: 'GET', params, signal },
     options,
   )
 }
@@ -3466,14 +3402,11 @@ export const getGetConsensusEntitiesQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEntities>>> = ({ signal }) =>
     GetConsensusEntities(network, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntities>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusEntities>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusEntitiesQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusEntities>>>
@@ -3496,9 +3429,7 @@ export function useGetConsensusEntities<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusEntitiesQueryOptions(network, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3516,9 +3447,7 @@ export const GetConsensusEntitiesAddress = (
 ) => {
   return GetConsensusEntitiesAddressMutator<Entity>(
     {
-      url: `/${encodeURIComponent(
-        String(network),
-      )}/consensus/entities/${encodeURIComponent(String(address))}`,
+      url: `/${encodeURIComponent(String(network))}/consensus/entities/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
@@ -3551,14 +3480,11 @@ export const getGetConsensusEntitiesAddressQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>> = ({ signal }) =>
     GetConsensusEntitiesAddress(network, address, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && address), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusEntitiesAddress>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusEntitiesAddressQueryResult = NonNullable<
@@ -3583,9 +3509,7 @@ export function useGetConsensusEntitiesAddress<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusEntitiesAddressQueryOptions(network, address, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3604,9 +3528,7 @@ export const GetConsensusEntitiesAddressNodes = (
 ) => {
   return GetConsensusEntitiesAddressNodesMutator<NodeList>(
     {
-      url: `/${encodeURIComponent(
-        String(network),
-      )}/consensus/entities/${encodeURIComponent(String(address))}/nodes`,
+      url: `/${encodeURIComponent(String(network))}/consensus/entities/${encodeURIComponent(String(address))}/nodes`,
       method: 'GET',
       params,
       signal,
@@ -3643,14 +3565,11 @@ export const getGetConsensusEntitiesAddressNodesQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>> = ({ signal }) =>
     GetConsensusEntitiesAddressNodes(network, address, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && address), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodes>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusEntitiesAddressNodesQueryResult = NonNullable<
@@ -3676,9 +3595,7 @@ export function useGetConsensusEntitiesAddressNodes<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusEntitiesAddressNodesQueryOptions(network, address, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3697,9 +3614,7 @@ export const GetConsensusEntitiesAddressNodesNodeId = (
 ) => {
   return GetConsensusEntitiesAddressNodesNodeIdMutator<Node>(
     {
-      url: `/${encodeURIComponent(String(network))}/consensus/entities/${encodeURIComponent(
-        String(address),
-      )}/nodes/${encodeURIComponent(String(nodeId))}`,
+      url: `/${encodeURIComponent(String(network))}/consensus/entities/${encodeURIComponent(String(address))}/nodes/${encodeURIComponent(String(nodeId))}`,
       method: 'GET',
       signal,
     },
@@ -3736,14 +3651,11 @@ export const getGetConsensusEntitiesAddressNodesNodeIdQueryOptions = <
     signal,
   }) => GetConsensusEntitiesAddressNodesNodeId(network, address, nodeId, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address && nodeId),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && address && nodeId), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusEntitiesAddressNodesNodeId>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusEntitiesAddressNodesNodeIdQueryResult = NonNullable<
@@ -3774,9 +3686,7 @@ export function useGetConsensusEntitiesAddressNodesNodeId<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3793,12 +3703,7 @@ export const GetConsensusValidators = (
   signal?: AbortSignal,
 ) => {
   return GetConsensusValidatorsMutator<ValidatorList>(
-    {
-      url: `/${encodeURIComponent(String(network))}/consensus/validators`,
-      method: 'GET',
-      params,
-      signal,
-    },
+    { url: `/${encodeURIComponent(String(network))}/consensus/validators`, method: 'GET', params, signal },
     options,
   )
 }
@@ -3828,14 +3733,11 @@ export const getGetConsensusValidatorsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusValidators>>> = ({ signal }) =>
     GetConsensusValidators(network, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidators>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusValidators>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusValidatorsQueryResult = NonNullable<
@@ -3860,9 +3762,7 @@ export function useGetConsensusValidators<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusValidatorsQueryOptions(network, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3880,9 +3780,7 @@ export const GetConsensusValidatorsAddress = (
 ) => {
   return GetConsensusValidatorsAddressMutator<ValidatorList>(
     {
-      url: `/${encodeURIComponent(
-        String(network),
-      )}/consensus/validators/${encodeURIComponent(String(address))}`,
+      url: `/${encodeURIComponent(String(network))}/consensus/validators/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
@@ -3915,14 +3813,11 @@ export const getGetConsensusValidatorsAddressQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>> = ({ signal }) =>
     GetConsensusValidatorsAddress(network, address, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && address), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusValidatorsAddress>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusValidatorsAddressQueryResult = NonNullable<
@@ -3947,9 +3842,7 @@ export function useGetConsensusValidatorsAddress<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusValidatorsAddressQueryOptions(network, address, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -3968,9 +3861,7 @@ export const GetConsensusValidatorsAddressHistory = (
 ) => {
   return GetConsensusValidatorsAddressHistoryMutator<ValidatorHistory>(
     {
-      url: `/${encodeURIComponent(
-        String(network),
-      )}/consensus/validators/${encodeURIComponent(String(address))}/history`,
+      url: `/${encodeURIComponent(String(network))}/consensus/validators/${encodeURIComponent(String(address))}/history`,
       method: 'GET',
       params,
       signal,
@@ -4008,14 +3899,11 @@ export const getGetConsensusValidatorsAddressHistoryQueryOptions = <
     signal,
   }) => GetConsensusValidatorsAddressHistory(network, address, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && address), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusValidatorsAddressHistory>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusValidatorsAddressHistoryQueryResult = NonNullable<
@@ -4041,9 +3929,7 @@ export function useGetConsensusValidatorsAddressHistory<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusValidatorsAddressHistoryQueryOptions(network, address, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4064,12 +3950,7 @@ export const GetConsensusAccounts = (
   signal?: AbortSignal,
 ) => {
   return GetConsensusAccountsMutator<AccountList>(
-    {
-      url: `/${encodeURIComponent(String(network))}/consensus/accounts`,
-      method: 'GET',
-      params,
-      signal,
-    },
+    { url: `/${encodeURIComponent(String(network))}/consensus/accounts`, method: 'GET', params, signal },
     options,
   )
 }
@@ -4099,14 +3980,11 @@ export const getGetConsensusAccountsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusAccounts>>> = ({ signal }) =>
     GetConsensusAccounts(network, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccounts>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusAccounts>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusAccountsQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusAccounts>>>
@@ -4133,9 +4011,7 @@ export function useGetConsensusAccounts<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusAccountsQueryOptions(network, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4153,9 +4029,7 @@ export const GetConsensusAccountsAddress = (
 ) => {
   return GetConsensusAccountsAddressMutator<Account>(
     {
-      url: `/${encodeURIComponent(
-        String(network),
-      )}/consensus/accounts/${encodeURIComponent(String(address))}`,
+      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
@@ -4188,14 +4062,11 @@ export const getGetConsensusAccountsAddressQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusAccountsAddress>>> = ({ signal }) =>
     GetConsensusAccountsAddress(network, address, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccountsAddress>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && address), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusAccountsAddress>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusAccountsAddressQueryResult = NonNullable<
@@ -4220,9 +4091,7 @@ export function useGetConsensusAccountsAddress<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusAccountsAddressQueryOptions(network, address, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4241,9 +4110,7 @@ export const GetConsensusAccountsAddressDelegations = (
 ) => {
   return GetConsensusAccountsAddressDelegationsMutator<DelegationList>(
     {
-      url: `/${encodeURIComponent(
-        String(network),
-      )}/consensus/accounts/${encodeURIComponent(String(address))}/delegations`,
+      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(String(address))}/delegations`,
       method: 'GET',
       params,
       signal,
@@ -4281,14 +4148,11 @@ export const getGetConsensusAccountsAddressDelegationsQueryOptions = <
     signal,
   }) => GetConsensusAccountsAddressDelegations(network, address, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && address), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegations>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusAccountsAddressDelegationsQueryResult = NonNullable<
@@ -4319,9 +4183,7 @@ export function useGetConsensusAccountsAddressDelegations<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4340,9 +4202,7 @@ export const GetConsensusAccountsAddressDelegationsTo = (
 ) => {
   return GetConsensusAccountsAddressDelegationsToMutator<DelegationList>(
     {
-      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(
-        String(address),
-      )}/delegations_to`,
+      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(String(address))}/delegations_to`,
       method: 'GET',
       params,
       signal,
@@ -4384,12 +4244,7 @@ export const getGetConsensusAccountsAddressDelegationsToQueryOptions = <
     signal,
   }) => GetConsensusAccountsAddressDelegationsTo(network, address, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address),
-    ...queryOptions,
-  } as UseQueryOptions<
+  return { queryKey, queryFn, enabled: !!(network && address), ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof GetConsensusAccountsAddressDelegationsTo>>,
     TError,
     TData
@@ -4428,9 +4283,7 @@ export function useGetConsensusAccountsAddressDelegationsTo<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4449,9 +4302,7 @@ export const GetConsensusAccountsAddressDebondingDelegations = (
 ) => {
   return GetConsensusAccountsAddressDebondingDelegationsMutator<DebondingDelegationList>(
     {
-      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(
-        String(address),
-      )}/debonding_delegations`,
+      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(String(address))}/debonding_delegations`,
       method: 'GET',
       params,
       signal,
@@ -4498,12 +4349,7 @@ export const getGetConsensusAccountsAddressDebondingDelegationsQueryOptions = <
   > = ({ signal }) =>
     GetConsensusAccountsAddressDebondingDelegations(network, address, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address),
-    ...queryOptions,
-  } as UseQueryOptions<
+  return { queryKey, queryFn, enabled: !!(network && address), ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegations>>,
     TError,
     TData
@@ -4542,9 +4388,7 @@ export function useGetConsensusAccountsAddressDebondingDelegations<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4563,9 +4407,7 @@ export const GetConsensusAccountsAddressDebondingDelegationsTo = (
 ) => {
   return GetConsensusAccountsAddressDebondingDelegationsToMutator<DebondingDelegationList>(
     {
-      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(
-        String(address),
-      )}/debonding_delegations_to`,
+      url: `/${encodeURIComponent(String(network))}/consensus/accounts/${encodeURIComponent(String(address))}/debonding_delegations_to`,
       method: 'GET',
       params,
       signal,
@@ -4612,12 +4454,7 @@ export const getGetConsensusAccountsAddressDebondingDelegationsToQueryOptions = 
   > = ({ signal }) =>
     GetConsensusAccountsAddressDebondingDelegationsTo(network, address, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && address),
-    ...queryOptions,
-  } as UseQueryOptions<
+  return { queryKey, queryFn, enabled: !!(network && address), ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof GetConsensusAccountsAddressDebondingDelegationsTo>>,
     TError,
     TData
@@ -4656,9 +4493,7 @@ export function useGetConsensusAccountsAddressDebondingDelegationsTo<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4675,12 +4510,7 @@ export const GetConsensusEpochs = (
   signal?: AbortSignal,
 ) => {
   return GetConsensusEpochsMutator<EpochList>(
-    {
-      url: `/${encodeURIComponent(String(network))}/consensus/epochs`,
-      method: 'GET',
-      params,
-      signal,
-    },
+    { url: `/${encodeURIComponent(String(network))}/consensus/epochs`, method: 'GET', params, signal },
     options,
   )
 }
@@ -4710,12 +4540,11 @@ export const getGetConsensusEpochsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEpochs>>> = ({ signal }) =>
     GetConsensusEpochs(network, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEpochs>>, TError, TData> & { queryKey: QueryKey }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusEpochs>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusEpochsQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusEpochs>>>
@@ -4735,9 +4564,7 @@ export function useGetConsensusEpochs<TData = Awaited<ReturnType<typeof GetConse
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusEpochsQueryOptions(network, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4785,14 +4612,11 @@ export const getGetConsensusEpochsEpochQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>> = ({ signal }) =>
     GetConsensusEpochsEpoch(network, epoch, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && epoch),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && epoch), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusEpochsEpoch>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusEpochsEpochQueryResult = NonNullable<
@@ -4817,9 +4641,7 @@ export function useGetConsensusEpochsEpoch<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusEpochsEpochQueryOptions(network, epoch, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4836,12 +4658,7 @@ export const GetConsensusProposals = (
   signal?: AbortSignal,
 ) => {
   return GetConsensusProposalsMutator<ProposalList>(
-    {
-      url: `/${encodeURIComponent(String(network))}/consensus/proposals`,
-      method: 'GET',
-      params,
-      signal,
-    },
+    { url: `/${encodeURIComponent(String(network))}/consensus/proposals`, method: 'GET', params, signal },
     options,
   )
 }
@@ -4871,14 +4688,11 @@ export const getGetConsensusProposalsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusProposals>>> = ({ signal }) =>
     GetConsensusProposals(network, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!network,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposals>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!network, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusProposals>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusProposalsQueryResult = NonNullable<Awaited<ReturnType<typeof GetConsensusProposals>>>
@@ -4901,9 +4715,7 @@ export function useGetConsensusProposals<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusProposalsQueryOptions(network, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -4921,9 +4733,7 @@ export const GetConsensusProposalsProposalId = (
 ) => {
   return GetConsensusProposalsProposalIdMutator<Proposal>(
     {
-      url: `/${encodeURIComponent(
-        String(network),
-      )}/consensus/proposals/${encodeURIComponent(String(proposalId))}`,
+      url: `/${encodeURIComponent(String(network))}/consensus/proposals/${encodeURIComponent(String(proposalId))}`,
       method: 'GET',
       signal,
     },
@@ -4956,14 +4766,11 @@ export const getGetConsensusProposalsProposalIdQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>> = ({ signal }) =>
     GetConsensusProposalsProposalId(network, proposalId, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && proposalId),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && proposalId), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusProposalsProposalId>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusProposalsProposalIdQueryResult = NonNullable<
@@ -4988,9 +4795,7 @@ export function useGetConsensusProposalsProposalId<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetConsensusProposalsProposalIdQueryOptions(network, proposalId, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5009,9 +4814,7 @@ export const GetConsensusProposalsProposalIdVotes = (
 ) => {
   return GetConsensusProposalsProposalIdVotesMutator<ProposalVotes>(
     {
-      url: `/${encodeURIComponent(
-        String(network),
-      )}/consensus/proposals/${encodeURIComponent(String(proposalId))}/votes`,
+      url: `/${encodeURIComponent(String(network))}/consensus/proposals/${encodeURIComponent(String(proposalId))}/votes`,
       method: 'GET',
       params,
       signal,
@@ -5049,14 +4852,11 @@ export const getGetConsensusProposalsProposalIdVotesQueryOptions = <
     signal,
   }) => GetConsensusProposalsProposalIdVotes(network, proposalId, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && proposalId),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && proposalId), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetConsensusProposalsProposalIdVotes>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetConsensusProposalsProposalIdVotesQueryResult = NonNullable<
@@ -5087,9 +4887,7 @@ export function useGetConsensusProposalsProposalIdVotes<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5144,12 +4942,11 @@ export const getGetRuntimeBlocksQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeBlocks>>> = ({ signal }) =>
     GetRuntimeBlocks(network, runtime, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeBlocks>>, TError, TData> & { queryKey: QueryKey }
+  return { queryKey, queryFn, enabled: !!(network && runtime), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeBlocks>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeBlocksQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeBlocks>>>
@@ -5170,9 +4967,7 @@ export function useGetRuntimeBlocks<TData = Awaited<ReturnType<typeof GetRuntime
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeBlocksQueryOptions(network, runtime, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5227,14 +5022,11 @@ export const getGetRuntimeTransactionsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeTransactions>>> = ({ signal }) =>
     GetRuntimeTransactions(network, runtime, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeTransactions>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && runtime), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeTransactions>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeTransactionsQueryResult = NonNullable<
@@ -5260,9 +5052,7 @@ export function useGetRuntimeTransactions<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeTransactionsQueryOptions(network, runtime, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5281,9 +5071,7 @@ export const GetRuntimeTransactionsTxHash = (
 ) => {
   return GetRuntimeTransactionsTxHashMutator<RuntimeTransactionList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/transactions/${encodeURIComponent(String(txHash))}`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/transactions/${encodeURIComponent(String(txHash))}`,
       method: 'GET',
       signal,
     },
@@ -5318,14 +5106,11 @@ export const getGetRuntimeTransactionsTxHashQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>> = ({ signal }) =>
     GetRuntimeTransactionsTxHash(network, runtime, txHash, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime && txHash),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && runtime && txHash), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeTransactionsTxHash>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeTransactionsTxHashQueryResult = NonNullable<
@@ -5351,9 +5136,7 @@ export function useGetRuntimeTransactionsTxHash<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeTransactionsTxHashQueryOptions(network, runtime, txHash, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5408,12 +5191,11 @@ export const getGetRuntimeEventsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeEvents>>> = ({ signal }) =>
     GetRuntimeEvents(network, runtime, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvents>>, TError, TData> & { queryKey: QueryKey }
+  return { queryKey, queryFn, enabled: !!(network && runtime), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeEvents>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeEventsQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeEvents>>>
@@ -5434,9 +5216,7 @@ export function useGetRuntimeEvents<TData = Awaited<ReturnType<typeof GetRuntime
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeEventsQueryOptions(network, runtime, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5491,14 +5271,11 @@ export const getGetRuntimeEvmTokensQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeEvmTokens>>> = ({ signal }) =>
     GetRuntimeEvmTokens(network, runtime, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeEvmTokens>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && runtime), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeEvmTokens>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeEvmTokensQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeEvmTokens>>>
@@ -5522,9 +5299,7 @@ export function useGetRuntimeEvmTokens<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeEvmTokensQueryOptions(network, runtime, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5543,9 +5318,7 @@ export const GetRuntimeEvmTokensAddress = (
 ) => {
   return GetRuntimeEvmTokensAddressMutator<EvmToken>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/evm_tokens/${encodeURIComponent(String(address))}`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/evm_tokens/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
@@ -5613,9 +5386,7 @@ export function useGetRuntimeEvmTokensAddress<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeEvmTokensAddressQueryOptions(network, runtime, address, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5637,9 +5408,7 @@ export const GetRuntimeEvmTokensAddressHolders = (
 ) => {
   return GetRuntimeEvmTokensAddressHoldersMutator<TokenHolderList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/evm_tokens/${encodeURIComponent(String(address))}/holders`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/evm_tokens/${encodeURIComponent(String(address))}/holders`,
       method: 'GET',
       params,
       signal,
@@ -5721,9 +5490,7 @@ export function useGetRuntimeEvmTokensAddressHolders<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5745,9 +5512,7 @@ export const GetRuntimeEvmTokensAddressNfts = (
 ) => {
   return GetRuntimeEvmTokensAddressNftsMutator<EvmNftList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/evm_tokens/${encodeURIComponent(String(address))}/nfts`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/evm_tokens/${encodeURIComponent(String(address))}/nfts`,
       method: 'GET',
       params,
       signal,
@@ -5828,9 +5593,7 @@ export function useGetRuntimeEvmTokensAddressNfts<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5851,9 +5614,7 @@ export const GetRuntimeEvmTokensAddressNftsId = (
 ) => {
   return GetRuntimeEvmTokensAddressNftsIdMutator<EvmNft>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/evm_tokens/${encodeURIComponent(String(address))}/nfts/${encodeURIComponent(String(id))}`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/evm_tokens/${encodeURIComponent(String(address))}/nfts/${encodeURIComponent(String(id))}`,
       method: 'GET',
       signal,
     },
@@ -5926,9 +5687,7 @@ export function useGetRuntimeEvmTokensAddressNftsId<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeEvmTokensAddressNftsIdQueryOptions(network, runtime, address, id, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -5947,9 +5706,7 @@ export const GetRuntimeAccountsAddress = (
 ) => {
   return GetRuntimeAccountsAddressMutator<RuntimeAccount>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/accounts/${encodeURIComponent(String(address))}`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/accounts/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
@@ -6017,9 +5774,7 @@ export function useGetRuntimeAccountsAddress<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeAccountsAddressQueryOptions(network, runtime, address, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6040,9 +5795,7 @@ export const GetRuntimeAccountsAddressNfts = (
 ) => {
   return GetRuntimeAccountsAddressNftsMutator<EvmNftList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/accounts/${encodeURIComponent(String(address))}/nfts`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/accounts/${encodeURIComponent(String(address))}/nfts`,
       method: 'GET',
       params,
       signal,
@@ -6122,9 +5875,7 @@ export function useGetRuntimeAccountsAddressNfts<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6172,12 +5923,11 @@ export const getGetRuntimeStatusQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeStatus>>> = ({ signal }) =>
     GetRuntimeStatus(network, runtime, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeStatus>>, TError, TData> & { queryKey: QueryKey }
+  return { queryKey, queryFn, enabled: !!(network && runtime), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeStatus>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeStatusQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeStatus>>>
@@ -6197,9 +5947,7 @@ export function useGetRuntimeStatus<TData = Awaited<ReturnType<typeof GetRuntime
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeStatusQueryOptions(network, runtime, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6254,12 +6002,11 @@ export const getGetRuntimeRoflAppsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflApps>>> = ({ signal }) =>
     GetRuntimeRoflApps(network, runtime, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflApps>>, TError, TData> & { queryKey: QueryKey }
+  return { queryKey, queryFn, enabled: !!(network && runtime), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeRoflApps>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeRoflAppsQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeRoflApps>>>
@@ -6280,9 +6027,7 @@ export function useGetRuntimeRoflApps<TData = Awaited<ReturnType<typeof GetRunti
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeRoflAppsQueryOptions(network, runtime, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6301,9 +6046,7 @@ export const GetRuntimeRoflAppsId = (
 ) => {
   return GetRuntimeRoflAppsIdMutator<RoflApp>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/rofl_apps/${encodeURIComponent(String(id))}`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/rofl_apps/${encodeURIComponent(String(id))}`,
       method: 'GET',
       signal,
     },
@@ -6338,14 +6081,11 @@ export const getGetRuntimeRoflAppsIdQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>> = ({ signal }) =>
     GetRuntimeRoflAppsId(network, runtime, id, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime && id),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && runtime && id), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeRoflAppsIdQueryResult = NonNullable<Awaited<ReturnType<typeof GetRuntimeRoflAppsId>>>
@@ -6369,9 +6109,7 @@ export function useGetRuntimeRoflAppsId<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeRoflAppsIdQueryOptions(network, runtime, id, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6394,9 +6132,7 @@ export const GetRuntimeRoflAppsIdTransactions = (
 ) => {
   return GetRuntimeRoflAppsIdTransactionsMutator<RuntimeTransactionList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/rofl_apps/${encodeURIComponent(String(id))}/transactions`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/rofl_apps/${encodeURIComponent(String(id))}/transactions`,
       method: 'GET',
       params,
       signal,
@@ -6435,14 +6171,11 @@ export const getGetRuntimeRoflAppsIdTransactionsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>> = ({ signal }) =>
     GetRuntimeRoflAppsIdTransactions(network, runtime, id, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime && id),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && runtime && id), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdTransactions>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeRoflAppsIdTransactionsQueryResult = NonNullable<
@@ -6472,9 +6205,7 @@ export function useGetRuntimeRoflAppsIdTransactions<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeRoflAppsIdTransactionsQueryOptions(network, runtime, id, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6494,9 +6225,7 @@ export const GetRuntimeRoflAppsIdInstanceTransactions = (
 ) => {
   return GetRuntimeRoflAppsIdInstanceTransactionsMutator<RuntimeTransactionList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/rofl_apps/${encodeURIComponent(String(id))}/instance_transactions`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/rofl_apps/${encodeURIComponent(String(id))}/instance_transactions`,
       method: 'GET',
       params,
       signal,
@@ -6544,12 +6273,7 @@ export const getGetRuntimeRoflAppsIdInstanceTransactionsQueryOptions = <
     signal,
   }) => GetRuntimeRoflAppsIdInstanceTransactions(network, runtime, id, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime && id),
-    ...queryOptions,
-  } as UseQueryOptions<
+  return { queryKey, queryFn, enabled: !!(network && runtime && id), ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstanceTransactions>>,
     TError,
     TData
@@ -6590,9 +6314,7 @@ export function useGetRuntimeRoflAppsIdInstanceTransactions<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6612,9 +6334,7 @@ export const GetRuntimeRoflAppsIdInstances = (
 ) => {
   return GetRuntimeRoflAppsIdInstancesMutator<RoflAppInstanceList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/rofl_apps/${encodeURIComponent(String(id))}/instances`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/rofl_apps/${encodeURIComponent(String(id))}/instances`,
       method: 'GET',
       params,
       signal,
@@ -6653,14 +6373,11 @@ export const getGetRuntimeRoflAppsIdInstancesQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>> = ({ signal }) =>
     GetRuntimeRoflAppsIdInstances(network, runtime, id, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime && id),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && runtime && id), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeRoflAppsIdInstances>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeRoflAppsIdInstancesQueryResult = NonNullable<
@@ -6687,9 +6404,7 @@ export function useGetRuntimeRoflAppsIdInstances<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeRoflAppsIdInstancesQueryOptions(network, runtime, id, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6709,9 +6424,7 @@ export const GetRuntimeRoflAppsIdInstancesRak = (
 ) => {
   return GetRuntimeRoflAppsIdInstancesRakMutator<RoflInstance>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/rofl_apps/${encodeURIComponent(String(id))}/instances/${encodeURIComponent(String(rak))}`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/rofl_apps/${encodeURIComponent(String(id))}/instances/${encodeURIComponent(String(rak))}`,
       method: 'GET',
       signal,
     },
@@ -6783,9 +6496,7 @@ export function useGetRuntimeRoflAppsIdInstancesRak<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeRoflAppsIdInstancesRakQueryOptions(network, runtime, id, rak, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6806,11 +6517,7 @@ export const GetRuntimeRoflAppsIdInstancesRakTransactions = (
 ) => {
   return GetRuntimeRoflAppsIdInstancesRakTransactionsMutator<RuntimeTransactionList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/rofl_apps/${encodeURIComponent(
-        String(id),
-      )}/instances/${encodeURIComponent(String(rak))}/transactions`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/rofl_apps/${encodeURIComponent(String(id))}/instances/${encodeURIComponent(String(rak))}/transactions`,
       method: 'GET',
       params,
       signal,
@@ -6909,9 +6616,7 @@ export function useGetRuntimeRoflAppsIdInstancesRakTransactions<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -6930,9 +6635,7 @@ export const GetRuntimeRoflmarketProviders = (
 ) => {
   return GetRuntimeRoflmarketProvidersMutator<RoflMarketProviderList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/roflmarket_providers`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/roflmarket_providers`,
       method: 'GET',
       params,
       signal,
@@ -6969,14 +6672,11 @@ export const getGetRuntimeRoflmarketProvidersQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>> = ({ signal }) =>
     GetRuntimeRoflmarketProviders(network, runtime, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && runtime), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeRoflmarketProviders>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeRoflmarketProvidersQueryResult = NonNullable<
@@ -7002,9 +6702,7 @@ export function useGetRuntimeRoflmarketProviders<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeRoflmarketProvidersQueryOptions(network, runtime, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -7023,9 +6721,7 @@ export const GetRuntimeRoflmarketProvidersAddress = (
 ) => {
   return GetRuntimeRoflmarketProvidersAddressMutator<RoflMarketProvider>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/roflmarket_providers/${encodeURIComponent(String(address))}`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/roflmarket_providers/${encodeURIComponent(String(address))}`,
       method: 'GET',
       signal,
     },
@@ -7095,9 +6791,7 @@ export function useGetRuntimeRoflmarketProvidersAddress<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeRoflmarketProvidersAddressQueryOptions(network, runtime, address, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -7117,9 +6811,7 @@ export const GetRuntimeRoflmarketProvidersAddressOffers = (
 ) => {
   return GetRuntimeRoflmarketProvidersAddressOffersMutator<RoflMarketOfferList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/roflmarket_providers/${encodeURIComponent(String(address))}/offers`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/roflmarket_providers/${encodeURIComponent(String(address))}/offers`,
       method: 'GET',
       params,
       signal,
@@ -7213,9 +6905,7 @@ export function useGetRuntimeRoflmarketProvidersAddressOffers<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -7235,11 +6925,7 @@ export const GetRuntimeRoflmarketProvidersAddressOffersId = (
 ) => {
   return GetRuntimeRoflmarketProvidersAddressOffersIdMutator<RoflMarketOffer>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/roflmarket_providers/${encodeURIComponent(
-        String(address),
-      )}/offers/${encodeURIComponent(String(id))}`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/roflmarket_providers/${encodeURIComponent(String(address))}/offers/${encodeURIComponent(String(id))}`,
       method: 'GET',
       signal,
     },
@@ -7329,9 +7015,7 @@ export function useGetRuntimeRoflmarketProvidersAddressOffersId<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -7351,11 +7035,7 @@ export const GetRuntimeRoflmarketProvidersAddressInstancesId = (
 ) => {
   return GetRuntimeRoflmarketProvidersAddressInstancesIdMutator<RoflMarketInstance>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/roflmarket_providers/${encodeURIComponent(
-        String(address),
-      )}/instances/${encodeURIComponent(String(id))}`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/roflmarket_providers/${encodeURIComponent(String(address))}/instances/${encodeURIComponent(String(id))}`,
       method: 'GET',
       signal,
     },
@@ -7446,9 +7126,7 @@ export function useGetRuntimeRoflmarketProvidersAddressInstancesId<
     options,
   )
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -7467,9 +7145,7 @@ export const GetRuntimeRoflmarketInstances = (
 ) => {
   return GetRuntimeRoflmarketInstancesMutator<RoflMarketInstanceList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(runtime),
-      )}/roflmarket_instances`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(runtime))}/roflmarket_instances`,
       method: 'GET',
       params,
       signal,
@@ -7506,14 +7182,11 @@ export const getGetRuntimeRoflmarketInstancesQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>> = ({ signal }) =>
     GetRuntimeRoflmarketInstances(network, runtime, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && runtime),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && runtime), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetRuntimeRoflmarketInstances>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetRuntimeRoflmarketInstancesQueryResult = NonNullable<
@@ -7539,9 +7212,7 @@ export function useGetRuntimeRoflmarketInstances<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetRuntimeRoflmarketInstancesQueryOptions(network, runtime, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -7598,14 +7269,11 @@ export const getGetLayerStatsTxVolumeQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetLayerStatsTxVolume>>> = ({ signal }) =>
     GetLayerStatsTxVolume(network, layer, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && layer),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetLayerStatsTxVolume>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && layer), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetLayerStatsTxVolume>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetLayerStatsTxVolumeQueryResult = NonNullable<Awaited<ReturnType<typeof GetLayerStatsTxVolume>>>
@@ -7631,9 +7299,7 @@ export function useGetLayerStatsTxVolume<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetLayerStatsTxVolumeQueryOptions(network, layer, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
@@ -7654,9 +7320,7 @@ export const GetLayerStatsActiveAccounts = (
 ) => {
   return GetLayerStatsActiveAccountsMutator<ActiveAccountsList>(
     {
-      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(
-        String(layer),
-      )}/stats/active_accounts`,
+      url: `/${encodeURIComponent(String(network))}/${encodeURIComponent(String(layer))}/stats/active_accounts`,
       method: 'GET',
       params,
       signal,
@@ -7692,14 +7356,11 @@ export const getGetLayerStatsActiveAccountsQueryOptions = <
   const queryFn: QueryFunction<Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>> = ({ signal }) =>
     GetLayerStatsActiveAccounts(network, layer, params, requestOptions, signal)
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(network && layer),
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>, TError, TData> & {
-    queryKey: QueryKey
-  }
+  return { queryKey, queryFn, enabled: !!(network && layer), ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof GetLayerStatsActiveAccounts>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
 }
 
 export type GetLayerStatsActiveAccountsQueryResult = NonNullable<
@@ -7727,9 +7388,7 @@ export function useGetLayerStatsActiveAccounts<
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetLayerStatsActiveAccountsQueryOptions(network, layer, params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
   query.queryKey = queryOptions.queryKey
 
