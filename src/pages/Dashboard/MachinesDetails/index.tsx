@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import { useState, type FC } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@oasisprotocol/ui-library/src/components/ui/tabs'
 import { Clock } from 'lucide-react'
@@ -21,6 +21,7 @@ import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/
 import { MachineLogs } from './MachineLogs'
 
 export const MachinesDetails: FC = () => {
+  const [logs, setLogs] = useState<string[]>([])
   const network = useNetwork()
   const { provider, id } = useParams()
   const roflMachinesQuery = useGetRuntimeRoflmarketProvidersAddressInstancesId(
@@ -127,7 +128,9 @@ export const MachinesDetails: FC = () => {
             </div>
           </TabsContent>
           <TabsContent value="logs">
-            {isFetched && machine && <MachineLogs provider={machine.provider} instance={machine.id} />}
+            {isFetched && machine && (
+              <MachineLogs provider={machine.provider} instance={machine.id} logs={logs} setLogs={setLogs} />
+            )}
           </TabsContent>
         </Tabs>
       </div>

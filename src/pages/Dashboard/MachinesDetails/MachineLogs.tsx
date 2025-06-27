@@ -1,5 +1,5 @@
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { EmptyState } from '../../../components/EmptyState'
 import { useMachineAccess } from '../../../hooks/useMachine'
 import { useScheduler } from '../../../hooks/useScheduler'
@@ -8,10 +8,11 @@ import { RawCode } from '../../../components/CodeDisplay'
 type MachineLogsProps = {
   provider: string
   instance: string
+  logs: string[]
+  setLogs: (logs: string[]) => void
 }
 
-export const MachineLogs: FC<MachineLogsProps> = ({ provider, instance }) => {
-  const [logs, setLogs] = useState<string[]>([])
+export const MachineLogs: FC<MachineLogsProps> = ({ provider, instance, logs, setLogs }) => {
   const { api: schedulerApi } = useScheduler(provider)
   const { fetchMachineLogs } = useMachineAccess(schedulerApi, provider, instance)
   const handleMachineAccess = async () => {
