@@ -422,9 +422,12 @@ export function useUpdateApp() {
       await waitForTransactionReceipt(wagmiConfig, { hash })
 
       if (secretsViewState.isDirty) {
-        const machines = await GetRuntimeRoflmarketInstances(network, 'sapphire', { deployed_app_id: appId })
-        console.log('restart machines?', machines.data.instances)
-        for (const machine of machines.data.instances) {
+        const machinesResponse = await GetRuntimeRoflmarketInstances(network, 'sapphire', {
+          deployed_app_id: appId,
+        })
+        const activeMachines = machinesResponse.data.instances.filter(m => !m.removed)
+        console.log('restart machines?', activeMachines)
+        for (const machine of activeMachines) {
           const hash = await restartMachine({ machineId: machine.id, provider: machine.provider, network })
           await waitForTransactionReceipt(wagmiConfig, { hash })
         }
