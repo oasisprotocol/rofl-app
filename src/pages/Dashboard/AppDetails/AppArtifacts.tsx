@@ -1,5 +1,5 @@
 import { useEffect, useState, type FC } from 'react'
-import { YamlCode } from '../../../components/CodeDisplay'
+import { RawCode } from '../../../components/CodeDisplay'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 
 type AppArtifactsProps = {
@@ -36,13 +36,13 @@ export const AppArtifacts: FC<AppArtifactsProps> = ({ isFetched, roflYaml, compo
           {roflContent && (
             <div>
               <h3 className="text-lg font-semibold mb-2">rofl.yaml</h3>
-              <YamlCode data={roflContent} />
+              <RawCode data={roflContent} />
             </div>
           )}
           {composeContent && (
             <div>
               <h3 className="text-lg font-semibold mb-2">compose.yaml</h3>
-              <YamlCode data={composeContent} />
+              <RawCode data={composeContent} />
             </div>
           )}
         </>
