@@ -192,7 +192,7 @@ async function waitForAppId(creationTxHash: string, network: 'mainnet' | 'testne
   throw new Error('waitForAppId timed out')
 }
 
-async function waitForBuildResults(taskId: string, token: string, timeout = 300_000) {
+async function waitForBuildResults(taskId: string, token: string, timeout = 600_000) {
   const interval = 3000
   const maxTries = timeout / interval
   for (let i = 0; i < maxTries; i++) {
@@ -269,7 +269,7 @@ export function useCreateAndDeployApp() {
               max_expiration: 3,
             },
             metadata: {
-              'net.oasis.rofl.name': appData.metadata?.name || '',
+              'net.oasis.rofl.name': `Draft of ${appData.metadata?.name || ''}`,
               'net.oasis.rofl.author': appData.metadata?.author || '',
               'net.oasis.rofl.description': appData.metadata?.description || '',
               'net.oasis.rofl.version': appData.metadata?.version || '',
@@ -311,7 +311,10 @@ export function useCreateAndDeployApp() {
           .setBody({
             id: app.id,
             admin: app.admin,
-            metadata: app.metadata,
+            metadata: {
+              ...app.metadata,
+              'net.oasis.rofl.name': appData.metadata?.name || '',
+            },
             policy: {
               ...app.policy,
               enclaves: enclaves,
