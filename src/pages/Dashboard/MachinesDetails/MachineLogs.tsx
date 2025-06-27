@@ -3,6 +3,7 @@ import { FC, useState } from 'react'
 import { EmptyState } from '../../../components/EmptyState'
 import { useMachineAccess } from '../../../hooks/useMachine'
 import { useScheduler } from '../../../hooks/useScheduler'
+import { RawCode } from '../../../components/CodeDisplay'
 
 type MachineLogsProps = {
   provider: string
@@ -30,13 +31,7 @@ export const MachineLogs: FC<MachineLogsProps> = ({ provider, instance }) => {
           <Button onClick={handleMachineAccess}>Access machine</Button>
         </EmptyState>
       )}
-      {hasLogs && (
-        <div className="space-y-4">
-          {logs.map((log, index) => (
-            <pre key={index}>{log}</pre>
-          ))}
-        </div>
-      )}
+      {hasLogs && <RawCode data={logs.join('\n')} className="h-[700px]" />}
     </>
   )
 }
