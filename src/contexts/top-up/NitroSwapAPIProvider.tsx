@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { FC, PropsWithChildren } from 'react'
 import { NitroSwapAPIContext } from './NitroSwapAPIContext'
 import type { NitroSwapAPIProviderContext, NitroSwapAPIProviderState } from './NitroSwapAPIContext'
-import { BLACKLIST_TOKENS, ENABLED_CHAINS_IDS, ROUTER_SWAP_API_URL } from '../../constants/top-up-config'
+import { TOKENS_ALLOW_LIST, ENABLED_CHAINS_IDS, ROUTER_SWAP_API_URL } from '../../constants/top-up-config'
 import type { TokenResponse } from '../../types/top-up'
 
 const nitroSwapAPIProviderInitialState: NitroSwapAPIProviderState = {
@@ -77,12 +77,14 @@ export const NitroSwapAPIContextProvider: FC<PropsWithChildren> = ({ children })
 
       return {
         ...tokenResponse,
-        data: data.filter(
-          token =>
-            !BLACKLIST_TOKENS.some(
-              ([chainId, address]) =>
-                token.chainId === chainId && token.address?.toLowerCase() === address.toLowerCase(),
-            ),
+        data: data.filter(token =>
+          TOKENS_ALLOW_LIST.some(([chainId, address]) => {
+            if (token.address?.toLowerCase() !== address.toLowerCase()) {
+              return false
+            }
+            if (chainId === '*') return true
+            return token.chainId.toString() === chainId
+          }),
         ),
       }
     },
