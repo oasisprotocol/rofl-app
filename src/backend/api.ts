@@ -401,7 +401,7 @@ export function useMachineExecuteRestartCmd() {
       const command = {
         // https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/build/rofl/scheduler/commands.go#L9-L42
         method: 'Restart',
-        args: oasis.misc.toCBOR(restartRequest),
+        args: restartRequest,
       }
 
       const encodedCommand = oasis.misc.toCBOR(command)
@@ -441,7 +441,7 @@ export function useMachineExecuteStopCmd() {
       const command = {
         // https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/build/rofl/scheduler/commands.go#L9-L42
         method: 'Terminate',
-        args: oasis.misc.toCBOR(restartRequest),
+        args: restartRequest,
       }
 
       const encodedCommand = oasis.misc.toCBOR(command)
