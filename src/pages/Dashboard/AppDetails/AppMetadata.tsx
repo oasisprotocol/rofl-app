@@ -67,14 +67,14 @@ export const AppMetadata: FC<AppMetadataProps> = ({
           </DetailsSectionRow>
           <DetailsSectionRow label="Machine(s) resources" className=" pb-6 border-b">
             {machines.map((machine, index) => (
-              <>
+              <span key={machine.id}>
                 <MachineResources
                   cpus={machine.resources.cpus}
                   memory={machine.resources.memory}
                   storage={machine.resources.storage}
                 />
                 {index < machines.length - 1 && <>, </>}
-              </>
+              </span>
             ))}
           </DetailsSectionRow>
         </>
