@@ -7,14 +7,15 @@ import { RawCode } from '../../../components/CodeDisplay'
 import { RotateCw } from 'lucide-react'
 
 type MachineLogsProps = {
+  schedulerRak: string
   provider: string
   instance: string
   logs: string[]
   setLogs: (logs: string[]) => void
 }
 
-export const MachineLogs: FC<MachineLogsProps> = ({ provider, instance, logs, setLogs }) => {
-  const { api: schedulerApi } = useScheduler(provider)
+export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, instance, logs, setLogs }) => {
+  const { api: schedulerApi } = useScheduler(schedulerRak, provider)
   const { fetchMachineLogs } = useMachineAccess(schedulerApi, provider, instance)
   const handleMachineAccess = async () => {
     const result = await fetchMachineLogs()

@@ -129,7 +129,13 @@ export const MachinesDetails: FC = () => {
           </TabsContent>
           <TabsContent value="logs">
             {isFetched && machine && (
-              <MachineLogs provider={machine.provider} instance={machine.id} logs={logs} setLogs={setLogs} />
+              <MachineLogs
+                schedulerRak={machine.metadata['net.oasis.scheduler.rak'] as string}
+                provider={machine.provider}
+                instance={machine.id}
+                logs={logs}
+                setLogs={setLogs}
+              />
             )}
           </TabsContent>
         </Tabs>

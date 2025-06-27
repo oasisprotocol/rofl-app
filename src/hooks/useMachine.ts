@@ -13,7 +13,7 @@ export const useMachineAccess = (schedulerApi: string, provider: string, instanc
     const message = createSiweMessage({
       domain: domain,
       address: address!,
-      statement: 'Provider: ' + provider,
+      statement: `Authenticate to ROFL provider ${provider} to manage your machines via API at ${domain}.`,
       uri: schedulerApi,
       version: '1',
       chainId: chainId,
