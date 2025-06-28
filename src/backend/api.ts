@@ -210,7 +210,7 @@ export function useCreateAndDeployApp() {
   const wagmiConfig = useConfig()
   const { sendTransactionAsync } = useSendTransaction()
   const steps = ['creating', 'building', 'updating', 'deploying'] as const
-  const [currentStep, setCurrentStep] = useState<(typeof steps)[number] | null>(null)
+  const [currentStep, setCurrentStep] = useState<(typeof steps)[number]>('creating')
   const stepEstimatedDurations: { [step in (typeof steps)[number]]?: number } = {
     creating: 40_000,
     building: 150_000,

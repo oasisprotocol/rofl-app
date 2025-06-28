@@ -42,7 +42,7 @@ type BootstrapStepProps = {
 type BootstrapState = (typeof BootstrapState)[keyof typeof BootstrapState]
 
 export const BootstrapState = {
-  CreateAndDeploy: 'create_and_deploy',
+  CreateAndDeploy: 'create_and_deploy', // look at createAndDeployAppMutation.progress.currentStep
   Artifacts: 'artifacts',
   Success: 'success',
   Error: 'error',
@@ -116,7 +116,13 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
             </video>
           </div>
         )}
-        <AnimatedStepText bootstrapStep={bootstrapStep} />
+        <AnimatedStepText
+          step={
+            bootstrapStep === 'create_and_deploy'
+              ? createAndDeployAppMutation.progress.currentStep
+              : bootstrapStep
+          }
+        />
       </div>
     </Layout>
   )
