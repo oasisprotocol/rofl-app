@@ -100,6 +100,7 @@ export const BuildStep: FC<AgentStepProps> = ({
       }
     })
   }
+  const noOffersWarning = providersOffersQuery.isFetched ? offers && offers.length === 0 : false
 
   return (
     <CreateLayout
@@ -179,11 +180,16 @@ export const BuildStep: FC<AgentStepProps> = ({
               </>
             )}
           />
+          {noOffersWarning && (
+            <div className="text-destructive text-sm">
+              No offers available for the provider. Please wait for offers to be available.
+            </div>
+          )}
         </div>
         <CreateFormNavigation
           handleNext={handleFormSubmit}
           handleBack={handleBack}
-          disabled={form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting || noOffersWarning}
         />
       </form>
     </CreateLayout>
