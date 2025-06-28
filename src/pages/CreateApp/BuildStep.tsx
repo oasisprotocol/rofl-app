@@ -17,6 +17,7 @@ import {
 import { InputFormField } from './InputFormField'
 import { BuildStepOffers } from './BuildStepOffers'
 import * as oasisRT from '@oasisprotocol/client-rt'
+import { sortOffersByPaymentTerms } from './helpers'
 
 type AgentStepProps = {
   handleNext: () => void
@@ -163,7 +164,7 @@ export const BuildStep: FC<AgentStepProps> = ({
             render={({ field, fieldState }) => (
               <>
                 <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
-                  {offers?.map(offer => (
+                  {offers?.sort(sortOffersByPaymentTerms).map(offer => (
                     <BuildStepOffers
                       key={offer.id}
                       offer={offer}
