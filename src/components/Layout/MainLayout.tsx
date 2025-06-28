@@ -28,7 +28,7 @@ import { ErrorBoundary } from '../ErrorBoundary'
 
 const navItems = {
   dashboard: { label: 'Dashboard', path: '/dashboard' },
-  myApps: { label: 'My Apps', path: '/dashboard/apps' },
+  myApps: { label: 'Apps', path: '/dashboard/apps' },
   machines: { label: 'Machines', path: '/dashboard/machines' },
   explore: { label: 'Explore', path: '/explore' },
 }
@@ -129,7 +129,7 @@ export const MainLayout: FC = () => {
                         variant="ghost"
                         className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
                       >
-                        My Apps
+                        Apps
                       </Button>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
