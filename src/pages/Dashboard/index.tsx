@@ -11,21 +11,42 @@ import { MachineCard } from '../../components/MachineCard'
 import { useAccount } from 'wagmi'
 
 const cardsLimit = 3
+const refetchInterval = 10000 // 10 seconds
 
 export const Dashboard: FC = () => {
   const network = useNetwork()
   const { address } = useAccount()
-  const roflAppsQuery = useGetRuntimeRoflApps(network, 'sapphire', {
-    limit: 1000,
-    offset: 0,
-    admin: address,
-  })
+  const roflAppsQuery = useGetRuntimeRoflApps(
+    network,
+    'sapphire',
+    {
+      limit: 1000,
+      offset: 0,
+      admin: address,
+    },
+    {
+      query: {
+        queryKey: ['roflAppsPolling', network, address],
+        refetchInterval: refetchInterval,
+      },
+    },
+  )
 
-  const roflMachinesQuery = useGetRuntimeRoflmarketInstances(network, 'sapphire', {
-    limit: 1000,
-    offset: 0,
-    admin: address,
-  })
+  const roflMachinesQuery = useGetRuntimeRoflmarketInstances(
+    network,
+    'sapphire',
+    {
+      limit: 1000,
+      offset: 0,
+      admin: address,
+    },
+    {
+      query: {
+        queryKey: ['roflmachinePolling', network, address],
+        refetchInterval: refetchInterval,
+      },
+    },
+  )
   const { data, isLoading, isFetched } = roflAppsQuery
   const roflApps = data?.data.rofl_apps
   const { data: machinesData, isLoading: isMachinesLoading, isFetched: isMachinesFetched } = roflMachinesQuery
