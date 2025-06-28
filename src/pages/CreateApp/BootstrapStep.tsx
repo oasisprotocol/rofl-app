@@ -6,7 +6,7 @@ import type { AppData, MetadataFormData } from './types'
 import { useCreateAndDeployApp } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { useNetwork } from '../../hooks/useNetwork'
-import { AnimatedStepText } from './AnimatedStepText'
+import { AnimatedStepText, HeaderSteps } from './AnimatedStepText'
 import { useArtifactUploads } from '../../hooks/useArtifactUploads'
 import * as yaml from 'yaml'
 
@@ -42,7 +42,7 @@ type BootstrapStepProps = {
 type BootstrapState = (typeof BootstrapState)[keyof typeof BootstrapState]
 
 export const BootstrapState = {
-  CreateAndDeploy: 'create_and_deploy',
+  CreateAndDeploy: 'create_and_deploy', // look at createAndDeployAppMutation.progress.currentStep
   Artifacts: 'artifacts',
   Success: 'success',
   Error: 'error',
@@ -106,14 +106,23 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
 
   return (
     <Layout headerContent={<Header />} footerContent={<Footer />}>
+      <HeaderSteps progress={createAndDeployAppMutation.progress} />
       <div className="w-full px-8 py-12 flex flex-col items-center justify-center">
-        <div className="w-full flex items-center justify-center mb-8">
-          {/* mitigate webm black background */}
-          <video className="mix-blend-lighten" width="310" height="310" autoPlay muted loop playsInline>
-            <source src="https://assets.oasis.io/webm/Oasis-Loader-310x310.webm" type="video/webm" />
-          </video>
-        </div>
-        <AnimatedStepText bootstrapStep={bootstrapStep} />
+        {(bootstrapStep === 'create_and_deploy' || bootstrapStep === 'artifacts') && (
+          <div className="w-full flex items-center justify-center mb-8">
+            {/* mitigate webm black background */}
+            <video className="mix-blend-lighten" width="310" height="310" autoPlay muted loop playsInline>
+              <source src="https://assets.oasis.io/webm/Oasis-Loader-310x310.webm" type="video/webm" />
+            </video>
+          </div>
+        )}
+        <AnimatedStepText
+          step={
+            bootstrapStep === 'create_and_deploy'
+              ? createAndDeployAppMutation.progress.currentStep
+              : bootstrapStep
+          }
+        />
       </div>
     </Layout>
   )

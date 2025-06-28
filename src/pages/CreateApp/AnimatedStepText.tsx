@@ -1,12 +1,34 @@
-import { type FC, useEffect, useState } from 'react'
+import { CSSProperties, type FC, useEffect, useState } from 'react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Link } from 'react-router-dom'
+import { CheckCircle } from 'lucide-react'
+import { useCreateAndDeployApp } from '../../backend/api'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
-type BootstrapState = 'create_and_deploy' | 'artifacts' | 'success' | 'error'
+type Step =
+  | ReturnType<typeof useCreateAndDeployApp>['progress']['currentStep']
+  | 'artifacts'
+  | 'success'
+  | 'error'
 
 const textContent = {
-  create_and_deploy: {
-    header: 'Creating and deploying ROFL app',
+  creating: {
+    header: 'Creating App...',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
+  },
+  building: {
+    header: 'Building App...',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
+  },
+  updating: {
+    header: 'Updating App Secrets...',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
+  },
+  deploying: {
+    header: 'Deploying App to Machine...',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
   },
@@ -33,15 +55,15 @@ const textContent = {
     header: 'Error creating ROFL app',
     description: 'An error occurred while creating the ROFL app. Please try again later.',
   },
-}
+} satisfies Record<Step, unknown>
 
 type AnimatedStepTextProps = {
-  bootstrapStep: BootstrapState
+  step: Step
 }
 
-export const AnimatedStepText: FC<AnimatedStepTextProps> = ({ bootstrapStep }) => {
+export const AnimatedStepText: FC<AnimatedStepTextProps> = ({ step }) => {
   const [isVisible, setIsVisible] = useState(false)
-  const content = textContent[bootstrapStep]
+  const content = textContent[step]
 
   useEffect(() => {
     setIsVisible(false)
@@ -51,12 +73,12 @@ export const AnimatedStepText: FC<AnimatedStepTextProps> = ({ bootstrapStep }) =
     }, 200)
 
     return () => clearTimeout(timer)
-  }, [bootstrapStep])
+  }, [step])
 
   return (
     <div className="mb-8">
       <h1
-        key={`header-${bootstrapStep}`}
+        key={`header-${step}`}
         className={`text-2xl font-white font-bold mb-2 text-center transition-all duration-400 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
         }`}
@@ -64,13 +86,64 @@ export const AnimatedStepText: FC<AnimatedStepTextProps> = ({ bootstrapStep }) =
         {content.header}
       </h1>
       <div
-        key={`description-${bootstrapStep}`}
+        key={`description-${step}`}
         className={`text-muted-foreground text-md max-w-md text-center transition-all duration-400 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
         }`}
       >
         {content.description}
       </div>
+    </div>
+  )
+}
+
+export const HeaderSteps: FC<{ progress: ReturnType<typeof useCreateAndDeployApp>['progress'] }> = ({
+  progress,
+}) => {
+  const { steps, currentStep, stepEstimatedDurations, stepLabels } = progress
+  return (
+    <div className="flex flex-col md:flex-row w-full">
+      {steps.map((step, i) => (
+        <div key={step} className="flex flex-1 items-center gap-3 px-6 py-4 border-b border-border">
+          {steps.indexOf(currentStep!) > i ? (
+            <CheckCircle className="h-6 w-6 text-success" />
+          ) : (
+            <div
+              className={cn(
+                'flex items-center justify-center w-6 h-6 rounded-full transition bg-muted',
+                currentStep === step && 'bg-primary',
+              )}
+            >
+              {currentStep === step && stepEstimatedDurations[step] && (
+                <div
+                  className="absolute size-8"
+                  style={
+                    { '--animate-dashoffset-duration': stepEstimatedDurations[step] + 'ms' } as CSSProperties
+                  }
+                >
+                  <svg
+                    className="size-full -rotate-90"
+                    viewBox="0 0 36 36"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="16"
+                      fill="none"
+                      className="stroke-current text-primary animate-dashoffset"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    ></circle>
+                  </svg>
+                </div>
+              )}
+              <span className="text-xs font-semibold text-primary-foreground">{i + 1}</span>
+            </div>
+          )}
+          <span className="text-xs font-semibold text-muted-foreground">{stepLabels[step]}</span>
+        </div>
+      ))}
     </div>
   )
 }

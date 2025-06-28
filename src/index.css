@@ -28,3 +28,14 @@
     }
   }
 }
+
+.animate-dashoffset {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 95;
+  animation: dashoffset var(--animate-dashoffset-duration, 1000ms) linear forwards;
+}
+@keyframes dashoffset {
+  to {
+    stroke-dashoffset: 10;
+  }
+}
