@@ -1,4 +1,4 @@
-name: Private Telegram bot
+name: Private Telegram Chat Bot
 description: |
   Confidential Telegram chat bot running entirely inside the TEE. No prompts
   will ever leave the trusted environment! Define your bot behavior with

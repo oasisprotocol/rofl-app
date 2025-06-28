@@ -17,6 +17,7 @@ import {
 import { InputFormField } from './InputFormField'
 import { BuildStepOffers } from './BuildStepOffers'
 import * as oasisRT from '@oasisprotocol/client-rt'
+import { sortOffersByPaymentTerms } from './helpers'
 
 type AgentStepProps = {
   handleNext: () => void
@@ -100,6 +101,7 @@ export const BuildStep: FC<AgentStepProps> = ({
       }
     })
   }
+  const noOffersWarning = providersOffersQuery.isFetched ? offers && offers.length === 0 : false
 
   return (
     <CreateLayout
@@ -162,7 +164,7 @@ export const BuildStep: FC<AgentStepProps> = ({
             render={({ field, fieldState }) => (
               <>
                 <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
-                  {offers?.map(offer => (
+                  {offers?.sort(sortOffersByPaymentTerms).map(offer => (
                     <BuildStepOffers
                       key={offer.id}
                       offer={offer}
@@ -179,11 +181,16 @@ export const BuildStep: FC<AgentStepProps> = ({
               </>
             )}
           />
+          {noOffersWarning && (
+            <div className="text-destructive text-sm">
+              No offers available for the provider. Please wait for offers to be available.
+            </div>
+          )}
         </div>
         <CreateFormNavigation
           handleNext={handleFormSubmit}
           handleBack={handleBack}
-          disabled={form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting || noOffersWarning}
         />
       </form>
     </CreateLayout>

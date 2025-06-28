@@ -11,21 +11,42 @@ import { MachineCard } from '../../components/MachineCard'
 import { useAccount } from 'wagmi'
 
 const cardsLimit = 3
+const refetchInterval = 10000 // 10 seconds
 
 export const Dashboard: FC = () => {
   const network = useNetwork()
   const { address } = useAccount()
-  const roflAppsQuery = useGetRuntimeRoflApps(network, 'sapphire', {
-    limit: 1000,
-    offset: 0,
-    admin: address,
-  })
+  const roflAppsQuery = useGetRuntimeRoflApps(
+    network,
+    'sapphire',
+    {
+      limit: 1000,
+      offset: 0,
+      admin: address,
+    },
+    {
+      query: {
+        queryKey: ['roflAppsPolling', network, address],
+        refetchInterval: refetchInterval,
+      },
+    },
+  )
 
-  const roflMachinesQuery = useGetRuntimeRoflmarketInstances(network, 'sapphire', {
-    limit: 1000,
-    offset: 0,
-    admin: address,
-  })
+  const roflMachinesQuery = useGetRuntimeRoflmarketInstances(
+    network,
+    'sapphire',
+    {
+      limit: 1000,
+      offset: 0,
+      admin: address,
+    },
+    {
+      query: {
+        queryKey: ['roflmachinePolling', network, address],
+        refetchInterval: refetchInterval,
+      },
+    },
+  )
   const { data, isLoading, isFetched } = roflAppsQuery
   const roflApps = data?.data.rofl_apps
   const { data: machinesData, isLoading: isMachinesLoading, isFetched: isMachinesFetched } = roflMachinesQuery
@@ -42,7 +63,7 @@ export const Dashboard: FC = () => {
           {isLoading && <Skeleton className="w-full h-[120px]" />}
           {isFetched && (
             <MetricCard
-              title="ROFL Apps Running"
+              title="Apps running"
               value={runningAppsNumber}
               isTotalCountClipped={data?.data.is_total_count_clipped}
             />
@@ -50,13 +71,13 @@ export const Dashboard: FC = () => {
           {isMachinesLoading && <Skeleton className="w-full h-[120px]" />}
           {isMachinesFetched && (
             <MetricCard
-              title="Machines Running"
+              title="Machines running"
               value={runningMachinesNumber}
               isTotalCountClipped={machinesData?.data.is_total_count_clipped}
             />
           )}
         </div>
-        <SectionHeader title="My ROFL Apps" to="/dashboard/apps" disabled={appsNumber === 0} />
+        <SectionHeader title="Apps" to="/dashboard/apps" disabled={appsNumber === 0} />
         {isFetched && !appsNumber && <MyAppsEmptyState />}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {isLoading &&

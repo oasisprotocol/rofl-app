@@ -4,9 +4,8 @@ import { EmptyState } from '../../../components/EmptyState'
 export const MachinesEmptyState: FC = () => {
   return (
     <EmptyState
-      title="No machines running"
-      description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas.
-            Bibendum sed integer ac eget."
+      title="You currently have no machines running"
+      description="Once you create your first app, the machine(s) running it will appear here."
     />
   )
 }

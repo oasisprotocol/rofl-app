@@ -74,7 +74,7 @@ export const Header: FC = () => {
                   Dashboard
                 </NavbarLink>
                 <NavbarLink to="/dashboard/apps" onClick={() => setIsOpen(false)}>
-                  My Apps
+                  Apps
                 </NavbarLink>
                 <NavbarLink to="/dashboard/machines" onClick={() => setIsOpen(false)}>
                   Machines

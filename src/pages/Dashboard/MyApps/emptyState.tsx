@@ -7,8 +7,8 @@ import { Plus } from 'lucide-react'
 export const MyAppsEmptyState: FC = () => {
   return (
     <EmptyState
-      title="Create your first ROFL App"
-      description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
+      title="Create your first app"
+      description="Use one of our templates to create your first application running in Oasis ROFL."
     >
       <Button asChild>
         <Link to="/create">

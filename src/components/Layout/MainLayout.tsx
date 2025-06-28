@@ -12,6 +12,7 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
   SidebarGroup,
+  SidebarFooter,
 } from '@oasisprotocol/ui-library/src/components/ui/sidebar'
 import { Compass, LayoutDashboard } from 'lucide-react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
@@ -27,7 +28,7 @@ import { ErrorBoundary } from '../ErrorBoundary'
 
 const navItems = {
   dashboard: { label: 'Dashboard', path: '/dashboard' },
-  myApps: { label: 'My Apps', path: '/dashboard/apps' },
+  myApps: { label: 'Apps', path: '/dashboard/apps' },
   machines: { label: 'Machines', path: '/dashboard/machines' },
   explore: { label: 'Explore', path: '/explore' },
 }
@@ -128,7 +129,7 @@ export const MainLayout: FC = () => {
                         variant="ghost"
                         className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
                       >
-                        My Apps
+                        Apps
                       </Button>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -157,6 +158,22 @@ export const MainLayout: FC = () => {
               </SidebarMenu>
             </SidebarGroup>
           </SidebarContent>
+          <SidebarFooter className="mb-2">
+            <div className="bg-sidebar-accent p-4 rounded-md text-sm text-foreground">
+              <span className="font-bold">Running in Beta.</span>
+              <br />
+              <a href="#" target="_blank" rel="noopener noreferrer" className="underline text-foreground">
+                Click to provide feedback.
+              </a>
+            </div>
+            <div className="bg-sidebar-accent p-4 rounded-md text-sm text-foreground">
+              <span className="font-bold">Need Support?</span>
+              <br />
+              <a href="#" target="_blank" rel="noopener noreferrer" className="underline text-foreground">
+                Speak to our devs.
+              </a>
+            </div>
+          </SidebarFooter>
         </Sidebar>
       }
     >
