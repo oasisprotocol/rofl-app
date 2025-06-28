@@ -215,6 +215,12 @@ export function useCreateAndDeployApp() {
     creating: 40_000,
     building: 150_000,
   }
+  const stepLabels: { [step in (typeof steps)[number]]: string } = {
+    creating: 'Creating App',
+    building: 'Building App',
+    updating: 'Updating App Secrets',
+    deploying: 'Deploying App to Machine',
+  }
 
   const mutation = useMutation<
     string,
@@ -374,7 +380,7 @@ export function useCreateAndDeployApp() {
 
   return {
     ...mutation,
-    progress: { steps, currentStep, stepEstimatedDurations },
+    progress: { steps, currentStep, stepLabels, stepEstimatedDurations },
   }
 }
 

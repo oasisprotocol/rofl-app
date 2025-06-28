@@ -1,6 +1,9 @@
 import { type FC, useEffect, useState } from 'react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Link } from 'react-router-dom'
+import { CheckCircle } from 'lucide-react'
+import { useCreateAndDeployApp } from '../../backend/api'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
 type BootstrapState = 'create_and_deploy' | 'artifacts' | 'success' | 'error'
 
@@ -71,6 +74,28 @@ export const AnimatedStepText: FC<AnimatedStepTextProps> = ({ bootstrapStep }) =
       >
         {content.description}
       </div>
+    </div>
+  )
+}
+
+export const HeaderSteps: FC<{ progress: ReturnType<typeof useCreateAndDeployApp>['progress'] }> = ({
+  progress,
+}) => {
+  const { steps, currentStep, stepEstimatedDurations, stepLabels } = progress
+  return (
+    <div className="flex flex-col md:flex-row w-full">
+      {steps.map((step, i) => (
+        <div key={step} className="flex flex-1 items-center gap-3 px-6 py-4 border-b border-border">
+          {steps.indexOf(currentStep!) > i ? (
+            <CheckCircle className="h-6 w-6 text-success" />
+          ) : (
+            <div className={cn("flex items-center justify-center w-6 h-6 rounded-full transition bg-muted", currentStep === step && 'bg-primary')}>
+              <span className="text-xs font-semibold text-primary-foreground">{i + 1}</span>
+            </div>
+          )}
+          <span className="text-xs font-semibold text-muted-foreground">{stepLabels[step]}</span>
+        </div>
+      ))}
     </div>
   )
 }
