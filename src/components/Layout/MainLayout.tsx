@@ -12,6 +12,7 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
   SidebarGroup,
+  SidebarFooter,
 } from '@oasisprotocol/ui-library/src/components/ui/sidebar'
 import { Compass, LayoutDashboard } from 'lucide-react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
@@ -157,6 +158,22 @@ export const MainLayout: FC = () => {
               </SidebarMenu>
             </SidebarGroup>
           </SidebarContent>
+          <SidebarFooter className="mb-2">
+            <div className="bg-sidebar-accent p-4 rounded-md text-sm text-foreground">
+              <span className="font-bold">Running in Beta.</span>
+              <br />
+              <a href="#" target="_blank" rel="noopener noreferrer" className="underline text-foreground">
+                Click to provide feedback.
+              </a>
+            </div>
+            <div className="bg-sidebar-accent p-4 rounded-md text-sm text-foreground">
+              <span className="font-bold">Need Support?</span>
+              <br />
+              <a href="#" target="_blank" rel="noopener noreferrer" className="underline text-foreground">
+                Speak to our devs.
+              </a>
+            </div>
+          </SidebarFooter>
         </Sidebar>
       }
     >
