@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from 'react'
+import { CSSProperties, type FC, useEffect, useState } from 'react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Link } from 'react-router-dom'
 import { CheckCircle } from 'lucide-react'
@@ -89,7 +89,36 @@ export const HeaderSteps: FC<{ progress: ReturnType<typeof useCreateAndDeployApp
           {steps.indexOf(currentStep!) > i ? (
             <CheckCircle className="h-6 w-6 text-success" />
           ) : (
-            <div className={cn("flex items-center justify-center w-6 h-6 rounded-full transition bg-muted", currentStep === step && 'bg-primary')}>
+            <div
+              className={cn(
+                'flex items-center justify-center w-6 h-6 rounded-full transition bg-muted',
+                currentStep === step && 'bg-primary',
+              )}
+            >
+              {currentStep === step && stepEstimatedDurations[step] && (
+                <div
+                  className="absolute size-8"
+                  style={
+                    { '--animate-dashoffset-duration': stepEstimatedDurations[step] + 'ms' } as CSSProperties
+                  }
+                >
+                  <svg
+                    className="size-full -rotate-90"
+                    viewBox="0 0 36 36"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="16"
+                      fill="none"
+                      className="stroke-current text-primary animate-dashoffset"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    ></circle>
+                  </svg>
+                </div>
+              )}
               <span className="text-xs font-semibold text-primary-foreground">{i + 1}</span>
             </div>
           )}
