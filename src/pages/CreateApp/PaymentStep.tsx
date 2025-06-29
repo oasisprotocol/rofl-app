@@ -101,8 +101,20 @@ export const PaymentStep: FC<AgentStepProps> = ({
           )}
         </TopUp>
       )}
+
+      {import.meta.env.PROD && isTestnet && (
+        <div className="text-sm text-destructive mt-4 text-pretty">
+          Functionality is currently blocked on the Oasis Sapphire Testnet. To build and deploy your
+          application, please switch to Mainnet.
+        </div>
+      )}
+
       {(hasEnoughBalance || isTestnet) && (
-        <CreateFormNavigation handleNext={handleNext} handleBack={handleBack} disabled={isTestnet} />
+        <CreateFormNavigation
+          handleNext={handleNext}
+          handleBack={handleBack}
+          disabled={import.meta.env.PROD && isTestnet}
+        />
       )}
     </CreateLayout>
   )
