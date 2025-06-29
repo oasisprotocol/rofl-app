@@ -1,15 +1,15 @@
 import { type FC } from 'react'
 import { CreateLayout } from './CreateLayout'
 import { CreateFormHeader } from './CreateFormHeader'
-import { CreateFormNavigation } from './CreateFormNavigation'
 import { TgbotAgentForm } from './TgbotAgentForm'
-import { type AgentFormData } from './types'
+import { XAgentForm } from './XAgentForm'
+import { type AgentFormData, type XAgentFormData } from './types'
 
 type AgentStepProps = {
   handleNext: () => void
   handleBack: () => void
-  agent?: AgentFormData
-  setAppDataForm: (data: { agent: AgentFormData }) => void
+  agent?: AgentFormData | XAgentFormData
+  setAppDataForm: (data: { agent: AgentFormData | XAgentFormData }) => void
   selectedTemplateName?: string
   selectedTemplateId?: string
 }
@@ -38,23 +38,21 @@ export const AgentStep: FC<AgentStepProps> = ({
         title="Agent Config"
         description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
       />
-
-      {selectedTemplateId === 'tgbot' ? (
+      {selectedTemplateId === 'tgbot' && (
         <TgbotAgentForm
           handleNext={handleNext}
           handleBack={handleBack}
-          agent={agent}
-          setAppDataForm={setAppDataForm}
+          agent={agent as AgentFormData}
+          setAppDataForm={setAppDataForm as (data: { agent: AgentFormData }) => void}
         />
-      ) : (
-        <>
-          <div className="space-y-6 mb-6 w-full">
-            <div className="text-center py-8">
-              <p className="text-lg text-gray-600">TODO: X-Agent configuration form</p>
-            </div>
-            <CreateFormNavigation handleNext={handleNext} handleBack={handleBack} disabled={false} />
-          </div>
-        </>
+      )}
+      {selectedTemplateId === 'x-agent' && (
+        <XAgentForm
+          handleNext={handleNext}
+          handleBack={handleBack}
+          agent={agent as XAgentFormData}
+          setAppDataForm={setAppDataForm as (data: { agent: XAgentFormData }) => void}
+        />
       )}
     </CreateLayout>
   )

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { InputFormField } from './InputFormField'
 import { SelectFormField } from './SelectFormField'
 import { CreateFormNavigation } from './CreateFormNavigation'
-import { agentFormSchema, type AgentFormData } from './types'
+import { tgbotFormSchema, type AgentFormData } from './types'
 
 type TgbotAgentFormProps = {
   handleNext: () => void
@@ -20,7 +20,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
   setAppDataForm,
 }) => {
   const form = useForm<AgentFormData>({
-    resolver: zodResolver(agentFormSchema),
+    resolver: zodResolver(tgbotFormSchema),
     defaultValues: { ...agent },
   })
 
