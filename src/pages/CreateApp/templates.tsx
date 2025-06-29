@@ -1,57 +1,94 @@
 import { parse } from 'yaml'
 import tgbot from '../../../templates/tgbot/tgbot.png'
 import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw'
+import xagent from '../../../templates/x-agent/twitter-persona-bot.png'
+import xagentTemplate from '../../../templates/x-agent/rofl.yaml?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
 import type { MetadataFormData } from './types'
 
 const parsedDefaultDeployments = parse(defaultDeployments)
-const parsedTemplate = parse(tgbotTemplate)
-const { compose: tgbotCompose, ...tgbotRofl } = parsedTemplate
+const parsedTgbotTemplate = parse(tgbotTemplate)
+const { compose: tgbotCompose, ...tgbotRofl } = parsedTgbotTemplate
+const parsedXagentTemplate = parse(xagentTemplate)
+const { compose: xagentCompose, ...xagentRofl } = parsedXagentTemplate
+
+type ParsedTemplate = {
+  name?: string
+  author?: string
+  description?: string
+  version?: string
+  homepage?: string
+  license?: string
+  [key: string]: unknown
+}
+
+const extractMetadata = (parsedTemplate: ParsedTemplate) => ({
+  name: parsedTemplate.name || '',
+  author: parsedTemplate.author || '',
+  description: parsedTemplate.description || '',
+  version: parsedTemplate.version || '',
+  homepage: parsedTemplate.homepage || '',
+  license: parsedTemplate.license || '',
+})
+
+const defaultBuildConfig = {
+  provider: '',
+  duration: 'hours' as const,
+  number: 2,
+  resources: '',
+}
+
+const createTemplateParser = (roflData: Record<string, unknown>) => {
+  return (metadata: Partial<MetadataFormData>, network: 'mainnet' | 'testnet', appId: string) => {
+    return {
+      ...roflData,
+      title: metadata.name,
+      description: metadata.description,
+      author: metadata.author,
+      version: metadata.version,
+      homepage: metadata.homepage,
+      license: metadata.license,
+      deployments: {
+        default: {
+          ...parsedDefaultDeployments.deployments.default,
+          app_id: appId,
+          network,
+        },
+      },
+    }
+  }
+}
 
 export const templates = [
   {
-    name: parsedTemplate.name,
-    description: parsedTemplate.description,
+    name: parsedTgbotTemplate.name,
+    description: parsedTgbotTemplate.description,
     image: tgbot,
     id: 'tgbot',
     initialValues: {
-      metadata: {
-        name: parsedTemplate.name || '',
-        author: parsedTemplate.author || '',
-        description: parsedTemplate.description || '',
-        version: parsedTemplate.version || '',
-        homepage: parsedTemplate.homepage || '',
-        license: parsedTemplate.license || '',
-      },
-      build: {
-        provider: '',
-        duration: 'hours' as const,
-        number: 2,
-        resources: '',
-      },
+      metadata: extractMetadata(parsedTgbotTemplate),
+      build: defaultBuildConfig,
     },
     yaml: {
       compose: tgbotCompose,
       rofl: tgbotRofl,
     },
-    templateParser: (metadata: Partial<MetadataFormData>, network: 'mainnet' | 'testnet', appId: string) => {
-      return {
-        ...tgbotRofl,
-        title: metadata.name,
-        description: metadata.description,
-        author: metadata.author,
-        version: metadata.version,
-        homepage: metadata.homepage,
-        license: metadata.license,
-        deployments: {
-          default: {
-            ...parsedDefaultDeployments.deployments.default,
-            app_id: appId,
-            network,
-          },
-        },
-      }
+    templateParser: createTemplateParser(tgbotRofl),
+  },
+  {
+    name: parsedXagentTemplate.name,
+    description: parsedXagentTemplate.description,
+    image: xagent,
+    id: 'x-agent',
+    initialValues: {
+      metadata: extractMetadata(parsedXagentTemplate),
+      build: defaultBuildConfig,
     },
+    yaml: {
+      compose: xagentCompose,
+      rofl: xagentRofl,
+    },
+    templateParser: createTemplateParser(xagentRofl),
   },
 ]
 

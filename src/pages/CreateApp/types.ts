@@ -24,7 +24,7 @@ export const metadataFormSchema = z.object({
   homepage: z.string().url().or(z.literal('')),
 })
 
-export const agentFormSchema = z.object({
+export const tgbotFormSchema = z.object({
   OLLAMA_MODEL: z.string().min(1, {
     message: 'Model is required.',
   }),
@@ -44,6 +44,38 @@ export const agentFormSchema = z.object({
     .max(1000, {
       message: 'Prompt must be less than 1000 characters.',
     }),
+})
+
+export const xAgentFormSchema = z.object({
+  SYSTEM_PROMPT: z
+    .string()
+    .min(1, {
+      message: 'Bot persona is required.',
+    })
+    .max(2000, {
+      message: 'Bot persona must be less than 2000 characters.',
+    }),
+  TWITTER_BEARER_TOKEN: z.string().min(1, {
+    message: 'Twitter Bearer Token is required.',
+  }),
+  TWITTER_API_KEY: z.string().min(1, {
+    message: 'Twitter API Key is required.',
+  }),
+  TWITTER_API_SECRET: z.string().min(1, {
+    message: 'Twitter API Secret is required.',
+  }),
+  TWITTER_ACCESS_TOKEN: z.string().min(1, {
+    message: 'Twitter Access Token is required.',
+  }),
+  TWITTER_ACCESS_TOKEN_SECRET: z.string().min(1, {
+    message: 'Twitter Access Token Secret is required.',
+  }),
+  OPENAI_API_KEY: z.string().min(1, {
+    message: 'OpenAI API Key is required.',
+  }),
+  OPENAI_MODEL: z.string().min(1, {
+    message: 'Model is required.',
+  }),
 })
 
 export const buildFormSchema = z
@@ -79,13 +111,14 @@ export const buildFormSchema = z
 
 export type TemplateFormData = string
 export type MetadataFormData = z.infer<typeof metadataFormSchema>
-export type AgentFormData = z.infer<typeof agentFormSchema>
+export type AgentFormData = z.infer<typeof tgbotFormSchema>
+export type XAgentFormData = z.infer<typeof xAgentFormSchema>
 export type BuildFormData = z.infer<typeof buildFormSchema>
 
 export type AppData = {
   template?: string
   metadata?: MetadataFormData
-  agent?: AgentFormData
+  agent?: AgentFormData | XAgentFormData
   build?: BuildFormData
   payment?: Record<string, unknown>
 }
