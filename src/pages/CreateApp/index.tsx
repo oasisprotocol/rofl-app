@@ -57,6 +57,7 @@ export const Create: FC = () => {
           agent={appData?.agent}
           setAppDataForm={setAppDataForm}
           selectedTemplateName={selectedTemplate?.name}
+          selectedTemplateId={selectedTemplate?.id}
         />
       )}
       {currentStep === 3 && (

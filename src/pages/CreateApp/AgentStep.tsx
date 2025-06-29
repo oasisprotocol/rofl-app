@@ -2,11 +2,8 @@ import { type FC } from 'react'
 import { CreateLayout } from './CreateLayout'
 import { CreateFormHeader } from './CreateFormHeader'
 import { CreateFormNavigation } from './CreateFormNavigation'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { InputFormField } from './InputFormField'
-import { SelectFormField } from './SelectFormField'
-import { agentFormSchema, type AgentFormData } from './types'
+import { TgbotAgentForm } from './TgbotAgentForm'
+import { type AgentFormData } from './types'
 
 type AgentStepProps = {
   handleNext: () => void
@@ -14,6 +11,7 @@ type AgentStepProps = {
   agent?: AgentFormData
   setAppDataForm: (data: { agent: AgentFormData }) => void
   selectedTemplateName?: string
+  selectedTemplateId?: string
 }
 
 export const AgentStep: FC<AgentStepProps> = ({
@@ -22,25 +20,8 @@ export const AgentStep: FC<AgentStepProps> = ({
   agent,
   setAppDataForm,
   selectedTemplateName,
+  selectedTemplateId,
 }) => {
-  const form = useForm<AgentFormData>({
-    resolver: zodResolver(agentFormSchema),
-    defaultValues: { ...agent },
-  })
-
-  function onSubmit(values: AgentFormData) {
-    setAppDataForm({ agent: values })
-    handleNext()
-  }
-
-  const handleFormSubmit = () => {
-    form.trigger().then(isValid => {
-      if (isValid) {
-        form.handleSubmit(onSubmit)()
-      }
-    })
-  }
-
   return (
     <CreateLayout
       currentStep={2}
@@ -58,40 +39,23 @@ export const AgentStep: FC<AgentStepProps> = ({
         description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
       />
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
-        <SelectFormField
-          control={form.control}
-          name="OLLAMA_MODEL"
-          label="Select the LLM running inside your TEE bot"
-          placeholder="Select a model"
-          options={[
-            { value: 'gemma3:1b', label: 'Gemma 3 1B' },
-            { value: 'deepseek-r1:1.5b', label: 'Deepseek 1.5B' },
-          ]}
-        />
-
-        <InputFormField
-          control={form.control}
-          name="TOKEN"
-          label="Telegram API token"
-          placeholder="Paste or type API token here"
-          type="password"
-        />
-
-        <InputFormField
-          control={form.control}
-          name="OLLAMA_SYSTEM_PROMPT"
-          label="LLM system prompt"
-          placeholder="Instructions for the agent on how to act, behave..."
-          type="textarea"
-        />
-
-        <CreateFormNavigation
-          handleNext={handleFormSubmit}
+      {selectedTemplateId === 'tgbot' ? (
+        <TgbotAgentForm
+          handleNext={handleNext}
           handleBack={handleBack}
-          disabled={form.formState.isSubmitting}
+          agent={agent}
+          setAppDataForm={setAppDataForm}
         />
-      </form>
+      ) : (
+        <>
+          <div className="space-y-6 mb-6 w-full">
+            <div className="text-center py-8">
+              <p className="text-lg text-gray-600">TODO: X-Agent configuration form</p>
+            </div>
+            <CreateFormNavigation handleNext={handleNext} handleBack={handleBack} disabled={false} />
+          </div>
+        </>
+      )}
     </CreateLayout>
   )
 }
