@@ -1,0 +1,104 @@
+name: X Agent
+description: An AI-powered Twitter bot that tweets hourly based on a customizable persona. Perfect for maintaining an active Twitter presence with engaging, contextual content.
+image: https://rofl.app/templates/twitter-persona-bot.png
+version: 1.1.2
+repository: https://github.com/oasisprotocol/template-rofl-x-agent
+author: Oasis Protocol Foundation <info@oasisprotocol.org>
+license: Apache-2.0
+tags:
+  - Social Media
+  - Twitter
+  - AI
+  - OpenAI
+  - Automation
+
+tee: tdx
+kind: container
+resources:
+  memory: 1024
+  cpus: 1
+  storage:
+    kind: disk-persistent
+    size: 1000
+artifacts:
+  firmware: https://github.com/oasisprotocol/oasis-boot/releases/download/v0.4.1/ovmf.tdx.fd#db47100a7d6a0c1f6983be224137c3f8d7cb09b63bb1c7a5ee7829d8e994a42f
+  kernel: https://github.com/oasisprotocol/oasis-boot/releases/download/v0.4.1/stage1.bin#06e12cba9b2423b4dd5916f4d84bf9c043f30041ab03aa74006f46ef9c129d22
+  stage2: https://github.com/oasisprotocol/oasis-boot/releases/download/v0.4.1/stage2-podman.tar.bz2#6f2487aa064460384309a58c858ffea9316e739331b5c36789bb2f61117869d6
+  container:
+    runtime: https://github.com/oasisprotocol/oasis-sdk/releases/download/rofl-containers%2Fv0.4.2/rofl-containers#0cbaa4c0c1b35c5ed41156868bee9f3726f52eeedc01b3060d3b2eb67d76f546
+    compose: compose.yaml
+secrets:
+  - name: SYSTEM_PROMPT
+    title: "Bot Persona"
+    description: "Define your bot's personality and behavior. This determines what kind of tweets it will generate."
+    type: text
+    required: true
+    placeholder: "You are a friendly tech enthusiast who shares insights about AI and technology..."
+  - name: TWITTER_BEARER_TOKEN
+    title: "Twitter Bearer Token"
+    description: "Your Twitter Bearer token (from Twitter Developer Portal)."
+    type: password
+    required: true
+    placeholder: "your_bearer_token"
+  - name: TWITTER_API_KEY
+    title: "Twitter API Key"
+    description: "Your Twitter API key (from Twitter Developer Portal)."
+    type: text
+    required: true
+    placeholder: "your_api_key"
+  - name: TWITTER_API_SECRET
+    title: "Twitter API Secret"
+    description: "Your Twitter API secret (from Twitter Developer Portal)."
+    type: password
+    required: true
+    placeholder: "your_api_secret"
+  - name: TWITTER_ACCESS_TOKEN
+    title: "Twitter Access Token"
+    description: "Your Twitter API access token (from Twitter Developer Portal)."
+    type: text
+    required: true
+    placeholder: "your_access_token"
+  - name: TWITTER_ACCESS_TOKEN_SECRET
+    title: "Twitter Access Token Secret"
+    description: "Your Twitter API access token secret (from Twitter Developer Portal)."
+    type: password
+    required: true
+    placeholder: "your_access_token_secret"
+  - name: OPENAI_API_KEY
+    title: "OpenAI API Key"
+    description: "Your OpenAI API key for generating tweet content."
+    type: password
+    required: true
+    placeholder: "sk-..."
+  - name: OPENAI_MODEL
+    title: "OpenAI Model"
+    description: "Select the OpenAI model to use for generating tweets"
+    type: select
+    required: false
+    options:
+      - "gpt-3.5-turbo": "GPT-3.5 Turbo (Fast & Cost-effective)"
+      - "gpt-4o-mini": "GPT-4o Mini (Balanced performance)"
+      - "gpt-4o": "GPT-4o (Most capable)"
+      - "gpt-4-turbo": "GPT-4 Turbo (High quality)"
+      - "gpt-4": "GPT-4 (Legacy)"
+      - "o1-mini": "O1 Mini (Reasoning focused)"
+      - "o1": "O1 (Advanced reasoning)"
+
+compose: |
+  services:
+    x-agent:
+      image: docker.io/ahmedatoasis/x-agent@sha256:2be6bb27d986af25a7c58fa50625d2863f6df7aa413343826351d0ffabdcc61c
+      build:
+        context: .
+        dockerfile: Dockerfile
+      platform: linux/amd64
+      environment:
+        - SYSTEM_PROMPT=${SYSTEM_PROMPT}
+        - TWITTER_BEARER_TOKEN=${TWITTER_BEARER_TOKEN}
+        - TWITTER_API_KEY=${TWITTER_API_KEY}
+        - TWITTER_API_SECRET=${TWITTER_API_SECRET}
+        - TWITTER_ACCESS_TOKEN=${TWITTER_ACCESS_TOKEN}
+        - TWITTER_ACCESS_TOKEN_SECRET=${TWITTER_ACCESS_TOKEN_SECRET}
+        - OPENAI_API_KEY=${OPENAI_API_KEY}
+        - OPENAI_MODEL=${OPENAI_MODEL}
+      restart: always
