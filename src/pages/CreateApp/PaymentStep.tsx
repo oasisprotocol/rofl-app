@@ -102,7 +102,11 @@ export const PaymentStep: FC<AgentStepProps> = ({
         </TopUp>
       )}
       {(hasEnoughBalance || isTestnet) && (
-        <CreateFormNavigation handleNext={handleNext} handleBack={handleBack} disabled={isTestnet} />
+        <CreateFormNavigation
+          handleNext={handleNext}
+          handleBack={handleBack}
+          disabled={import.meta.env.PROD && isTestnet}
+        />
       )}
     </CreateLayout>
   )
