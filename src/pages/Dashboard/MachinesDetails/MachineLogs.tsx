@@ -61,7 +61,7 @@ export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, inst
             </Button>
           </div>
 
-          <RawCode data={logs.join('\n')} className="h-[700px]" />
+          <RawCode data={logs.reverse().join('\n')} className="h-[700px]" />
         </>
       )}
     </>
