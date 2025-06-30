@@ -172,6 +172,7 @@ export const BuildStep: FC<AgentStepProps> = ({
                       multiplyNumber={Number(form.watch('number'))}
                       duration={form.watch('duration')}
                       onCostCalculated={handleCostCalculated}
+                      network={network}
                     />
                   ))}
                 </RadioGroup>
