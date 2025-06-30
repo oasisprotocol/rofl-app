@@ -20,7 +20,7 @@ type CreateLayoutProps = {
   hints?:
     | {
         title: string
-        description: string
+        description: ReactNode
       }[]
     | undefined
   selectedTemplateName?: string
