@@ -12,12 +12,25 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const { signMessageAsync } = useSignMessage()
   const chainId = useChainId()
 
-  const [token, setToken] = useState<string | null>(null)
+  const [token, _setToken] = useState<string | null>(
+    // TODO: possibly already expired or from another account. Currently detected by useInterval within a few seconds.
+    window.localStorage.getItem('jwt')
+  )
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const { refetch: refetchNonce } = useGetNonce(isConnected ? address : undefined)
   const { mutateAsync: loginMutationAsync } = useLogin()
+
+  const setToken = (token: string | null) => {
+    _setToken(token)
+    try {
+      if (token) window.localStorage.setItem('jwt', token)
+      else window.localStorage.removeItem('jwt')
+    } catch {
+      // Ignore failures like Safari incognito
+    }
+  }
 
   const getSiweMessage = useCallback((address: `0x${string}`, nonce: string, chainId: number): string => {
     const domain = PROD ? window.location.hostname : 'dev.rofl.app'
