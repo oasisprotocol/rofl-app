@@ -3,13 +3,14 @@ import { CreateLayout } from './CreateLayout'
 import { CreateFormHeader } from './CreateFormHeader'
 import { TgbotAgentForm } from './TgbotAgentForm'
 import { XAgentForm } from './XAgentForm'
-import { type AgentFormData, type XAgentFormData } from './types'
+import { HlCopyTraderForm } from './HlCopyTraderForm'
+import { type AgentFormData, type XAgentFormData, type HlCopyTraderFormData } from './types'
 
 type AgentStepProps = {
   handleNext: () => void
   handleBack: () => void
-  agent?: AgentFormData | XAgentFormData
-  setAppDataForm: (data: { agent: AgentFormData | XAgentFormData }) => void
+  agent?: AgentFormData | XAgentFormData | HlCopyTraderFormData
+  setAppDataForm: (data: { agent: AgentFormData | XAgentFormData | HlCopyTraderFormData }) => void
   selectedTemplateName?: string
   selectedTemplateId?: string
 }
@@ -52,6 +53,14 @@ export const AgentStep: FC<AgentStepProps> = ({
           handleBack={handleBack}
           agent={agent as XAgentFormData}
           setAppDataForm={setAppDataForm as (data: { agent: XAgentFormData }) => void}
+        />
+      )}
+      {selectedTemplateId === 'hl-copy-trader' && (
+        <HlCopyTraderForm
+          handleNext={handleNext}
+          handleBack={handleBack}
+          agent={agent as HlCopyTraderFormData}
+          setAppDataForm={setAppDataForm as (data: { agent: HlCopyTraderFormData }) => void}
         />
       )}
     </CreateLayout>
