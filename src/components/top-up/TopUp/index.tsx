@@ -30,6 +30,7 @@ import { maxUint256 } from 'viem'
 import { TopUpProgressDialog } from '../TopUpProgressDialog'
 import { useNetwork } from '../../../hooks/useNetwork.ts'
 import { sapphire, sapphireTestnet } from 'viem/chains'
+import nitroBoltIcon from '../NitroBoltIcon.svg'
 
 const bridgeFormSchema = z.object({
   sourceChain: z
@@ -669,6 +670,14 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
             selectedChain={chains?.find(chain => chain.chainId === watchedValues.sourceChain?.chainId)}
             selectedChainNativeToken={nativeTokens?.find(token => token.chainId)}
           />
+
+          <div className="flex items-center justify-center gap-0.5">
+            <p className="text-xs font-medium text-foreground leading-4">Powered by</p>
+            <div className="w-4 h-4">
+              <img src={nitroBoltIcon} alt="Router Nitro" className="h-4 w-4 mx-auto" />
+            </div>
+            <p className="text-xs font-medium text-foreground leading-4">Router Nitro</p>
+          </div>
 
           {children?.({
             isValid: isFormValid && !!quote && !isLoading,
