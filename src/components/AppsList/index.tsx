@@ -26,6 +26,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
         limit: pageLimit,
         offset: pageParam,
         admin: type === 'dashboard' ? address : undefined,
+        sort_by: type === 'dashboard' ? 'created_at_desc' : undefined,
       })
       return result
     },

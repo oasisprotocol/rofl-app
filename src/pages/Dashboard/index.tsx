@@ -23,6 +23,7 @@ export const Dashboard: FC = () => {
       limit: 1000,
       offset: 0,
       admin: address,
+      sort_by: 'created_at_desc',
     },
     {
       query: {
