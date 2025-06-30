@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { MyAppsEmptyState } from '../../pages/Dashboard/MyApps/emptyState'
 import { MachinesEmptyState } from '../../pages/Dashboard/Machines/emptyState'
 import { MetricCard } from './MetricCard'
@@ -6,9 +6,10 @@ import { SectionHeader } from './SectionHeader'
 import { useGetRuntimeRoflApps, useGetRuntimeRoflmarketInstances } from '../../nexus/api'
 import { useNetwork } from '../../hooks/useNetwork'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
-import { AppCard } from '../../components/AppCard'
 import { MachineCard } from '../../components/MachineCard'
 import { useAccount } from 'wagmi'
+import { DashboardAppsCards } from './DashboardAppCards'
+import { MetadataFormData } from '../CreateApp/types'
 
 const cardsLimit = 3
 const refetchInterval = 10000 // 10 seconds
@@ -16,6 +17,12 @@ const refetchInterval = 10000 // 10 seconds
 export const Dashboard: FC = () => {
   const network = useNetwork()
   const { address } = useAccount()
+  const persistedPendingApps: {
+    [address: string]: { [network: string]: { [key: string]: MetadataFormData } }
+  } = JSON.parse(window.localStorage.getItem('pendingApps') || '{}')
+  const [pendingApps, setPendingApps] = useState<{ [key: string]: MetadataFormData }>(
+    address ? persistedPendingApps[address]?.[network] || {} : {},
+  )
   const roflAppsQuery = useGetRuntimeRoflApps(
     network,
     'sapphire',
@@ -55,6 +62,32 @@ export const Dashboard: FC = () => {
   const runningAppsNumber = roflApps?.filter(app => app.num_active_instances > 0).length || 0
   const machinesNumber = machinesData?.data.total_count
   const runningMachinesNumber = roflMachines?.filter(machine => !machine.removed).length || 0
+  useEffect(() => {
+    if (pendingApps && roflApps && address) {
+      const roflAppIds = new Set(roflApps.map(app => app.id))
+      const updatedPendingApps = { ...pendingApps }
+      let hasChanges = false
+
+      Object.keys(pendingApps).forEach(pendingAppId => {
+        if (roflAppIds.has(pendingAppId)) {
+          delete updatedPendingApps[pendingAppId]
+          hasChanges = true
+        }
+      })
+
+      if (hasChanges) {
+        const updatedPersistedApps = {
+          ...persistedPendingApps,
+          [address]: {
+            ...persistedPendingApps[address],
+            [network]: updatedPendingApps,
+          },
+        }
+        window.localStorage.setItem('pendingApps', JSON.stringify(updatedPersistedApps))
+        setPendingApps(updatedPendingApps)
+      }
+    }
+  }, [roflApps, pendingApps, network, persistedPendingApps, address])
 
   return (
     <>
@@ -84,10 +117,14 @@ export const Dashboard: FC = () => {
             Array.from({ length: cardsLimit }).map((_, index) => (
               <Skeleton key={index} className="w-full h-[200px]" />
             ))}
-          {isFetched &&
-            roflApps
-              ?.slice(0, cardsLimit)
-              .map(app => <AppCard key={app.id} app={app} network={network} type="dashboard" />)}
+          {isFetched && (
+            <DashboardAppsCards
+              pendingApps={pendingApps}
+              roflApps={roflApps || []}
+              cardsLimit={cardsLimit}
+              network={network}
+            />
+          )}
         </div>
         <SectionHeader title="Machines" to="/dashboard/machines" disabled={machinesNumber === 0} />
         {isMachinesFetched && !machinesNumber && <MachinesEmptyState />}

@@ -8,6 +8,7 @@ import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/
 import { useNetwork } from '../../hooks/useNetwork'
 import { AnimatedStepText, HeaderSteps } from './AnimatedStepText'
 import { useArtifactUploads } from '../../hooks/useArtifactUploads'
+import { useAccount } from 'wagmi'
 import * as yaml from 'yaml'
 
 // TEMP
@@ -50,6 +51,7 @@ export const BootstrapState = {
 
 export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => {
   const network = useNetwork()
+  const { address } = useAccount()
   const [appId, setAppId] = useState('')
   const [buildTriggered, setBuildTriggered] = useState(false)
   const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.CreateAndDeploy)
@@ -77,6 +79,28 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
       setBootstrapStep(BootstrapState.Error)
     },
   })
+
+  useEffect(() => {
+    if (appId && address) {
+      const pendingApps = JSON.parse(window.localStorage.getItem('pendingApps') || '{}')
+      const addressData = pendingApps[address] || {}
+      const networkData = addressData[network] || {}
+
+      window.localStorage.setItem(
+        'pendingApps',
+        JSON.stringify({
+          ...pendingApps,
+          [address]: {
+            ...addressData,
+            [network]: {
+              ...networkData,
+              [appId]: { ...appData?.metadata },
+            },
+          },
+        }),
+      )
+    }
+  }, [appId, appData?.metadata, network, address])
 
   // Without useEffect onSuccess and onError will not be called
   useEffect(() => {
