@@ -4,6 +4,8 @@ import { useGetNonce, useLogin } from '../../backend/api'
 import { RoflAppBackendAuthContext } from './Context'
 import { createSiweMessage } from 'viem/siwe'
 
+const { PROD } = import.meta.env
+
 export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }) {
   const { address, isConnected } = useAccount()
   const { signMessageAsync } = useSignMessage()
@@ -17,7 +19,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const loginMutation = useLogin()
 
   const getSiweMessage = useCallback((address: `0x${string}`, nonce: string, chainId: number): string => {
-    const domain = window.location.hostname
+    const domain = PROD ? window.location.hostname : 'dev.rofl.app'
     const uri = `https://${domain}`
     const statement = 'Sign in to ROFL App Backend'
 
