@@ -1,8 +1,10 @@
 import { parse } from 'yaml'
-import tgbot from '../../../templates/tgbot/app.webp'
+import tgbotThumbnail from '../../../templates/tgbot/app.webp'
 import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw'
-import xagent from '../../../templates/x-agent/app.webp'
+import xagentThumbnail from '../../../templates/x-agent/app.webp'
 import xagentTemplate from '../../../templates/x-agent/rofl.yaml?raw'
+import hlCopyTraderThumbnail from '../../../templates/hl-copy-trader/app.webp'
+import hlCopyTraderTemplate from '../../../templates/hl-copy-trader/rofl.yaml?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
 import type { MetadataFormData } from './types'
 
@@ -11,6 +13,8 @@ const parsedTgbotTemplate = parse(tgbotTemplate)
 const { compose: tgbotCompose, ...tgbotRofl } = parsedTgbotTemplate
 const parsedXagentTemplate = parse(xagentTemplate)
 const { compose: xagentCompose, ...xagentRofl } = parsedXagentTemplate
+const parsedHlTemplate = parse(hlCopyTraderTemplate)
+const { compose: hlCompose, ...hlRofl } = parsedHlTemplate
 
 type ParsedTemplate = {
   name?: string
@@ -63,7 +67,7 @@ export const templates = [
   {
     name: parsedTgbotTemplate.name,
     description: parsedTgbotTemplate.description,
-    image: tgbot,
+    image: tgbotThumbnail,
     id: 'tgbot',
     initialValues: {
       metadata: extractMetadata(parsedTgbotTemplate),
@@ -78,7 +82,7 @@ export const templates = [
   {
     name: parsedXagentTemplate.name,
     description: parsedXagentTemplate.description,
-    image: xagent,
+    image: xagentThumbnail,
     id: 'x-agent',
     initialValues: {
       metadata: extractMetadata(parsedXagentTemplate),
@@ -89,6 +93,21 @@ export const templates = [
       rofl: xagentRofl,
     },
     templateParser: createTemplateParser(xagentRofl),
+  },
+  {
+    name: parsedHlTemplate.name,
+    description: parsedHlTemplate.description,
+    image: hlCopyTraderThumbnail,
+    id: 'hl-copy-trader',
+    initialValues: {
+      metadata: extractMetadata(parsedHlTemplate),
+      build: defaultBuildConfig,
+    },
+    yaml: {
+      compose: hlCompose,
+      rofl: hlRofl,
+    },
+    templateParser: createTemplateParser(hlRofl),
   },
 ]
 
