@@ -53,7 +53,8 @@ export const AgentStepHints: FC<AgentStepHintsProps> = ({ selectedTemplateId }) 
                 <DialogTitle>README.md</DialogTitle>
                 <DialogDescription>Docs provided by the template authors.</DialogDescription>
               </DialogHeader>
-              <div className="flex-1 overflow-y-auto pr-2">
+              {/* https://github.com/tailwindlabs/tailwindcss-typography */}
+              <div className="flex-1 overflow-y-auto pr-2 prose prose-sm dark:prose-invert max-w-full">
                 <ReactMarkdown>{markdown}</ReactMarkdown>
               </div>
             </DialogContent>
