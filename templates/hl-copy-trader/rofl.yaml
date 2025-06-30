@@ -43,7 +43,7 @@ secrets:
 compose: |
   services:
     hl-copy-trader:
-      image: docker.io/ahmedatoasis/hl-copy-trader@sha256:d86c8f871e5a883946476fca1b226ad1437e149ff7bf0e563d4209264ba5988c
+      image: docker.io/ahmedatoasis/hl-copy-trader@sha256:bab5c3602da987bcde1372438b2dd7f1692badbf0e6969dc553bc28119498588
       build:
         context: .
         dockerfile: Dockerfile

@@ -1,6 +1,6 @@
 import { parse } from 'yaml'
 import tgbotThumbnail from '../../../templates/tgbot/app.webp'
-import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw'
+import tgbotTemplate from '../../../templates/tgbot/rofl.yaml?raw'
 import xagentThumbnail from '../../../templates/x-agent/app.webp'
 import xagentTemplate from '../../../templates/x-agent/rofl.yaml?raw'
 import hlCopyTraderThumbnail from '../../../templates/hl-copy-trader/app.webp'
