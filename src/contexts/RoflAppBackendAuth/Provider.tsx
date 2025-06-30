@@ -16,7 +16,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const [error, setError] = useState<string | null>(null)
 
   const { refetch: refetchNonce } = useGetNonce(isConnected ? address : undefined)
-  const loginMutation = useLogin()
+  const { mutateAsync: loginMutationAsync } = useLogin()
 
   const getSiweMessage = useCallback((address: `0x${string}`, nonce: string, chainId: number): string => {
     const domain = PROD ? window.location.hostname : 'dev.rofl.app'
@@ -53,7 +53,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
       const message = getSiweMessage(address, freshNonce, chainId || 1)
       const signature = await signMessageAsync({ message })
 
-      const jwtToken = await loginMutation.mutateAsync({
+      const jwtToken = await loginMutationAsync({
         message,
         signature,
       })
@@ -68,7 +68,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
     } finally {
       setIsLoading(false)
     }
-  }, [address, isConnected, refetchNonce, getSiweMessage, chainId, signMessageAsync, loginMutation])
+  }, [address, isConnected, refetchNonce, getSiweMessage, chainId, signMessageAsync, loginMutationAsync])
 
   const logout = useCallback(() => {
     setToken(null)
