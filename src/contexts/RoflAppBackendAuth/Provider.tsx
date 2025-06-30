@@ -78,7 +78,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   }, [])
 
   useInterval(() => {
-    if (token && isJWTExpired(token)) {
+    if (token && address && isJWTExpired(token, address)) {
       logout() // Clear token if account switches or token expires
     }
   }, 10_000) // Should be less than buffer in isJWTExpired
@@ -97,8 +97,10 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   return <RoflAppBackendAuthContext.Provider value={value}>{children}</RoflAppBackendAuthContext.Provider>
 }
 
-function isJWTExpired(jwtString: string) {
+function isJWTExpired(jwtString: string, address: string) {
   const jwt = JSON.parse(atob(jwtString.split('.')[1]))
+  if (jwt.address !== address) return true
+
   // Based on https://github.com/DD-DeCaF/caffeine-vue/blob/da133e7c8ac5e31e4b94d2f70ddad4d26c9cbc46/src/store/modules/session.ts#L133-L144
   // Buffer is the time before *actual* expiry when the token
   // will be considered expired, to account for clock skew and
