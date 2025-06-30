@@ -13,9 +13,17 @@ type MachineLogsProps = {
   instance: string
   logs: string[]
   setLogs: (logs: string[]) => void
+  isRemoved?: boolean
 }
 
-export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, instance, logs, setLogs }) => {
+export const MachineLogs: FC<MachineLogsProps> = ({
+  schedulerRak,
+  provider,
+  instance,
+  logs,
+  setLogs,
+  isRemoved,
+}) => {
   const { api: schedulerApi } = useScheduler(schedulerRak, provider)
   const { fetchMachineLogs, isAuthenticating, isLoadingLogs } = useMachineAccess(
     schedulerApi,
@@ -31,6 +39,15 @@ export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, inst
     }
   }
   const hasLogs = logs.length > 0
+
+  if (isRemoved) {
+    return (
+      <EmptyState
+        title="Machine has been removed"
+        description="Logs are not available for machines that have been removed."
+      ></EmptyState>
+    )
+  }
 
   return (
     <>
