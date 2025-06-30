@@ -370,7 +370,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
           return
         }
 
-        const expandedAmount = NumberUtils.expandAmount(amount)
+        const expandedAmount = NumberUtils.expandAmount(amount, selectedSourceToken.decimals)
 
         const quoteResponse = await getQuote({
           fromTokenChainId: sourceChain.chainId,
