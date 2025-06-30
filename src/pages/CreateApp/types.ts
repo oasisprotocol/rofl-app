@@ -78,6 +78,19 @@ export const xAgentFormSchema = z.object({
   }),
 })
 
+export const hlCopyTraderFormSchema = z.object({
+  COPY_TRADE_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
+    message: 'Please enter a valid Ethereum address (0x...).',
+  }),
+  WITHDRAW_FUNDS_TO: z
+    .string()
+    .regex(/^0x[a-fA-F0-9]{40}$/, {
+      message: 'Please enter a valid Ethereum address (0x...).',
+    })
+    .optional()
+    .or(z.literal('')),
+})
+
 export const buildFormSchema = z
   .object({
     provider: z.string().min(1, {
@@ -113,12 +126,13 @@ export type TemplateFormData = string
 export type MetadataFormData = z.infer<typeof metadataFormSchema>
 export type AgentFormData = z.infer<typeof tgbotFormSchema>
 export type XAgentFormData = z.infer<typeof xAgentFormSchema>
+export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
 export type BuildFormData = z.infer<typeof buildFormSchema>
 
 export type AppData = {
   template?: string
   metadata?: MetadataFormData
-  agent?: AgentFormData | XAgentFormData
+  agent?: AgentFormData | XAgentFormData | HlCopyTraderFormData
   build?: BuildFormData
   payment?: Record<string, unknown>
 }
