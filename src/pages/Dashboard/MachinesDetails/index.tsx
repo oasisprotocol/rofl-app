@@ -135,6 +135,7 @@ export const MachinesDetails: FC = () => {
                 instance={machine.id}
                 logs={logs}
                 setLogs={setLogs}
+                isRemoved={machine.removed}
               />
             )}
           </TabsContent>
