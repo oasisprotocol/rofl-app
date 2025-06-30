@@ -10,9 +10,9 @@ type MetadataFormFieldsProps = {
 export const MetadataFormFields: FC<MetadataFormFieldsProps> = ({ control }) => {
   return (
     <div className="space-y-6">
-      <InputFormField control={control} name="name" label="Name" placeholder="ROFL App name" />
+      <InputFormField control={control} name="name" label="Name" placeholder="App name" />
 
-      <InputFormField control={control} name="author" label="Author" placeholder="Rofl App Creator" />
+      <InputFormField control={control} name="author" label="Author" placeholder="App Creator" />
 
       <InputFormField
         control={control}
@@ -22,9 +22,9 @@ export const MetadataFormFields: FC<MetadataFormFieldsProps> = ({ control }) => 
         type="textarea"
       />
 
-      <InputFormField control={control} name="version" label="Version" placeholder="Rofl App version" />
+      <InputFormField control={control} name="version" label="Version" placeholder="App version" />
 
-      <InputFormField control={control} name="license" label="license" placeholder="MIT, Apache-2.0, etc." />
+      <InputFormField control={control} name="license" label="License" placeholder="MIT, Apache-2.0, etc." />
 
       <InputFormField
         control={control}

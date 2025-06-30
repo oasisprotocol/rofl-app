@@ -34,7 +34,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
   selectedTemplateName,
 }) => {
   const sidebarItems = [
-    { label: 'ROFL Metadata', active: currentStep === 1 },
+    { label: 'Metadata', active: currentStep === 1 },
     { label: 'Agent Config', active: currentStep === 2 },
     { label: 'Build and Deploy', active: currentStep === 3 },
     { label: 'Payment', active: currentStep === 4 },
@@ -49,7 +49,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
           <SidebarContent className="bg-sidebar-background">
             <SidebarGroup>
               <SidebarMenu>
-                <span className="text-xl font-semibold text-white">ROFL App Creation</span>
+                <span className="text-xl font-semibold text-white">App Creation</span>
                 <span className="text-sm text-muted-foreground pb-8">with {selectedTemplateName}</span>
                 {sidebarItems.map((item, index) => (
                   <SidebarItemLabel

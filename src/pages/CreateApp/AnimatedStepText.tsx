@@ -38,7 +38,7 @@ const textContent = {
       'Nulla pretium dictum metus, in fringilla arcu tincidunt ut. Duis eget turpis at magna tempor interdum at ac ante.',
   },
   success: {
-    header: 'ROFL App will be ready in 5 minutes!',
+    header: 'App will be ready in 5 minutes!',
     description: (
       <>
         <div>
