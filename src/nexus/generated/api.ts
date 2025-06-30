@@ -66,6 +66,7 @@ import GetRuntimeRoflmarketProvidersAddressInstancesIdMutator from '../replaceNe
 import GetRuntimeRoflmarketInstancesMutator from '../replaceNetworkWithBaseURL'
 import GetLayerStatsTxVolumeMutator from '../replaceNetworkWithBaseURL'
 import GetLayerStatsActiveAccountsMutator from '../replaceNetworkWithBaseURL'
+import * as oasisRT from '@oasisprotocol/client-rt'
 export type Layer = (typeof Layer)[keyof typeof Layer]
 
 export const Layer = {
@@ -1837,7 +1838,12 @@ export type RoflMarketProviderList = List & RoflMarketProviderListAllOf
 /**
  * The offered resources by this offer.
  */
-export type RoflMarketOfferResources = { [key: string]: unknown }
+export type RoflMarketOfferResources = {
+  cpus: number /* manually changed */
+  memory: number /* manually changed */
+  storage: number /* manually changed */
+  tee: oasisRT.types.RoflmarketTeeType /* manually changed */
+}
 
 /**
  * The payment configuration for this offer.

@@ -67,6 +67,12 @@ export const Create: FC = () => {
           build={appData?.build}
           setAppDataForm={setAppDataForm}
           selectedTemplateName={selectedTemplate?.name}
+          selectedTemplateRequirements={{
+            tee: selectedTemplate?.yaml.rofl.tee as 'tdx' | 'sgx' | undefined,
+            cpus: selectedTemplate?.yaml.rofl.resources.cpus as number | undefined,
+            memory: selectedTemplate?.yaml.rofl.resources.memory as number | undefined,
+            storage: selectedTemplate?.yaml.rofl.resources.storage.size as number | undefined,
+          }}
         />
       )}
       {currentStep === 4 && (
