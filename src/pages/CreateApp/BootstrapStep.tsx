@@ -8,8 +8,8 @@ import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/
 import { useNetwork } from '../../hooks/useNetwork'
 import { AnimatedStepText, HeaderSteps } from './AnimatedStepText'
 import { useArtifactUploads } from '../../hooks/useArtifactUploads'
-import { useAccount } from 'wagmi'
 import * as yaml from 'yaml'
+import { usePendingApps } from '../../hooks/usePendingApps'
 
 // TEMP
 export type Template = {
@@ -51,11 +51,11 @@ export const BootstrapState = {
 
 export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => {
   const network = useNetwork()
-  const { address } = useAccount()
   const [appId, setAppId] = useState('')
   const [buildTriggered, setBuildTriggered] = useState(false)
   const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.CreateAndDeploy)
   const { token } = useRoflAppBackendAuthContext()
+  const { addPendingApp } = usePendingApps()
 
   const createAndDeployAppMutation = useCreateAndDeployApp()
 
@@ -81,26 +81,10 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
   })
 
   useEffect(() => {
-    if (appId && address) {
-      const pendingApps = JSON.parse(window.localStorage.getItem('pendingApps') || '{}')
-      const addressData = pendingApps[address] || {}
-      const networkData = addressData[network] || {}
-
-      window.localStorage.setItem(
-        'pendingApps',
-        JSON.stringify({
-          ...pendingApps,
-          [address]: {
-            ...addressData,
-            [network]: {
-              ...networkData,
-              [appId]: { ...appData?.metadata },
-            },
-          },
-        }),
-      )
+    if (appId && appData?.metadata) {
+      addPendingApp(appId, appData.metadata)
     }
-  }, [appId, appData?.metadata, network, address])
+  }, [appId, appData?.metadata, addPendingApp])
 
   // Without useEffect onSuccess and onError will not be called
   useEffect(() => {
