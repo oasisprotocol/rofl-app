@@ -72,7 +72,17 @@ export const BuildStep: FC<AgentStepProps> = ({
   )
   const offers = providersOffersQuery.data?.data.offers.filter(
     offer => offer.resources.tee === oasisRT.types.RoflmarketTeeType.TDX,
-  )
+  ).sort(sortOffersByPaymentTerms)
+
+  useEffect(() => {
+    form.resetField('resources') // Clear offer selection if provider changes
+  }, [providerValue, form])
+
+  useEffect(() => {
+    if (!form.getValues('resources') && offers && offers.length > 0) {
+      form.setValue('resources', offers[0].id) // Preselect smallest offer
+    }
+  }, [offers, form])
 
   // API terms are like 1=hour, 2=month, 3=year, but only hour is mandatory
   // Testnet provider provide only hourly terms
@@ -164,7 +174,7 @@ export const BuildStep: FC<AgentStepProps> = ({
             render={({ field, fieldState }) => (
               <>
                 <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
-                  {offers?.sort(sortOffersByPaymentTerms).map(offer => (
+                  {offers?.map(offer => (
                     <BuildStepOffers
                       key={offer.id}
                       offer={offer}
