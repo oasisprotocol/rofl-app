@@ -40,6 +40,15 @@ export const MachineLogs: FC<MachineLogsProps> = ({
   }
   const hasLogs = logs.length > 0
 
+  if (!schedulerRak) {
+    return (
+      <EmptyState
+        title="Waiting for scheduler"
+        description="Logs will be available once the scheduler is ready."
+      ></EmptyState>
+    )
+  }
+
   if (isRemoved) {
     return (
       <EmptyState
