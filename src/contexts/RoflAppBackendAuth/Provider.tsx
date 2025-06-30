@@ -3,6 +3,7 @@ import { useAccount, useSignMessage, useChainId } from 'wagmi'
 import { useGetNonce, useLogin } from '../../backend/api'
 import { RoflAppBackendAuthContext } from './Context'
 import { createSiweMessage } from 'viem/siwe'
+import { useInterval } from './useInterval'
 
 const { PROD } = import.meta.env
 
@@ -76,6 +77,12 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
     console.log('SIWE Authentication logged out')
   }, [])
 
+  useInterval(() => {
+    if (token && isJWTExpired(token)) {
+      logout() // Clear token if account switches or token expires
+    }
+  }, 10_000) // Should be less than buffer in isJWTExpired
+
   const isAuthenticated = !!token
 
   const value = {
@@ -88,4 +95,14 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   }
 
   return <RoflAppBackendAuthContext.Provider value={value}>{children}</RoflAppBackendAuthContext.Provider>
+}
+
+function isJWTExpired(jwtString: string) {
+  const jwt = JSON.parse(atob(jwtString.split('.')[1]))
+  // Based on https://github.com/DD-DeCaF/caffeine-vue/blob/da133e7c8ac5e31e4b94d2f70ddad4d26c9cbc46/src/store/modules/session.ts#L133-L144
+  // Buffer is the time before *actual* expiry when the token
+  // will be considered expired, to account for clock skew and
+  // service-to-service requests delays.
+  const buffer = 60_000
+  return new Date(jwt.exp * 1000 - buffer) <= new Date()
 }
