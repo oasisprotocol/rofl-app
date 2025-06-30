@@ -17,6 +17,7 @@ type BuildStepOffersProps = {
   multiplyNumber?: number
   duration: BuildFormData['duration']
   onCostCalculated?: (roseCostInBaseUnits: string) => void
+  network: 'mainnet' | 'testnet'
 }
 
 export const BuildStepOffers: FC<BuildStepOffersProps> = ({
@@ -25,6 +26,7 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
   fieldValue,
   duration,
   onCostCalculated,
+  network,
 }) => {
   const ticker = useTicker()
   const targetTerms =
@@ -32,7 +34,13 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
   const targetTermsPrice = (offer.payment?.native as { terms?: Record<oasisRT.types.RoflmarketTerm, string> })
     ?.terms?.[targetTerms]
   const multiplyBy = duration === 'days' ? multiplyNumber * 24 : multiplyNumber
-  const { data: rosePrice, isLoading: isLoadingRosePrice, isFetched: isFetchedRosePrice } = useGetRosePrice()
+  const {
+    data: rosePrice,
+    isLoading: isLoadingRosePrice,
+    isFetched: isFetchedRosePrice,
+  } = useGetRosePrice({
+    enabled: network !== 'testnet',
+  })
   const roseCostInBaseUnits = multiplyBaseUnits(targetTermsPrice || '0', multiplyBy)
   const roseCost = fromBaseUnits(roseCostInBaseUnits)
 

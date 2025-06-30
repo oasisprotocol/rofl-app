@@ -42,7 +42,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
       <SelectFormField
         control={form.control}
         name="OLLAMA_MODEL"
-        label="Select the LLM running inside your TEE bot"
+        label="LLM running inside your TEE bot"
         placeholder="Select a model"
         options={[
           { value: 'gemma3:1b', label: 'Gemma 3 1B' },

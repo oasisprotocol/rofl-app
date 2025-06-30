@@ -8,7 +8,7 @@ type GetRosePriceResponse = {
 
 const staleTime = 1000 * 60 * 3 // 3 minutes
 
-export function useGetRosePrice() {
+export function useGetRosePrice(options?: { enabled?: boolean }) {
   return useQuery<number, AxiosError<unknown>>({
     queryKey: ['rosePrice'],
     queryFn: () =>
@@ -22,5 +22,6 @@ export function useGetRosePrice() {
         .then(({ data }) => data['oasis-network'].usd),
     staleTime,
     throwOnError: false,
+    enabled: options?.enabled ?? true,
   })
 }

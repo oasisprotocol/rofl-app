@@ -162,14 +162,24 @@ export const MainLayout: FC = () => {
             <div className="bg-sidebar-accent p-4 rounded-md text-sm text-foreground">
               <span className="font-bold">Running in Beta.</span>
               <br />
-              <a href="#" target="_blank" rel="noopener noreferrer" className="underline text-foreground">
-                Click to provide feedback.
+              <a
+                href="https://forms.gle/yewQDdMzNg81wKtw9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-foreground"
+              >
+                Provide feedback here
               </a>
             </div>
             <div className="bg-sidebar-accent p-4 rounded-md text-sm text-foreground">
               <span className="font-bold">Need Support?</span>
               <br />
-              <a href="#" target="_blank" rel="noopener noreferrer" className="underline text-foreground">
+              <a
+                href="https://oasis.io/discord"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-foreground"
+              >
                 Speak to our devs.
               </a>
             </div>
