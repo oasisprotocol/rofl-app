@@ -13,6 +13,8 @@ import { ViewMetadataState, ViewSecretsState } from '../pages/Dashboard/AppDetai
 import { useState } from 'react'
 import { useBlockNavigatingAway } from '../pages/CreateApp/useBlockNavigatingAway'
 import { toast } from 'sonner'
+import { BuildFormData } from '../types/build-form.ts'
+import { convertToDurationTerms } from './helpers.ts'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -266,24 +268,10 @@ export function useCreateAndDeployApp() {
       const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
       const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId)
 
-      const duration =
-        appData.build!.duration === 'months'
-          ? {
-              term: oasisRT.types.RoflmarketTerm.MONTH,
-              term_count: appData.build!.number,
-            }
-          : appData.build!.duration === 'days'
-            ? {
-                term: oasisRT.types.RoflmarketTerm.HOUR,
-                term_count: appData.build!.number * 24,
-              }
-            : appData.build!.duration === 'hours'
-              ? {
-                  term: oasisRT.types.RoflmarketTerm.HOUR,
-                  term_count: appData.build!.number,
-                }
-              : undefined
-      if (!duration) throw new Error('Invalid duration')
+      const duration = convertToDurationTerms({
+        duration: appData.build!.duration,
+        number: appData.build!.number,
+      })
 
       let hash
       console.log('create app?')
@@ -593,6 +581,44 @@ export function useMachineExecuteStopCmd() {
       )
       // Doesn't wait for transaction receipt
       // Takes about 1 minute to complete after transaction receipt
+    },
+  })
+}
+
+export function useMachineTopUp() {
+  const wagmiConfig = useConfig()
+  const { sendTransactionAsync } = useSendTransaction()
+  return useMutation<
+    void,
+    AxiosError<unknown>,
+    { machineId: string; provider: string; network: 'mainnet' | 'testnet'; build: BuildFormData }
+  >({
+    mutationFn: async ({ machineId, provider, network, build }) => {
+      const duration = convertToDurationTerms({
+        duration: build.duration,
+        number: build.number,
+      })
+
+      const sapphireRuntimeId =
+        network === 'mainnet'
+          ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
+          : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
+
+      const { term, term_count } = duration
+      const hash = await sendTransactionAsync(
+        roflmarket
+          .callInstanceTopUp()
+          .setBody({
+            provider: oasis.staking.addressFromBech32(provider),
+            id: oasis.misc.fromHex(machineId) as oasisRT.types.MachineID,
+            term,
+            term_count,
+          })
+          .toSubcall(),
+      )
+
+      await waitForTransactionReceipt(wagmiConfig, { hash })
     },
   })
 }

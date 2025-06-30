@@ -3,13 +3,13 @@ import { Label } from '@oasisprotocol/ui-library/src/components/ui/label'
 import { RadioGroupItem } from '@oasisprotocol/ui-library/src/components/ui/radio-group'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { fromBaseUnits, multiplyBaseUnits } from '../../utils/number-utils'
-import { MachineResources } from '../../components/MachineResources'
+import { MachineResources } from '../MachineResources'
 import { useGetRosePrice } from '../../coin-gecko/api'
 import { type RoflMarketOffer } from '../../nexus/api'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import * as oasisRT from '@oasisprotocol/client-rt'
-import { type BuildFormData } from './types'
 import { useTicker } from '../../hooks/useTicker'
+import { BuildFormData } from '../../types/build-form.ts'
 
 type BuildStepOffersProps = {
   offer: RoflMarketOffer
@@ -18,6 +18,7 @@ type BuildStepOffersProps = {
   duration: BuildFormData['duration']
   onCostCalculated?: (roseCostInBaseUnits: string) => void
   network: 'mainnet' | 'testnet'
+  disabled: boolean
 }
 
 export const BuildStepOffers: FC<BuildStepOffersProps> = ({
@@ -27,6 +28,7 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
   duration,
   onCostCalculated,
   network,
+  disabled,
 }) => {
   const ticker = useTicker()
   const targetTerms =
@@ -52,7 +54,7 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
 
   return (
     <div key={offer.id} className="relative">
-      <RadioGroupItem value={offer.id} id={offer.id} className="peer sr-only" />
+      <RadioGroupItem value={offer.id} id={offer.id} className="peer sr-only" disabled={disabled} />
       <Label
         htmlFor={offer.id}
         className={cn(
@@ -79,7 +81,7 @@ export const BuildStepOffers: FC<BuildStepOffersProps> = ({
             <>
               {roseCost} {ticker}
               <span className="text-muted-foreground text-sm">
-                {isLoadingRosePrice && <Skeleton className="w-full h-[20px] w-[80px]" />}
+                {isLoadingRosePrice && <Skeleton className="h-[20px] w-[80px]" />}
                 {isFetchedRosePrice && rosePrice && (
                   <span>
                     ~

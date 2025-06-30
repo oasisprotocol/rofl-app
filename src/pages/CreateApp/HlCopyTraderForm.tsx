@@ -1,9 +1,9 @@
 import { type FC } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { InputFormField } from './InputFormField'
 import { CreateFormNavigation } from './CreateFormNavigation'
 import { hlCopyTraderFormSchema, type HlCopyTraderFormData } from './types'
+import { InputFormField } from '../../components/InputFormField'
 
 type HlCopyTraderFormProps = {
   handleNext: () => void

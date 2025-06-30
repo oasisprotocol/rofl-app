@@ -21,6 +21,7 @@ import { sapphire } from 'viem/chains'
 
 import './index.css'
 import '@rainbow-me/rainbowkit/styles.css'
+import { MachineTopUp } from './pages/Dashboard/MachinesDetails/MachineTopUp.tsx'
 
 const queryClient = new QueryClient()
 const rainbowKitTheme: Theme = {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
           {
             path: 'machines/:provider/instances/:id',
             element: <MachinesDetails />,
+          },
+          {
+            path: 'machines/:provider/instances/:id/top-up',
+            element: <MachineTopUp />,
           },
         ],
       },
