@@ -149,7 +149,7 @@ export const AppDetails: FC = () => {
                     <TabsList className="w-full md:w-auto">
                       <TabsTrigger value="details">Details</TabsTrigger>
                       <TabsTrigger value="secrets">Secrets</TabsTrigger>
-                      <TabsTrigger value="compose">Compose</TabsTrigger>
+                      <TabsTrigger value="compose">Manifest</TabsTrigger>
                     </TabsList>
                   </div>
                 </div>
