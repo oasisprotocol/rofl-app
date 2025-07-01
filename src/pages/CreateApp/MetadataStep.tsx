@@ -48,8 +48,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({
       hints={[
         {
           title: 'Tips and Tricks',
-          description:
-            'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
+          description: 'All data you provide here will be visible publicly on-chain.',
         },
       ]}
       selectedTemplateName={selectedTemplateName}

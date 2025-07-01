@@ -304,7 +304,6 @@ export function useCreateAndDeployApp() {
               'net.oasis.rofl.description': appData.metadata?.description || '',
               'net.oasis.rofl.version': appData.metadata?.version || '',
               'net.oasis.rofl.homepage': appData.metadata?.homepage || '',
-              'net.oasis.rofl.license': appData.metadata?.license || '',
             },
           })
           .toSubcall(),
@@ -451,7 +450,6 @@ export function useUpdateApp() {
               'net.oasis.rofl.description': metadataViewState.metadata?.description || '',
               'net.oasis.rofl.version': metadataViewState.metadata?.version || '',
               'net.oasis.rofl.homepage': metadataViewState.metadata?.homepage || '',
-              'net.oasis.rofl.license': metadataViewState.metadata?.license || '',
             },
             secrets: secretsViewState.isDirty
               ? Object.fromEntries(

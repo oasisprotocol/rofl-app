@@ -25,7 +25,6 @@ function setDefaultMetadataViewState(metadata: RoflAppMetadata | undefined = {})
       description: (metadata['net.oasis.rofl.description'] as string) || '',
       version: (metadata['net.oasis.rofl.version'] as string) || '',
       homepage: (metadata['net.oasis.rofl.homepage'] as string) || '',
-      license: (metadata['net.oasis.rofl.license'] as string) || '',
     },
   }
 }
