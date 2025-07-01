@@ -7,8 +7,6 @@ import { useCreateAndDeployApp } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { useNetwork } from '../../hooks/useNetwork'
 import { AnimatedStepText, HeaderSteps } from './AnimatedStepText'
-import { useArtifactUploads } from '../../hooks/useArtifactUploads'
-import * as yaml from 'yaml'
 
 // TEMP
 export type Template = {
@@ -43,40 +41,17 @@ type BootstrapState = (typeof BootstrapState)[keyof typeof BootstrapState]
 
 export const BootstrapState = {
   CreateAndDeploy: 'create_and_deploy', // look at createAndDeployAppMutation.progress.currentStep
-  Artifacts: 'artifacts',
   Success: 'success',
   Error: 'error',
 } as const
 
 export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => {
   const network = useNetwork()
-  const [appId, setAppId] = useState('')
   const [buildTriggered, setBuildTriggered] = useState(false)
   const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.CreateAndDeploy)
   const { token } = useRoflAppBackendAuthContext()
 
   const createAndDeployAppMutation = useCreateAndDeployApp()
-
-  const rofl =
-    appId && template && appData?.metadata ? template.templateParser(appData.metadata, network, appId) : {}
-  const roflYaml = yaml.stringify(rofl)
-  const composeYaml = template?.yaml.compose || ''
-
-  useArtifactUploads({
-    token,
-    appId,
-    roflYaml,
-    composeYaml,
-    enabled: bootstrapStep === BootstrapState.Artifacts && !!appId && !!token && !!appData && !!template,
-    onSuccess: () => {
-      console.log('Artifact uploads completed successfully')
-      setBootstrapStep(BootstrapState.Success)
-    },
-    onError: error => {
-      console.error('Failed to upload artifacts:', error)
-      setBootstrapStep(BootstrapState.Error)
-    },
-  })
 
   // Without useEffect onSuccess and onError will not be called
   useEffect(() => {
@@ -91,9 +66,8 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
         },
         {
           onSuccess: returnedAppId => {
-            setAppId(returnedAppId)
             console.log('App created and deployed successfully with ID:', returnedAppId)
-            setBootstrapStep(BootstrapState.Artifacts)
+            setBootstrapStep(BootstrapState.Success)
           },
           onError: error => {
             console.log('Failed to create and deploy app:', error)
@@ -108,7 +82,7 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
     <Layout headerContent={<Header />} footerContent={<Footer />}>
       <HeaderSteps progress={createAndDeployAppMutation.progress} />
       <div className="w-full px-8 py-12 flex flex-col items-center justify-center">
-        {(bootstrapStep === 'create_and_deploy' || bootstrapStep === 'artifacts') && (
+        {bootstrapStep === 'create_and_deploy' && (
           <div className="w-full flex items-center justify-center mb-8">
             {/* mitigate webm black background */}
             <video className="mix-blend-lighten" width="310" height="310" autoPlay muted loop playsInline>

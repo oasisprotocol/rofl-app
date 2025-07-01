@@ -5,11 +5,7 @@ import { CheckCircle } from 'lucide-react'
 import { useCreateAndDeployApp } from '../../backend/api'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
-type Step =
-  | ReturnType<typeof useCreateAndDeployApp>['progress']['currentStep']
-  | 'artifacts'
-  | 'success'
-  | 'error'
+type Step = ReturnType<typeof useCreateAndDeployApp>['progress']['currentStep'] | 'success' | 'error'
 
 const textContent = {
   creating: {
@@ -31,11 +27,6 @@ const textContent = {
     header: 'Deploying App to Machine...',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
-  },
-  artifacts: {
-    header: 'Building artifacts',
-    description:
-      'Nulla pretium dictum metus, in fringilla arcu tincidunt ut. Duis eget turpis at magna tempor interdum at ac ante.',
   },
   success: {
     header: 'App will be ready in 5 minutes!',

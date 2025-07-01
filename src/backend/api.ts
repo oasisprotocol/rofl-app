@@ -314,6 +314,9 @@ export function useCreateAndDeployApp() {
       const compose = template.yaml.compose
       console.log('Build?')
       setCurrentStep('building')
+      // TODO: wait + handle error?
+      uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
+      uploadArtifact({ id: `${appId}-compose-yaml`, file: new Blob([compose]) }, token)
       const { task_id } = await buildRofl({ manifest, compose }, token)
       const buildResults = await waitForBuildResults(task_id, token)
       console.log('Build results:', buildResults)
