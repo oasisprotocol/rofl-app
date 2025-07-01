@@ -19,6 +19,7 @@ import { MachineTopUp } from './MachineTopUp'
 import { MachineStop } from './MachineStop'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { MachineLogs } from './MachineLogs'
+import { toast } from 'sonner'
 
 export const MachinesDetails: FC = () => {
   const [logs, setLogs] = useState<string[]>([])
@@ -81,6 +82,7 @@ export const MachinesDetails: FC = () => {
                         provider: machine.provider,
                         network,
                       })
+                      toast.loading('Machine is restarting (~1min)', { duration: 1 * 60 * 1000 })
                     }}
                   />
                   <MachineStop
