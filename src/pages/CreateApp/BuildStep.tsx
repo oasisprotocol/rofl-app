@@ -33,21 +33,8 @@ export const BuildStep: FC<AgentStepProps> = ({
   }
 
   return (
-    <CreateLayout
-      currentStep={3}
-      hints={[
-        {
-          title: 'Tips and Tricks',
-          description:
-            'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
-        },
-      ]}
-      selectedTemplateName={selectedTemplateName}
-    >
-      <CreateFormHeader
-        title="Build and Deploy"
-        description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
-      />
+    <CreateLayout currentStep={3} selectedTemplateName={selectedTemplateName}>
+      <CreateFormHeader title="Configure machine" />
 
       <BuildForm
         onSubmit={onSubmit}

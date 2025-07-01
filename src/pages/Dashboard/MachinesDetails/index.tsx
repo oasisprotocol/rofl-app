@@ -102,7 +102,7 @@ export const MachinesDetails: FC = () => {
               {isLoading && <Skeleton className="w-full h-[200px]" />}
               {isFetched && machine && (
                 <>
-                  <DetailsSectionRow label="App Running" className=" py-6 border-b">
+                  <DetailsSectionRow label="Active app" className=" py-6 border-b">
                     <Link to={`/dashboard/apps/${machine.deployment?.app_id}`} className="text-primary">
                       <MachineAppDetails appId={machine.deployment?.app_id as string} />
                     </Link>

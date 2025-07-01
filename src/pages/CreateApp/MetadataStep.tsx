@@ -43,20 +43,10 @@ export const MetadataStep: FC<MetadataStepProps> = ({
   }
 
   return (
-    <CreateLayout
-      currentStep={1}
-      hints={[
-        {
-          title: 'Tips and Tricks',
-          description: 'All data you provide here will be visible publicly on-chain.',
-        },
-      ]}
-      selectedTemplateName={selectedTemplateName}
-    >
+    <CreateLayout currentStep={1} selectedTemplateName={selectedTemplateName}>
       <CreateFormHeader
-        title="Public Metadata"
-        description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet
-          vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
+        title="Input Metadata"
+        description="All data you provide here will be visible publicly on-chain."
       />
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">

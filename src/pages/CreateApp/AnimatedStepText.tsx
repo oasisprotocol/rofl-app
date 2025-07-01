@@ -9,24 +9,20 @@ type Step = ReturnType<typeof useCreateAndDeployApp>['progress']['currentStep'] 
 
 const textContent = {
   creating: {
-    header: 'Creating App...',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
+    header: 'Creating app...',
+    description: '',
   },
   building: {
-    header: 'Building App...',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
+    header: 'Building app...',
+    description: '',
   },
   updating: {
-    header: 'Updating App Secrets...',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
+    header: 'Updating app secrets...',
+    description: '',
   },
   deploying: {
-    header: 'Deploying App to Machine...',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet erat in enim volutpat facilisis at quis sapien.',
+    header: 'Deploying app to machine...',
+    description: '',
   },
   success: {
     header: 'App will be ready in 5 minutes!',

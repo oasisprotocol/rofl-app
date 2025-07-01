@@ -1,6 +1,6 @@
 import { type FC, useMemo } from 'react'
 import { useNetwork } from '../../../hooks/useNetwork'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useGetRuntimeRoflmarketProvidersAddressInstancesId } from '../../../nexus/generated/api'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton.tsx'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
@@ -66,11 +66,11 @@ export const MachineTopUp: FC = () => {
   return (
     <div>
       <div className="flex pl-6 pt-6 pr-3">
-        <Button variant="ghost" className="flex items-center gap-2 !p-0 h-auto" asChild>
-          <Link to="../">
+        <Button variant="ghost" className="flex items-center gap-2 !p-0 h-auto" onClick={handleBack}>
+          <>
             <ChevronLeft className="w-4 h-4 text-foreground" />
             <span className="text-sm font-medium text-foreground">Back to {machineTitle} details</span>
-          </Link>
+          </>
         </Button>
       </div>
       {isLoading && <Skeleton className="w-full h-[36px]" />}
@@ -79,10 +79,7 @@ export const MachineTopUp: FC = () => {
           <div className="flex flex-col">
             <div className="flex flex-col items-start gap-2 max-w-md">
               <h1 className="text-2xl font-semibold text-foreground">Top up {machineTitle}</h1>
-              <p className="text-sm text-muted-foreground">
-                At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices
-                egestas. Bibendum sed integer ac eget.
-              </p>
+              <p className="text-sm text-muted-foreground mb-2">Machine rental costs are non-refundable.</p>
               <BuildForm
                 build={buildConfig}
                 offerId={machine!.offer_id}

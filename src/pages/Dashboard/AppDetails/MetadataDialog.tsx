@@ -79,7 +79,7 @@ export const MetadataDialog: FC<MetadataDialogProps> = ({ metadata, setViewMetad
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Metadata</DialogTitle>
+          <DialogTitle>Edit metadata</DialogTitle>
         </DialogHeader>
         <DialogDescription className="mb-6">
           Once updated click "Apply" or "Discard" in app details view.
