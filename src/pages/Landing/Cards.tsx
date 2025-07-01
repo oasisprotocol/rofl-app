@@ -1,6 +1,6 @@
 import { useEffect, useState, type FC } from 'react'
 import { CardWrapper } from '../../components/Card/index'
-import dashboardImage from './images/dashboard.png'
+import dashboardImage from './images/dashboard.webp'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { useAccount } from 'wagmi'
 
