@@ -52,7 +52,7 @@ export const Hero: FC = () => {
         {/* -mb-[50px] can be removed once the image is properly cropped by designer */}
         <div
           className={cn(
-            'border-t lg:border-0 -mb-[50px] relative h-70 md:h-96 lg:h-[450px] transition-all duration-1000 delay-500 ease-out',
+            'border-t lg:border-0 md:-mb-[50px] relative h-70 md:h-96 lg:h-[450px] transition-all duration-1000 delay-500 ease-out',
             {
               'opacity-100 translate-x-0': isLoaded,
               'opacity-0 translate-x-8': !isLoaded,

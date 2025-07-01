@@ -60,19 +60,19 @@ export const Header: FC = () => {
                 </NavLink>
               </div>
             </SheetHeader>
-            <nav className="flex flex-col">
-              <div className="p-2">
+            <nav>
+              <div className="flex flex-col p-2">
                 <NavbarLink to="/dashboard" onClick={() => setIsOpen(false)}>
-                  Dashboard
+                  <span className="text-foreground">Dashboard</span>
                 </NavbarLink>
                 <NavbarLink to="/dashboard/apps" onClick={() => setIsOpen(false)}>
-                  Apps
+                  <span className="text-foreground">Apps</span>
                 </NavbarLink>
                 <NavbarLink to="/dashboard/machines" onClick={() => setIsOpen(false)}>
-                  Machines
+                  <span className="text-foreground">Machines</span>
                 </NavbarLink>
                 <NavbarLink to="/explore" onClick={() => setIsOpen(false)}>
-                  Explore
+                  <span className="text-foreground">Explore</span>
                 </NavbarLink>
               </div>
 
