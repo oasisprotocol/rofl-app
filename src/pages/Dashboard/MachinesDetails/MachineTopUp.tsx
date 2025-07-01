@@ -134,7 +134,7 @@ export const MachineTopUp: FC = () => {
                         isLoading={machineTopUp.isPending}
                       />
                       {machineTopUp.isError && (
-                        <p className="text-xs text-error break-words">{machineTopUp?.error.message}</p>
+                        <p className="text-xs text-error break-all">{machineTopUp?.error.message}</p>
                       )}
                     </>
                   )
