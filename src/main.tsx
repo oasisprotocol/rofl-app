@@ -1,7 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom'
 import { WagmiProvider } from 'wagmi'
-import { CreateContextProvider } from './pages/CreateApp/CreateContextProvider'
 import { Landing } from './pages/Landing'
 import { Dashboard } from './pages/Dashboard'
 import { MyApps } from './pages/Dashboard/MyApps'
@@ -72,12 +71,7 @@ const router = createBrowserRouter([
           const location = useLocation()
           // Key is used to reset state on every navigation to this route. Even
           // if inside create flow and user clicks "Create +" in Header bar.
-          // TODO: CreateContextProvider is not needed anymore
-          return (
-            <CreateContextProvider key={location.key}>
-              <Create />
-            </CreateContextProvider>
-          )
+          return <Create key={location.key} />
         },
       },
       {

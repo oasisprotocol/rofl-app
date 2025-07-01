@@ -9,13 +9,7 @@ import { BootstrapStep } from './BootstrapStep'
 import { getTemplateById } from './templates'
 
 export const Create: FC = () => {
-  const context = useCreate()
-
-  if (!context) {
-    return <div>Error: CreateContext not found</div>
-  }
-
-  const { currentStep, setCurrentStep, appData, setAppDataForm } = context
+  const { currentStep, setCurrentStep, appData, setAppDataForm } = useCreate()
   const steps = [
     { component: TemplateStep },
     { component: MetadataStep },
