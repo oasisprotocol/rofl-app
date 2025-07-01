@@ -207,6 +207,25 @@ async function waitForBuildResults(taskId: string, token: string, timeout = 600_
   throw new Error('waitForBuildResults timed out')
 }
 
+async function waitForAppScheduler(
+  appId: `rofl1${string}`,
+  network: 'mainnet' | 'testnet',
+  timeout = 600_000,
+) {
+  const interval = 1000
+  const maxTries = timeout / interval
+  for (let i = 0; i < maxTries; i++) {
+    // https://testnet.nexus.oasis.io/v1/sapphire/roflmarket_instances?deployed_app_id=rofl1qrauzv0rnmedtxdjhdp4zjfhk6uzxefpaq5yqz0v
+    const response = await GetRuntimeRoflmarketInstances(network, 'sapphire', { deployed_app_id: appId })
+
+    const node_id = response.data.instances?.[0]?.node_id
+    const scheduler = response.data.instances?.[0]?.metadata?.['net.oasis.scheduler.rak']
+    if (node_id && scheduler) return scheduler
+    await new Promise(resolve => setTimeout(resolve, interval))
+  }
+  throw new Error('waitForAppScheduler timed out')
+}
+
 export function useCreateAndDeployApp() {
   const { blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const wagmiConfig = useConfig()
@@ -215,7 +234,8 @@ export function useCreateAndDeployApp() {
   const [currentStep, setCurrentStep] = useState<(typeof steps)[number]>('creating')
   const stepEstimatedDurations: { [step in (typeof steps)[number]]?: number } = {
     creating: 40_000,
-    building: 150_000,
+    building: 80_000,
+    deploying: 80_000,
   }
   const stepLabels: { [step in (typeof steps)[number]]: string } = {
     creating: 'Creating App',
@@ -314,6 +334,9 @@ export function useCreateAndDeployApp() {
       const compose = template.yaml.compose
       console.log('Build?')
       setCurrentStep('building')
+      // TODO: wait + handle error?
+      uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
+      uploadArtifact({ id: `${appId}-compose-yaml`, file: new Blob([compose]) }, token)
       const { task_id } = await buildRofl({ manifest, compose }, token)
       const buildResults = await waitForBuildResults(task_id, token)
       console.log('Build results:', buildResults)
@@ -357,7 +380,7 @@ export function useCreateAndDeployApp() {
       )
       await waitForTransactionReceipt(wagmiConfig, { hash })
 
-      console.log('deploy app?')
+      console.log('queue app deploy?')
       setCurrentStep('deploying')
       hash = await sendTransactionAsync(
         roflmarket
@@ -378,8 +401,10 @@ export function useCreateAndDeployApp() {
           .toSubcall(),
       )
       await waitForTransactionReceipt(wagmiConfig, { hash })
-      console.log('deployed', appId)
+      console.log('deploy queued', appId)
 
+      await waitForAppScheduler(appId, network)
+      console.log('deployed', appId)
       return appId
     },
   })
