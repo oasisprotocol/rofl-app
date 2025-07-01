@@ -689,12 +689,11 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
             </div>
             <p className="text-xs font-medium text-foreground leading-4">Router Nitro</p>
           </div>
-
-          {children?.({
-            isValid: isFormValid && !!quote && !isLoading,
-            onSubmit: handleFormSubmit,
-          })}
         </form>
+        {children?.({
+          isValid: isFormValid && !!quote && !isLoading,
+          onSubmit: handleFormSubmit,
+        })}
       </div>
 
       <TopUpProgressDialog
