@@ -24,7 +24,7 @@ export function CardWrapper({ title, description, to, image, label }: CardProps)
       <CardDescription className={cn('text-md', image && 'md:max-w-[50%]')}>{description}</CardDescription>
       <CardFooter className="p-0">
         {to ? (
-          <Button disabled={!to} asChild>
+          <Button disabled={!to} asChild className="z-1">
             <Link
               to={to}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
