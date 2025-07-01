@@ -2,8 +2,11 @@ import { useEffect, useState, type FC } from 'react'
 import { CardWrapper } from '../../components/Card/index'
 import dashboardImage from './images/dashboard.png'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
+import { useAccount } from 'wagmi'
 
 export const Cards: FC = () => {
+  const { isConnected } = useAccount()
+
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
@@ -24,8 +27,7 @@ export const Cards: FC = () => {
         <CardWrapper
           title="Start with templates"
           description="Convert your containerized app into a trustless app in minutes via Oasis CLI."
-          // change link when wallet connected to create flow
-          to="/templates"
+          to={isConnected ? '/create' : '/templates'}
           label="Create app"
         />
         <CardWrapper
