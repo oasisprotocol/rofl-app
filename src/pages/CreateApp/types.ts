@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { BuildFormData } from '../../types/build-form.ts'
 
 export const metadataFormSchema = z.object({
   name: z.string().min(1, {
@@ -84,43 +85,11 @@ export const hlCopyTraderFormSchema = z.object({
   }),
 })
 
-export const buildFormSchema = z
-  .object({
-    provider: z.string().min(1, {
-      message: 'Provider is required.',
-    }),
-    duration: z.enum(['hours', 'days', 'months']),
-    number: z.coerce.number().int().positive({
-      message: 'Number is required.',
-    }),
-    resources: z.string().min(1, {
-      message: 'Resources are required.',
-    }),
-    roseCostInBaseUnits: z.string().optional(),
-  })
-  .refine(
-    data => {
-      const maxLimits = {
-        hours: 8760, // 1 year in hours (365 * 24)
-        days: 365, // 1 year in days
-        months: 12, // 1 year in months
-      }
-
-      const maxAllowed = maxLimits[data.duration as keyof typeof maxLimits]
-      return data.number <= maxAllowed
-    },
-    {
-      message: 'Duration cannot exceed 1 year. Maximum allowed: 8760 hours, 365 days, or 12 months.',
-      path: ['number'], // target field name
-    },
-  )
-
 export type TemplateFormData = string
 export type MetadataFormData = z.infer<typeof metadataFormSchema>
 export type AgentFormData = z.infer<typeof tgbotFormSchema>
 export type XAgentFormData = z.infer<typeof xAgentFormSchema>
 export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
-export type BuildFormData = z.infer<typeof buildFormSchema>
 
 export type AppData = {
   template?: string

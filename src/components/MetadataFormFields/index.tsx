@@ -1,7 +1,7 @@
 import { type FC } from 'react'
 import { type Control } from 'react-hook-form'
-import { InputFormField } from '../../pages/CreateApp/InputFormField'
 import { type MetadataFormData } from '../../pages/CreateApp/types'
+import { InputFormField } from '../InputFormField'
 
 type MetadataFormFieldsProps = {
   control: Control<MetadataFormData>

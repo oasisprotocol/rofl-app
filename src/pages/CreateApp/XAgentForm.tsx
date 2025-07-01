@@ -1,10 +1,10 @@
 import { type FC } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { InputFormField } from './InputFormField'
-import { SelectFormField } from './SelectFormField'
+import { SelectFormField } from '../../components/SelectFormField'
 import { CreateFormNavigation } from './CreateFormNavigation'
 import { xAgentFormSchema, type XAgentFormData } from './types'
+import { InputFormField } from '../../components/InputFormField'
 
 type XAgentFormProps = {
   handleNext: () => void
