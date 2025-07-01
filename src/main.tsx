@@ -18,6 +18,7 @@ import { MainLayout } from './components/Layout/MainLayout'
 import { RoflAppBackendAuthProvider } from './contexts/RoflAppBackendAuth/Provider'
 import { RootLayout } from './components/RootLayout'
 import { sapphire } from 'viem/chains'
+import { LandingTemplates } from './pages/LandingTemplates/index.tsx'
 
 import './index.css'
 import '@rainbow-me/rainbowkit/styles.css'
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing />,
+      },
+      {
+        index: true,
+        element: <LandingTemplates />,
+        path: 'templates',
       },
       {
         path: 'dashboard',

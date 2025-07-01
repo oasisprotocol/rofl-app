@@ -24,6 +24,7 @@ export const Cards: FC = () => {
         <CardWrapper
           title="Templates"
           description="Tincidunt ut bibendum tempus integer nec eget commodo. Nisi eleifend phasellus vitae in diam laoreet urna molestie tortor. Facilisi sit fringilla ultricies nisi semper rhoncus egestas."
+          to="/templates"
         />
         <CardWrapper
           title="Providers"
