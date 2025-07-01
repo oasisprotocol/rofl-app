@@ -521,7 +521,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
   return (
     <div className="flex w-full h-full justify-center items-center">
-      <div className="flex w-full">
+      <div className="flex flex-col w-full">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
           <div className="space-y-2">
             <div className="space-y-6">
