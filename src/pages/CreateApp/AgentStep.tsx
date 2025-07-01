@@ -25,7 +25,7 @@ export const AgentStep: FC<AgentStepProps> = ({
 }) => {
   return (
     <CreateLayout currentStep={2} selectedTemplateName={selectedTemplateName}>
-      <CreateFormHeader title="Setup Agent" description="" />
+      <CreateFormHeader title="Setup Agent" />
 
       {selectedTemplateId === 'tgbot' && (
         <TgbotAgentForm

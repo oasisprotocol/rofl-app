@@ -34,7 +34,7 @@ export const BuildStep: FC<AgentStepProps> = ({
 
   return (
     <CreateLayout currentStep={3} selectedTemplateName={selectedTemplateName}>
-      <CreateFormHeader title="Configure machine" description="" />
+      <CreateFormHeader title="Configure machine" />
 
       <BuildForm
         onSubmit={onSubmit}
