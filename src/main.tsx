@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom'
 import { WagmiProvider } from 'wagmi'
 import { CreateContextProvider } from './pages/CreateApp/CreateContextProvider'
 import { Landing } from './pages/Landing'
@@ -68,7 +68,17 @@ const router = createBrowserRouter([
       },
       {
         path: 'create',
-        element: <Create />,
+        Component: () => {
+          const location = useLocation()
+          // Key is used to reset state on every navigation to this route. Even
+          // if inside create flow and user clicks "Create +" in Header bar.
+          // TODO: CreateContextProvider is not needed anymore
+          return (
+            <CreateContextProvider key={location.key}>
+              <Create />
+            </CreateContextProvider>
+          )
+        },
       },
       {
         path: 'explore',
@@ -99,9 +109,7 @@ createRoot(document.getElementById('root')!).render(
         )}
       >
         <RoflAppBackendAuthProvider>
-          <CreateContextProvider>
-            <RouterProvider router={router} />
-          </CreateContextProvider>
+          <RouterProvider router={router} />
         </RoflAppBackendAuthProvider>
       </RainbowKitProvider>
     </QueryClientProvider>
