@@ -87,7 +87,7 @@ export const MachineLogs: FC<MachineLogsProps> = ({
             </Button>
           </div>
 
-          <RawCode data={logs.reverse().join('\n')} className="h-[700px]" />
+          <RawCode data={logs.slice().reverse().join('\n')} className="h-[700px]" />
         </>
       )}
     </>
