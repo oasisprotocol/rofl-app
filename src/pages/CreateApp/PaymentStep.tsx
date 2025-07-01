@@ -61,19 +61,15 @@ export const PaymentStep: FC<AgentStepProps> = ({
   }
 
   return (
-    <CreateLayout
-      currentStep={4}
-      hints={[
-        {
-          title: 'kill it',
-          description: '',
-        },
-      ]}
-      selectedTemplateName={selectedTemplateName}
-    >
+    <CreateLayout currentStep={4} selectedTemplateName={selectedTemplateName}>
       <CreateFormHeader
         title="Payment"
-        description="Registration fees are refundable if you delete your app. Machine rental costs are non-refundable."
+        description={
+          <>
+            Registration fees are refundable if you delete your app.
+            <br /> Machine rental costs are non-refundable.
+          </>
+        }
       />
       {isLoading && <Spinner />}
       {sapphireBalance && (

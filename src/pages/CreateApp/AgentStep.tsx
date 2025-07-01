@@ -5,7 +5,6 @@ import { TgbotAgentForm } from './TgbotAgentForm'
 import { XAgentForm } from './XAgentForm'
 import { HlCopyTraderForm } from './HlCopyTraderForm'
 import { type AgentFormData, type XAgentFormData, type HlCopyTraderFormData } from './types'
-import { AgentStepHints } from './AgentStepHints'
 
 type AgentStepProps = {
   handleNext: () => void
@@ -25,16 +24,7 @@ export const AgentStep: FC<AgentStepProps> = ({
   selectedTemplateId,
 }) => {
   return (
-    <CreateLayout
-      currentStep={2}
-      hints={[
-        {
-          title: 'kill it',
-          description: <AgentStepHints selectedTemplateId={selectedTemplateId} />,
-        },
-      ]}
-      selectedTemplateName={selectedTemplateName}
-    >
+    <CreateLayout currentStep={2} selectedTemplateName={selectedTemplateName}>
       <CreateFormHeader title="Setup Agent" description="" />
 
       {selectedTemplateId === 'tgbot' && (

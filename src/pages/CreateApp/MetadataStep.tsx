@@ -43,16 +43,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({
   }
 
   return (
-    <CreateLayout
-      currentStep={1}
-      hints={[
-        {
-          title: 'kill it',
-          description: 'All data you provide here will be visible publicly on-chain.',
-        },
-      ]}
-      selectedTemplateName={selectedTemplateName}
-    >
+    <CreateLayout currentStep={1} selectedTemplateName={selectedTemplateName}>
       <CreateFormHeader
         title="Input Metadata"
         description="All data you provide here will be visible publicly on-chain."
