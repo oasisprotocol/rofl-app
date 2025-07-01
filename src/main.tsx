@@ -101,6 +101,7 @@ createRoot(document.getElementById('root')!).render(
   <WagmiProvider config={wagmiConfig}>
     <QueryClientProvider client={queryClient}>
       <RainbowKitProvider
+        modalSize="compact"
         initialChain={sapphire}
         theme={rainbowKitTheme}
         avatar={({ address, size }) => (
