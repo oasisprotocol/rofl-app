@@ -141,82 +141,85 @@ export const BuildForm: FC<BuildFormProps> = ({
   const handleFormSubmit = async () => {
     const isValid = await form.trigger()
     if (isValid) {
-      form.handleSubmit(onSubmit)
+      form.handleSubmit(onSubmit)()
     }
   }
 
   const noOffersWarning = providersOffersQuery.isFetched ? offers && offers.length === 0 : false
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
-      <SelectFormField
-        control={form.control}
-        name="provider"
-        label="Provider"
-        placeholder="Select provider"
-        options={[...providerOptions]}
-        disabled
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+    <>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
         <SelectFormField
           control={form.control}
-          name="duration"
-          label="Duration period"
-          placeholder="Select duration"
-          options={[...durationOptions]}
+          name="provider"
+          label="Provider"
+          placeholder="Select provider"
+          options={[...providerOptions]}
+          disabled
         />
 
-        <div>
-          <InputFormField
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          <SelectFormField
             control={form.control}
-            name="number"
-            label={`Number of ${form.watch('duration') || 'hours'}`}
-            placeholder="Enter number"
-            type="number"
-            min={1}
+            name="duration"
+            label="Duration period"
+            placeholder="Select duration"
+            options={[...durationOptions]}
           />
-          {form.watch('duration') === 'hours' && Number(form.watch('number')) === 1 && (
-            <div className="text-sm text-warning leading-tight mt-2">
-              1 hour is a very short period of time for a ROFL app. It may not be enough for debugging.
+
+          <div>
+            <InputFormField
+              control={form.control}
+              name="number"
+              label={`Number of ${form.watch('duration') || 'hours'}`}
+              placeholder="Enter number"
+              type="number"
+              min={1}
+            />
+            {form.watch('duration') === 'hours' && Number(form.watch('number')) === 1 && (
+              <div className="text-sm text-warning leading-tight mt-2">
+                1 hour is a very short period of time for a ROFL app. It may not be enough for debugging.
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="resources">Resources</Label>
+          <Controller
+            control={form.control}
+            name="resources"
+            render={({ field, fieldState }) => (
+              <>
+                <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
+                  {offers?.sort(sortOffersByPaymentTerms).map(offer => (
+                    <BuildStepOffers
+                      key={offer.id}
+                      offer={offer}
+                      fieldValue={field.value}
+                      multiplyNumber={Number(form.watch('number'))}
+                      duration={form.watch('duration')}
+                      onCostCalculated={handleCostCalculated}
+                      network={network}
+                      disabled={offerId ? offer.id !== offerId : false}
+                    />
+                  ))}
+                </RadioGroup>
+                {fieldState.error && (
+                  <div className="text-destructive text-sm">{fieldState.error.message}</div>
+                )}
+              </>
+            )}
+          />
+          {noOffersWarning && (
+            <div className="text-destructive text-sm">
+              No offers available for the provider. Please wait for offers to be available.
             </div>
           )}
         </div>
-      </div>
-
-      <div className="grid gap-2">
-        <Label htmlFor="resources">Resources</Label>
-        <Controller
-          control={form.control}
-          name="resources"
-          render={({ field, fieldState }) => (
-            <>
-              <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
-                {offers?.sort(sortOffersByPaymentTerms).map(offer => (
-                  <BuildStepOffers
-                    key={offer.id}
-                    offer={offer}
-                    fieldValue={field.value}
-                    multiplyNumber={Number(form.watch('number'))}
-                    duration={form.watch('duration')}
-                    onCostCalculated={handleCostCalculated}
-                    network={network}
-                    disabled={offerId ? offer.id !== offerId : false}
-                  />
-                ))}
-              </RadioGroup>
-              {fieldState.error && <div className="text-destructive text-sm">{fieldState.error.message}</div>}
-            </>
-          )}
-        />
-        {noOffersWarning && (
-          <div className="text-destructive text-sm">
-            No offers available for the provider. Please wait for offers to be available.
-          </div>
-        )}
-      </div>
-
+      </form>
       {children({ form, handleFormSubmit, noOffersWarning: !!noOffersWarning })}
-    </form>
+    </>
   )
 }
