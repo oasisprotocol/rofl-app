@@ -215,7 +215,7 @@ export function useCreateAndDeployApp() {
   const [currentStep, setCurrentStep] = useState<(typeof steps)[number]>('creating')
   const stepEstimatedDurations: { [step in (typeof steps)[number]]?: number } = {
     creating: 40_000,
-    building: 150_000,
+    building: 80_000,
   }
   const stepLabels: { [step in (typeof steps)[number]]: string } = {
     creating: 'Creating App',
