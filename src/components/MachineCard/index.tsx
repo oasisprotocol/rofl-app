@@ -7,6 +7,7 @@ import { MachineStatusIcon } from '../MachineStatusIcon'
 import { trimLongString } from '../../utils/trimLongString'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
+import { ArrowRight } from 'lucide-react'
 
 type ExploreAppCardProps = {
   machine: RoflMarketInstance
@@ -22,8 +23,11 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
     <Card className="rounded-md">
       <CardHeader className="">
         <div className="flex items-start justify-between">
-          <h3 className="text-lg font-semibold text-foreground pr-2 break-all">
-            <>{machine.metadata?.['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
+          <h3 className="text-lg font-semibold text-foreground pr-2 break-all text-primary">
+            <Link to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}>
+              {' '}
+              <>{machine.metadata?.['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
+            </Link>
           </h3>
           <MachineStatusIcon machine={machine} />
         </div>
@@ -31,16 +35,19 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
       <CardContent className="flex-1">
         <div className="flex flex-col gap-2">
           <span
-            className={cn('text-md break-all text-primary', {
-              'text-primary': roflAppName,
+            className={cn('text-md break-all flex items-center gap-2', {
+              'text-foreground': roflAppName,
               'text-muted-foreground': !roflAppName,
             })}
           >
             {isLoading && <Skeleton className="w-full h-[24px] w-full" />}
             {isFetched && !!roflAppName && (
-              <Link to={`/dashboard/apps/${data?.data.id}`}>
+              <>
                 <>{roflAppName}</>
-              </Link>
+                <Link to={`/dashboard/apps/${data?.data.id}`}>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </>
             )}
             {isFetched && !roflAppName && <>Name not provided</>}
           </span>
