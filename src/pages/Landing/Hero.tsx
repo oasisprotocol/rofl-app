@@ -4,7 +4,7 @@ import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import HeroImage from './images/hero.svg'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
-import { SimpleRainbowKitConnectButton } from '../../components/RainbowKitConnectButton'
+import { RainbowKitConnectButton } from '../../components/RainbowKitConnectButton'
 import { useAccount } from 'wagmi'
 
 export const Hero: FC = () => {
@@ -34,19 +34,28 @@ export const Hero: FC = () => {
               Build trustless apps. Start quickly with templates. Manage everything from one interface.
             </p>
           </div>
-          {isConnected ? (
-            <Button size="lg" asChild>
-              <Link to="/dashboard">
-                Get started
-                <ArrowRight />
-              </Link>
-            </Button>
-          ) : (
-            <SimpleRainbowKitConnectButton>
-              Connect Wallet
-              <ArrowRight />
-            </SimpleRainbowKitConnectButton>
-          )}
+          <RainbowKitConnectButton>
+            {({ openConnectModal }) => {
+              return isConnected ? (
+                <Button size="lg" asChild>
+                  <Link to="/dashboard">
+                    Get started
+                    <ArrowRight />
+                  </Link>
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    openConnectModal()
+                  }}
+                  className="max-md:w-full"
+                >
+                  Connect Wallet
+                  <ArrowRight />
+                </Button>
+              )
+            }}
+          </RainbowKitConnectButton>
         </div>
 
         {/* -mb-[50px] can be removed once the image is properly cropped by designer */}

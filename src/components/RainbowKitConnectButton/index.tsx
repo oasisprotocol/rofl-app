@@ -13,8 +13,11 @@ import { AccountAvatar } from '../AccountAvatar'
 import { useAccount, useDisconnect } from 'wagmi'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
 import { useNavigate } from 'react-router-dom'
-import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { ENABLED_CHAINS_IDS } from '../../constants/top-up-config.ts'
+import { sapphire, sapphireTestnet } from 'viem/chains'
+import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks.ts'
+
+type ConnectButtonRenderProps = Parameters<React.ComponentProps<typeof ConnectButton.Custom>['children']>[0]
 
 const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address, className = '' }) => {
   return (
@@ -25,53 +28,60 @@ const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address
   )
 }
 
+const useNavigateToDashboardOnChainChange = ({ enabled }: { enabled: boolean }) => {
+  const { chainId } = useAccount()
+  const [selectedChainId, setselectedChainId] = useState(chainId)
+  const navigate = useNavigate()
+  const { isAuthenticated } = useRoflAppBackendAuthContext()
+
+  useEffect(() => {
+    if (!enabled) return
+
+    if (chainId && chainId !== selectedChainId && isAuthenticated) {
+      // slice(1) Ignore sapphire
+      if (!ENABLED_CHAINS_IDS.slice(1).includes(chainId.toString())) {
+        setselectedChainId(chainId)
+        navigate('/dashboard', { replace: true })
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled, chainId, navigate, selectedChainId])
+}
+
 interface Props {
+  children?: (props: ConnectButtonRenderProps) => ReactNode
   onMobileClose?: () => void
 }
 
-export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
-  const { login, isLoading, isAuthenticated } = useRoflAppBackendAuthContext()
+export const RainbowKitConnectButton: FC<Props> = ({ children, onMobileClose }) => {
   const isMobile = useIsMobile()
   const { disconnect } = useDisconnect()
   const navigate = useNavigate()
-  const { chainId, isConnected, address } = useAccount()
-  const [selectedChainId, setSelectedChainId] = useState(chainId)
 
-  useEffect(() => {
-    const handleLogin = async () => {
-      if (isConnected && address && !isLoading && !isAuthenticated) {
-        try {
-          await login()
-        } catch (error) {
-          console.error('Login failed:', error)
-        }
-      }
-    }
-
-    handleLogin()
-  }, [isLoading, isAuthenticated, isConnected, address, login])
-
-  useEffect(() => {
-    if (chainId && chainId !== selectedChainId) {
-      // slice(1) Ignore sapphire
-      if (!ENABLED_CHAINS_IDS.slice(1).includes(chainId.toString())) {
-        setSelectedChainId(chainId)
-        navigate('/dashboard')
-      }
-    }
-  }, [chainId, navigate, selectedChainId])
+  useNavigateToDashboardOnChainChange({ enabled: !!children })
 
   const handleDisconnect = () => {
     disconnect()
-    navigate('/')
+    navigate('/', { replace: true })
     onMobileClose?.()
   }
 
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
-        const ready = mounted
-        const connected = ready && account && chain
+      {props => {
+        const {
+          account,
+          chain,
+          openAccountModal,
+          openChainModal,
+          openConnectModal,
+          mounted,
+          authenticationStatus,
+        } = props
+
+        const ready = mounted && authenticationStatus !== 'loading'
+        const connected =
+          ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated')
 
         return (
           <div
@@ -85,6 +95,8 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
             })}
           >
             {(() => {
+              if (typeof children === 'function') return <>{children(props)}</>
+
               if (!connected) {
                 return (
                   <Button
@@ -100,7 +112,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                 )
               }
 
-              if (chain.unsupported) {
+              if (chain.id !== sapphire.id && chain.id !== sapphireTestnet.id) {
                 return (
                   <Button
                     onClick={() => {
@@ -134,7 +146,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                       />
                       <div className="flex flex-col items-start min-w-0 flex-1">
                         <TruncatedAddress
-                          address={address as `0x${string}`}
+                          address={account.address as `0x${string}`}
                           className="mono text-foreground text-base font-medium leading-6 w-full"
                         />
                         <p className="text-muted-foreground text-sm leading-5">{account.displayBalance}</p>
@@ -185,64 +197,6 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                   </DropdownMenu>
                 </div>
               )
-            })()}
-          </div>
-        )
-      }}
-    </ConnectButton.Custom>
-  )
-}
-
-type SimpleRainbowKitConnectButtonProps = {
-  children: ReactNode
-}
-
-export const SimpleRainbowKitConnectButton: FC<SimpleRainbowKitConnectButtonProps> = ({ children }) => {
-  return (
-    <ConnectButton.Custom>
-      {({ account, chain, openChainModal, openConnectModal, mounted }) => {
-        const ready = mounted
-        const connected = ready && account && chain
-
-        return (
-          <div
-            {...(!ready && {
-              'aria-hidden': true,
-              style: {
-                opacity: 0,
-                pointerEvents: 'none',
-                userSelect: 'none',
-              },
-            })}
-          >
-            {(() => {
-              if (!connected) {
-                return (
-                  <Button
-                    onClick={() => {
-                      openConnectModal()
-                    }}
-                    size="lg"
-                  >
-                    <>{children}</>
-                  </Button>
-                )
-              }
-
-              if (chain.unsupported) {
-                return (
-                  <Button
-                    size="lg"
-                    onClick={() => {
-                      openChainModal()
-                    }}
-                    variant="destructive"
-                    className="max-md:w-full"
-                  >
-                    Wrong network
-                  </Button>
-                )
-              }
             })()}
           </div>
         )

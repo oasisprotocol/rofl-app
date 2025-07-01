@@ -1,12 +1,11 @@
 import { createContext } from 'react'
+import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
 
-type RoflAppBackendAuthContextType = {
-  login: () => Promise<string | undefined>
-  logout: () => void
-  isLoading: boolean
-  error: string | null
-  isAuthenticated: boolean
+export interface RoflAppBackendAuthContextType {
   token: string | null
+  isAuthenticated: boolean
+  isTokenExpired: boolean
+  status: AuthenticationStatus
 }
 
 export const RoflAppBackendAuthContext = createContext<RoflAppBackendAuthContextType | undefined>(undefined)
