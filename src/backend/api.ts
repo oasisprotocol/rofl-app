@@ -11,6 +11,7 @@ import { useConfig, useSendTransaction } from 'wagmi'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { ViewMetadataState, ViewSecretsState } from '../pages/Dashboard/AppDetails/types'
 import { useState } from 'react'
+import { useBlockNavigatingAway } from '../pages/CreateApp/useBlockNavigatingAway'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -207,6 +208,7 @@ async function waitForBuildResults(taskId: string, token: string, timeout = 600_
 }
 
 export function useCreateAndDeployApp() {
+  const { blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const wagmiConfig = useConfig()
   const { sendTransactionAsync } = useSendTransaction()
   const steps = ['creating', 'building', 'updating', 'deploying'] as const
@@ -227,7 +229,11 @@ export function useCreateAndDeployApp() {
     AxiosError<unknown>,
     { token: string; template: Template; appData: AppData; network: 'mainnet' | 'testnet' }
   >({
+    onSettled() {
+      allowNavigatingAway()
+    },
     mutationFn: async ({ token, template, appData, network }) => {
+      blockNavigatingAway()
       const sapphireRuntimeId =
         network === 'mainnet'
           ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')

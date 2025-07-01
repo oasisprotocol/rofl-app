@@ -9,7 +9,6 @@ import { useNetwork } from '../../hooks/useNetwork'
 import { AnimatedStepText, HeaderSteps } from './AnimatedStepText'
 import { useArtifactUploads } from '../../hooks/useArtifactUploads'
 import * as yaml from 'yaml'
-import { useBlocker } from 'react-router-dom'
 
 // TEMP
 export type Template = {
@@ -55,7 +54,6 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
   const [buildTriggered, setBuildTriggered] = useState(false)
   const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.CreateAndDeploy)
   const { token } = useRoflAppBackendAuthContext()
-  useBlocker(bootstrapStep !== 'success' && bootstrapStep !== 'error')
 
   const createAndDeployAppMutation = useCreateAndDeployApp()
 
