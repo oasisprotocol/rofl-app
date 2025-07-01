@@ -25,7 +25,6 @@ function setDefaultMetadataViewState(metadata: RoflAppMetadata | undefined = {})
       description: (metadata['net.oasis.rofl.description'] as string) || '',
       version: (metadata['net.oasis.rofl.version'] as string) || '',
       homepage: (metadata['net.oasis.rofl.homepage'] as string) || '',
-      license: (metadata['net.oasis.rofl.license'] as string) || '',
     },
   }
 }
@@ -149,7 +148,7 @@ export const AppDetails: FC = () => {
                     <TabsList className="w-full md:w-auto">
                       <TabsTrigger value="details">Details</TabsTrigger>
                       <TabsTrigger value="secrets">Secrets</TabsTrigger>
-                      <TabsTrigger value="compose">Compose</TabsTrigger>
+                      <TabsTrigger value="compose">Manifest</TabsTrigger>
                     </TabsList>
                   </div>
                 </div>

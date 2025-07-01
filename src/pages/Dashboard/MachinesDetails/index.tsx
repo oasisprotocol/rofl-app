@@ -15,7 +15,6 @@ import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { trimLongString } from '../../../utils/trimLongString'
 import { MachineResources } from '../../../components/MachineResources'
 import { useMachineExecuteRestartCmd, useMachineExecuteStopCmd } from '../../../backend/api'
-import { MachineStop } from './MachineStop'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { MachineLogs } from './MachineLogs'
 import { toast } from 'sonner'
@@ -88,16 +87,6 @@ export const MachinesDetails: FC = () => {
                         network,
                       })
                       toast.loading('Machine is restarting (~1min)', { duration: 1 * 60 * 1000 })
-                    }}
-                  />
-                  <MachineStop
-                    disabled={machine.removed}
-                    onConfirm={async () => {
-                      await stopMachine.mutateAsync({
-                        machineId: machine.id,
-                        provider: machine.provider,
-                        network,
-                      })
                     }}
                   />
                   <TabsList className="w-full md:w-auto">

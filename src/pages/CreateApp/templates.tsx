@@ -22,17 +22,15 @@ type ParsedTemplate = {
   description?: string
   version?: string
   homepage?: string
-  license?: string
   [key: string]: unknown
 }
 
 const extractMetadata = (parsedTemplate: ParsedTemplate) => ({
   name: parsedTemplate.name || '',
-  author: parsedTemplate.author || '',
+  author: '',
   description: parsedTemplate.description || '',
   version: parsedTemplate.version || '',
   homepage: parsedTemplate.homepage || '',
-  license: parsedTemplate.license || '',
 })
 
 export const defaultBuildConfig = {
@@ -51,7 +49,6 @@ const createTemplateParser = (roflData: Record<string, unknown>) => {
       author: metadata.author,
       version: metadata.version,
       homepage: metadata.homepage,
-      license: metadata.license,
       deployments: {
         default: {
           ...parsedDefaultDeployments.deployments.default,

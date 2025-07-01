@@ -21,8 +21,18 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
     <Card className="rounded-md">
       <CardHeader className="">
         <div className="flex items-start justify-between">
-          <h3 className="text-lg font-semibold text-foreground pr-2 break-all">
-            <>{app.metadata?.['net.oasis.rofl.name'] || trimLongString(app.id)}</>
+          <h3
+            className={cn(
+              'text-lg font-semibold text-foreground pr-2 break-all',
+              type === 'dashboard' && 'text-primary',
+            )}
+          >
+            {type === 'dashboard' && (
+              <Link to={`/dashboard/apps/${app.id}`}>
+                <>{app.metadata?.['net.oasis.rofl.name'] || trimLongString(app.id)}</>
+              </Link>
+            )}
+            {type === 'explore' && <>{app.metadata?.['net.oasis.rofl.name'] || trimLongString(app.id)}</>}
           </h3>
           <AppStatusIcon hasActiveInstances={!!app.num_active_instances} removed={app.removed} />
         </div>

@@ -119,9 +119,6 @@ export const AppMetadata: FC<AppMetadataProps> = ({
           </a>
         ) : undefined}
       </DetailsSectionRow>
-      <DetailsSectionRow label="License" className=" pb-6 border-b">
-        <>{editableState.license}</>
-      </DetailsSectionRow>
       <div className="text-xl font-bold">Policy</div>
       <DetailsSectionRow label="Who can run this app">
         <Endorsements endorsements={policy.endorsements} />

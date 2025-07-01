@@ -5,9 +5,7 @@ export const metadataFormSchema = z.object({
   name: z.string().min(1, {
     message: 'Name is required.',
   }),
-  author: z.string().min(1, {
-    message: 'Author is required.',
-  }),
+  author: z.string().optional(),
   description: z.string().min(1, {
     message: 'Description is required.',
   }),
@@ -19,9 +17,6 @@ export const metadataFormSchema = z.object({
         message: 'Version must be valid semver format.',
       },
     ),
-  license: z.string().min(1, {
-    message: 'License is required.',
-  }),
   homepage: z.string().url().or(z.literal('')),
 })
 

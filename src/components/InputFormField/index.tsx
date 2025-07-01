@@ -39,7 +39,7 @@ export const InputFormField = <T extends FieldValues>({
                 {...field}
                 aria-invalid={!!fieldState.error}
                 type={type}
-                autoComplete={type === 'password' ? 'new-password' : 'off'}
+                autoComplete="off"
                 spellCheck={type === 'password' ? 'false' : 'true'}
                 disabled={disabled}
                 min={min}

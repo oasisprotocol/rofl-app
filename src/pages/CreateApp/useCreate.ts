@@ -9,7 +9,6 @@ const initAppDataState: AppData = {
     description: '',
     version: '',
     homepage: '',
-    license: '',
   },
   agent: {
     OLLAMA_MODEL: '',
