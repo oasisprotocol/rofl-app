@@ -44,7 +44,7 @@ export const Hero: FC = () => {
             </Button>
           ) : (
             <SimpleRainbowKitConnectButton>
-              Get started
+              Connect Wallet
               <ArrowRight />
             </SimpleRainbowKitConnectButton>
           )}
