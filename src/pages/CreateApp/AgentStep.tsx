@@ -6,8 +6,6 @@ import { XAgentForm } from './XAgentForm'
 import { HlCopyTraderForm } from './HlCopyTraderForm'
 import { type AgentFormData, type XAgentFormData, type HlCopyTraderFormData } from './types'
 import { AgentStepHints } from './AgentStepHints'
-import xAgentDocs from '../../../templates/x-agent/README.md?raw'
-import ReactMarkdown from 'react-markdown'
 
 type AgentStepProps = {
   handleNext: () => void
@@ -63,11 +61,6 @@ export const AgentStep: FC<AgentStepProps> = ({
           setAppDataForm={setAppDataForm as (data: { agent: HlCopyTraderFormData }) => void}
         />
       )}
-
-      {/* <AgentStepHints selectedTemplateId="x-agent" /> */}
-      {/* <div className="flex-1 overflow-y-auto pr-2 prose prose-sm dark:prose-invert max-w-full">
-        <ReactMarkdown>{xAgentDocs}</ReactMarkdown>
-      </div> */}
     </CreateLayout>
   )
 }
