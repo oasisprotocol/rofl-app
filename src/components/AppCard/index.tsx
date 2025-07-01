@@ -40,8 +40,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
                 <Badge variant="secondary">
                   <>{app.metadata?.['net.oasis.rofl.version']}</>
                 </Badge>
-              )}
-              {' '}
+              )}{' '}
               <span className="text-xs">
                 {formatDistanceToNow(parseISO(app.date_created), {
                   addSuffix: true,

@@ -30,7 +30,7 @@ export const RemoveAppButton: FC<RemoveAppButtonProps> = ({ stakedAmount, onConf
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Restart Machine</DialogTitle>
+          <DialogTitle>Remove App</DialogTitle>
           <DialogDescription>
             This will permanently remove the app and get back {fromBaseUnits(stakedAmount)} {ticker}. This
             action cannot be undone.
