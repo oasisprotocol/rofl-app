@@ -157,6 +157,7 @@ export const AppDetails: FC = () => {
               <TabsContent value="details">
                 <AppMetadata
                   id={roflApp.id}
+                  date_created={roflApp.date_created}
                   editableState={viewMetadataState.metadata}
                   policy={roflApp.policy}
                   setViewMetadataState={setViewMetadataState}

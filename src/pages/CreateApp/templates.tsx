@@ -35,7 +35,7 @@ const extractMetadata = (parsedTemplate: ParsedTemplate) => ({
   license: parsedTemplate.license || '',
 })
 
-const defaultBuildConfig = {
+export const defaultBuildConfig = {
   provider: '',
   duration: 'hours' as const,
   number: 2,

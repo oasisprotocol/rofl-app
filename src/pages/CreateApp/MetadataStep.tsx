@@ -55,7 +55,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({
       selectedTemplateName={selectedTemplateName}
     >
       <CreateFormHeader
-        title="Input Your Public ROFL Metadata"
+        title="Public Metadata"
         description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet
           vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
       />

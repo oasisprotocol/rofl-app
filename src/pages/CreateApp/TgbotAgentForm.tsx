@@ -1,10 +1,10 @@
 import { type FC } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { InputFormField } from './InputFormField'
-import { SelectFormField } from './SelectFormField'
+import { SelectFormField } from '../../components/SelectFormField'
 import { CreateFormNavigation } from './CreateFormNavigation'
 import { tgbotFormSchema, type AgentFormData } from './types'
+import { InputFormField } from '../../components/InputFormField'
 
 type TgbotAgentFormProps = {
   handleNext: () => void
@@ -42,7 +42,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
       <SelectFormField
         control={form.control}
         name="OLLAMA_MODEL"
-        label="Select the LLM running inside your TEE bot"
+        label="LLM running inside your TEE bot"
         placeholder="Select a model"
         options={[
           { value: 'gemma3:1b', label: 'Gemma 3 1B' },

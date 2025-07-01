@@ -66,6 +66,7 @@ import GetRuntimeRoflmarketProvidersAddressInstancesIdMutator from '../replaceNe
 import GetRuntimeRoflmarketInstancesMutator from '../replaceNetworkWithBaseURL'
 import GetLayerStatsTxVolumeMutator from '../replaceNetworkWithBaseURL'
 import GetLayerStatsActiveAccountsMutator from '../replaceNetworkWithBaseURL'
+import * as oasisRT from '@oasisprotocol/client-rt'
 export type Layer = (typeof Layer)[keyof typeof Layer]
 
 export const Layer = {
@@ -1837,7 +1838,12 @@ export type RoflMarketProviderList = List & RoflMarketProviderListAllOf
 /**
  * The offered resources by this offer.
  */
-export type RoflMarketOfferResources = { [key: string]: unknown }
+export type RoflMarketOfferResources = {
+  cpus: number /* manually changed */
+  memory: number /* manually changed */
+  storage: number /* manually changed */
+  tee: oasisRT.types.RoflmarketTeeType /* manually changed */
+}
 
 /**
  * The payment configuration for this offer.
@@ -2519,7 +2525,22 @@ export type GetRuntimeRoflAppsParams = {
    * A filter on the name of the ROFL app. If multiple names are provided, the ROFL App must match all of them.
    */
   name?: string[]
+  /**
+ * The field to sort the ROFL apps by.
+If unset, the ROFL apps will be sorted by activity (num_active_instances, num_transactions) in descending order.
+To sort by creation time, set this to `created_at` (or `created_at_desc`).
+
+ */
+  sort_by?: GetRuntimeRoflAppsSortBy
 }
+
+export type GetRuntimeRoflAppsSortBy =
+  (typeof GetRuntimeRoflAppsSortBy)[keyof typeof GetRuntimeRoflAppsSortBy]
+
+export const GetRuntimeRoflAppsSortBy = {
+  created_at: 'created_at',
+  created_at_desc: 'created_at_desc',
+} as const
 
 export type GetRuntimeRoflAppsIdTransactionsParams = {
   /**

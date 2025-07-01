@@ -11,6 +11,10 @@ import { useConfig, useSendTransaction } from 'wagmi'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { ViewMetadataState, ViewSecretsState } from '../pages/Dashboard/AppDetails/types'
 import { useState } from 'react'
+import { useBlockNavigatingAway } from '../pages/CreateApp/useBlockNavigatingAway'
+import { toast } from 'sonner'
+import { BuildFormData } from '../types/build-form.ts'
+import { convertToDurationTerms } from './helpers.ts'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -206,14 +210,35 @@ async function waitForBuildResults(taskId: string, token: string, timeout = 600_
   throw new Error('waitForBuildResults timed out')
 }
 
+async function waitForAppScheduler(
+  appId: `rofl1${string}`,
+  network: 'mainnet' | 'testnet',
+  timeout = 600_000,
+) {
+  const interval = 1000
+  const maxTries = timeout / interval
+  for (let i = 0; i < maxTries; i++) {
+    // https://testnet.nexus.oasis.io/v1/sapphire/roflmarket_instances?deployed_app_id=rofl1qrauzv0rnmedtxdjhdp4zjfhk6uzxefpaq5yqz0v
+    const response = await GetRuntimeRoflmarketInstances(network, 'sapphire', { deployed_app_id: appId })
+
+    const node_id = response.data.instances?.[0]?.node_id
+    const scheduler = response.data.instances?.[0]?.metadata?.['net.oasis.scheduler.rak']
+    if (node_id && scheduler) return scheduler
+    await new Promise(resolve => setTimeout(resolve, interval))
+  }
+  throw new Error('waitForAppScheduler timed out')
+}
+
 export function useCreateAndDeployApp() {
+  const { blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const wagmiConfig = useConfig()
   const { sendTransactionAsync } = useSendTransaction()
   const steps = ['creating', 'building', 'updating', 'deploying'] as const
   const [currentStep, setCurrentStep] = useState<(typeof steps)[number]>('creating')
   const stepEstimatedDurations: { [step in (typeof steps)[number]]?: number } = {
     creating: 40_000,
-    building: 150_000,
+    building: 80_000,
+    deploying: 80_000,
   }
   const stepLabels: { [step in (typeof steps)[number]]: string } = {
     creating: 'Creating App',
@@ -227,7 +252,11 @@ export function useCreateAndDeployApp() {
     AxiosError<unknown>,
     { token: string; template: Template; appData: AppData; network: 'mainnet' | 'testnet' }
   >({
+    onSettled() {
+      allowNavigatingAway()
+    },
     mutationFn: async ({ token, template, appData, network }) => {
+      blockNavigatingAway()
       const sapphireRuntimeId =
         network === 'mainnet'
           ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
@@ -239,24 +268,10 @@ export function useCreateAndDeployApp() {
       const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
       const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId)
 
-      const duration =
-        appData.build!.duration === 'months'
-          ? {
-              term: oasisRT.types.RoflmarketTerm.MONTH,
-              term_count: appData.build!.number,
-            }
-          : appData.build!.duration === 'days'
-            ? {
-                term: oasisRT.types.RoflmarketTerm.HOUR,
-                term_count: appData.build!.number * 24,
-              }
-            : appData.build!.duration === 'hours'
-              ? {
-                  term: oasisRT.types.RoflmarketTerm.HOUR,
-                  term_count: appData.build!.number,
-                }
-              : undefined
-      if (!duration) throw new Error('Invalid duration')
+      const duration = convertToDurationTerms({
+        duration: appData.build!.duration,
+        number: appData.build!.number,
+      })
 
       let hash
       console.log('create app?')
@@ -308,6 +323,9 @@ export function useCreateAndDeployApp() {
       const compose = template.yaml.compose
       console.log('Build?')
       setCurrentStep('building')
+      // TODO: wait + handle error?
+      uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
+      uploadArtifact({ id: `${appId}-compose-yaml`, file: new Blob([compose]) }, token)
       const { task_id } = await buildRofl({ manifest, compose }, token)
       const buildResults = await waitForBuildResults(task_id, token)
       console.log('Build results:', buildResults)
@@ -351,7 +369,7 @@ export function useCreateAndDeployApp() {
       )
       await waitForTransactionReceipt(wagmiConfig, { hash })
 
-      console.log('deploy app?')
+      console.log('queue app deploy?')
       setCurrentStep('deploying')
       hash = await sendTransactionAsync(
         roflmarket
@@ -372,8 +390,12 @@ export function useCreateAndDeployApp() {
           .toSubcall(),
       )
       await waitForTransactionReceipt(wagmiConfig, { hash })
+      console.log('deploy queued', appId)
+
+      await waitForAppScheduler(appId, network)
       console.log('deployed', appId)
 
+      toast.loading('App is starting (~5min)', { duration: 5 * 60 * 1000 })
       return appId
     },
   })
@@ -453,6 +475,7 @@ export function useUpdateApp() {
           const hash = await restartMachine({ machineId: machine.id, provider: machine.provider, network })
           await waitForTransactionReceipt(wagmiConfig, { hash })
         }
+        toast.loading('App is restarting (~1min)', { duration: 1 * 60 * 1000 })
       }
       return appId
     },
@@ -558,6 +581,44 @@ export function useMachineExecuteStopCmd() {
       )
       // Doesn't wait for transaction receipt
       // Takes about 1 minute to complete after transaction receipt
+    },
+  })
+}
+
+export function useMachineTopUp() {
+  const wagmiConfig = useConfig()
+  const { sendTransactionAsync } = useSendTransaction()
+  return useMutation<
+    void,
+    AxiosError<unknown>,
+    { machineId: string; provider: string; network: 'mainnet' | 'testnet'; build: BuildFormData }
+  >({
+    mutationFn: async ({ machineId, provider, network, build }) => {
+      const duration = convertToDurationTerms({
+        duration: build.duration,
+        number: build.number,
+      })
+
+      const sapphireRuntimeId =
+        network === 'mainnet'
+          ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
+          : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
+
+      const { term, term_count } = duration
+      const hash = await sendTransactionAsync(
+        roflmarket
+          .callInstanceTopUp()
+          .setBody({
+            provider: oasis.staking.addressFromBech32(provider),
+            id: oasis.misc.fromHex(machineId) as oasisRT.types.MachineID,
+            term,
+            term_count,
+          })
+          .toSubcall(),
+      )
+
+      await waitForTransactionReceipt(wagmiConfig, { hash })
     },
   })
 }

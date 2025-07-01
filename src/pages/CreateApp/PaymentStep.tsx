@@ -30,7 +30,7 @@ export const PaymentStep: FC<AgentStepProps> = ({
   const { address } = useAccount()
   const network = useNetwork()
   const isTestnet = network === 'testnet'
-  const chain = network === 'mainnet' ? sapphire : sapphireTestnet
+  const chain = isTestnet ? sapphireTestnet : sapphire
   const ticker = useTicker()
   const {
     data: sapphireBalance,
@@ -97,7 +97,11 @@ export const PaymentStep: FC<AgentStepProps> = ({
       {!hasEnoughBalance && minAmount && (
         <TopUp minAmount={minAmount} onTopUpSuccess={handleTopUpSuccess}>
           {({ isValid, onSubmit }) => (
-            <CreateFormNavigation handleNext={onSubmit} handleBack={handleBack} disabled={!isValid} />
+            <CreateFormNavigation
+              handleNext={onSubmit as () => void}
+              handleBack={handleBack}
+              disabled={!isValid}
+            />
           )}
         </TopUp>
       )}

@@ -3,6 +3,7 @@ import { useAccount, useSignMessage, useChainId } from 'wagmi'
 import { useGetNonce, useLogin } from '../../backend/api'
 import { RoflAppBackendAuthContext } from './Context'
 import { createSiweMessage } from 'viem/siwe'
+import { useInterval } from './useInterval'
 
 const { PROD } = import.meta.env
 
@@ -11,12 +12,25 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const { signMessageAsync } = useSignMessage()
   const chainId = useChainId()
 
-  const [token, setToken] = useState<string | null>(null)
+  const [token, _setToken] = useState<string | null>(
+    // TODO: possibly already expired or from another account. Currently detected by useInterval within a few seconds.
+    window.localStorage.getItem('jwt'),
+  )
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const { refetch: refetchNonce } = useGetNonce(isConnected ? address : undefined)
-  const loginMutation = useLogin()
+  const { mutateAsync: loginMutationAsync } = useLogin()
+
+  const setToken = (token: string | null) => {
+    _setToken(token)
+    try {
+      if (token) window.localStorage.setItem('jwt', token)
+      else window.localStorage.removeItem('jwt')
+    } catch {
+      // Ignore failures like Safari incognito
+    }
+  }
 
   const getSiweMessage = useCallback((address: `0x${string}`, nonce: string, chainId: number): string => {
     const domain = PROD ? window.location.hostname : 'dev.rofl.app'
@@ -53,7 +67,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
       const message = getSiweMessage(address, freshNonce, chainId || 1)
       const signature = await signMessageAsync({ message })
 
-      const jwtToken = await loginMutation.mutateAsync({
+      const jwtToken = await loginMutationAsync({
         message,
         signature,
       })
@@ -68,13 +82,19 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
     } finally {
       setIsLoading(false)
     }
-  }, [address, isConnected, refetchNonce, getSiweMessage, chainId, signMessageAsync, loginMutation])
+  }, [address, isConnected, refetchNonce, getSiweMessage, chainId, signMessageAsync, loginMutationAsync])
 
   const logout = useCallback(() => {
     setToken(null)
     setError(null)
     console.log('SIWE Authentication logged out')
   }, [])
+
+  useInterval(() => {
+    if (token && address && isJWTExpired(token, address)) {
+      logout() // Clear token if account switches or token expires
+    }
+  }, 10_000) // Should be less than buffer in isJWTExpired
 
   const isAuthenticated = !!token
 
@@ -88,4 +108,16 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   }
 
   return <RoflAppBackendAuthContext.Provider value={value}>{children}</RoflAppBackendAuthContext.Provider>
+}
+
+function isJWTExpired(jwtString: string, address: string) {
+  const jwt = JSON.parse(atob(jwtString.split('.')[1]))
+  if (jwt.address !== address) return true
+
+  // Based on https://github.com/DD-DeCaF/caffeine-vue/blob/da133e7c8ac5e31e4b94d2f70ddad4d26c9cbc46/src/store/modules/session.ts#L133-L144
+  // Buffer is the time before *actual* expiry when the token
+  // will be considered expired, to account for clock skew and
+  // service-to-service requests delays.
+  const buffer = 60_000
+  return new Date(jwt.exp * 1000 - buffer) <= new Date()
 }

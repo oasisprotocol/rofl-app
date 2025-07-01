@@ -1,5 +1,5 @@
-import { type FC, type FormEvent, type ReactNode, useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { type FC, FormEvent, type ReactNode, useEffect, useMemo, useState } from 'react'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
@@ -160,7 +160,7 @@ interface TopUpProps {
   onValidChange?: (isValid: boolean) => void
   onTopUpSuccess?: () => void
   onTopUpError?: (error: Error) => void
-  children?: (props: { isValid: boolean; onSubmit: (e?: FormEvent<HTMLFormElement>) => void }) => ReactNode
+  children?: (props: { isValid: boolean; onSubmit: () => void }) => ReactNode
 }
 
 const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpSuccess, onTopUpError }) => {
@@ -436,7 +436,12 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
     }
   }
 
-  const onSubmit = async () => {
+  const onSubmit: SubmitHandler<BridgeFormData> = async (
+    _data: BridgeFormData,
+    e?: React.BaseSyntheticEvent,
+  ) => {
+    e?.preventDefault()
+
     if (!quote) return
 
     setIsLoading(true)
@@ -508,6 +513,12 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
     }
   }
 
+  const handleFormSubmit = async (e?: FormEvent<HTMLFormElement>) => {
+    e?.preventDefault()
+
+    form.handleSubmit(onSubmit)()
+  }
+
   return (
     <div className="flex w-full h-full justify-center items-center">
       <div className="flex w-full">
@@ -548,7 +559,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                         ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
-                  {errors.sourceChain && <p className="text-xs text-red-500">{errors.sourceChain.message}</p>}
+                  {errors.sourceChain && <p className="text-xs text-error">{errors.sourceChain.message}</p>}
 
                   <div className="flex">
                     <div className="w-full relative">
@@ -619,8 +630,8 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  {errors.amount && <p className="text-xs text-red-500">{errors.amount.message}</p>}
-                  {errors.sourceToken && <p className="text-xs text-red-500">{errors.sourceToken.message}</p>}
+                  {errors.amount && <p className="text-xs text-error">{errors.amount.message}</p>}
+                  {errors.sourceToken && <p className="text-xs text-error">{errors.sourceToken.message}</p>}
                 </div>
               </div>
             </div>
@@ -653,13 +664,13 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                 </Button>
               </div>
               {errors.destinationToken && (
-                <p className="text-xs text-red-500">{errors.destinationToken.message}</p>
+                <p className="text-xs text-error">{errors.destinationToken.message}</p>
               )}
             </div>
           </div>
 
           {topUpError && (
-            <p className="text-xs text-red-500 break-words">
+            <p className="text-xs text-error break-words">
               {topUpError.length > 150 ? `${topUpError.slice(0, 150)}...` : topUpError}
             </p>
           )}
@@ -681,7 +692,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
           {children?.({
             isValid: isFormValid && !!quote && !isLoading,
-            onSubmit,
+            onSubmit: handleFormSubmit,
           })}
         </form>
       </div>
@@ -728,7 +739,7 @@ export const TopUp: FC<TopUpProps> = props => {
   return (
     <NitroSwapAPIContextProvider>
       <RouterPathfinderContextProvider>
-        <TopUpLoading {...props} />
+        <TopUpLoading {...props} minAmount={props.minAmount ?? new BigNumber(0)} />
       </RouterPathfinderContextProvider>
     </NitroSwapAPIContextProvider>
   )

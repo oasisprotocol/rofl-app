@@ -8,6 +8,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { AppStatusIcon } from '../AppStatusIcon'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { trimLongString } from '../../utils/trimLongString'
+import { formatDistanceToNow, parseISO } from 'date-fns'
 
 type AppCardProps = {
   app: RoflApp
@@ -34,11 +35,18 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
         )}
         {type === 'dashboard' && (
           <div className="flex flex-col gap-2">
-            {!!app.metadata?.['net.oasis.rofl.version'] && (
-              <Badge variant="secondary">
-                <>{app.metadata?.['net.oasis.rofl.version']}</>
-              </Badge>
-            )}
+            <div>
+              {!!app.metadata?.['net.oasis.rofl.version'] && (
+                <Badge variant="secondary">
+                  <>{app.metadata?.['net.oasis.rofl.version']}</>
+                </Badge>
+              )}{' '}
+              <span className="text-xs">
+                {formatDistanceToNow(parseISO(app.date_created), {
+                  addSuffix: true,
+                })}
+              </span>
+            </div>
             <span className="text-xs text-muted-foreground break-all">{app.id}</span>
           </div>
         )}

@@ -1,7 +1,6 @@
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom'
 import { WagmiProvider } from 'wagmi'
-import { CreateContextProvider } from './pages/CreateApp/CreateContextProvider'
 import { Landing } from './pages/Landing'
 import { Dashboard } from './pages/Dashboard'
 import { MyApps } from './pages/Dashboard/MyApps'
@@ -22,6 +21,7 @@ import { sapphire } from 'viem/chains'
 
 import './index.css'
 import '@rainbow-me/rainbowkit/styles.css'
+import { MachineTopUp } from './pages/Dashboard/MachinesDetails/MachineTopUp.tsx'
 
 const queryClient = new QueryClient()
 const rainbowKitTheme: Theme = {
@@ -64,11 +64,20 @@ const router = createBrowserRouter([
             path: 'machines/:provider/instances/:id',
             element: <MachinesDetails />,
           },
+          {
+            path: 'machines/:provider/instances/:id/top-up',
+            element: <MachineTopUp />,
+          },
         ],
       },
       {
         path: 'create',
-        element: <Create />,
+        Component: () => {
+          const location = useLocation()
+          // Key is used to reset state on every navigation to this route. Even
+          // if inside create flow and user clicks "Create +" in Header bar.
+          return <Create key={location.key} />
+        },
       },
       {
         path: 'explore',
@@ -92,6 +101,7 @@ createRoot(document.getElementById('root')!).render(
   <WagmiProvider config={wagmiConfig}>
     <QueryClientProvider client={queryClient}>
       <RainbowKitProvider
+        modalSize="compact"
         initialChain={sapphire}
         theme={rainbowKitTheme}
         avatar={({ address, size }) => (
@@ -99,9 +109,7 @@ createRoot(document.getElementById('root')!).render(
         )}
       >
         <RoflAppBackendAuthProvider>
-          <CreateContextProvider>
-            <RouterProvider router={router} />
-          </CreateContextProvider>
+          <RouterProvider router={router} />
         </RoflAppBackendAuthProvider>
       </RainbowKitProvider>
     </QueryClientProvider>

@@ -1,6 +1,4 @@
-import type { ReactNode } from 'react'
 import { useState } from 'react'
-import { CreateContext } from './CreateContext'
 import type { AppData } from './types'
 
 const initAppDataState: AppData = {
@@ -27,7 +25,7 @@ const initAppDataState: AppData = {
   payment: {},
 }
 
-export const CreateContextProvider = ({ children }: { children: ReactNode }) => {
+export const useCreate = () => {
   const [currentStep, setCurrentStep] = useState(0)
   const [appData, setAppData] = useState<AppData>(initAppDataState)
   const setAppDataForm = (data: Partial<AppData>) => {
@@ -38,17 +36,11 @@ export const CreateContextProvider = ({ children }: { children: ReactNode }) => 
     setAppData(initAppDataState)
   }
 
-  return (
-    <CreateContext.Provider
-      value={{
-        currentStep,
-        setCurrentStep,
-        resetStep,
-        appData,
-        setAppDataForm,
-      }}
-    >
-      {children}
-    </CreateContext.Provider>
-  )
+  return {
+    currentStep,
+    setCurrentStep,
+    resetStep,
+    appData,
+    setAppDataForm,
+  }
 }

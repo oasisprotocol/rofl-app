@@ -1,7 +1,7 @@
 import { useState, type FC } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@oasisprotocol/ui-library/src/components/ui/tabs'
-import { Clock } from 'lucide-react'
+import { CircleArrowUp, Clock } from 'lucide-react'
 import { formatDistanceToNow, parseISO, isFuture } from 'date-fns'
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow'
@@ -15,10 +15,11 @@ import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { trimLongString } from '../../../utils/trimLongString'
 import { MachineResources } from '../../../components/MachineResources'
 import { useMachineExecuteRestartCmd, useMachineExecuteStopCmd } from '../../../backend/api'
-import { MachineTopUp } from './MachineTopUp'
 import { MachineStop } from './MachineStop'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { MachineLogs } from './MachineLogs'
+import { toast } from 'sonner'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 
 export const MachinesDetails: FC = () => {
   const [logs, setLogs] = useState<string[]>([])
@@ -72,7 +73,12 @@ export const MachinesDetails: FC = () => {
                     )}
                   </div>
 
-                  <MachineTopUp onConfirm={() => {}} disabled={machine.removed} />
+                  <Button variant="outline" className="w-full md:w-auto" disabled={machine.removed} asChild>
+                    <Link to="./top-up">
+                      <CircleArrowUp />
+                      Top up
+                    </Link>
+                  </Button>
                   <MachineRestart
                     disabled={machine.removed}
                     onConfirm={async () => {
@@ -81,6 +87,7 @@ export const MachinesDetails: FC = () => {
                         provider: machine.provider,
                         network,
                       })
+                      toast.loading('Machine is restarting (~1min)', { duration: 1 * 60 * 1000 })
                     }}
                   />
                   <MachineStop

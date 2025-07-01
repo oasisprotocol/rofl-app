@@ -17,6 +17,7 @@ import { MachineResources } from '../../../components/MachineResources'
 
 type AppMetadataProps = {
   id: string
+  date_created: string
   editableState: MetadataFormData
   policy: RoflAppPolicy
   setViewMetadataState: (state: ViewMetadataState) => void
@@ -25,6 +26,7 @@ type AppMetadataProps = {
 
 export const AppMetadata: FC<AppMetadataProps> = ({
   id,
+  date_created,
   editableState,
   policy,
   setViewMetadataState,
@@ -83,7 +85,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
           <span className="text-muted-foreground">Machines data is not available.</span>
         </DetailsSectionRow>
       )}
-      <DetailsSectionRow label="Explorer Link" className="pb-6 border-b">
+      <DetailsSectionRow label="Explorer Link">
         <a
           href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${id}`}
           target="_blank"
@@ -92,6 +94,9 @@ export const AppMetadata: FC<AppMetadataProps> = ({
         >
           {id}
         </a>
+      </DetailsSectionRow>
+      <DetailsSectionRow label="Created at" className="pb-6 border-b">
+        {new Date(date_created).toLocaleString()}
       </DetailsSectionRow>
       <MetadataDialog
         metadata={editableState}

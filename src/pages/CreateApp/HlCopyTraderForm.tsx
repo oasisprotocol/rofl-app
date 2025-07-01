@@ -1,9 +1,9 @@
 import { type FC } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { InputFormField } from './InputFormField'
 import { CreateFormNavigation } from './CreateFormNavigation'
 import { hlCopyTraderFormSchema, type HlCopyTraderFormData } from './types'
+import { InputFormField } from '../../components/InputFormField'
 
 type HlCopyTraderFormProps = {
   handleNext: () => void
@@ -42,13 +42,6 @@ export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
         control={form.control}
         name="COPY_TRADE_ADDRESS"
         label="Trader Address to Copy"
-        placeholder="0x..."
-      />
-
-      <InputFormField
-        control={form.control}
-        name="WITHDRAW_FUNDS_TO"
-        label="Withdrawal Address (Optional)"
         placeholder="0x..."
       />
 
