@@ -14,7 +14,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
 
   const [token, _setToken] = useState<string | null>(
     // TODO: possibly already expired or from another account. Currently detected by useInterval within a few seconds.
-    window.localStorage.getItem('jwt')
+    window.localStorage.getItem('jwt'),
   )
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
