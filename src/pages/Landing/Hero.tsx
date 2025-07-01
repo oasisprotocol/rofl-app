@@ -31,8 +31,7 @@ export const Hero: FC = () => {
               Onchain Trust.
             </h1>
             <p className="text-md text-muted-foreground lg:max-w-lg leading-relaxed">
-              Build next-gen applications with Runtime Offchain Logic, a framework that allows dApps to run in
-              a verifiable, decentralized, and private way.
+              Build trustless apps. Start quickly with templates. Manage everything from one interface.
             </p>
           </div>
           {isConnected ? (

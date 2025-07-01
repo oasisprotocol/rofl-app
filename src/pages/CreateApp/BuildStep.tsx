@@ -37,17 +37,13 @@ export const BuildStep: FC<AgentStepProps> = ({
       currentStep={3}
       hints={[
         {
-          title: 'Tips and Tricks',
-          description:
-            'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
+          title: 'kill it',
+          description: '',
         },
       ]}
       selectedTemplateName={selectedTemplateName}
     >
-      <CreateFormHeader
-        title="Build and Deploy"
-        description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
-      />
+      <CreateFormHeader title="Configure machine" description="" />
 
       <BuildForm
         onSubmit={onSubmit}

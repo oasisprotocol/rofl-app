@@ -1,5 +1,5 @@
 name: Hyperliquid Copy Trader
-description: A confidential copy trading bot for Hyperliquid. It copies the trades of a specified trader on the Hyperliquid DEX.
+description: Confidential copy trading agent built for Hyperliquid. Automatically mirrors trades from a specified trader.
 image: https://rofl.app/templates/hl-rofl-trader.png
 version: 1.2.6
 repository: https://github.com/oasisprotocol/template-rofl-hl-copy-trader

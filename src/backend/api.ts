@@ -241,10 +241,10 @@ export function useCreateAndDeployApp() {
     deploying: 80_000,
   }
   const stepLabels: { [step in (typeof steps)[number]]: string } = {
-    creating: 'Creating App',
-    building: 'Building App',
-    updating: 'Updating App Secrets',
-    deploying: 'Deploying App to Machine',
+    creating: 'Creating app',
+    building: 'Building app',
+    updating: 'Updating app secrets',
+    deploying: 'Deploying app to machine',
   }
 
   const mutation = useMutation<

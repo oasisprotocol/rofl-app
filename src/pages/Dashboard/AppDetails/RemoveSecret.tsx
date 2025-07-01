@@ -30,7 +30,7 @@ export const RemoveSecret: FC<RemoveSecretProps> = ({ secret, handleRemoveSecret
         <DialogHeader>
           <DialogTitle>Please confirm your action</DialogTitle>
           <DialogDescription>
-            Secret key <strong>{secret}</strong> will be removed from ROFL app.
+            Secret key <strong>{secret}</strong> will be removed from the app.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

@@ -28,7 +28,7 @@ export const MachineRestart: FC<MachineRestartProps> = ({ onConfirm, disabled })
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Restart Machine</DialogTitle>
+          <DialogTitle>Restart machine</DialogTitle>
           <DialogDescription>
             The machine and your app will be unavailable during the restart process.
           </DialogDescription>

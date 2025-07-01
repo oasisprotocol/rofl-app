@@ -1,8 +1,5 @@
-name: Private Telegram Chat Bot
-description: |
-  Confidential Telegram chat bot running entirely inside the TEE. No prompts
-  will ever leave the trusted environment! Define your bot behavior with
-  confidential system prompt.
+name: Private Telegram Bot
+description: Confidential chatbot running inside a TEE. No prompts leave the secure enclave. Define your bot's behavior with system prompt.
 image: https://rofl.app/templates/tgbot.png
 version: 0.1.0
 repository: https://github.com/oasisprotocol/demo-rofl-tgbot

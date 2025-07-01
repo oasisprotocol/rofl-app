@@ -79,10 +79,7 @@ export const MachineTopUp: FC = () => {
           <div className="flex flex-col">
             <div className="flex flex-col items-start gap-2 max-w-md">
               <h1 className="text-2xl font-semibold text-foreground">Top up {machineTitle}</h1>
-              <p className="text-sm text-muted-foreground">
-                At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices
-                egestas. Bibendum sed integer ac eget.
-              </p>
+              <p className="text-sm text-muted-foreground mb-2">Machine rental costs are non-refundable.</p>
               <BuildForm
                 build={buildConfig}
                 offerId={machine!.offer_id}

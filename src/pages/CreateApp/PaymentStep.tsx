@@ -65,16 +65,15 @@ export const PaymentStep: FC<AgentStepProps> = ({
       currentStep={4}
       hints={[
         {
-          title: 'Tips and Tricks',
-          description:
-            'Ultricies convallis urna habitant blandit risus ultrices facilisi donec. Bibendum semper convallis sit tellus tincidunt tincidunt.',
+          title: 'kill it',
+          description: '',
         },
       ]}
       selectedTemplateName={selectedTemplateName}
     >
       <CreateFormHeader
         title="Payment"
-        description="At varius sit sit netus at integer vitae posuere id. Nulla imperdiet vestibulum amet ultrices egestas. Bibendum sed integer ac eget."
+        description="Registration fees are refundable if you delete your app. Machine rental costs are non-refundable."
       />
       {isLoading && <Spinner />}
       {sapphireBalance && (
@@ -93,6 +92,13 @@ export const PaymentStep: FC<AgentStepProps> = ({
               : undefined
           }
         />
+      )}
+      {!hasEnoughBalance && minAmount && (
+        <p className="text-sm text-foreground font-semibold text-center my-4">
+          You need more ROSE to complete this process.
+          <br />
+          Top up your wallet below.
+        </p>
       )}
       {!hasEnoughBalance && minAmount && (
         <TopUp minAmount={minAmount} onTopUpSuccess={handleTopUpSuccess}>

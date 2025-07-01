@@ -103,7 +103,7 @@ export const SecretDialog: FC<SecretDialogProps> = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Edit Secret' : 'Add New Secret'}</DialogTitle>
+          <DialogTitle>{isEditMode ? 'Edit secret' : 'Add new secret'}</DialogTitle>
         </DialogHeader>
         <DialogDescription className="mb-6">
           {isEditMode

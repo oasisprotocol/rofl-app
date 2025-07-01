@@ -53,7 +53,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
 
       {machines && machines.length > 0 && isMachineFetched ? (
         <>
-          <DetailsSectionRow label="Machine(s)">
+          <DetailsSectionRow label="Machines">
             {machines.map((machine, index) => (
               <span key={machine.id}>
                 <Link
@@ -67,7 +67,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
               </span>
             ))}
           </DetailsSectionRow>
-          <DetailsSectionRow label="Machine(s) resources" className=" pb-6 border-b">
+          <DetailsSectionRow label="Resources" className=" pb-6 border-b">
             {machines.map((machine, index) => (
               <span key={machine.id}>
                 <MachineResources
@@ -85,7 +85,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
           <span className="text-muted-foreground">Machines data is not available.</span>
         </DetailsSectionRow>
       )}
-      <DetailsSectionRow label="Explorer Link">
+      <DetailsSectionRow label="Explorer">
         <a
           href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${id}`}
           target="_blank"
@@ -95,7 +95,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
           {id}
         </a>
       </DetailsSectionRow>
-      <DetailsSectionRow label="Created at" className="pb-6 border-b">
+      <DetailsSectionRow label="Created" className="pb-6 border-b">
         {new Date(date_created).toLocaleString()}
       </DetailsSectionRow>
       <MetadataDialog

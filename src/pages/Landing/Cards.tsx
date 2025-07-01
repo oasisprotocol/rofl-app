@@ -22,12 +22,15 @@ export const Cards: FC = () => {
         )}
       >
         <CardWrapper
-          title="Templates"
-          description="Tincidunt ut bibendum tempus integer nec eget commodo. Nisi eleifend phasellus vitae in diam laoreet urna molestie tortor. Facilisi sit fringilla ultricies nisi semper rhoncus egestas."
+          title="Start with templates"
+          description="Convert your containerized app into a trustless app in minutes via Oasis CLI."
+          // change link when wallet connected to create flow
+          to="/templates"
+          label="Create app"
         />
         <CardWrapper
-          title="Providers"
-          description="Tincidunt ut bibendum tempus integer nec eget commodo. Nisi eleifend phasellus vitae in diam laoreet urna molestie tortor. Facilisi sit fringilla ultricies nisi semper rhoncus egestas."
+          title="Flexible deployment"
+          description="Manage apps and access confidential VMs through a decentralized network of compute providers."
         />
       </div>
       <div
@@ -37,9 +40,10 @@ export const Cards: FC = () => {
         })}
       >
         <CardWrapper
-          title="Explore"
-          description="Egestas eu praesent mauris feugiat tellus tempus sem quis. Sodales lacus elit turpis nullam enim condimentum non. Est commodo nec diam sapien aenean. Nullam dui ut enim ut purus augue integer tempor. Nam dictum nunc auctor ornare nec enim eget urna."
+          title="Explore the ecosystem"
+          description="Browse live examples and discover what's possible with verifiable offchain compute."
           to="/explore"
+          label="Explore now"
           image={dashboardImage}
         />
       </div>

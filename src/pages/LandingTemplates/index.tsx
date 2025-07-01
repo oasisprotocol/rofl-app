@@ -2,41 +2,34 @@ import { type FC } from 'react'
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout'
 import { Header } from '../../components/Layout/Header'
 import { Footer } from '../../components/Layout/Footer'
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from '@oasisprotocol/ui-library/src/components/ui/card'
-import { type AppData } from './types'
-import { templates } from './templates'
+import { Card, CardHeader, CardTitle, CardContent } from '@oasisprotocol/ui-library/src/components/ui/card'
+import { templates } from '../CreateApp/templates'
 import { ArrowUpRight } from 'lucide-react'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator'
 
-type TemplateStepProps = {
-  handleNext: () => void
-  setAppDataForm: (data: Partial<AppData>) => void
-}
-
-export const TemplateStep: FC<TemplateStepProps> = ({ handleNext, setAppDataForm }) => {
-  const handleTemplateSelect = (id: string) => {
-    const template = templates.find(template => template.id === id)
-    setAppDataForm({
-      template: id,
-      ...template?.initialValues,
-    })
-    handleNext()
-  }
-
+export const LandingTemplates: FC = () => {
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
       <Layout headerContent={<Header />} footerContent={<Footer />}>
-        <div className="max-w-6xl mx-auto px-8 py-12">
-          <div className="mb-8">
-            <h1 className="text-2xl font-white font-bold mb-2 ">Create app from template</h1>
-            {/* <p className="text-muted-foreground text-md max-w-md">TOOD: Sync cards with public templates</p> */}
+        {/* If this is what product wants get this content from TemplateStep */}
+        <div className=" mx-auto px-8 py-12">
+          <div className="mb-10">
+            <h1 className="text-2xl font-white font-bold mb-2 text-center">
+              Create your app from a template
+            </h1>
+            {/* <p className="text-muted-foreground text-md text-center">
+              Convert your containerized app into a trustless app in minutes via Oasis CLI
+            </p> */}
+            <p className="text-muted-foreground text-md text-center">
+              <Button size="lg" className="mt-4">
+                {/* <Link to="/create-app" className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"> */}
+                Connect Wallet
+                {/* </Link> */}
+              </Button>
+            </p>
           </div>
+          <Separator className="my-8" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {templates.map(template => (
               <Card key={template.id} className="rounded-md pt-6 flex flex-col">
@@ -55,11 +48,6 @@ export const TemplateStep: FC<TemplateStepProps> = ({ handleNext, setAppDataForm
                     {template.description || 'No description available.'}
                   </span>
                 </CardContent>
-                <CardFooter>
-                  <Button className="w-full" onClick={() => handleTemplateSelect(template.id)}>
-                    Select
-                  </Button>
-                </CardFooter>
               </Card>
             ))}
             <Card className="border-0 rounded-md">
@@ -83,12 +71,14 @@ export const TemplateStep: FC<TemplateStepProps> = ({ handleNext, setAppDataForm
                 </span>
               </CardContent>
             </Card>
-            <Card className="border-0 rounded-md">
+
+            <Card className="border-0 rounded-md opacity-50">
               <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
                 <span className="text-muted-foreground text-lg font-semibold">More coming soon...</span>
               </CardContent>
             </Card>
-            {/* if there is not a multiple of 3 templates (including 2 static cards) add a semi transparent card  */}
+
+            {/* if there is not a multiple of 3 templates (including new template soon) add a semi transparent card  */}
             {(templates.length + 2) % 3 !== 0 && (
               <Card className="border-0 rounded-md rounded-lg bg-gradient-to-r from-card to-transparent"></Card>
             )}

@@ -1,5 +1,5 @@
-name: X Agent
-description: An AI-powered Twitter bot that tweets hourly based on a customizable persona. Perfect for maintaining an active Twitter presence with engaging, contextual content.
+name: Autonomous X Agent
+description: AI-powered bot that tweets hourly with a customizable persona. Maintain an active social presence with engaging, contextual content.
 image: https://rofl.app/templates/twitter-persona-bot.png
 version: 1.1.2
 repository: https://github.com/oasisprotocol/template-rofl-x-agent

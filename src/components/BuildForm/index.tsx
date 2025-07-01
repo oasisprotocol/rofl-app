@@ -163,7 +163,7 @@ export const BuildForm: FC<BuildFormProps> = ({
           <SelectFormField
             control={form.control}
             name="duration"
-            label="Duration period"
+            label="Duration"
             placeholder="Select duration"
             options={[...durationOptions]}
           />
@@ -179,14 +179,14 @@ export const BuildForm: FC<BuildFormProps> = ({
             />
             {form.watch('duration') === 'hours' && Number(form.watch('number')) === 1 && (
               <div className="text-sm text-warning leading-tight mt-2">
-                1 hour is a very short period of time for a ROFL app. It may not be enough for debugging.
+                1 hour is a very short period of time for the app. It may not be enough for debugging.
               </div>
             )}
           </div>
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="resources">Resources</Label>
+          <Label htmlFor="resources">Size</Label>
           <Controller
             control={form.control}
             name="resources"

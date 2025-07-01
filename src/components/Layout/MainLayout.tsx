@@ -160,7 +160,7 @@ export const MainLayout: FC = () => {
           </SidebarContent>
           <SidebarFooter className="mb-2">
             <div className="bg-sidebar-accent p-4 rounded-md text-sm text-foreground">
-              <span className="font-bold">Running in Beta.</span>
+              <span className="font-bold">Running in Beta</span>
               <br />
               <a
                 href="https://forms.gle/yewQDdMzNg81wKtw9"
@@ -180,7 +180,7 @@ export const MainLayout: FC = () => {
                 rel="noopener noreferrer"
                 className="underline text-foreground"
               >
-                Speak to our devs.
+                Speak to our devs
               </a>
             </div>
           </SidebarFooter>
