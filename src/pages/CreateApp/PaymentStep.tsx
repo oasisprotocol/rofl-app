@@ -14,17 +14,19 @@ import { useNetwork } from '../../hooks/useNetwork.ts'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useTicker } from '../../hooks/useTicker'
 
-type AgentStepProps = {
+type PaymentStepProps = {
   handleNext: () => void
   handleBack: () => void
   selectedTemplateName?: string
+  selectedTemplateId?: string
   appData?: AppData
 }
 
-export const PaymentStep: FC<AgentStepProps> = ({
+export const PaymentStep: FC<PaymentStepProps> = ({
   handleNext,
   handleBack,
   selectedTemplateName,
+  selectedTemplateId,
   appData,
 }) => {
   const { address } = useAccount()
@@ -61,7 +63,11 @@ export const PaymentStep: FC<AgentStepProps> = ({
   }
 
   return (
-    <CreateLayout currentStep={4} selectedTemplateName={selectedTemplateName}>
+    <CreateLayout
+      currentStep={4}
+      selectedTemplateName={selectedTemplateName}
+      selectedTemplateId={selectedTemplateId}
+    >
       <CreateFormHeader
         title="Payment"
         description={

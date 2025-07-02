@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from 'react'
+import { useState, useEffect } from 'react'
 import { Header } from '../../components/Layout/Header'
 import { Footer } from '../../components/Layout/Footer'
 import {
@@ -9,14 +10,30 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/sidebar'
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout'
 import { SidebarItemLabel } from './SidebarItemLabel'
+import { HelpWidget } from './HelpWidget'
 
 type CreateLayoutProps = {
   children: ReactNode
   currentStep?: number
   selectedTemplateName?: string
+  selectedTemplateId?: string
 }
 
-export const CreateLayout: FC<CreateLayoutProps> = ({ children, currentStep = 1, selectedTemplateName }) => {
+export const CreateLayout: FC<CreateLayoutProps> = ({
+  children,
+  currentStep = 1,
+  selectedTemplateName,
+  selectedTemplateId,
+}) => {
+  const [isHelpPanelExpanded, setIsHelpPanelExpanded] = useState(() => {
+    const saved = localStorage.getItem('help-expanded')
+    return saved ? JSON.parse(saved) : false
+  })
+
+  useEffect(() => {
+    localStorage.setItem('help-expanded', JSON.stringify(isHelpPanelExpanded))
+  }, [isHelpPanelExpanded])
+
   const sidebarItems = [
     { label: 'Input metadata', active: currentStep === 1 },
     { label: 'Setup agent', active: currentStep === 2 },
@@ -51,7 +68,12 @@ export const CreateLayout: FC<CreateLayoutProps> = ({ children, currentStep = 1,
       }
     >
       <div className="flex-1 p-6 h-full">
-        <div className="flex-1 flex flex-col md:flex-row items-start h-full">
+        <div className="flex-1 flex flex-col items-start h-full relative">
+          <HelpWidget
+            selectedTemplateId={selectedTemplateId}
+            isExpanded={isHelpPanelExpanded}
+            setIsExpanded={setIsHelpPanelExpanded}
+          />
           <div className="max-w-lg mx-auto px-8 py-12 flex flex-col gap-8 items-center w-full">
             {children}
           </div>

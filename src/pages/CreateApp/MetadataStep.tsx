@@ -12,6 +12,7 @@ type MetadataStepProps = {
   setAppDataForm: (data: { metadata: MetadataFormData }) => void
   metadata?: MetadataFormData
   selectedTemplateName?: string
+  selectedTemplateId?: string
 }
 
 export const MetadataStep: FC<MetadataStepProps> = ({
@@ -19,6 +20,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({
   setAppDataForm,
   metadata,
   selectedTemplateName,
+  selectedTemplateId,
 }) => {
   const form = useForm<MetadataFormData>({
     resolver: zodResolver(metadataFormSchema),
@@ -43,7 +45,11 @@ export const MetadataStep: FC<MetadataStepProps> = ({
   }
 
   return (
-    <CreateLayout currentStep={1} selectedTemplateName={selectedTemplateName}>
+    <CreateLayout
+      currentStep={1}
+      selectedTemplateName={selectedTemplateName}
+      selectedTemplateId={selectedTemplateId}
+    >
       <CreateFormHeader
         title="Input Metadata"
         description="All data you provide here will be visible publicly on-chain."

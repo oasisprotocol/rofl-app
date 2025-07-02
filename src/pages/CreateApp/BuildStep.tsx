@@ -5,12 +5,13 @@ import { CreateFormNavigation } from './CreateFormNavigation'
 import { BuildForm } from '../../components/BuildForm'
 import { BuildFormData } from '../../types/build-form.ts'
 
-type AgentStepProps = {
+type BuildStepProps = {
   handleNext: () => void
   handleBack: () => void
   build?: BuildFormData
   setAppDataForm: (data: { build: BuildFormData }) => void
   selectedTemplateName?: string
+  selectedTemplateId?: string
   selectedTemplateRequirements?: {
     tee: 'tdx' | 'sgx' | undefined
     cpus: number | undefined
@@ -19,12 +20,13 @@ type AgentStepProps = {
   }
 }
 
-export const BuildStep: FC<AgentStepProps> = ({
+export const BuildStep: FC<BuildStepProps> = ({
   handleNext,
   handleBack,
   build,
   setAppDataForm,
   selectedTemplateName,
+  selectedTemplateId,
   selectedTemplateRequirements,
 }) => {
   const onSubmit = (values: BuildFormData) => {
@@ -33,7 +35,11 @@ export const BuildStep: FC<AgentStepProps> = ({
   }
 
   return (
-    <CreateLayout currentStep={3} selectedTemplateName={selectedTemplateName}>
+    <CreateLayout
+      currentStep={3}
+      selectedTemplateName={selectedTemplateName}
+      selectedTemplateId={selectedTemplateId}
+    >
       <CreateFormHeader title="Configure machine" />
 
       <BuildForm
