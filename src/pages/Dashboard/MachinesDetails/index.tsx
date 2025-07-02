@@ -86,7 +86,7 @@ export const MachinesDetails: FC = () => {
                         provider: machine.provider,
                         network,
                       })
-                      toast.loading('Machine is restarting (~1min)', { duration: 1 * 60 * 1000 })
+                      toast('Machine is restarting (~1min)', { duration: 1 * 60 * 1000 })
                     }}
                   />
                   <TabsList className="w-full md:w-auto">
