@@ -93,7 +93,7 @@ export const HeaderSteps: FC<{
     <div className="flex flex-col md:flex-row w-full">
       {steps.map((step, i) => (
         <div key={step} className="flex flex-1 items-center gap-3 px-6 py-4 border-b border-border">
-          {steps.indexOf(currentStep!) > i ? (
+          {steps.indexOf(currentStep!) > i || bootstrapStep === 'success' ? (
             <CheckCircle className="h-6 w-6 text-success" />
           ) : currentStep === step && bootstrapStep === 'error' ? (
             <TriangleAlert className="h-6 w-6 text-error" />
