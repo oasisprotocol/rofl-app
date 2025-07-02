@@ -1,4 +1,4 @@
-name: Private Telegram Bot
+name: AI Telegram Chatbot
 description: Confidential chatbot running inside a TEE. No prompts leave the secure enclave. Define your bot's behavior with system prompt.
 image: https://rofl.app/templates/tgbot.png
 version: 0.1.0

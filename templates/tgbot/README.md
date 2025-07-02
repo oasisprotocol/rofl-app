@@ -1,8 +1,8 @@
-# Private Telegram Chat Bot
+# AI Telegram Chatbot
 
 ## Overview
 
-The Private Telegram Chat Bot runs a confidential AI assistant entirely inside
+The AI Telegram Chatbot runs a confidential AI assistant entirely inside
 a trusted execution environment (TEE). All conversations and the AI model stay
 completely private within the secure enclave.
 
