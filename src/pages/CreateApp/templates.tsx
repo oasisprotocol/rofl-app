@@ -27,7 +27,7 @@ type ParsedTemplate = {
 
 const extractMetadata = (parsedTemplate: ParsedTemplate) => ({
   name: parsedTemplate.name || '',
-  author: parsedTemplate.author || '',
+  author: '',
   description: parsedTemplate.description || '',
   version: parsedTemplate.version || '',
   homepage: parsedTemplate.homepage || '',
