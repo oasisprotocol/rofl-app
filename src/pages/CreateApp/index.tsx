@@ -42,6 +42,7 @@ export const Create: FC = () => {
           metadata={appData?.metadata}
           setAppDataForm={setAppDataForm}
           selectedTemplateName={selectedTemplate?.name}
+          selectedTemplateId={selectedTemplate?.id}
         />
       )}
       {currentStep === 2 && (
@@ -61,6 +62,7 @@ export const Create: FC = () => {
           build={appData?.build}
           setAppDataForm={setAppDataForm}
           selectedTemplateName={selectedTemplate?.name}
+          selectedTemplateId={selectedTemplate?.id}
           selectedTemplateRequirements={{
             tee: selectedTemplate?.yaml.rofl.tee as 'tdx' | 'sgx' | undefined,
             cpus: selectedTemplate?.yaml.rofl.resources.cpus as number | undefined,
@@ -75,6 +77,7 @@ export const Create: FC = () => {
           handleBack={handleBack}
           appData={appData}
           selectedTemplateName={selectedTemplate?.name}
+          selectedTemplateId={selectedTemplate?.id}
         />
       )}
       {currentStep === 5 && <BootstrapStep appData={appData} template={selectedTemplate} />}

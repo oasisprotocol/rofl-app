@@ -16,7 +16,7 @@ type CreateLayoutProps = {
   children: ReactNode
   currentStep?: number
   selectedTemplateName?: string
-  selectedTemplateId: string
+  selectedTemplateId?: string
 }
 
 export const CreateLayout: FC<CreateLayoutProps> = ({

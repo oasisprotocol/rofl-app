@@ -18,6 +18,7 @@ type PaymentStepProps = {
   handleNext: () => void
   handleBack: () => void
   selectedTemplateName?: string
+  selectedTemplateId?: string
   appData?: AppData
 }
 
@@ -25,6 +26,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
   handleNext,
   handleBack,
   selectedTemplateName,
+  selectedTemplateId,
   appData,
 }) => {
   const { address } = useAccount()
@@ -61,7 +63,11 @@ export const PaymentStep: FC<PaymentStepProps> = ({
   }
 
   return (
-    <CreateLayout currentStep={4} selectedTemplateName={selectedTemplateName}>
+    <CreateLayout
+      currentStep={4}
+      selectedTemplateName={selectedTemplateName}
+      selectedTemplateId={selectedTemplateId}
+    >
       <CreateFormHeader
         title="Payment"
         description={

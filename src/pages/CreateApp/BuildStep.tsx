@@ -11,6 +11,7 @@ type BuildStepProps = {
   build?: BuildFormData
   setAppDataForm: (data: { build: BuildFormData }) => void
   selectedTemplateName?: string
+  selectedTemplateId?: string
   selectedTemplateRequirements?: {
     tee: 'tdx' | 'sgx' | undefined
     cpus: number | undefined
@@ -25,6 +26,7 @@ export const BuildStep: FC<BuildStepProps> = ({
   build,
   setAppDataForm,
   selectedTemplateName,
+  selectedTemplateId,
   selectedTemplateRequirements,
 }) => {
   const onSubmit = (values: BuildFormData) => {
@@ -33,7 +35,11 @@ export const BuildStep: FC<BuildStepProps> = ({
   }
 
   return (
-    <CreateLayout currentStep={3} selectedTemplateName={selectedTemplateName}>
+    <CreateLayout
+      currentStep={3}
+      selectedTemplateName={selectedTemplateName}
+      selectedTemplateId={selectedTemplateId}
+    >
       <CreateFormHeader title="Configure machine" />
 
       <BuildForm

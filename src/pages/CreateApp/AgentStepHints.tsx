@@ -14,10 +14,11 @@ type AgentStepHintsProps = {
 }
 
 export const AgentStepHints: FC<AgentStepHintsProps> = ({
-  selectedTemplateId = 'tgbot',
+  selectedTemplateId,
   isExpanded,
   setIsExpanded,
 }) => {
+  console.log('selectedTemplateId', selectedTemplateId)
   const getMarkdownForTemplate = (templateId: string) => {
     switch (templateId) {
       case 'tgbot':
