@@ -97,7 +97,7 @@ export const templates = [
     },
     templateParser: createTemplateParser(xagentRofl),
   },
-  {
+  /*{
     name: parsedHlTemplate.name,
     description: parsedHlTemplate.description,
     image: hlCopyTraderThumbnail,
@@ -111,7 +111,7 @@ export const templates = [
       rofl: hlRofl,
     },
     templateParser: createTemplateParser(hlRofl),
-  },
+  },*/
 ]
 
 export const getTemplateById = (id: string | undefined) => {
