@@ -5,7 +5,7 @@ import { CreateFormNavigation } from './CreateFormNavigation'
 import { BuildForm } from '../../components/BuildForm'
 import { BuildFormData } from '../../types/build-form.ts'
 
-type AgentStepProps = {
+type BuildStepProps = {
   handleNext: () => void
   handleBack: () => void
   build?: BuildFormData
@@ -19,7 +19,7 @@ type AgentStepProps = {
   }
 }
 
-export const BuildStep: FC<AgentStepProps> = ({
+export const BuildStep: FC<BuildStepProps> = ({
   handleNext,
   handleBack,
   build,

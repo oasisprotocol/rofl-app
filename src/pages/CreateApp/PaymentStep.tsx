@@ -14,14 +14,14 @@ import { useNetwork } from '../../hooks/useNetwork.ts'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useTicker } from '../../hooks/useTicker'
 
-type AgentStepProps = {
+type PaymentStepProps = {
   handleNext: () => void
   handleBack: () => void
   selectedTemplateName?: string
   appData?: AppData
 }
 
-export const PaymentStep: FC<AgentStepProps> = ({
+export const PaymentStep: FC<PaymentStepProps> = ({
   handleNext,
   handleBack,
   selectedTemplateName,
