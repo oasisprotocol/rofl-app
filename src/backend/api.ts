@@ -481,7 +481,9 @@ export function useUpdateApp() {
 }
 
 export function useRemoveApp() {
+  const wagmiConfig = useConfig()
   const { sendTransactionAsync } = useSendTransaction()
+  const { mutateAsync: stopMachine } = useMachineExecuteStopCmd()
   return useMutation<void, AxiosError<unknown>, { appId: `rofl1${string}`; network: 'mainnet' | 'testnet' }>({
     mutationFn: async ({ appId, network }) => {
       const sapphireRuntimeId =
@@ -489,12 +491,23 @@ export function useRemoveApp() {
           ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
           : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
       const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId)
-      await sendTransactionAsync(
+      const hash = await sendTransactionAsync(
         rofl
           .callRemove()
           .setBody({ id: oasisRT.rofl.fromBech32(appId) })
           .toSubcall(),
       )
+      await waitForTransactionReceipt(wagmiConfig, { hash })
+
+      const machinesResponse = await GetRuntimeRoflmarketInstances(network, 'sapphire', {
+        deployed_app_id: appId,
+      })
+      const activeMachines = machinesResponse.data.instances.filter(m => !m.removed)
+      console.log('stop machines?', activeMachines)
+      for (const machine of activeMachines) {
+        const hash = await stopMachine({ machineId: machine.id, provider: machine.provider, network })
+        await waitForTransactionReceipt(wagmiConfig, { hash })
+      }
     },
   })
 }
@@ -544,7 +557,7 @@ export function useMachineExecuteRestartCmd() {
 export function useMachineExecuteStopCmd() {
   const { sendTransactionAsync } = useSendTransaction()
   return useMutation<
-    void,
+    `0x${string}`,
     AxiosError<unknown>,
     { machineId: string; provider: string; network: 'mainnet' | 'testnet' }
   >({
@@ -567,7 +580,7 @@ export function useMachineExecuteStopCmd() {
 
       const encodedCommand = oasis.misc.toCBOR(command)
 
-      await sendTransactionAsync(
+      return await sendTransactionAsync(
         roflmarket
           .callInstanceExecuteCmds()
           .setBody({
