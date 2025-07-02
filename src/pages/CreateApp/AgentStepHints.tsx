@@ -64,6 +64,7 @@ export const AgentStepHints: FC<AgentStepHintsProps> = ({
           </div>
 
           <div className="flex-1 overflow-y-auto p-4">
+            {/* prose classes https://github.com/tailwindlabs/tailwindcss-typography */}
             <div className="prose prose-sm dark:prose-invert max-w-none">
               <ReactMarkdown>{markdown}</ReactMarkdown>
             </div>
