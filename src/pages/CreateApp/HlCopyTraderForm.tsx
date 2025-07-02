@@ -45,6 +45,15 @@ export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
         placeholder="0x..."
       />
 
+      <InputFormField
+        control={form.control}
+        name="WITHDRAW_FUNDS_TO"
+        label="Withdrawal Address"
+        placeholder="0x..."
+      />
+
+      {/* Hidden prefilled WITHDRAW="false" */}
+
       <CreateFormNavigation
         handleNext={handleFormSubmit}
         handleBack={handleBack}
