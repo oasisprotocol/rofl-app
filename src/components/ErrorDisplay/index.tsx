@@ -16,7 +16,8 @@ const errorMap: Record<AppErrors, (error: ErrorPayload) => FormattedError> = {
   }),
   [AppErrors.UnsupportedChain]: () => ({
     title: 'Unsupported Chain',
-    message: 'The chain ID you are trying to access is not supported. Please switch to a supported chain.',
+    message:
+      'The currently connected chain is not supported. Please, go to your wallet (e.g. MetaMask) and switch to Oasis Sapphire.',
   }),
   [AppErrors.PageDoesNotExist]: () => ({
     title: 'Page Not Found',
