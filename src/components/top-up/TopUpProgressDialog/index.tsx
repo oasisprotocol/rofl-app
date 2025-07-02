@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { type FC, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -8,11 +8,13 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Spinner } from '../../Spinner'
+import { useCountdownTimer } from './useCountdownTimer'
 
-interface ProgressStep {
+export interface ProgressStep {
   id: number
   label: string
   description: string
+  expectedTimeInSeconds?: number
 }
 
 interface TopUpProgressDialogProps {
@@ -38,6 +40,33 @@ export const TopUpProgressDialog: FC<TopUpProgressDialogProps> = ({
   const showCloseButton = allStepsCompleted || hasError
   const isProcessing = currentStep !== null && !showCloseButton
 
+  const currentStepData = progressSteps.find(step => step.id === currentStep)
+  const hasExpectedTime = currentStepData?.expectedTimeInSeconds !== undefined
+
+  const countdown = useCountdownTimer({
+    initialTimeInSeconds: currentStepData?.expectedTimeInSeconds || 0,
+  })
+
+  useEffect(() => {
+    if (currentStep && hasExpectedTime && stepStatuses[currentStep] === 'processing') {
+      countdown.reset()
+      countdown.start()
+    } else {
+      countdown.stop()
+    }
+
+    return () => {
+      countdown.stop()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep, hasExpectedTime, stepStatuses])
+
+  useEffect(() => {
+    if (!isOpen) {
+      countdown.stop()
+    }
+  }, [isOpen, countdown])
+
   return (
     <Dialog open={isOpen} onOpenChange={showCloseButton ? onClose : undefined}>
       <DialogContent className={`sm:max-w-md ${!showCloseButton ? '[&>button]:hidden' : ''}`}>
@@ -60,6 +89,7 @@ export const TopUpProgressDialog: FC<TopUpProgressDialogProps> = ({
             const isCompleted = status === 'completed'
             const isError = status === 'error'
             const isProcessing = status === 'processing'
+            const shouldShowCountdown = isProcessing && isActive && step.expectedTimeInSeconds !== undefined
 
             return (
               <div key={step.id} className="flex items-start gap-3">
@@ -101,6 +131,14 @@ export const TopUpProgressDialog: FC<TopUpProgressDialogProps> = ({
                   <p className="text-xs text-muted-foreground">{step.description}</p>
                   {isCompleted && <p className="text-xs text-success mt-1">Complete</p>}
                   {isError && <p className="text-xs text-error mt-1">Error occurred</p>}
+                  {shouldShowCountdown && (
+                    <p
+                      className={`text-xs mt-1 font-mono ${countdown.isNegative ? 'text-error' : 'text-muted-foreground'}`}
+                    >
+                      {countdown.isNegative ? 'Overtime: ' : 'Expected: '}
+                      {countdown.formattedTime}
+                    </p>
+                  )}
                 </div>
               </div>
             )

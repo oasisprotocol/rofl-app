@@ -1,4 +1,4 @@
-import React, { type FC, FormEvent, type ReactNode, useEffect, useMemo, useState } from 'react'
+import React, { type FC, FormEvent, type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -27,10 +27,11 @@ import { NitroSwapAPIContextProvider } from '../../../contexts/top-up/NitroSwapA
 import { Spinner } from '../../Spinner'
 import { FaucetInfo } from '../FaucetInfo'
 import { maxUint256 } from 'viem'
-import { TopUpProgressDialog } from '../TopUpProgressDialog'
+import { ProgressStep, TopUpProgressDialog } from '../TopUpProgressDialog'
 import { useNetwork } from '../../../hooks/useNetwork.ts'
-import { sapphire, sapphireTestnet } from 'viem/chains'
+import { sapphire } from 'viem/chains'
 import nitroBoltIcon from '../NitroBoltIcon.svg'
+import { useChainModal } from '@rainbow-me/rainbowkit'
 
 const bridgeFormSchema = z.object({
   sourceChain: z
@@ -132,29 +133,6 @@ const TransactionSummary: FC<TransactionSummaryProps> = ({
   )
 }
 
-const progressSteps = [
-  {
-    id: 1,
-    label: 'Validating chain connection',
-    description: 'Ensuring wallet is connected to correct blockchain network',
-  },
-  {
-    id: 2,
-    label: 'Approving token spend',
-    description: 'Granting permission to smart contract for token transfer',
-  },
-  {
-    id: 3,
-    label: 'Executing bridge transaction',
-    description: 'Initiating cross-chain token transfer',
-  },
-  {
-    id: 4,
-    label: 'Confirming completion',
-    description: 'Monitoring transaction until tokens arrive on destination chain',
-  },
-]
-
 interface TopUpProps {
   minAmount: BigNumber
   onValidChange?: (isValid: boolean) => void
@@ -166,13 +144,12 @@ interface TopUpProps {
 const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpSuccess, onTopUpError }) => {
   const { address } = useAccount()
   const currentChainId = useChainId()
-  const network = useNetwork()
-  const appChain = network === 'mainnet' ? sapphire : sapphireTestnet
   const {
     state: { chains, nativeTokens },
     getToken,
   } = useNitroSwapAPI()
   const { getQuote, executeTransaction, pollStatus } = useRouterPathfinder()
+  const { openChainModal } = useChainModal()
 
   const [selectedChainTokens, setSelectedChainTokens] = useState<TokenWithBalance[] | null>(null)
   const [quote, setQuote] = useState<QuoteResponse | null>(null)
@@ -447,9 +424,8 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
     setIsLoading(true)
     setTopUpError('')
     try {
-      setCurrentStep(1)
-
       // Step 1: Chain validation and switching
+      setCurrentStep(1)
       updateStepStatus(1, 'processing')
       const switchToSource = await switchToChain({
         targetChainId: Number(quote.source?.chainId ?? '0'),
@@ -462,9 +438,8 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
       }
       updateStepStatus(1, 'completed')
 
-      setCurrentStep(2)
-
       // Step 2: Token allowance approval
+      setCurrentStep(2)
       updateStepStatus(2, 'processing')
       await checkAndSetErc20Allowance(
         quote.source!.asset.address as `0x${string}`,
@@ -473,39 +448,46 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
         address as `0x${string}`,
       )
       updateStepStatus(2, 'completed')
-      setCurrentStep(3)
 
       // Step 3: Execute cross-chain transaction
+      setCurrentStep(3)
       updateStepStatus(3, 'processing')
       const txHash = await executeTransaction(quote)
       updateStepStatus(3, 'completed')
-      setCurrentStep(4)
 
       // Step 4: Monitor transaction completion
+      setCurrentStep(4)
       updateStepStatus(4, 'processing')
       await pollStatus({ srcTxHash: txHash })
       updateStepStatus(4, 'completed')
-      setCurrentStep(null)
 
       // Step 5: Switch back to app chain
+      setCurrentStep(5)
+      updateStepStatus(5, 'processing')
+
       const switchToAppChain = await switchToChain({
-        targetChainId: appChain.id,
-        currentChainId,
+        targetChainId: sapphire.id,
+        currentChainId: Number(quote.source?.chainId ?? '0'),
         address,
       })
 
       if (!switchToAppChain.success) {
-        throw new Error(switchToAppChain.error)
+        console.error(switchToAppChain.error)
+        updateStepStatus(5, 'error')
+        openChainModal?.()
+      } else {
+        updateStepStatus(5, 'completed')
       }
 
+      setCurrentStep(null)
       onTopUpSuccess?.()
     } catch (error) {
       console.error('Topup transaction failed:', error)
       if (currentStep) {
         updateStepStatus(currentStep, 'error')
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      setTopUpError((error as any).message)
+
+      setTopUpError((error as Error).message)
       onTopUpError?.(error as Error)
       setCurrentStep(null)
     } finally {
@@ -518,6 +500,49 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
     form.handleSubmit(onSubmit)()
   }
+
+  const lastValidProgressStepsRef = useRef<ProgressStep[] | null>(null)
+
+  const progressSteps = useMemo(() => {
+    if (!quote) {
+      return lastValidProgressStepsRef.current || []
+    }
+
+    const steps = [
+      {
+        id: 1,
+        label: 'Validating chain connection',
+        description: 'Ensuring wallet is connected to correct blockchain network',
+      },
+      {
+        id: 2,
+        label: 'Approving token spend',
+        description: 'Granting permission to smart contract for token transfer',
+      },
+      {
+        id: 3,
+        label: 'Executing bridge transaction',
+        description: 'Initiating cross-chain token transfer',
+      },
+      {
+        id: 4,
+        label: 'Confirming completion',
+        description: 'Monitoring transaction until tokens arrive on destination chain',
+        expectedTimeInSeconds: quote?.estimatedTime,
+      },
+      {
+        id: 5,
+        label: 'Validating chain connection',
+        description: 'Ensuring wallet is connected to correct blockchain network',
+      },
+    ]
+
+    if (quote?.estimatedTime) {
+      lastValidProgressStepsRef.current = steps
+    }
+
+    return steps
+  }, [quote])
 
   return (
     <div className="flex w-full h-full justify-center items-center">
