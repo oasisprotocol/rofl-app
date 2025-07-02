@@ -18,7 +18,7 @@ export const CreateFormNavigation: FC<CreateFormNavigationProps> = ({
   return (
     <div className="flex gap-4 w-full pt-4">
       {handleBack && (
-        <Button className="flex-1" variant="secondary" onClick={handleBack}>
+        <Button className="flex-1" variant="secondary" onClick={handleBack} type="button">
           Back
         </Button>
       )}
