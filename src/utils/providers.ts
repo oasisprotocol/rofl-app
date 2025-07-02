@@ -2,7 +2,7 @@
  * For now we want to whitelist only selected OPF providers based on
  * https://github.com/oasisprotocol/cli/blob/master/build/rofl/provider/defaults.go
  */
-const WHITELISTED_PROVIDER_ADDRESSES = {
+export const WHITELISTED_PROVIDER_ADDRESSES = {
   mainnet: 'oasis1qzc8pldvm8vm3duvdrj63wgvkw34y9ucfcxzetqr',
   testnet: 'oasis1qp2ens0hsp7gh23wajxa4hpetkdek3swyyulyrmz',
 } as const
