@@ -73,6 +73,34 @@ export const MachineLogs: FC<MachineLogsProps> = ({
       .map(line => (line.includes(containersInitializedMessage) ? '\n\n\n# Booted\n' + line : line))
       .join('\n')
 
+  // Workaround for Hyperliquid Copy Trader
+  // Detect
+  //   https://github.com/oasisprotocol/template-rofl-hl-copy-trader/blob/6ea6164b44d0a975daf95af2cf83d2052e5e5ab7/src/core/copy_trader.py#L54
+  //   {"level":"warn","module":"runtime","msg":"2025-07-02 16:06:59,245 - src.core.copy_trader - INFO - Copy trader initialized - Target: 0x8af700ba841f30e0a3fcb0ee4c4a9d223e1efa05, Our address: 0xe8bbADdd6cE1D28a2efaC6272186E02968D01690, Dry run: False","ts":"2025-07-02T16:07:01.871593492Z"}
+  const hyperliquidInitLine = logs.find(line =>
+    line.includes('- src.core.copy_trader - INFO - Copy trader initialized -'),
+  )
+  // extract 0xe8bbADdd6cE1D28a2efaC6272186E02968D01690
+  const hyperliquidTradingAddress = hyperliquidInitLine?.match(/Our address: (0x[0-9a-fA-F]{40}),/)?.[1]
+  if (hyperliquidInitLine && !hyperliquidTradingAddress) {
+    console.error('Can not parse hyperliquid init line:', hyperliquidInitLine)
+  }
+  const hyperliquidExtractedMessage = hyperliquidTradingAddress && (
+    // Based on https://github.com/oasisprotocol/template-rofl-hl-copy-trader/blob/6ea6164b44d0a975daf95af2cf83d2052e5e5ab7/src/core/copy_trader.py#L82-L99
+    <p className="text-md leading-relaxed">
+      Your copy trading bot's USDC (Perps) address on Hyperliquid:
+      <br />
+      {hyperliquidTradingAddress}
+      <br />
+      ⚠️&nbsp; IMPORTANT: Only send USDC (Perps) on Hyperliquid!
+      <br />
+      ⚠️&nbsp; Sending funds on any other chain or to the wrong account type may result in PERMANENT LOSS OF
+      FUNDS!
+      <br />
+      <br />
+    </p>
+  )
+
   return (
     <>
       {!hasLogs && !isLoadingLogs && (
@@ -101,7 +129,7 @@ export const MachineLogs: FC<MachineLogsProps> = ({
               {isAuthenticating || isLoadingLogs ? 'Fetching...' : 'Refetch logs'}
             </Button>
           </div>
-
+          {hyperliquidExtractedMessage}
           <RawCode data={logsWithSections} className="h-[700px]" />
         </>
       )}
