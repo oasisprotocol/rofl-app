@@ -5,7 +5,12 @@ export const metadataFormSchema = z.object({
   name: z.string().min(1, {
     message: 'Name is required.',
   }),
-  author: z.string().optional(),
+  author: z.literal('').or(
+    z.string().regex(/^(.+)\s+<([^@\s]+@[^@\s]+\.[^@\s]+)>$/, {
+      message:
+        'Author must follow the format "Name <valid_email>". The email address must be in square brackets',
+    }),
+  ),
   description: z.string().min(1, {
     message: 'Description is required.',
   }),

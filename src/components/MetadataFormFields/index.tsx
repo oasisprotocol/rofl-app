@@ -12,7 +12,12 @@ export const MetadataFormFields: FC<MetadataFormFieldsProps> = ({ control }) => 
     <div className="space-y-6">
       <InputFormField control={control} name="name" label="Name" placeholder="App name" />
 
-      <InputFormField control={control} name="author" label="Author" placeholder="John Doe" />
+      <InputFormField
+        control={control}
+        name="author"
+        label="Author"
+        placeholder="John Doe <john@example.com>"
+      />
 
       <InputFormField
         control={control}
