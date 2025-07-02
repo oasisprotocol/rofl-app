@@ -70,6 +70,8 @@ export const BuildForm: FC<BuildFormProps> = ({
   )
   const offers = providersOffersQuery.data?.data.offers
     .filter(offer => {
+      if (offer.capacity === 0) return false
+
       if (!selectedTemplateRequirements) {
         return (
           offer.resources.tee === oasisRT.types.RoflmarketTeeType.TDX ||
