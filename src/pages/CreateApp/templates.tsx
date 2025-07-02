@@ -112,7 +112,7 @@ export const templates = [
     },
     templateParser: createTemplateParser(hlRofl),
   },
-].slice(0, -1) // Disables hyperliquid
+]
 
 export const getTemplateById = (id: string | undefined) => {
   return templates.find(template => template.id === id)
