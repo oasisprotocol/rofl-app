@@ -16,15 +16,6 @@ import { useNavigate } from 'react-router-dom'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { ENABLED_CHAINS_IDS } from '../../constants/top-up-config.ts'
 
-const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address, className = '' }) => {
-  return (
-    <div className={`flex overflow-hidden ${className}`}>
-      <span className="flex-1 truncate min-w-0">{address.slice(0, -4)}</span>
-      <span className="flex-shrink-0">{address.slice(-4)}</span>
-    </div>
-  )
-}
-
 interface Props {
   onMobileClose?: () => void
 }
@@ -133,10 +124,9 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                         }}
                       />
                       <div className="flex flex-col items-start min-w-0 flex-1">
-                        <TruncatedAddress
-                          address={address as `0x${string}`}
-                          className="mono text-foreground text-base font-medium leading-6 w-full"
-                        />
+                        <span className="mono text-foreground text-base font-medium leading-6 w-full">
+                          {account.displayName}
+                        </span>
                         <p className="text-muted-foreground text-sm leading-5">{account.displayBalance}</p>
                       </div>
                     </button>
