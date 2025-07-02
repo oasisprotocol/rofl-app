@@ -1,4 +1,4 @@
-import { type FC, useMemo } from 'react'
+import { type FC, useEffect, useMemo } from 'react'
 import { useNetwork } from '../../../hooks/useNetwork'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetRuntimeRoflmarketProvidersAddressInstancesId } from '../../../nexus/generated/api'
@@ -9,17 +9,20 @@ import { trimLongString } from '../../../utils/trimLongString.ts'
 import { BuildForm } from '../../../components/BuildForm'
 import { CreateFormNavigation } from '../../CreateApp/CreateFormNavigation.tsx'
 import { useMachineTopUp } from '../../../backend/api.ts'
-import { useAccount, useBalance } from 'wagmi'
+import { useAccount, useBalance, useChainId } from 'wagmi'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { NumberUtils } from '../../../utils/number.utils.ts'
 import { BigNumber } from 'bignumber.js'
 import { TopUp } from '../../../components/top-up/TopUp'
 import { Spinner } from '../../../components/Spinner'
 import { defaultBuildConfig } from '../../CreateApp/templates.tsx'
+import { useBlockNavigatingAway } from '../../CreateApp/useBlockNavigatingAway.ts'
 
 export const MachineTopUp: FC = () => {
   const navigate = useNavigate()
   const network = useNetwork()
+  const currentChainId = useChainId()
+  const canNavigateAway = currentChainId === sapphire.id || currentChainId === sapphireTestnet.id
   const { provider, id } = useParams()
   // TODO: Refactor, join with MachineDetails/index.tsx state into a provider
   const roflMachinesQuery = useGetRuntimeRoflmarketProvidersAddressInstancesId(
@@ -55,8 +58,20 @@ export const MachineTopUp: FC = () => {
     [provider],
   )
 
+  const { blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
+
+  useEffect(() => {
+    if (canNavigateAway) {
+      allowNavigatingAway()
+    } else {
+      blockNavigatingAway()
+    }
+  }, [allowNavigatingAway, blockNavigatingAway, canNavigateAway])
+
   const handleBack = () => {
-    navigate(`/dashboard/machines/${machine!.provider}/instances/${machine!.id}`)
+    if (canNavigateAway) {
+      navigate(`/dashboard/machines/${machine!.provider}/instances/${machine!.id}`)
+    }
   }
 
   const handleTopUpSuccess = () => {
@@ -111,11 +126,19 @@ export const MachineTopUp: FC = () => {
                         {isSapphireBalanceLoading && <Spinner />}
                         <TopUp minAmount={minAmount} onTopUpSuccess={handleTopUpSuccess}>
                           {({ isValid, onSubmit }) => (
-                            <CreateFormNavigation
-                              handleNext={onSubmit}
-                              handleBack={handleBack}
-                              disabled={!isValid}
-                            />
+                            <>
+                              <CreateFormNavigation
+                                handleNext={onSubmit}
+                                handleBack={handleBack}
+                                disabled={!isValid}
+                              />
+                              {!canNavigateAway && (
+                                <p className="text-xs text-error py-2">
+                                  Before navigation away, manually switch the chain to ${sapphire.name}{' '}
+                                  (chainId: ${sapphire.id})
+                                </p>
+                              )}
+                            </>
                           )}
                         </TopUp>
                       </>
@@ -130,6 +153,12 @@ export const MachineTopUp: FC = () => {
                         disabled={machineTopUp.isPending || noOffersWarning}
                         isLoading={machineTopUp.isPending}
                       />
+                      {!canNavigateAway && (
+                        <p className="text-xs text-error py-2">
+                          Before navigation away, manually switch the chain to ${sapphire.name} (chainId: $
+                          {sapphire.id})
+                        </p>
+                      )}
                       {machineTopUp.isError && (
                         <p className="text-xs text-error break-all">{machineTopUp?.error.message}</p>
                       )}
