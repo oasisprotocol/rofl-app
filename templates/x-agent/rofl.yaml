@@ -15,7 +15,7 @@ tags:
 tee: tdx
 kind: container
 resources:
-  memory: 1024
+  memory: 2048
   cpus: 1
   storage:
     kind: disk-persistent
