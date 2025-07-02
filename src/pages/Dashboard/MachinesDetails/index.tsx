@@ -40,7 +40,7 @@ export const MachinesDetails: FC = () => {
     <>
       <div>
         <Dialog open={showBlockingOverlay}>
-          <DialogContent className="w-auto">
+          <DialogContent className="w-auto [&>button]:hidden">
             {/* mitigate webm black background */}
             <video className="mix-blend-lighten" width="310" height="310" autoPlay muted loop playsInline>
               <source src="https://assets.oasis.io/webm/Oasis-Loader-310x310.webm" type="video/webm" />
