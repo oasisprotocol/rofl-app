@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { type FC, useEffect } from 'react'
 import { CreateLayout } from './CreateLayout'
 import { CreateFormHeader } from './CreateFormHeader'
 import { CreateFormNavigation } from './CreateFormNavigation'
@@ -13,6 +13,7 @@ import { fromBaseUnits } from '../../utils/number-utils'
 import { useNetwork } from '../../hooks/useNetwork.ts'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useTicker } from '../../hooks/useTicker'
+import { useBlockNavigatingAway } from './useBlockNavigatingAway.ts'
 
 type PaymentStepProps = {
   handleNext: () => void
@@ -59,6 +60,16 @@ export const PaymentStep: FC<PaymentStepProps> = ({
     hasEnoughBalance || !sapphireBalance || !amountRequired
       ? null
       : BigNumber(amountRequired).minus(sapphireBalance.value)
+
+  const { blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
+
+  useEffect(() => {
+    if (canNavigateAway) {
+      allowNavigatingAway()
+    } else {
+      blockNavigatingAway()
+    }
+  }, [allowNavigatingAway, blockNavigatingAway, canNavigateAway])
 
   return (
     <CreateLayout
