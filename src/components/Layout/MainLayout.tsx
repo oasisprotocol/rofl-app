@@ -25,6 +25,7 @@ import {
   BreadcrumbSeparator,
 } from '@oasisprotocol/ui-library/src/components/ui/breadcrumb'
 import { ErrorBoundary } from '../ErrorBoundary'
+import { SidebarFooterContent } from './SidebarFooter'
 
 const navItems = {
   dashboard: { label: 'Dashboard', path: '/dashboard' },
@@ -159,30 +160,7 @@ export const MainLayout: FC = () => {
             </SidebarGroup>
           </SidebarContent>
           <SidebarFooter className="mb-2">
-            <div className="bg-sidebar-accent p-4 rounded-md text-sm text-foreground">
-              <span className="font-bold">Running in Beta</span>
-              <br />
-              <a
-                href="https://forms.gle/yewQDdMzNg81wKtw9"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-foreground"
-              >
-                Provide feedback here
-              </a>
-            </div>
-            <div className="bg-sidebar-accent p-4 rounded-md text-sm text-foreground">
-              <span className="font-bold">Need Support?</span>
-              <br />
-              <a
-                href="https://oasis.io/discord"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-foreground"
-              >
-                Speak to our devs
-              </a>
-            </div>
+            <SidebarFooterContent />
           </SidebarFooter>
         </Sidebar>
       }
