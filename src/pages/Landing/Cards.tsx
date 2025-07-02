@@ -26,7 +26,7 @@ export const Cards: FC = () => {
       >
         <CardWrapper
           title="Start with templates"
-          description="Convert your containerized app into a trustless app in minutes via Oasis CLI."
+          description="Skip the complexity and launch faster with our custom-built templates."
           to={isConnected ? '/create' : '/templates'}
           label="Create app"
         />
