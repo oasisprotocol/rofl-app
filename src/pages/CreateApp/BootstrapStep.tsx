@@ -80,7 +80,7 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
 
   return (
     <Layout headerContent={<Header />} footerContent={<Footer />}>
-      <HeaderSteps progress={createAndDeployAppMutation.progress} />
+      <HeaderSteps progress={createAndDeployAppMutation.progress} bootstrapStep={bootstrapStep} />
       <div className="w-full px-8 py-12 flex flex-col items-center justify-center">
         {bootstrapStep === 'create_and_deploy' && (
           <div className="w-full flex items-center justify-center mb-8">
