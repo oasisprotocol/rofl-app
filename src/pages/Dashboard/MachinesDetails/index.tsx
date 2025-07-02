@@ -12,13 +12,13 @@ import {
   useGetRuntimeRoflmarketProvidersAddressInstancesId,
 } from '../../../nexus/api'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
-import { trimLongString } from '../../../utils/trimLongString'
 import { MachineResources } from '../../../components/MachineResources'
 import { useMachineExecuteRestartCmd, useMachineExecuteStopCmd } from '../../../backend/api'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { MachineLogs } from './MachineLogs'
 import { toast } from 'sonner'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { MachineName } from '../../../components/MachineName'
 
 export const MachinesDetails: FC = () => {
   const [logs, setLogs] = useState<string[]>([])
@@ -54,7 +54,7 @@ export const MachinesDetails: FC = () => {
               <>
                 <div className="flex items-center gap-2">
                   <h1 className="text-2xl font-bold">
-                    <>{machine.metadata?.['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
+                    <MachineName machine={machine} network={network} />
                   </h1>
                   <MachineStatusIcon machine={machine} />
                 </div>
