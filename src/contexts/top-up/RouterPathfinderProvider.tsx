@@ -31,7 +31,7 @@ export const RouterPathfinderContextProvider: FC<PropsWithChildren> = ({ childre
       const defaultParams = {
         slippageTolerance: 2,
         destFuel: 0,
-        partnerId: 1,
+        partnerId: Number(import.meta.env.VITE_NITRO_PARTNER_ID),
       }
 
       const mergedParams = { ...defaultParams, ...params }
