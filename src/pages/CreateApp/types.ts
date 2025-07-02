@@ -6,10 +6,48 @@ export const metadataFormSchema = z.object({
     message: 'Name is required.',
   }),
   author: z.literal('').or(
-    z.string().regex(/^(.+)\s+<([^@\s]+@[^@\s.]+(?:\.[^@\s.]+)*\.[a-zA-Z]{2,})>$/, {
-      message:
-        'Author must follow the format "Name <valid_email>". The email address must be in square brackets.',
-    }),
+    z.string().refine(
+      value => {
+        // This code is auto generated based on Go's net/mail.ParseAddress
+        // Accept formats: email@domain.com, Name <email@domain.com>, "Name" <email@domain.com>, <email@domain.com>
+
+        // Rejects consecutive dots, leading/trailing dots, and other invalid patterns
+        const emailRegex =
+          /^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$/
+
+        // Trim whitespace
+        const trimmed = value.trim()
+
+        // Case 1: Simple email address (user@domain.com)
+        if (emailRegex.test(trimmed)) {
+          return true
+        }
+
+        // Case 2: Email in angle brackets only (<user@domain.com>)
+        const angleBracketsOnly = /^<([^<>]+)>$/.exec(trimmed)
+        if (angleBracketsOnly) {
+          return emailRegex.test(angleBracketsOnly[1].trim())
+        }
+
+        // Case 3: Display name with email in angle brackets
+        // Matches: Name <email>, "Name" <email>, "Name with spaces" <email>
+        const displayNameWithEmail = /^(.+?)\s*<([^<>]+)>$/.exec(trimmed)
+        if (displayNameWithEmail) {
+          const displayName = displayNameWithEmail[1].trim()
+          const email = displayNameWithEmail[2].trim()
+
+          // Display name should not be empty and email should be valid
+          if (displayName.length > 0 && emailRegex.test(email)) {
+            return true
+          }
+        }
+
+        return false
+      },
+      {
+        message: 'Author must be a valid email address or in the format "Name <email@domain.com>".',
+      },
+    ),
   ),
   description: z.string().min(1, {
     message: 'Description is required.',
