@@ -28,10 +28,6 @@ const textContent = {
     header: 'App will be ready in 5 minutes!',
     description: (
       <>
-        <div>
-          Sed imperdiet libero sed arcu iaculis, et congue eros rhoncus. Donec lacinia a ante eu imperdiet.
-          Sed nisi elit, hendrerit ut est nec, pharetra euismod odio.
-        </div>
         <Button asChild className="mt-4">
           <Link to={'/dashboard'}>Navigate to Dashboard</Link>
         </Button>
