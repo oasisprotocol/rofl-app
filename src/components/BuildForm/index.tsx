@@ -31,6 +31,7 @@ type BuildFormProps = {
     storage: number | undefined
   }
   offerId?: string
+  selectedTemplateId?: string
 }
 
 export const BuildForm: FC<BuildFormProps> = ({
@@ -39,6 +40,7 @@ export const BuildForm: FC<BuildFormProps> = ({
   selectedTemplateRequirements,
   offerId,
   children,
+  selectedTemplateId,
 }) => {
   const network = useNetwork()
   const providersQuery = useGetRuntimeRoflmarketProviders(network, 'sapphire')
@@ -187,6 +189,14 @@ export const BuildForm: FC<BuildFormProps> = ({
                 1 hour is a very short period of time for the app. It may not be enough for debugging.
               </div>
             )}
+            {selectedTemplateId === 'hl-copy-trader' &&
+              ((form.watch('duration') === 'days' && Number(form.watch('number')) < 7) ||
+                (form.watch('duration') === 'hours' && Number(form.watch('number')) < 168)) && (
+                <div className="text-sm text-warning leading-tight mt-2">
+                  We recommend running the Copy Trader for at least 7 days so you have enough time to test it
+                  and withdraw your funds.
+                </div>
+              )}
           </div>
         </div>
 

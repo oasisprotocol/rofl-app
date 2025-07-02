@@ -46,6 +46,7 @@ export const BuildStep: FC<BuildStepProps> = ({
         onSubmit={onSubmit}
         build={build}
         selectedTemplateRequirements={selectedTemplateRequirements}
+        selectedTemplateId={selectedTemplateId}
       >
         {({ form, handleFormSubmit, noOffersWarning }) => (
           <CreateFormNavigation
