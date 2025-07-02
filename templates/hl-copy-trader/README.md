@@ -91,4 +91,5 @@ Before setting up your copy trader, ensure you have:
     2. Set the `WITHDRAW` secret to `true`.
     3. Ensure your `WITHDRAW_FUNDS_TO` address is set.
     4. Save your changes.
-    5. Apply the changes and restart the machine to begin the withdrawal process.
+    5. Apply the changes and restart the machine to begin the withdrawal
+       process.
