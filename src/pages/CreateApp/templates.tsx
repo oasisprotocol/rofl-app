@@ -40,6 +40,12 @@ export const defaultBuildConfig = {
   resources: '',
 }
 
+export const defaultCopyTraderBuildConfig = {
+  ...defaultBuildConfig,
+  duration: 'days' as const,
+  number: 7,
+}
+
 const createTemplateParser = (roflData: Record<string, unknown>) => {
   return (metadata: Partial<MetadataFormData>, network: 'mainnet' | 'testnet', appId: string) => {
     return {
@@ -98,7 +104,7 @@ export const templates = [
     id: 'hl-copy-trader',
     initialValues: {
       metadata: extractMetadata(parsedHlTemplate),
-      build: defaultBuildConfig,
+      build: defaultCopyTraderBuildConfig,
     },
     yaml: {
       compose: hlCompose,
