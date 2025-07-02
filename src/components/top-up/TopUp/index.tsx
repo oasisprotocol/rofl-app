@@ -17,7 +17,7 @@ import type { Chain, Token } from '../../../types/top-up'
 import { TokenLogo } from '../TokenLogo'
 import { DESTINATION_CHAIN_ID } from '../../../constants/top-up-config'
 import type { GetBalanceReturnType } from 'wagmi/actions'
-import { useAccount, useChainId, useGasPrice } from 'wagmi'
+import { useAccount, useGasPrice } from 'wagmi'
 import type { QuoteResponse } from '../../../backend/top-up'
 import { NumberUtils } from '../../../utils/number.utils.ts'
 import { FormatUtils } from '../../../utils/format.utils.ts'
@@ -32,6 +32,7 @@ import { useNetwork } from '../../../hooks/useNetwork.ts'
 import { sapphire } from 'viem/chains'
 import nitroBoltIcon from '../NitroBoltIcon.svg'
 import { useChainModal } from '@rainbow-me/rainbowkit'
+import classes from './index.module.css'
 
 const bridgeFormSchema = z.object({
   sourceChain: z
@@ -143,7 +144,6 @@ interface TopUpProps {
 
 const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpSuccess, onTopUpError }) => {
   const { address } = useAccount()
-  const currentChainId = useChainId()
   const {
     state: { chains, nativeTokens },
     getToken,
@@ -167,6 +167,13 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
       [stepId]: status,
     }))
   }
+
+  useEffect(() => {
+    document.body.classList.add('topUp')
+    return () => {
+      document.body.classList.remove('topUp')
+    }
+  }, [])
 
   const destinationChain = chains?.find(chain => chain.chainId === DESTINATION_CHAIN_ID)
   const destinationToken = nativeTokens?.find(token => token.chainId === DESTINATION_CHAIN_ID)
@@ -429,7 +436,6 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
       updateStepStatus(1, 'processing')
       const switchToSource = await switchToChain({
         targetChainId: Number(quote.source?.chainId ?? '0'),
-        currentChainId,
         address,
       })
 
@@ -467,7 +473,6 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
       const switchToAppChain = await switchToChain({
         targetChainId: sapphire.id,
-        currentChainId: Number(quote.source?.chainId ?? '0'),
         address,
       })
 
@@ -491,6 +496,16 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
       onTopUpError?.(error as Error)
       setCurrentStep(null)
     } finally {
+      const switchToAppChainResult = await switchToChain({
+        targetChainId: sapphire.id,
+        address,
+      })
+
+      if (!switchToAppChainResult.success) {
+        console.error(switchToAppChainResult.error)
+        openChainModal?.()
+      }
+
       setIsLoading(false)
     }
   }
@@ -545,7 +560,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
   }, [quote])
 
   return (
-    <div className="flex w-full h-full justify-center items-center">
+    <div className={`${classes.topUp} flex w-full h-full justify-center items-center`}>
       <div className="flex flex-col w-full">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
           <div className="space-y-2">

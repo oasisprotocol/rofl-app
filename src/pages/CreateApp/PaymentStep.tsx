@@ -2,7 +2,7 @@ import { type FC } from 'react'
 import { CreateLayout } from './CreateLayout'
 import { CreateFormHeader } from './CreateFormHeader'
 import { CreateFormNavigation } from './CreateFormNavigation'
-import { useAccount, useBalance } from 'wagmi'
+import { useAccount, useBalance, useChainId } from 'wagmi'
 import { NumberUtils } from '../../utils/number.utils.ts'
 import { TopUp } from '../../components/top-up/TopUp'
 import { PaymentCostBreakdown } from './PaymentCostBreakdown.tsx'
@@ -31,6 +31,8 @@ export const PaymentStep: FC<PaymentStepProps> = ({
 }) => {
   const { address } = useAccount()
   const network = useNetwork()
+  const currentChainId = useChainId()
+  const canNavigateAway = currentChainId === sapphire.id || currentChainId === sapphireTestnet.id
   const isTestnet = network === 'testnet'
   const chain = isTestnet ? sapphireTestnet : sapphire
   const ticker = useTicker()
@@ -101,11 +103,22 @@ export const PaymentStep: FC<PaymentStepProps> = ({
       {!hasEnoughBalance && minAmount && (
         <TopUp minAmount={minAmount} onTopUpSuccess={refetch} onTopUpError={() => refetch()}>
           {({ isValid, onSubmit }) => (
-            <CreateFormNavigation
-              handleNext={onSubmit as () => void}
-              handleBack={handleBack}
-              disabled={!isValid}
-            />
+            <>
+              <CreateFormNavigation
+                handleNext={onSubmit as () => void}
+                handleBack={() => {
+                  if (canNavigateAway) {
+                    handleBack()
+                  }
+                }}
+                disabled={!isValid}
+              />
+              {!canNavigateAway && (
+                <p className="text-xs text-error py-2">
+                  Before navigation away, manually switch the chain to {sapphire.name} (chainId:{sapphire.id})
+                </p>
+              )}
+            </>
           )}
         </TopUp>
       )}
@@ -118,11 +131,26 @@ export const PaymentStep: FC<PaymentStepProps> = ({
       )}
 
       {(hasEnoughBalance || isTestnet) && (
-        <CreateFormNavigation
-          handleNext={handleNext}
-          handleBack={handleBack}
-          disabled={import.meta.env.PROD && isTestnet}
-        />
+        <>
+          <CreateFormNavigation
+            handleNext={() => {
+              if (canNavigateAway) {
+                handleNext()
+              }
+            }}
+            handleBack={() => {
+              if (canNavigateAway) {
+                handleBack()
+              }
+            }}
+            disabled={import.meta.env.PROD && isTestnet}
+          />
+          {!canNavigateAway && (
+            <p className="text-xs text-error py-2">
+              Before navigation away, manually switch the chain to ${sapphire.name} (chainId: ${sapphire.id})
+            </p>
+          )}
+        </>
       )}
     </CreateLayout>
   )
