@@ -134,7 +134,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
                       />
                       <div className="flex flex-col items-start min-w-0 flex-1">
                         <TruncatedAddress
-                          address="0xbd4f609e4b14540b87caaf5efaaa5ced7eb469a6"
+                          address={address as `0x${string}`}
                           className="mono text-foreground text-base font-medium leading-6 w-full"
                         />
                         <p className="text-muted-foreground text-sm leading-5">{account.displayBalance}</p>
