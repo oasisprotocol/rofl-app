@@ -394,7 +394,7 @@ export function useCreateAndDeployApp() {
       await waitForAppScheduler(appId, network)
       console.log('deployed', appId)
 
-      toast.loading('App is starting (~5min)', { duration: 5 * 60 * 1000 })
+      toast('App is starting (~5min)', { duration: 5 * 60 * 1000 })
       return appId
     },
   })
@@ -473,7 +473,7 @@ export function useUpdateApp() {
           const hash = await restartMachine({ machineId: machine.id, provider: machine.provider, network })
           await waitForTransactionReceipt(wagmiConfig, { hash })
         }
-        toast.loading('App is restarting (~1min)', { duration: 1 * 60 * 1000 })
+        toast('App is restarting (~1min)', { duration: 1 * 60 * 1000 })
       }
       return appId
     },
