@@ -126,7 +126,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
               />
               {!canNavigateAway && (
                 <p className="text-xs text-error py-2">
-                  Before navigation away, manually switch the chain to {sapphire.name} (chainId:{sapphire.id})
+                  Before navigating away, manually switch the chain to {sapphire.name} in your wallet.
                 </p>
               )}
             </>
@@ -158,7 +158,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
           />
           {!canNavigateAway && (
             <p className="text-xs text-error py-2">
-              Before navigation away, manually switch the chain to ${sapphire.name} (chainId: ${sapphire.id})
+              Before navigating away, manually switch the chain to {sapphire.name} in your wallet.
             </p>
           )}
         </>
