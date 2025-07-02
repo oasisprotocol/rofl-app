@@ -7,9 +7,7 @@ import { MachineStatusIcon } from '../MachineStatusIcon'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { ArrowRight } from 'lucide-react'
-import { convertMachineId } from '../../utils/machine'
-import { WHITELISTED_PROVIDER_ADDRESSES } from '../../utils/providers'
-import { trimLongString } from '../../utils/trimLongString'
+import { MachineName } from '../MachineName'
 
 type ExploreAppCardProps = {
   machine: RoflMarketInstance
@@ -20,8 +18,6 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
   const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', machine.deployment?.app_id as string)
   const { data, isLoading, isFetched } = roflAppQuery
   const roflAppName = data?.data.metadata['net.oasis.rofl.name']
-  const machineNumber = convertMachineId(machine.id)
-  const isOpfProvider = WHITELISTED_PROVIDER_ADDRESSES[network] === machine.provider
 
   return (
     <Card className="rounded-md">
@@ -29,12 +25,7 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
         <div className="flex items-start justify-between">
           <h3 className="text-lg font-semibold text-foreground pr-2 break-all text-primary">
             <Link to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}>
-              {!isOpfProvider && (
-                <>{machine.metadata?.['net.oasis.provider.name'] || trimLongString(machine.provider)}</>
-              )}
-              {isOpfProvider && network === 'mainnet' && <>OPF</>}
-              {isOpfProvider && network === 'testnet' && <>OPF Testnet</>}
-              {machineNumber && <>-{machineNumber}</>}
+              <MachineName machine={machine} network={network} />
             </Link>
           </h3>
           <MachineStatusIcon machine={machine} />
