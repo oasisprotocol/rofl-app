@@ -83,13 +83,9 @@ export const hlCopyTraderFormSchema = z.object({
   COPY_TRADE_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
     message: 'Please enter a valid Ethereum address (0x...).',
   }),
-  WITHDRAW_FUNDS_TO: z
-    .string()
-    .regex(/^0x[a-fA-F0-9]{40}$/, {
-      message: 'Please enter a valid Ethereum address (0x...).',
-    })
-    .optional()
-    .or(z.literal('')),
+  WITHDRAW_FUNDS_TO: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
+    message: 'Please enter a valid Ethereum address (0x...).',
+  }),
 })
 
 export type TemplateFormData = string
