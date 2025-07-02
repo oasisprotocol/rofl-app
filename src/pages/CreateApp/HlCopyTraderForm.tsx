@@ -52,6 +52,8 @@ export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
         placeholder="0x..."
       />
 
+      {/* Hidden prefilled WITHDRAW="false" */}
+
       <CreateFormNavigation
         handleNext={handleFormSubmit}
         handleBack={handleBack}

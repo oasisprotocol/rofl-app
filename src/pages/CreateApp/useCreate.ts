@@ -14,6 +14,7 @@ const initAppDataState: AppData = {
     OLLAMA_MODEL: '',
     TOKEN: '',
     OLLAMA_SYSTEM_PROMPT: '',
+    WITHDRAW: 'false',
   },
   build: {
     provider: '',
