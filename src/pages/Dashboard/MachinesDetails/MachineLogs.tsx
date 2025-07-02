@@ -58,6 +58,21 @@ export const MachineLogs: FC<MachineLogsProps> = ({
     )
   }
 
+  // Append sections and indent everything else.
+  // https://github.com/oasisprotocol/oasis-sdk/blob/e2061d999426e3455ca4ed7c8a5c82f0b52441e5/rofl-containers/src/main.rs#L110
+  const containersInitializedMessage = '"everything is up and running"'
+  const firstSection = logs.join('\n').includes(containersInitializedMessage)
+    ? '# Application\n'
+    : '# Still booting\n'
+  const logsWithSections =
+    firstSection +
+    logs
+      .slice()
+      .reverse()
+      .map(line => '  ' + line)
+      .map(line => (line.includes(containersInitializedMessage) ? '\n\n\n# Booted\n' + line : line))
+      .join('\n')
+
   return (
     <>
       {!hasLogs && !isLoadingLogs && (
@@ -87,7 +102,7 @@ export const MachineLogs: FC<MachineLogsProps> = ({
             </Button>
           </div>
 
-          <RawCode data={logs.slice().reverse().join('\n')} className="h-[700px]" />
+          <RawCode data={logsWithSections} className="h-[700px]" />
         </>
       )}
     </>
