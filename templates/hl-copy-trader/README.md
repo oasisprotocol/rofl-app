@@ -33,15 +33,19 @@ Before setting up your copy trader, ensure you have:
 2. **Withdrawal Configuration** (Use to stop operations and withdraw funds)
 
    - For normal operation, leave these settings at their default values.
-   - To initiate a withdrawal, you must configure two settings. This is useful when you want to emergency withdraw all funds or are happy with the results and want to stop copy trading.
+   - To initiate a withdrawal, you must configure two settings. This is
+     useful when you want to emergency withdraw all funds or are happy with the
+     results and want to stop copy trading.
 
    **a. Withdrawal Address (`WITHDRAW_FUNDS_TO`)** (Required)
-   - This is the destination address where your funds will be sent in an emergency or when you decide to stop trading.
+   - This is the destination address where your funds will be sent in an
+     emergency or when you decide to stop trading.
    - You must provide a valid address here for the bot to operate.
 
    **b. Enable Withdrawal (`WITHDRAW`)**
    - Set this to `true` to activate the withdrawal process.
-   - When enabled, the bot will not copy any trades. Instead, upon starting, it will immediately:
+   - When enabled, the bot will not copy any trades. Instead, upon starting,
+     it will immediately:
      - Cancel all open orders
      - Close all open positions
      - Transfer all USDC to your specified withdrawal address
@@ -63,8 +67,9 @@ Before setting up your copy trader, ensure you have:
 - If your account is too small relative to the copied trader, some trades may
   not execute.
 - The minimum trade size on Hyperliquid is $10.
-- Example: If the copied trader has $100,000 and opens a $100 position (0.1%),
-  you need at least $10,000 to copy this trade, otherwise it will be skipped.
+- Example: If the copied trader has $100,000 and opens a $100 position
+  (0.1%), you need at least $10,000 to copy this trade, otherwise it will be
+  skipped.
 
 ## Risk Warning
 
@@ -81,4 +86,9 @@ Before setting up your copy trader, ensure you have:
 - **Bot not copying trades**: Ensure your account has sufficient funds for the
   minimum trade size.
 - **Finding your bot's address**: Check the ROFL app logs after deployment.
-- **How to withdraw**: Set the `WITHDRAW` variable to `true`, provide your destination address in `WITHDRAW_FUNDS_TO`, and restart the app.
+- **How to withdraw**:
+    1. Go to your app's **Secrets** tab.
+    2. Set the `WITHDRAW` secret to `true`.
+    3. Ensure your `WITHDRAW_FUNDS_TO` address is set.
+    4. Save your changes.
+    5. Apply the changes and restart the machine to begin the withdrawal process.
