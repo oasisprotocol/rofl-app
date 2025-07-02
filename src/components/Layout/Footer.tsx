@@ -8,7 +8,7 @@ export const Footer: FC = () => {
   return (
     <footer className="w-full flex items-center justify-between">
       <p className="text-xs text-muted-foreground">
-        Copyright @ {label} {new Date().getFullYear()}
+        Copyright © {label} {new Date().getFullYear()}
       </p>
 
       <div className="flex items-center gap-2.5">
