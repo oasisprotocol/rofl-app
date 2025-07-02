@@ -5,9 +5,14 @@ type HasChildren = {
   children: ReactNode
 }
 
+type FallbackRenderProps = {
+  error: Error
+}
+
 type ErrorBoundaryProps = HasChildren & {
   className?: string
   fallbackContent?: ReactNode
+  fallbackRender?: (props: FallbackRenderProps) => ReactNode
   onError?: (error: Error, errorInfo: ErrorInfo) => void
 }
 
@@ -35,7 +40,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   render() {
-    if (this.state.hasError) {
+    if (this.state.hasError && this.state.error) {
+      if (this.props.fallbackRender) {
+        return this.props.fallbackRender({
+          error: this.state.error,
+        })
+      }
+
       return (
         this.props.fallbackContent ?? (
           <ErrorDisplay error={this.state.error} className={this.props.className} />
