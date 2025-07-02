@@ -10,7 +10,7 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/sidebar'
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout'
 import { SidebarItemLabel } from './SidebarItemLabel'
-import { AgentStepHints } from './AgentStepHints'
+import { HelpWidget } from './HelpWidget'
 
 type CreateLayoutProps = {
   children: ReactNode
@@ -69,7 +69,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
     >
       <div className="flex-1 p-6 h-full">
         <div className="flex-1 flex flex-col items-start h-full relative">
-          <AgentStepHints
+          <HelpWidget
             selectedTemplateId={selectedTemplateId}
             isExpanded={isHelpPanelExpanded}
             setIsExpanded={setIsHelpPanelExpanded}

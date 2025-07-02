@@ -7,17 +7,13 @@ import xAgentDocs from '../../../templates/x-agent/README.md?raw'
 import tbotDocs from '../../../templates/tgbot/README.md?raw'
 import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
 
-type AgentStepHintsProps = {
+type HelpWidgetProps = {
   selectedTemplateId?: string
   isExpanded: boolean
   setIsExpanded: (expanded: boolean) => void
 }
 
-export const AgentStepHints: FC<AgentStepHintsProps> = ({
-  selectedTemplateId,
-  isExpanded,
-  setIsExpanded,
-}) => {
+export const HelpWidget: FC<HelpWidgetProps> = ({ selectedTemplateId, isExpanded, setIsExpanded }) => {
   const getMarkdownForTemplate = (templateId: string) => {
     switch (templateId) {
       case 'tgbot':
