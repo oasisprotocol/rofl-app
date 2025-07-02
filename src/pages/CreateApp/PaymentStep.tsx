@@ -58,10 +58,6 @@ export const PaymentStep: FC<PaymentStepProps> = ({
       ? null
       : BigNumber(amountRequired).minus(sapphireBalance.value)
 
-  const handleTopUpSuccess = () => {
-    refetch()
-  }
-
   return (
     <CreateLayout
       currentStep={4}
@@ -103,7 +99,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
         </p>
       )}
       {!hasEnoughBalance && minAmount && (
-        <TopUp minAmount={minAmount} onTopUpSuccess={handleTopUpSuccess}>
+        <TopUp minAmount={minAmount} onTopUpSuccess={refetch} onTopUpError={() => refetch()}>
           {({ isValid, onSubmit }) => (
             <CreateFormNavigation
               handleNext={onSubmit as () => void}

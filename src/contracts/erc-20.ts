@@ -134,6 +134,7 @@ interface ChainSwitchOptions {
 
 interface ChainSwitchResult {
   success: boolean
+  isTimeout?: boolean
   error?: string
 }
 
@@ -150,24 +151,43 @@ export const switchToChain = async ({
     return { success: true }
   }
 
-  try {
-    await switchChain(wagmiConfig, { chainId: targetChainId })
+  const maxRetries = 3
+  const switchTimeout = 5000
 
-    await new Promise(resolve => setTimeout(resolve, 1000))
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`Switching to chain (Chain ID: ${targetChainId})... (attempt ${attempt}/${maxRetries})`)
 
-    return { success: true }
-  } catch (switchError) {
-    console.error('Chain switch error:', switchError)
+      // Create a timeout promise
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Chain switch timeout')), switchTimeout),
+      )
 
-    if (switchError instanceof Error && switchError.message.includes('Unsupported Chain')) {
-      console.log("Got 'Unsupported Chain' error, but continuing as switch likely succeeded")
+      // Race the switchChain call against the timeout
+      await Promise.race([switchChain(wagmiConfig, { chainId: targetChainId }), timeoutPromise])
 
-      await new Promise(resolve => setTimeout(resolve, 3000))
-
+      await new Promise(resolve => setTimeout(resolve, 1000))
       return { success: true }
-    } else {
-      const errorMessage = `Please switch to the source chain (Chain ID: ${targetChainId}) to continue`
-      return { success: false, error: errorMessage }
+    } catch (switchError) {
+      console.error(`Chain switch error (attempt ${attempt}/${maxRetries}):`, switchError)
+
+      if (switchError instanceof Error && switchError.message.includes('Chain switch timeout')) {
+        return { isTimeout: true, success: false }
+      }
+
+      if (switchError instanceof Error && switchError.message.includes('Unsupported Chain')) {
+        console.log("Got 'Unsupported Chain' error, but continuing as switch likely succeeded")
+        await new Promise(resolve => setTimeout(resolve, 3000))
+        return { success: true }
+      }
+
+      if (attempt < maxRetries) {
+        console.log(`Retrying chain switch in 2 seconds... (attempt ${attempt + 1}/${maxRetries})`)
+        await new Promise(resolve => setTimeout(resolve, 2000))
+      }
     }
   }
+
+  const errorMessage = `Failed to switch to chain (Chain ID: ${targetChainId}) after ${maxRetries} attempts. Please switch manually to continue.`
+  return { success: false, error: errorMessage }
 }
