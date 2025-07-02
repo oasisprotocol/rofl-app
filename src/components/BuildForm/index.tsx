@@ -121,6 +121,9 @@ export const BuildForm: FC<BuildFormProps> = ({
         form.setValue('resources', offerId)
       }
     }
+    if (!offerId && offers && offers.length > 0 && !form.getValues('resources')) {
+      form.setValue('resources', offers[0].id) // Preselect smallest offer
+    }
   }, [offerId, offers, form])
 
   // API terms are like 1=hour, 2=month, 3=year, but only hour is mandatory
