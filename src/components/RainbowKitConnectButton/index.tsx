@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC, type ReactNode } from 'react'
+import { useEffect, useState, type FC, type ReactNode, useRef } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { ChevronDown, Wallet } from 'lucide-react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
@@ -15,6 +15,8 @@ import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
 import { useNavigate } from 'react-router-dom'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { ENABLED_CHAINS_IDS } from '../../constants/top-up-config.ts'
+import { trackEvent } from 'fathom-client'
+import { ANALYTICS_ENABLED } from '../../constants/analytics-config.ts'
 
 const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address, className = '' }) => {
   return (
@@ -36,6 +38,17 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
   const navigate = useNavigate()
   const { chainId, isConnected, address } = useAccount()
   const [selectedChainId, setSelectedChainId] = useState(chainId)
+  // Filter out token expirations
+  const hasWalletConnected = useRef(false)
+
+  useEffect(() => {
+    if (!ANALYTICS_ENABLED) return
+
+    if (isAuthenticated && !hasWalletConnected.current) {
+      trackEvent('Wallet connected')
+      hasWalletConnected.current = true
+    }
+  }, [isAuthenticated])
 
   useEffect(() => {
     const handleLogin = async () => {
