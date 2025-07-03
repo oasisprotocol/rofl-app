@@ -46,7 +46,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   } = useGetRuntimeRoflmarketInstances(network, 'sapphire', {
     deployed_app_id: id,
   })
-  const machines = machinesData?.data.instances
+  const machines = machinesData?.data.instances.filter(machine => !machine.removed)
 
   return (
     <div className="space-y-4">
