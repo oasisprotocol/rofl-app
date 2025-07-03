@@ -50,17 +50,17 @@ export const Header: FC = () => {
                 </Button>
               </div>
             </SheetTrigger>
-            <SheetContent side="top" className="w-full">
-              <SheetHeader>
+            <SheetContent side="top" className="gap-0">
+              <SheetHeader className="mb-4 px-3 py-2.5 border-b">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                <div className="flex items-start px-3 py-2.5">
+                <div className="flex items-start">
                   <NavLink to="/" onClick={() => setIsOpen(false)}>
-                    <img src={Logotype} alt="ROFL App" />
+                    <img src={Logotype} alt="ROFL App" className="h-[36px]" />
                   </NavLink>
                 </div>
               </SheetHeader>
               <nav>
-                <div className="flex flex-col p-2">
+                <div className="flex flex-col px-4 pb-4 gap-2">
                   <NavbarLink to="/dashboard" onClick={() => setIsOpen(false)}>
                     <span className="text-foreground">Dashboard</span>
                   </NavbarLink>
