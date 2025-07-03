@@ -5,8 +5,6 @@ import { RoflAppBackendAuthContext } from './Context'
 import { createSiweMessage } from 'viem/siwe'
 import { useInterval } from './useInterval'
 
-const { PROD } = import.meta.env
-
 export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }) {
   const { address, isConnected } = useAccount()
   const { signMessageAsync } = useSignMessage()
@@ -33,7 +31,21 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   }
 
   const getSiweMessage = useCallback((address: `0x${string}`, nonce: string, chainId: number): string => {
-    const domain = PROD ? window.location.hostname : 'dev.rofl.app'
+    const hostname = window.location.hostname
+    let domain: string
+
+    if (hostname === 'rofl.app') {
+      domain = 'rofl.app'
+    } else if (
+      hostname === 'dev.rofl.app' ||
+      hostname.endsWith('.rofl-app.pages.dev') ||
+      hostname === 'localhost'
+    ) {
+      domain = 'dev.rofl.app'
+    } else {
+      domain = 'rofl.app'
+    }
+
     const uri = `https://${domain}`
     const statement = 'Sign in to ROFL App Backend'
 
