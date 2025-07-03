@@ -13,6 +13,9 @@ export const buildFormSchema = z
       message: 'Resources are required.',
     }),
     roseCostInBaseUnits: z.string().optional(),
+    offerCpu: z.number(),
+    offerMemory: z.number(),
+    offerStorage: z.number(),
   })
   .refine(
     data => {

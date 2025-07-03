@@ -321,7 +321,9 @@ export function useCreateAndDeployApp() {
         .query(nic)
       console.log('App', app)
 
-      const manifest = yaml.stringify(template.templateParser(appData.metadata!, network, appId))
+      const manifest = yaml.stringify(
+        template.templateParser(appData.metadata!, appData.build!, network, appId),
+      )
       const compose = template.yaml.compose
       const readme = getReadmeByTemplateId(appData.template!)
       console.log('Build?')
