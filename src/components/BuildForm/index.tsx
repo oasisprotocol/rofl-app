@@ -130,6 +130,18 @@ export const BuildForm: FC<BuildFormProps> = ({
     }
   }, [offerId, offers, form])
 
+  const selectedOfferId = form.watch('offerId')
+  useEffect(() => {
+    if (selectedOfferId && offers) {
+      const selectedOffer = offers.find(offer => offer.id === selectedOfferId)
+      if (selectedOffer) {
+        form.setValue('offerCpu', selectedOffer.resources.cpus)
+        form.setValue('offerMemory', selectedOffer.resources.memory)
+        form.setValue('offerStorage', selectedOffer.resources.storage)
+      }
+    }
+  }, [selectedOfferId, offers, form])
+
   // API terms are like 1=hour, 2=month, 3=year, but only hour is mandatory
   // Testnet provider provide only hourly terms
   const hasMonthlyTerms = offers?.some(

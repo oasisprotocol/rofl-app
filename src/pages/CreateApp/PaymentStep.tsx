@@ -30,6 +30,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
   selectedTemplateId,
   appData,
 }) => {
+  console.log('appData', appData)
   const { address } = useAccount()
   const network = useNetwork()
   const currentChainId = useChainId()

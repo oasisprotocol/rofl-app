@@ -7,6 +7,7 @@ import { useCreateAndDeployApp } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { useNetwork } from '../../hooks/useNetwork'
 import { AnimatedStepText, HeaderSteps } from './AnimatedStepText'
+import { BuildFormData } from '../../types/build-form'
 
 // TEMP
 export type Template = {
@@ -16,10 +17,7 @@ export type Template = {
   id: string
   initialValues: {
     metadata: Partial<MetadataFormData>
-    build: {
-      provider: string
-      offerId: string
-    }
+    build: Partial<BuildFormData>
   }
   yaml: {
     compose: string
@@ -27,6 +25,7 @@ export type Template = {
   }
   templateParser: (
     metadata: Partial<MetadataFormData>,
+    build: Partial<BuildFormData>,
     network: 'mainnet' | 'testnet',
     appId: string,
   ) => Record<string, unknown>
