@@ -18,7 +18,7 @@ import { ENABLED_CHAINS_IDS } from '../../constants/top-up-config.ts'
 
 const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address, className = '' }) => {
   return (
-    <div className={`flex overflow-hidden ${className}`}>
+    <div className={`flex overflow-hidden max-w-max ${className}`}>
       <span className="flex-1 truncate min-w-0">{address.slice(0, -4)}</span>
       <span className="flex-shrink-0">{address.slice(-4)}</span>
     </div>
