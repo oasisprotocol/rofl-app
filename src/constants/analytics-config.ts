@@ -1,1 +1,1 @@
-export const ANALYTICS_ENABLED = (window.location.hostname = 'rofl.app')
+export const ANALYTICS_ENABLED = window.location.hostname === 'rofl.app'
