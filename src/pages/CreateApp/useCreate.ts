@@ -20,7 +20,7 @@ const initAppDataState: AppData = {
     provider: '',
     duration: 'hours',
     number: 2,
-    resources: '',
+    offerId: '',
   },
   payment: {},
 }

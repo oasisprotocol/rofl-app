@@ -18,7 +18,7 @@ export type Template = {
     metadata: Partial<MetadataFormData>
     build: {
       provider: string
-      resources: string
+      offerId: string
     }
   }
   yaml: {

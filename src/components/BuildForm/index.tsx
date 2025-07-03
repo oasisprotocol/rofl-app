@@ -109,7 +109,7 @@ export const BuildForm: FC<BuildFormProps> = ({
   }, [build, form])
 
   useEffect(() => {
-    form.resetField('resources') // Clear offer selection if provider changes
+    form.resetField('offerId') // Clear offer selection if provider changes
   }, [providerValue, form])
 
   useEffect(() => {
@@ -119,14 +119,14 @@ export const BuildForm: FC<BuildFormProps> = ({
   }, [providerOptions, form])
 
   useEffect(() => {
-    if (offerId && offers && !form.getValues('resources')) {
+    if (offerId && offers && !form.getValues('offerId')) {
       const selectedOffer = offers.find(offer => offer.id === offerId)
       if (selectedOffer) {
-        form.setValue('resources', offerId)
+        form.setValue('offerId', offerId)
       }
     }
-    if (!offerId && offers && offers.length > 0 && !form.getValues('resources')) {
-      form.setValue('resources', offers[0].id) // Preselect smallest offer
+    if (!offerId && offers && offers.length > 0 && !form.getValues('offerId')) {
+      form.setValue('offerId', offers[0].id) // Preselect smallest offer
     }
   }, [offerId, offers, form])
 
@@ -204,7 +204,7 @@ export const BuildForm: FC<BuildFormProps> = ({
           <Label htmlFor="resources">Size</Label>
           <Controller
             control={form.control}
-            name="resources"
+            name="offerId"
             render={({ field, fieldState }) => (
               <>
                 <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
