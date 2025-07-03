@@ -7,6 +7,8 @@ import { useCreateAndDeployApp } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { useNetwork } from '../../hooks/useNetwork'
 import { AnimatedStepText, HeaderSteps } from './AnimatedStepText'
+import { ANALYTICS_ENABLED } from '../../constants/analytics-config.ts'
+import { trackEvent } from 'fathom-client'
 
 // TEMP
 export type Template = {
@@ -68,10 +70,18 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
           onSuccess: returnedAppId => {
             console.log('App created and deployed successfully with ID:', returnedAppId)
             setBootstrapStep(BootstrapState.Success)
+
+            if (ANALYTICS_ENABLED) {
+              trackEvent('Create app flow - successfully finished', { _value: 100 /* =1, value in cents */ })
+            }
           },
           onError: error => {
             console.log('Failed to create and deploy app:', error)
             setBootstrapStep(BootstrapState.Error)
+
+            if (ANALYTICS_ENABLED) {
+              trackEvent('Create app flow - failed')
+            }
           },
         },
       )
