@@ -40,7 +40,8 @@ export const defaultBuildConfig = {
   provider: '',
   duration: 'hours' as const,
   number: 2,
-  resources: '',
+  offerId: '',
+  // resources: '',
 }
 
 export const defaultCopyTraderBuildConfig = {

@@ -380,7 +380,7 @@ export function useCreateAndDeployApp() {
           .callInstanceCreate()
           .setBody({
             provider: oasis.staking.addressFromBech32(appData.build!.provider!),
-            offer: oasis.misc.fromHex(appData.build!.resources),
+            offer: oasis.misc.fromHex(appData.build!.offerId!),
             deployment: {
               app_id: app.id,
               manifest_hash: oasis.misc.fromHex(buildResults.manifest_hash),
