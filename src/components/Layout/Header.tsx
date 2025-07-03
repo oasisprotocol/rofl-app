@@ -15,6 +15,7 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/sheet'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
 import { NavbarLink } from '../NavbarLink'
+import { BuildBadge } from '../BuildBadge'
 
 export const Header: FC = () => {
   const isMobile = useIsMobile()
@@ -23,10 +24,12 @@ export const Header: FC = () => {
 
   return (
     <div className="w-full flex justify-between items-center">
-      <Link to={isConnected ? '/dashboard' : '/'}>
-        <img src={Logotype} alt="ROFL App" className="h-[36px]" />
-      </Link>
-
+      <div className="flex items-center gap-4">
+        <Link to={isConnected ? '/dashboard' : '/'}>
+          <img src={Logotype} alt="ROFL App" className="h-[36px]" />
+        </Link>
+        <BuildBadge />
+      </div>
       <div className="flex items-center gap-4">
         {isConnected && (
           <Button asChild>
