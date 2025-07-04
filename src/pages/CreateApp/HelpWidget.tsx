@@ -3,9 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { ChevronRight, HelpCircle } from 'lucide-react'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
-import xAgentDocs from '../../../templates/x-agent/README.md?raw'
-import tbotDocs from '../../../templates/tgbot/README.md?raw'
-import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
+import { getReadmeByTemplateId } from './templates'
 
 type HelpWidgetProps = {
   selectedTemplateId?: string
@@ -14,24 +12,11 @@ type HelpWidgetProps = {
 }
 
 export const HelpWidget: FC<HelpWidgetProps> = ({ selectedTemplateId, isExpanded, setIsExpanded }) => {
-  const getMarkdownForTemplate = (templateId: string) => {
-    switch (templateId) {
-      case 'tgbot':
-        return tbotDocs
-      case 'x-agent':
-        return xAgentDocs
-      case 'hl-copy-trader':
-        return hlCopyTraderDocs
-      default:
-        return ''
-    }
-  }
-
   if (!selectedTemplateId) {
     return null
   }
 
-  const markdown = getMarkdownForTemplate(selectedTemplateId)
+  const markdown = getReadmeByTemplateId(selectedTemplateId)
 
   if (!markdown) {
     return null
