@@ -16,9 +16,9 @@ import { MachineResources } from '../../../components/MachineResources'
 import { useMachineExecuteRestartCmd, useMachineExecuteStopCmd } from '../../../backend/api'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { MachineLogs } from './MachineLogs'
-import { toast } from 'sonner'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { MachineName } from '../../../components/MachineName'
+import { toastWithDuration } from '../../../utils/toastWithDuration'
 
 export const MachinesDetails: FC = () => {
   const [logs, setLogs] = useState<string[]>([])
@@ -86,7 +86,7 @@ export const MachinesDetails: FC = () => {
                         provider: machine.provider,
                         network,
                       })
-                      toast('Machine is restarting (~1min)', { duration: 1 * 60 * 1000 })
+                      toastWithDuration('Machine is restarting (~1min)', 1 * 60 * 1000)
                     }}
                   />
                   <TabsList className="w-full md:w-auto">

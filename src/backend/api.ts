@@ -12,9 +12,9 @@ import { waitForTransactionReceipt } from '@wagmi/core'
 import { ViewMetadataState, ViewSecretsState } from '../pages/Dashboard/AppDetails/types'
 import { useState } from 'react'
 import { useBlockNavigatingAway } from '../pages/CreateApp/useBlockNavigatingAway'
-import { toast } from 'sonner'
 import { BuildFormData } from '../types/build-form.ts'
 import { convertToDurationTerms } from './helpers.ts'
+import { toastWithDuration } from '../utils/toastWithDuration.tsx'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -394,7 +394,7 @@ export function useCreateAndDeployApp() {
       await waitForAppScheduler(appId, network)
       console.log('deployed', appId)
 
-      toast('App is starting (~5min)', { duration: 5 * 60 * 1000 })
+      toastWithDuration('App is starting (~5min)', 5 * 60 * 1000)
       return appId
     },
   })
@@ -473,7 +473,7 @@ export function useUpdateApp() {
           const hash = await restartMachine({ machineId: machine.id, provider: machine.provider, network })
           await waitForTransactionReceipt(wagmiConfig, { hash })
         }
-        toast('App is restarting (~1min)', { duration: 1 * 60 * 1000 })
+        toastWithDuration('App is restarting (~1min)', 1 * 60 * 1000)
       }
       return appId
     },
