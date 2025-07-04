@@ -1,48 +1,29 @@
-import { useEffect, useState, type FC } from 'react'
+import { type FC } from 'react'
 import { RawCode } from '../../../components/CodeDisplay'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 
 type AppArtifactsProps = {
   isFetched?: boolean
-  roflYaml?: Blob
-  composeYaml?: Blob
+  roflYaml?: string
+  composeYaml?: string
 }
 
 export const AppArtifacts: FC<AppArtifactsProps> = ({ isFetched, roflYaml, composeYaml }) => {
-  const [roflContent, setRoflContent] = useState<string>('')
-  const [composeContent, setComposeContent] = useState<string>('')
-
-  useEffect(() => {
-    if (roflYaml) {
-      roflYaml.text().then(content => {
-        setRoflContent(content)
-      })
-    }
-  }, [roflYaml])
-
-  useEffect(() => {
-    if (composeYaml) {
-      composeYaml.text().then(content => {
-        setComposeContent(content)
-      })
-    }
-  }, [composeYaml])
-
   return (
     <div className="space-y-6">
       {!isFetched && <Skeleton className="w-full h-[400px]" />}
       {isFetched && (
         <>
-          {roflContent && (
+          {roflYaml && (
             <div>
               <h3 className="text-lg font-semibold mb-2">rofl.yaml</h3>
-              <RawCode data={roflContent} />
+              <RawCode data={roflYaml} />
             </div>
           )}
-          {composeContent && (
+          {composeYaml && (
             <div>
               <h3 className="text-lg font-semibold mb-2">compose.yaml</h3>
-              <RawCode data={composeContent} />
+              <RawCode data={composeYaml} />
             </div>
           )}
         </>
