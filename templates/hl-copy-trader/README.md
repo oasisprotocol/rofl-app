@@ -85,6 +85,14 @@ To enable withdrawal:
 - Technical issues or network delays may affect trade execution.
 - Trade at your own discretion and only risk what you can afford to lose.
 
+### ⚠️ CRITICAL: Machine Termination Risk
+
+- If your ROFL machine is terminated (e.g., due to insufficient funds to pay
+  for the machine), you will lose the ability to withdraw your trading funds.
+- Always ensure your ROFL account has sufficient balance to keep your machine
+  running.
+- Monitor your machine status regularly to avoid unexpected termination.
+
 ## Troubleshooting
 
 - **Bot not copying trades**: Ensure your account has sufficient funds for the
