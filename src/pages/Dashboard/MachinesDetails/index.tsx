@@ -107,6 +107,9 @@ export const MachinesDetails: FC = () => {
                       <MachineAppDetails appId={machine.deployment?.app_id as string} />
                     </Link>
                   </DetailsSectionRow>
+                  <DetailsSectionRow label="Created">
+                    {new Date(machine.created_at).toLocaleString()}
+                  </DetailsSectionRow>
                   <DetailsSectionRow label="Provider">{machine.provider}</DetailsSectionRow>
                   <DetailsSectionRow label="Instance ID">{machine.id}</DetailsSectionRow>
                   <DetailsSectionRow label="Resources">
