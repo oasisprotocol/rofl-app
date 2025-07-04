@@ -15,6 +15,7 @@ import { AppArtifacts } from './AppArtifacts'
 import { UnsavedChanges } from './UnsavedChanges'
 import { RemoveAppButton } from './RemoveAppButton'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
+import { HelpWidget } from '../../CreateApp/HelpWidget'
 
 function setDefaultMetadataViewState(metadata: RoflAppMetadata | undefined = {}): ViewMetadataState {
   return {
@@ -45,6 +46,7 @@ export const AppDetails: FC = () => {
   const [viewSecretsState, setViewSecretsState] = useState({
     ...setDefaultSecretsViewState(),
   })
+  const [isHelpPanelExpanded, setIsHelpPanelExpanded] = useState(false)
   const network = useNetwork()
   const { id } = useParams()
   const roflAppQuery = useGetRuntimeRoflAppsId(network, 'sapphire', id!)
@@ -56,6 +58,8 @@ export const AppDetails: FC = () => {
     `${id}-compose-yaml`,
     token,
   )
+  const { data: readme } = useDownloadArtifact(`${id}-readme-md`, token)
+
   const editEnabled = !!token && !roflApp?.removed
   const removeApp = useRemoveApp()
   const updateApp = useUpdateApp()
@@ -163,7 +167,12 @@ export const AppDetails: FC = () => {
                   editEnabled={editEnabled}
                 />
               </TabsContent>
-              <TabsContent value="secrets">
+              <TabsContent value="secrets" className="relative pt-10">
+                <HelpWidget
+                  markdown={readme}
+                  isExpanded={isHelpPanelExpanded}
+                  setIsExpanded={setIsHelpPanelExpanded}
+                ></HelpWidget>
                 <AppSecrets
                   appSek={roflApp.sek}
                   secrets={viewSecretsState.secrets}
