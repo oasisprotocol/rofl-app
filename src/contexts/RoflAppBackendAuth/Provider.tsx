@@ -1,14 +1,19 @@
 import { useState, useCallback, type ReactNode } from 'react'
-import { useAccount, useSignMessage, useChainId } from 'wagmi'
+import { useAccount, useChainId, useSignMessage } from 'wagmi'
 import { useGetNonce, useLogin } from '../../backend/api'
 import { RoflAppBackendAuthContext } from './Context'
 import { createSiweMessage } from 'viem/siwe'
 import { useInterval } from './useInterval'
+import { useNetwork } from '../../hooks/useNetwork.ts'
+import { sapphire, sapphireTestnet } from 'viem/chains'
+import { useChainModal } from '@rainbow-me/rainbowkit'
 
 export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }) {
   const { address, isConnected } = useAccount()
   const { signMessageAsync } = useSignMessage()
-  const chainId = useChainId()
+  const currentChainId = useChainId()
+  const chainId = useNetwork('mainnet') === 'mainnet' ? sapphire.id : sapphireTestnet.id
+  const { chainModalOpen, openChainModal } = useChainModal()
 
   const [token, _setToken] = useState<string | null>(
     // TODO: possibly already expired or from another account. Currently detected by useInterval within a few seconds.
@@ -67,6 +72,13 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
       return
     }
 
+    if (currentChainId !== chainId) {
+      if (!chainModalOpen) {
+        openChainModal?.()
+      }
+      return
+    }
+
     setIsLoading(true)
     setError(null)
 
@@ -76,7 +88,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
         throw new Error('Failed to fetch nonce')
       }
 
-      const message = getSiweMessage(address, freshNonce, chainId || 1)
+      const message = getSiweMessage(address, freshNonce, chainId)
       const signature = await signMessageAsync({ message })
 
       const jwtToken = await loginMutationAsync({
@@ -94,7 +106,18 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
     } finally {
       setIsLoading(false)
     }
-  }, [address, isConnected, refetchNonce, getSiweMessage, chainId, signMessageAsync, loginMutationAsync])
+  }, [
+    address,
+    isConnected,
+    currentChainId,
+    chainId,
+    chainModalOpen,
+    openChainModal,
+    refetchNonce,
+    getSiweMessage,
+    signMessageAsync,
+    loginMutationAsync,
+  ])
 
   const logout = useCallback(() => {
     setToken(null)
