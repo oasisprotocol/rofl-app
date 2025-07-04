@@ -37,12 +37,12 @@ Before setting up your copy trader, ensure you have:
 
 ### Step 3: Fund Your Trading Account
 
-1.  After deploying your ROFL app, find your bot's trading address in the logs.
-    -   Navigate to **[My Machines](https://rofl.app/dashboard/machines)**.
-    -   Click **View Details** on your machine.
-    -   Go to the **Logs** tab to find the address.
-2.  Send USDC (Perps) to this address on Hyperliquid.
-3.  The bot will automatically detect the funds and start listening for trades.
+1. After deploying your ROFL app, find your bot's trading address in the logs.
+   - Navigate to **[My Machines](https://rofl.app/dashboard/machines)**.
+   - Click **View Details** on your machine.
+   - Go to the **Logs** tab to find the address.
+2. Send USDC (Perps) to this address on Hyperliquid.
+3. The bot will automatically detect the funds and start listening for trades.
 
 ⚠️  **IMPORTANT: Only send USDC (Perps) on Hyperliquid!**
 ⚠️  **Sending funds on any other chain or to the wrong account type**
@@ -60,17 +60,20 @@ Before setting up your copy trader, ensure you have:
 
 ### Step 4: Enable Withdrawal
 
-Use this to stop operations and withdraw funds. When enabled, the bot will not copy any trades. Instead, upon starting, it will immediately:
+Use this to stop operations and withdraw funds. When enabled, the bot will not
+copy any trades. Instead, upon starting, it will immediately:
+
 - Cancel all open orders
 - Close all open positions
 - Transfer all USDC to your specified withdrawal address (`WITHDRAW_FUNDS_TO`)
 
 To enable withdrawal:
-1.  Navigate to **[My Apps](https://rofl.app/dashboard/apps)**.
-2.  Click **View Details** on your app.
-3.  Go to the **Secrets** tab.
-4.  Set the `WITHDRAW` secret to `true`.
-5.  Apply the changes and restart the machine to begin the withdrawal process.
+
+1. Navigate to **[My Apps](https://rofl.app/dashboard/apps)**.
+2. Click **View Details** on your app.
+3. Go to the **Secrets** tab.
+4. Set the `WITHDRAW` secret to `true`.
+5. Apply the changes and restart the machine to begin the withdrawal process.
 
 ## Risk Warning
 
@@ -86,5 +89,6 @@ To enable withdrawal:
 
 - **Bot not copying trades**: Ensure your account has sufficient funds for the
   minimum trade size.
-- **Finding your bot's address**: Check the ROFL app logs after deployment as described in Step 3.
+- **Finding your bot's address**: Check the ROFL app logs after deployment as
+  described in Step 3.
 - **How to withdraw**: Follow the instructions in Step 4.
