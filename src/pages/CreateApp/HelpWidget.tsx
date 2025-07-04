@@ -6,17 +6,21 @@ import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { getReadmeByTemplateId } from './templates'
 
 type HelpWidgetProps = {
+  /** Specify either `selectedTemplateId` or `markdown` */
   selectedTemplateId?: string
+  /** Specify either `selectedTemplateId` or `markdown` */
+  markdown?: string
   isExpanded: boolean
   setIsExpanded: (expanded: boolean) => void
 }
 
-export const HelpWidget: FC<HelpWidgetProps> = ({ selectedTemplateId, isExpanded, setIsExpanded }) => {
-  if (!selectedTemplateId) {
-    return null
-  }
-
-  const markdown = getReadmeByTemplateId(selectedTemplateId)
+export const HelpWidget: FC<HelpWidgetProps> = ({
+  selectedTemplateId,
+  markdown: _markdown,
+  isExpanded,
+  setIsExpanded,
+}) => {
+  const markdown = _markdown || (selectedTemplateId && getReadmeByTemplateId(selectedTemplateId))
 
   if (!markdown) {
     return null
@@ -25,7 +29,10 @@ export const HelpWidget: FC<HelpWidgetProps> = ({ selectedTemplateId, isExpanded
   return (
     <>
       <div
-        className={cn('right-0 top-26 md:top-16 h-[calc(100vh-8rem)] flex', !isExpanded ? 'hidden' : 'fixed')}
+        className={cn(
+          'right-0 top-26 md:top-16 h-[calc(100vh-8rem)] flex',
+          !isExpanded ? 'hidden' : 'fixed z-10',
+        )}
       >
         <div className="bg-background border-l border-border transition-transform duration-300 ease-in-out flex flex-col w-[min(380px,100vw)]">
           <div className="flex items-center justify-between p-4 border-b bg-card">

@@ -59,7 +59,7 @@ type ArtifactUploadRequest = {
   file: File | Blob
 }
 
-type ArtifactDownloadResponse = Blob
+type ArtifactDownloadResponse = string
 
 const fetchNonce = async (address: string): Promise<string> => {
   const response = await axios.get<NonceResponse>(`${BACKEND_URL}/auth/nonce`, {
@@ -128,7 +128,7 @@ const downloadArtifact = async (id: string, token: string): Promise<ArtifactDown
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    responseType: 'blob',
+    responseType: 'text',
   })
   return response.data
 }
