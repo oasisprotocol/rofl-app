@@ -1,10 +1,13 @@
 import { parse } from 'yaml'
 import tgbotThumbnail from '../../../templates/tgbot/app.webp'
 import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw'
+import tbotDocs from '../../../templates/tgbot/README.md?raw'
 import xagentThumbnail from '../../../templates/x-agent/app.webp'
 import xagentTemplate from '../../../templates/x-agent/rofl-template.yaml?raw'
+import xAgentDocs from '../../../templates/x-agent/README.md?raw'
 import hlCopyTraderThumbnail from '../../../templates/hl-copy-trader/app.webp'
 import hlCopyTraderTemplate from '../../../templates/hl-copy-trader/rofl-template.yaml?raw'
+import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
 import type { MetadataFormData } from './types'
 
@@ -116,4 +119,17 @@ export const templates = [
 
 export const getTemplateById = (id: string | undefined) => {
   return templates.find(template => template.id === id)
+}
+
+export const getReadmeByTemplateId = (templateId: string) => {
+  switch (templateId) {
+    case 'tgbot':
+      return tbotDocs
+    case 'x-agent':
+      return xAgentDocs
+    case 'hl-copy-trader':
+      return hlCopyTraderDocs
+    default:
+      return ''
+  }
 }

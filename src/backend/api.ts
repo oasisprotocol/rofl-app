@@ -15,6 +15,7 @@ import { useBlockNavigatingAway } from '../pages/CreateApp/useBlockNavigatingAwa
 import { BuildFormData } from '../types/build-form.ts'
 import { convertToDurationTerms } from './helpers.ts'
 import { toastWithDuration } from '../utils/toastWithDuration.tsx'
+import { getReadmeByTemplateId } from '../pages/CreateApp/templates.tsx'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -304,6 +305,8 @@ export function useCreateAndDeployApp() {
               'net.oasis.rofl.description': appData.metadata?.description || '',
               'net.oasis.rofl.version': appData.metadata?.version || '',
               'net.oasis.rofl.homepage': appData.metadata?.homepage || '',
+              'net.oasis.roflapp.template': appData.template || '',
+              'net.oasis.roflapp.created_using_commit': BUILD_COMMIT,
             },
           })
           .toSubcall(),
@@ -320,11 +323,13 @@ export function useCreateAndDeployApp() {
 
       const manifest = yaml.stringify(template.templateParser(appData.metadata!, network, appId))
       const compose = template.yaml.compose
+      const readme = getReadmeByTemplateId(appData.template!)
       console.log('Build?')
       setCurrentStep('building')
       // TODO: wait + handle error?
       uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
       uploadArtifact({ id: `${appId}-compose-yaml`, file: new Blob([compose]) }, token)
+      uploadArtifact({ id: `${appId}-readme-md`, file: new Blob([readme]) }, token)
       const { task_id } = await buildRofl({ manifest, compose }, token)
       const buildResults = await waitForBuildResults(task_id, token)
       console.log('Build results:', buildResults)
@@ -445,6 +450,7 @@ export function useUpdateApp() {
             admin: app.admin,
             policy: app.policy,
             metadata: {
+              ...metadataViewState.metadata,
               'net.oasis.rofl.name': metadataViewState.metadata?.name || '',
               'net.oasis.rofl.author': metadataViewState.metadata?.author || '',
               'net.oasis.rofl.description': metadataViewState.metadata?.description || '',
