@@ -304,6 +304,8 @@ export function useCreateAndDeployApp() {
               'net.oasis.rofl.description': appData.metadata?.description || '',
               'net.oasis.rofl.version': appData.metadata?.version || '',
               'net.oasis.rofl.homepage': appData.metadata?.homepage || '',
+              'net.oasis.roflapp.template': appData.template || '',
+              'net.oasis.roflapp.created_using_commit': BUILD_COMMIT,
             },
           })
           .toSubcall(),
@@ -445,6 +447,7 @@ export function useUpdateApp() {
             admin: app.admin,
             policy: app.policy,
             metadata: {
+              ...metadataViewState.metadata,
               'net.oasis.rofl.name': metadataViewState.metadata?.name || '',
               'net.oasis.rofl.author': metadataViewState.metadata?.author || '',
               'net.oasis.rofl.description': metadataViewState.metadata?.description || '',
