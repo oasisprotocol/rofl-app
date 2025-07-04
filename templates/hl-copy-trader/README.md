@@ -30,35 +30,22 @@ Before setting up your copy trader, ensure you have:
    - Example: `0x1234567890abcdef...`
    - This address determines which trades your bot will replicate.
 
-2. **Withdrawal Configuration** (Use to stop operations and withdraw funds)
-
-   - For normal operation, leave these settings at their default values.
-   - To initiate a withdrawal, you must configure two settings. This is
-     useful when you want to emergency withdraw all funds or are happy with the
-     results and want to stop copy trading.
-
-   **a. Withdrawal Address (`WITHDRAW_FUNDS_TO`)** (Required)
+2. **Withdrawal Address (`WITHDRAW_FUNDS_TO`)** (Required)
    - This is the destination address where your funds will be sent in an
      emergency or when you decide to stop trading.
    - You must provide a valid address here for the bot to operate.
 
-   **b. Enable Withdrawal (`WITHDRAW`)**
-   - Set this to `true` to activate the withdrawal process.
-   - When enabled, the bot will not copy any trades. Instead, upon starting,
-     it will immediately:
-     - Cancel all open orders
-     - Close all open positions
-     - Transfer all USDC to your specified withdrawal address
-
 ### Step 3: Fund Your Trading Account
 
-1. After deploying your ROFL app, check the logs to find your bot's trading
-   address.
+1. After deploying your ROFL app, find your bot's trading address in the logs.
+   - Navigate to **[My Machines](https://rofl.app/dashboard/machines)**.
+   - Click **View Details** on your machine.
+   - Go to the **Logs** tab to find the address.
 2. Send USDC (Perps) to this address on Hyperliquid.
 3. The bot will automatically detect the funds and start listening for trades.
 
-⚠️  **IMPORTANT: Only send USDC (Perps) on Hyperliquid!**  
-⚠️  **Sending funds on any other chain or to the wrong account type**  
+⚠️  **IMPORTANT: Only send USDC (Perps) on Hyperliquid!**
+⚠️  **Sending funds on any other chain or to the wrong account type**
 ⚠️  **may result in PERMANENT LOSS OF FUNDS!**
 
 **Important Funding Considerations:**
@@ -70,6 +57,23 @@ Before setting up your copy trader, ensure you have:
 - Example: If the copied trader has $100,000 and opens a $100 position
   (0.1%), you need at least $10,000 to copy this trade, otherwise it will be
   skipped.
+
+### Step 4: Enable Withdrawal
+
+Use this to stop operations and withdraw funds. When enabled, the bot will not
+copy any trades. Instead, upon starting, it will immediately:
+
+- Cancel all open orders
+- Close all open positions
+- Transfer all USDC to your specified withdrawal address (`WITHDRAW_FUNDS_TO`)
+
+To enable withdrawal:
+
+1. Navigate to **[My Apps](https://rofl.app/dashboard/apps)**.
+2. Click **View Details** on your app.
+3. Go to the **Secrets** tab.
+4. Set the `WITHDRAW` secret to `true`.
+5. Apply the changes and restart the machine to begin the withdrawal process.
 
 ## Risk Warning
 
@@ -85,11 +89,6 @@ Before setting up your copy trader, ensure you have:
 
 - **Bot not copying trades**: Ensure your account has sufficient funds for the
   minimum trade size.
-- **Finding your bot's address**: Check the ROFL app logs after deployment.
-- **How to withdraw**:
-    1. Go to your app's **Secrets** tab.
-    2. Set the `WITHDRAW` secret to `true`.
-    3. Ensure your `WITHDRAW_FUNDS_TO` address is set.
-    4. Save your changes.
-    5. Apply the changes and restart the machine to begin the withdrawal
-       process.
+- **Finding your bot's address**: Check the ROFL app logs after deployment as
+  described in Step 3.
+- **How to withdraw**: Follow the instructions in Step 4.
