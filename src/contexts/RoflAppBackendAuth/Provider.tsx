@@ -1,4 +1,4 @@
-import { useState, useCallback, type ReactNode } from 'react'
+import { useState, useCallback, type ReactNode, useRef, useEffect } from 'react'
 import { useAccount, useChainId, useSignMessage } from 'wagmi'
 import { useGetNonce, useLogin } from '../../backend/api'
 import { RoflAppBackendAuthContext } from './Context'
@@ -7,6 +7,8 @@ import { useInterval } from './useInterval'
 import { useNetwork } from '../../hooks/useNetwork.ts'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useChainModal } from '@rainbow-me/rainbowkit'
+import { ANALYTICS_ENABLED } from '../../constants/analytics-config.ts'
+import { trackEvent } from 'fathom-client'
 
 export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }) {
   const { address, isConnected } = useAccount()
@@ -14,6 +16,8 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const currentChainId = useChainId()
   const chainId = useNetwork('mainnet') === 'mainnet' ? sapphire.id : sapphireTestnet.id
   const { chainModalOpen, openChainModal } = useChainModal()
+  // Filter out token expirations
+  const hasWalletConnected = useRef(false)
 
   const [token, _setToken] = useState<string | null>(
     // TODO: possibly already expired or from another account. Currently detected by useInterval within a few seconds.
@@ -24,6 +28,15 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
 
   const { refetch: refetchNonce } = useGetNonce(isConnected ? address : undefined)
   const { mutateAsync: loginMutationAsync } = useLogin()
+
+  useEffect(() => {
+    if (!ANALYTICS_ENABLED) return
+
+    if (!!token && !hasWalletConnected.current) {
+      trackEvent('Wallet connected')
+      hasWalletConnected.current = true
+    }
+  }, [token])
 
   const setToken = (token: string | null) => {
     _setToken(token)
