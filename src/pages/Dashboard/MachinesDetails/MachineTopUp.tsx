@@ -1,4 +1,4 @@
-import { type FC, useEffect, useMemo } from 'react'
+import { type FC, useCallback, useEffect, useMemo } from 'react'
 import { useNetwork } from '../../../hooks/useNetwork'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetRuntimeRoflmarketProvidersAddressInstancesId } from '../../../nexus/generated/api'
@@ -68,15 +68,21 @@ export const MachineTopUp: FC = () => {
     }
   }, [allowNavigatingAway, blockNavigatingAway, canNavigateAway])
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     if (canNavigateAway) {
       navigate(`/dashboard/machines/${machine!.provider}/instances/${machine!.id}`)
     }
-  }
+  }, [canNavigateAway, machine, navigate])
 
   const handleTopUpSuccess = () => {
     refetchSapphireBalance()
   }
+
+  useEffect(() => {
+    if (machine?.removed) {
+      handleBack()
+    }
+  }, [handleBack, machine?.removed])
 
   return (
     <div>
