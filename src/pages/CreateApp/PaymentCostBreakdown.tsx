@@ -1,12 +1,12 @@
 import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator'
-import type { FC } from 'react'
+import type { FC, ReactNode } from 'react'
 
 interface PaymentCostBreakdownProps {
   appCost: string
   deployCost: string
   transactionFee: string
   total: string
-  availableAmount?: string
+  availableAmount?: ReactNode
 }
 
 export const PaymentCostBreakdown: FC<PaymentCostBreakdownProps> = ({
@@ -44,7 +44,7 @@ export const PaymentCostBreakdown: FC<PaymentCostBreakdownProps> = ({
         <p className="text-md font-semibold text-foreground">{total}</p>
       </div>
 
-      {availableAmount && <p className="text-xs text-destructive text-right">{availableAmount} Available</p>}
+      {availableAmount && availableAmount}
     </div>
   )
 }
