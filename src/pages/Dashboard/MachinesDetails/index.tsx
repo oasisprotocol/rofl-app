@@ -72,12 +72,14 @@ export const MachinesDetails: FC = () => {
                     )}
                   </div>
 
-                  <Button variant="outline" className="w-full md:w-auto" disabled={machine.removed} asChild>
-                    <Link to="./top-up">
-                      <CircleArrowUp />
-                      Top up
-                    </Link>
-                  </Button>
+                  {!machine.removed && (
+                    <Button variant="outline" className="w-full md:w-auto" asChild>
+                      <Link to="./top-up">
+                        <CircleArrowUp />
+                        Top up
+                      </Link>
+                    </Button>
+                  )}
                   <MachineRestart
                     disabled={machine.removed}
                     onConfirm={async () => {
