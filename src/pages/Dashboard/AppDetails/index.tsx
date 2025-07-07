@@ -142,6 +142,10 @@ export const AppDetails: FC = () => {
                     <RemoveAppButton
                       stakedAmount={roflApp.stake}
                       onConfirm={async () => {
+                        if (roflApp.metadata['net.oasis.roflapp.template'] === 'hl-copy-trader') {
+                          if (!window.confirm('Did you withdraw funds from trading account?')) return
+                        }
+
                         await removeApp.mutateAsync({ appId: id as `rofl1${string}`, network })
                         roflAppQuery.refetch()
                       }}
