@@ -1,12 +1,19 @@
 import { type FC } from 'react'
-import { CircleCheck, CircleOff, CirclePause, CircleStop } from 'lucide-react'
+import { CircleCheck, CircleOff, CirclePause, CircleStop, CircleX } from 'lucide-react'
 import { parseISO, addMinutes, isWithinInterval, isPast } from 'date-fns'
 import { Badge } from '@oasisprotocol/ui-library/src/components/ui/badge'
 import { RoflMarketInstance } from '../../nexus/api'
 import * as oasisRT from '@oasisprotocol/client-rt'
 import { Tooltip, TooltipTrigger, TooltipContent } from '@oasisprotocol/ui-library/src/components/ui/tooltip'
 
-type MachineStatusTypes = 'created' | 'active' | 'removed' | 'expiring' | 'accepted' | 'unknown'
+type MachineStatusTypes =
+  | 'created'
+  | 'active'
+  | 'removed'
+  | 'expiring'
+  | 'accepted'
+  | 'unknown'
+  | 'net.oasis.error'
 
 function getMachineStatus(machine: RoflMarketInstance): MachineStatusTypes {
   if (machine.status === oasisRT.types.RoflmarketInstanceStatus.CREATED) return 'created'
@@ -15,6 +22,7 @@ function getMachineStatus(machine: RoflMarketInstance): MachineStatusTypes {
     const expired = isExpired(machine.paid_until)
     const expiringSoon = !expired && isExpiringSoon(machine.paid_until)
     if (machine.removed || expired) return 'removed'
+    if (machine.metadata['net.oasis.error']) return 'net.oasis.error'
     if (expiringSoon) return 'expiring'
 
     // Machine is running when:
@@ -60,7 +68,7 @@ const isExpired = (expirationDate: string) => {
 export const MachineStatusIcon: FC<MachineStatusIconProps> = ({ machine }) => {
   const status = getMachineStatus(machine)
 
-  const getStatusConfig = (status: MachineStatusTypes) => {
+  const getStatusConfig = (status: MachineStatusTypes): { tooltip: string; icon: JSX.Element } => {
     switch (status) {
       case 'created':
         return {
@@ -82,6 +90,11 @@ export const MachineStatusIcon: FC<MachineStatusIconProps> = ({ machine }) => {
           icon: <CircleStop className="h-5 w-5" style={{ color: 'var(--error)' }} />,
           tooltip: 'Machine is no longer available',
         }
+      case 'net.oasis.error':
+        return {
+          icon: <CircleX className="h-5 w-5" style={{ color: 'var(--error)' }} />,
+          tooltip: 'Machine error',
+        }
       case 'expiring':
         return {
           icon: <Badge className="bg-warning">Expiring Soon</Badge>,
@@ -92,8 +105,6 @@ export const MachineStatusIcon: FC<MachineStatusIconProps> = ({ machine }) => {
           icon: <CircleOff className="h-5 w-5" style={{ color: 'var(--error)' }} />,
           tooltip: 'Machine is in unknown status',
         }
-      default:
-        return null
     }
   }
 
