@@ -15,6 +15,7 @@ import { type MetadataFormData } from '../../CreateApp/types'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { MachineResources } from '../../../components/MachineResources'
 import { MachineName } from '../../../components/MachineName'
+import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
 
 type AppMetadataProps = {
   id: string
@@ -57,13 +58,16 @@ export const AppMetadata: FC<AppMetadataProps> = ({
           <DetailsSectionRow label="Machines">
             {machines.map((machine, index) => (
               <span key={machine.id}>
-                <Link
-                  key={machine.id}
-                  to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}
-                  className="text-primary"
-                >
-                  <MachineName machine={machine} network={network} />
-                </Link>
+                <span className="inline-flex items-center gap-2">
+                  <Link
+                    key={machine.id}
+                    to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}
+                    className="text-primary"
+                  >
+                    <MachineName machine={machine} network={network} />
+                  </Link>
+                  <MachineStatusIcon machine={machine} />
+                </span>
                 {index < machines.length - 1 && <>, </>}
               </span>
             ))}
