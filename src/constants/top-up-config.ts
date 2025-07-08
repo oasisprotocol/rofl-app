@@ -7,6 +7,7 @@ export const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 export const ROUTER_PATHFINDER_API_URL = 'https://api-beta.pathfinder.routerprotocol.com/api/v2'
 export const ROUTER_SWAP_API_URL = 'https://api.nitroswap.routernitro.com'
 export const FAUCET_URL = 'https://faucet.testnet.oasis.io/'
+export const TOP_UP_FAILED_URL = 'https://rose.oasis.io/'
 
 /**
  * TOKENS_ALLOW_LIST represents a list of token pairs that are allowed.
