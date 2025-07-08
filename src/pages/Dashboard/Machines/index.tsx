@@ -29,7 +29,7 @@ export const Machines: FC = () => {
     enabled: isConnected,
     getNextPageParam: (lastPage, allPages) => {
       const totalFetched = allPages.length * pageLimit
-      return totalFetched < lastPage.data.total_count ? totalFetched : undefined
+      return lastPage.data.instances.length < lastPage.data.total_count ? totalFetched : undefined
     },
   })
 

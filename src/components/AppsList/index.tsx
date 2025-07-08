@@ -34,7 +34,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
     enabled: type === 'explore' || (type === 'dashboard' && isConnected),
     getNextPageParam: (lastPage, allPages) => {
       const totalFetched = allPages.length * pageLimit
-      return totalFetched < lastPage.data.total_count ? totalFetched : undefined
+      return lastPage.data.rofl_apps.length < lastPage.data.total_count ? totalFetched : undefined
     },
   })
 
