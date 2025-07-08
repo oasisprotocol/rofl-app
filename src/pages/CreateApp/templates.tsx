@@ -96,7 +96,10 @@ const createTemplateParser = (roflData: RoflData) => {
         memory: buildData.offerMemory,
         storage: {
           ...roflData.resources?.storage,
-          size: buildData.offerStorage,
+          // Reserve 2GB to prevent "ORC exceeds instance storage resources".
+          // https://github.com/oasisprotocol/cli/blob/ee329dbd9e6323d62d4bf69d98521d150721a58c/cmd/rofl/build/tdx.go#L258
+          // https://github.com/oasisprotocol/oasis-sdk/blob/de3c30d/rofl-scheduler/src/manager.rs#L1256
+          size: buildData.offerStorage! - 2048,
         },
       },
       deployments: {
