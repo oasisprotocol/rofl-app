@@ -96,17 +96,13 @@ export const PaymentStep: FC<PaymentStepProps> = ({
               : '-'
           }
           transactionFee={`~${fromBaseUnits(feeCost)} ${ticker}`}
-          total={amountRequired ? `${fromBaseUnits(amountRequired)} ${ticker}` : '-'}
-          availableAmount={
-            <p className={`${hasEnoughBalance ? 'text-success' : 'text-error'} text-xs text-right`}>
-              {NumberUtils.formatTokenAmountWithSymbol(
-                sapphireBalance.value.toString(),
-                sapphireBalance.decimals,
-                sapphireBalance.symbol,
-              )}{' '}
-              Available
-            </p>
-          }
+          total={amountRequired ? `~${fromBaseUnits(amountRequired)} ${ticker}` : '-'}
+          hasEnoughBalance={hasEnoughBalance}
+          availableAmount={NumberUtils.formatTokenAmountWithSymbol(
+            sapphireBalance.value.toString(),
+            sapphireBalance.decimals,
+            sapphireBalance.symbol,
+          )}
         />
       )}
       {!hasEnoughBalance && minAmount && (

@@ -1,12 +1,13 @@
 import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator'
-import type { FC, ReactNode } from 'react'
+import type { FC } from 'react'
 
 interface PaymentCostBreakdownProps {
   appCost: string
   deployCost: string
   transactionFee: string
   total: string
-  availableAmount?: ReactNode
+  hasEnoughBalance: boolean
+  availableAmount: string
 }
 
 export const PaymentCostBreakdown: FC<PaymentCostBreakdownProps> = ({
@@ -14,37 +15,59 @@ export const PaymentCostBreakdown: FC<PaymentCostBreakdownProps> = ({
   deployCost,
   transactionFee,
   total,
+  hasEnoughBalance,
   availableAmount,
 }) => {
   return (
-    <div className="flex flex-col w-full gap-2">
-      <div className="flex justify-between items-start">
-        <p className="text-sm font-medium text-foreground">App registration</p>
-        <p className="text-sm font-medium text-foreground">{appCost}</p>
+    <div className="flex flex-col space-y-2 w-full">
+      <div className="flex flex-col space-y-2">
+        <div className="flex justify-between items-start">
+          <span className="text-sm font-medium text-foreground">App registration</span>
+          <span className="text-sm text-muted-foreground">{appCost}</span>
+        </div>
+
+        <Separator orientation="horizontal" />
+
+        <div className="flex justify-between items-start">
+          <span className="text-sm font-medium text-foreground">Machine</span>
+          <span className="text-sm text-muted-foreground">{deployCost}</span>
+        </div>
+
+        <Separator orientation="horizontal" />
+
+        <div className="flex justify-between items-start">
+          <span className="text-sm font-medium text-foreground">Transaction fee(s)</span>
+          <span className="text-sm text-muted-foreground">{transactionFee}</span>
+        </div>
+
+        <Separator orientation="horizontal" />
+
+        <div className="flex justify-between items-start space-y-6">
+          <span className="text-sm font-medium text-foreground">Total</span>
+          <span className="text-sm font-medium text-foreground">{total}</span>
+        </div>
       </div>
 
-      <Separator />
+      <div className="flex flex-col space-y-2">
+        <Separator orientation="horizontal" />
 
-      <div className="flex justify-between items-start">
-        <p className="text-sm font-medium text-foreground">Machine</p>
-        <p className="text-sm font-medium text-foreground">{deployCost}</p>
+        <div className="flex items-start justify-between gap-y-6">
+          <p className="text-sm text-muted-foreground">Available</p>
+          <div className="flex flex-col items-end">
+            {hasEnoughBalance && (
+              <>
+                <span className="text-sm text-muted-foreground">{availableAmount}</span>
+              </>
+            )}
+            {!hasEnoughBalance && (
+              <>
+                <p className="text-sm text-destructive">{availableAmount}</p>
+                <p className="text-xs text-destructive">Insufficient funds</p>
+              </>
+            )}
+          </div>
+        </div>
       </div>
-
-      <Separator />
-
-      <div className="flex justify-between items-start">
-        <p className="text-sm font-medium text-foreground">Transaction fee(s)</p>
-        <p className="text-sm font-medium text-foreground">{transactionFee}</p>
-      </div>
-
-      <Separator />
-
-      <div className="flex justify-between items-start">
-        <p className="text-md font-semibold text-foreground ">Total</p>
-        <p className="text-md font-semibold text-foreground">{total}</p>
-      </div>
-
-      {availableAmount && availableAmount}
     </div>
   )
 }
