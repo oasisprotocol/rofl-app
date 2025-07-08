@@ -5,11 +5,14 @@ export interface NitroSwapAPIProviderState {
   BASE_URL: string
   chains: Chain[] | null
   nativeTokens: Token[] | null
+  chainsLoaded: boolean
+  nativeTokensLoaded: boolean
 }
 
 export interface NitroSwapAPIProviderContext {
   state: NitroSwapAPIProviderState
   isLoading: boolean
+  hasInitializationFailed: boolean
   getChains: (params?: {
     page?: number
     limit?: number

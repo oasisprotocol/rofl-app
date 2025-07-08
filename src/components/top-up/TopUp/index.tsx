@@ -32,6 +32,7 @@ import { useNetwork } from '../../../hooks/useNetwork.ts'
 import { sapphire } from 'viem/chains'
 import nitroBoltIcon from '../NitroBoltIcon.svg'
 import { useChainModal } from '@rainbow-me/rainbowkit'
+import { TopUpInitializationFailed } from '../TopUpInitializationFailed'
 import classes from './index.module.css'
 
 const bridgeFormSchema = z.object({
@@ -751,10 +752,20 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 }
 
 const TopUpLoading: FC<TopUpProps> = props => {
-  const { isLoading } = useNitroSwapAPI()
+  const { isLoading, hasInitializationFailed } = useNitroSwapAPI()
 
-  if (!isLoading) {
+  if (!isLoading && !hasInitializationFailed) {
     return <TopUpCmp {...props} />
+  }
+
+  if (hasInitializationFailed) {
+    return (
+      <>
+        <TopUpInitializationFailed />
+        {/* Fallback navigation */}
+        {props.children?.({ isValid: false, onSubmit: () => {} })}
+      </>
+    )
   }
 
   return (

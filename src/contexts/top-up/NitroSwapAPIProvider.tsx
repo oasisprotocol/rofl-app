@@ -4,11 +4,14 @@ import { NitroSwapAPIContext } from './NitroSwapAPIContext'
 import type { NitroSwapAPIProviderContext, NitroSwapAPIProviderState } from './NitroSwapAPIContext'
 import { TOKENS_ALLOW_LIST, ENABLED_CHAINS_IDS, ROUTER_SWAP_API_URL } from '../../constants/top-up-config'
 import type { TokenResponse } from '../../types/top-up'
+import { sapphire } from 'viem/chains'
 
 const nitroSwapAPIProviderInitialState: NitroSwapAPIProviderState = {
   BASE_URL: ROUTER_SWAP_API_URL,
   chains: null,
   nativeTokens: null,
+  chainsLoaded: false,
+  nativeTokensLoaded: false,
 }
 
 export const NitroSwapAPIContextProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -132,6 +135,7 @@ export const NitroSwapAPIContextProvider: FC<PropsWithChildren> = ({ children })
       setState(prevState => ({
         ...prevState,
         chains: enabledChains.flat(),
+        chainsLoaded: true,
       }))
     }
 
@@ -158,6 +162,7 @@ export const NitroSwapAPIContextProvider: FC<PropsWithChildren> = ({ children })
       setState(prevState => ({
         ...prevState,
         nativeTokens: tokens.flat(),
+        nativeTokensLoaded: true,
       }))
     }
 
@@ -165,14 +170,21 @@ export const NitroSwapAPIContextProvider: FC<PropsWithChildren> = ({ children })
   }, [state.chains, getToken])
 
   const isLoading = useMemo(() => {
-    if (ENABLED_CHAINS_IDS.length > (state.chains?.length ?? 0)) return true
-    if (ENABLED_CHAINS_IDS.length > (state.nativeTokens?.length ?? 0)) return true
-    return false
-  }, [state.chains, state.nativeTokens])
+    return !state.chainsLoaded || !state.nativeTokensLoaded
+  }, [state.chainsLoaded, state.nativeTokensLoaded])
+
+  const hasInitializationFailed = useMemo(() => {
+    if (isLoading) return false
+
+    const hasSapphire = state.chains?.some(chain => chain.chainId === sapphire.id.toString())
+
+    return !hasSapphire
+  }, [isLoading, state.chains])
 
   const providerState: NitroSwapAPIProviderContext = {
     state,
     isLoading,
+    hasInitializationFailed,
     getChains,
     getToken,
     getTokens,
