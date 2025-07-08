@@ -9,6 +9,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   define: {
     APP_VERSION: JSON.stringify(version),
-    BUILD_COMMIT: JSON.stringify(execSync('git rev-parse HEAD').toString()),
+    BUILD_COMMIT: JSON.stringify(execSync('git rev-parse HEAD').toString().trim()),
   },
 });
