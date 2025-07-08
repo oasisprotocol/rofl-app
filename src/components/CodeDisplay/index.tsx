@@ -2,7 +2,11 @@ import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { type FC, lazy, Suspense } from 'react'
 
 const TextAreaFallback = ({ value }: { value?: string }) => (
-  <textarea readOnly value={value} className="w-full h-full bg-background text-foreground overflow-hidden" />
+  <textarea
+    readOnly
+    value={value}
+    className="w-full h-full px-4 bg-[#1e1e1e] text-[#ce9178] overflow-hidden"
+  />
 )
 
 const MonacoEditor = lazy(async () => {
