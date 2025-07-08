@@ -68,7 +68,7 @@ const isExpired = (expirationDate: string) => {
 export const MachineStatusIcon: FC<MachineStatusIconProps> = ({ machine }) => {
   const status = getMachineStatus(machine)
 
-  const getStatusConfig = (status: MachineStatusTypes): { tooltip: string; icon: JSX.Element } => {
+  const getStatusConfig = (status: MachineStatusTypes): { tooltip: string; icon: React.JSX.Element } => {
     switch (status) {
       case 'created':
         return {
