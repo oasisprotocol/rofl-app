@@ -83,7 +83,6 @@ const createTemplateParser = (roflData: RoflData) => {
     network: 'mainnet' | 'testnet',
     appId: string,
   ) => {
-    console.log('TODO: use', buildData)
     return {
       ...roflData,
       title: metadata.name,
@@ -93,6 +92,12 @@ const createTemplateParser = (roflData: RoflData) => {
       homepage: metadata.homepage,
       resources: {
         ...roflData.resources,
+        cpus: buildData.offerCpus,
+        memory: buildData.offerMemory,
+        storage: {
+          ...roflData.resources?.storage,
+          size: buildData.offerStorage,
+        },
       },
       deployments: {
         default: {
