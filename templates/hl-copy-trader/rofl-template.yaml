@@ -1,7 +1,7 @@
 name: Hyperliquid Copy Trader
 description: Confidential copy trading agent built for Hyperliquid. Automatically mirrors trades from a specified trader.
 image: https://rofl.app/templates/hl-rofl-trader.png
-version: 1.4.2
+version: 1.5.7
 repository: https://github.com/oasisprotocol/template-rofl-hl-copy-trader
 author: Oasis Protocol Foundation <info@oasisprotocol.org>
 license: Apache-2.0
@@ -49,7 +49,7 @@ secrets:
 compose: |
   services:
     hl-copy-trader:
-      image: docker.io/ahmedatoasis/hl-copy-trader@sha256:920559b2fef1f8e070c6d06d91e0fc49b94d373ad3d16ee49aaca1d4eabab219
+      image: docker.io/ahmedatoasis/hl-copy-trader@sha256:7511e71bd86f768c82e388304943c41e0ea5451eb1adf71c00315916f14629d5
       build:
         context: .
         dockerfile: Dockerfile
