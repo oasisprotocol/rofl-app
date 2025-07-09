@@ -27,7 +27,7 @@ type ParsedTemplate = {
   version?: string
   homepage?: string
   resources?: {
-    cpu?: number
+    cpus?: number
     memory?: number
     storage?: {
       size?: number
@@ -40,7 +40,7 @@ type ParsedTemplate = {
 
 type RoflData = {
   resources?: {
-    cpu?: number
+    cpus?: number
     memory?: number
     storage?: {
       size?: number
@@ -64,14 +64,14 @@ export const defaultBuildConfig = {
   duration: 'hours' as const,
   number: 2,
   offerId: '',
-  offerCpu: 0,
+  offerCpus: 0,
   offerMemory: 0,
   offerStorage: 0,
 }
 
 export const extractResources = (parsedTemplate: ParsedTemplate) => ({
   ...defaultBuildConfig,
-  offerCpu: parsedTemplate.resources?.cpu || 0,
+  offerCpus: parsedTemplate.resources?.cpus || 0,
   offerMemory: parsedTemplate.resources?.memory || 0,
   offerStorage: parsedTemplate.resources?.storage?.size || 0,
 })
@@ -83,6 +83,7 @@ const createTemplateParser = (roflData: RoflData) => {
     network: 'mainnet' | 'testnet',
     appId: string,
   ) => {
+    console.log('TODO: use', buildData)
     return {
       ...roflData,
       title: metadata.name,

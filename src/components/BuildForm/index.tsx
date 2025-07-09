@@ -135,7 +135,7 @@ export const BuildForm: FC<BuildFormProps> = ({
     if (selectedOfferId && offers) {
       const selectedOffer = offers.find(offer => offer.id === selectedOfferId)
       if (selectedOffer) {
-        form.setValue('offerCpu', selectedOffer.resources.cpus)
+        form.setValue('offerCpus', selectedOffer.resources.cpus)
         form.setValue('offerMemory', selectedOffer.resources.memory)
         form.setValue('offerStorage', selectedOffer.resources.storage)
       }

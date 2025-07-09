@@ -13,7 +13,7 @@ export const buildFormSchema = z
       message: 'Resources are required.',
     }),
     roseCostInBaseUnits: z.string().optional(),
-    offerCpu: z.number(),
+    offerCpus: z.number(),
     offerMemory: z.number(),
     offerStorage: z.number(),
   })
