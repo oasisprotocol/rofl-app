@@ -321,7 +321,9 @@ export function useCreateAndDeployApp() {
         .query(nic)
       console.log('App', app)
 
-      const manifest = yaml.stringify(template.templateParser(appData.metadata!, network, appId))
+      const manifest = yaml.stringify(
+        template.templateParser(appData.metadata!, appData.build!, network, appId),
+      )
       const compose = template.yaml.compose
       const readme = getReadmeByTemplateId(appData.template!)
       console.log('Build?')
@@ -380,7 +382,7 @@ export function useCreateAndDeployApp() {
           .callInstanceCreate()
           .setBody({
             provider: oasis.staking.addressFromBech32(appData.build!.provider!),
-            offer: oasis.misc.fromHex(appData.build!.resources),
+            offer: oasis.misc.fromHex(appData.build!.offerId!),
             deployment: {
               app_id: app.id,
               manifest_hash: oasis.misc.fromHex(buildResults.manifest_hash),

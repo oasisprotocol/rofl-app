@@ -9,10 +9,13 @@ export const buildFormSchema = z
     number: z.coerce.number().int().positive({
       message: 'Number is required.',
     }),
-    resources: z.string().min(1, {
+    offerId: z.string().min(1, {
       message: 'Resources are required.',
     }),
     roseCostInBaseUnits: z.string().optional(),
+    offerCpus: z.number(),
+    offerMemory: z.number(),
+    offerStorage: z.number(),
   })
   .refine(
     data => {

@@ -10,6 +10,7 @@ import hlCopyTraderTemplate from '../../../templates/hl-copy-trader/rofl-templat
 import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
 import type { MetadataFormData } from './types'
+import { BuildFormData } from '../../types/build-form'
 
 const parsedDefaultDeployments = parse(defaultDeployments)
 const parsedTgbotTemplate = parse(tgbotTemplate)
@@ -25,6 +26,28 @@ type ParsedTemplate = {
   description?: string
   version?: string
   homepage?: string
+  resources?: {
+    cpus?: number
+    memory?: number
+    storage?: {
+      size?: number
+      [key: string]: unknown
+    }
+    [key: string]: unknown
+  }
+  [key: string]: unknown
+}
+
+type RoflData = {
+  resources?: {
+    cpus?: number
+    memory?: number
+    storage?: {
+      size?: number
+      [key: string]: unknown
+    }
+    [key: string]: unknown
+  }
   [key: string]: unknown
 }
 
@@ -40,17 +63,27 @@ export const defaultBuildConfig = {
   provider: '',
   duration: 'hours' as const,
   number: 2,
-  resources: '',
+  offerId: '',
+  offerCpus: 0,
+  offerMemory: 0,
+  offerStorage: 0,
 }
 
-export const defaultCopyTraderBuildConfig = {
+export const extractResources = (parsedTemplate: ParsedTemplate) => ({
   ...defaultBuildConfig,
-  duration: 'days' as const,
-  number: 7,
-}
+  offerCpus: parsedTemplate.resources?.cpus || 0,
+  offerMemory: parsedTemplate.resources?.memory || 0,
+  offerStorage: parsedTemplate.resources?.storage?.size || 0,
+})
 
-const createTemplateParser = (roflData: Record<string, unknown>) => {
-  return (metadata: Partial<MetadataFormData>, network: 'mainnet' | 'testnet', appId: string) => {
+const createTemplateParser = (roflData: RoflData) => {
+  return (
+    metadata: Partial<MetadataFormData>,
+    buildData: Partial<BuildFormData>,
+    network: 'mainnet' | 'testnet',
+    appId: string,
+  ) => {
+    console.log('TODO: use', buildData)
     return {
       ...roflData,
       title: metadata.name,
@@ -58,6 +91,9 @@ const createTemplateParser = (roflData: Record<string, unknown>) => {
       author: metadata.author,
       version: metadata.version,
       homepage: metadata.homepage,
+      resources: {
+        ...roflData.resources,
+      },
       deployments: {
         default: {
           ...parsedDefaultDeployments.deployments.default,
@@ -77,7 +113,7 @@ export const templates = [
     id: 'tgbot',
     initialValues: {
       metadata: extractMetadata(parsedTgbotTemplate),
-      build: defaultBuildConfig,
+      build: extractResources(parsedTgbotTemplate),
     },
     yaml: {
       compose: tgbotCompose,
@@ -92,7 +128,7 @@ export const templates = [
     id: 'x-agent',
     initialValues: {
       metadata: extractMetadata(parsedXagentTemplate),
-      build: defaultBuildConfig,
+      build: extractResources(parsedXagentTemplate),
     },
     yaml: {
       compose: xagentCompose,
@@ -107,7 +143,7 @@ export const templates = [
     id: 'hl-copy-trader',
     initialValues: {
       metadata: extractMetadata(parsedHlTemplate),
-      build: defaultCopyTraderBuildConfig,
+      build: { ...extractResources(parsedHlTemplate), duration: 'days' as const, number: 7 },
     },
     yaml: {
       compose: hlCompose,
