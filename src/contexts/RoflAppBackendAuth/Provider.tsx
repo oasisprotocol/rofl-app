@@ -5,11 +5,12 @@ import { useInterval } from './useInterval'
 import { ANALYTICS_ENABLED } from '../../constants/analytics-config.ts'
 import { trackEvent } from 'fathom-client'
 import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }) {
   const { address, isConnected } = useAccount()
   const navigate = useNavigate()
+  const location = useLocation()
   const [token, setToken] = useState<string | null>(window.localStorage.getItem('jwt'))
   const [isInitialLoad, setIsInitialLoad] = useState(true)
   // Filter out token expirations
@@ -65,10 +66,10 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const isTokenExpired = token ? isJWTExpired(token, address || '') : false
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && location.pathname === '/') {
       navigate('/dashboard', { replace: true })
     }
-  }, [navigate, isAuthenticated])
+  }, [navigate, isAuthenticated, location.pathname])
 
   // Authentication status for RainbowKit
   const getAuthenticationStatus = (): AuthenticationStatus => {
