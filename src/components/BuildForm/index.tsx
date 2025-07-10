@@ -167,86 +167,82 @@ export const BuildForm: FC<BuildFormProps> = ({
   const noOffersWarning = providersOffersQuery.isFetched ? offers && offers.length === 0 : false
 
   return (
-    <>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
+      <SelectFormField
+        control={form.control}
+        name="provider"
+        label="Provider"
+        placeholder="Select provider"
+        options={[...providerOptions]}
+        disabled
+      />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
         <SelectFormField
           control={form.control}
-          name="provider"
-          label="Provider"
-          placeholder="Select provider"
-          options={[...providerOptions]}
-          disabled
+          name="duration"
+          label="Duration"
+          placeholder="Select duration"
+          options={[...durationOptions]}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-          <SelectFormField
+        <div>
+          <InputFormField
             control={form.control}
-            name="duration"
-            label="Duration"
-            placeholder="Select duration"
-            options={[...durationOptions]}
+            name="number"
+            label={`Number of ${form.watch('duration') || 'hours'}`}
+            placeholder="Enter number"
+            type="number"
+            min={1}
           />
-
-          <div>
-            <InputFormField
-              control={form.control}
-              name="number"
-              label={`Number of ${form.watch('duration') || 'hours'}`}
-              placeholder="Enter number"
-              type="number"
-              min={1}
-            />
-            {form.watch('duration') === 'hours' && Number(form.watch('number')) === 1 && (
-              <div className="text-sm text-warning leading-tight mt-2">
-                1 hour is a very short period of time for the app. It may not be enough for debugging.
-              </div>
-            )}
-            {selectedTemplateId === 'hl-copy-trader' &&
-              ((form.watch('duration') === 'days' && Number(form.watch('number')) < 7) ||
-                (form.watch('duration') === 'hours' && Number(form.watch('number')) < 168)) && (
-                <div className="text-sm text-warning leading-tight mt-2">
-                  We recommend running the Copy Trader for at least 7 days so you have enough time to test it
-                  and withdraw your funds.
-                </div>
-              )}
-          </div>
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="resources">Size</Label>
-          <Controller
-            control={form.control}
-            name="offerId"
-            render={({ field, fieldState }) => (
-              <>
-                <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
-                  {offers?.sort(sortOffersByPaymentTerms).map(offer => (
-                    <BuildStepOffers
-                      key={offer.id}
-                      offer={offer}
-                      fieldValue={field.value}
-                      multiplyNumber={Number(form.watch('number'))}
-                      duration={form.watch('duration')}
-                      onCostCalculated={handleCostCalculated}
-                      network={network}
-                      disabled={offerId ? offer.id !== offerId : false}
-                    />
-                  ))}
-                </RadioGroup>
-                {fieldState.error && (
-                  <div className="text-destructive text-sm">{fieldState.error.message}</div>
-                )}
-              </>
-            )}
-          />
-          {noOffersWarning && (
-            <div className="text-destructive text-sm">
-              No offers available for the provider. Please wait for offers to be available.
+          {form.watch('duration') === 'hours' && Number(form.watch('number')) === 1 && (
+            <div className="text-sm text-warning leading-tight mt-2">
+              1 hour is a very short period of time for the app. It may not be enough for debugging.
             </div>
           )}
+          {selectedTemplateId === 'hl-copy-trader' &&
+            ((form.watch('duration') === 'days' && Number(form.watch('number')) < 7) ||
+              (form.watch('duration') === 'hours' && Number(form.watch('number')) < 168)) && (
+              <div className="text-sm text-warning leading-tight mt-2">
+                We recommend running the Copy Trader for at least 7 days so you have enough time to test it
+                and withdraw your funds.
+              </div>
+            )}
         </div>
-      </form>
+      </div>
+
+      <div className="grid gap-2">
+        <Label htmlFor="resources">Size</Label>
+        <Controller
+          control={form.control}
+          name="offerId"
+          render={({ field, fieldState }) => (
+            <>
+              <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
+                {offers?.sort(sortOffersByPaymentTerms).map(offer => (
+                  <BuildStepOffers
+                    key={offer.id}
+                    offer={offer}
+                    fieldValue={field.value}
+                    multiplyNumber={Number(form.watch('number'))}
+                    duration={form.watch('duration')}
+                    onCostCalculated={handleCostCalculated}
+                    network={network}
+                    disabled={offerId ? offer.id !== offerId : false}
+                  />
+                ))}
+              </RadioGroup>
+              {fieldState.error && <div className="text-destructive text-sm">{fieldState.error.message}</div>}
+            </>
+          )}
+        />
+        {noOffersWarning && (
+          <div className="text-destructive text-sm">
+            No offers available for the provider. Please wait for offers to be available.
+          </div>
+        )}
+      </div>
       {children({ form, handleFormSubmit, noOffersWarning: !!noOffersWarning })}
-    </>
+    </form>
   )
 }
