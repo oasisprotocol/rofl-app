@@ -11,26 +11,17 @@ import { Create } from './pages/CreateApp'
 import { Explore } from './pages/Explore'
 import { NotFound } from './components/NotFound'
 import { wagmiConfig } from './constants/wagmi-config.ts'
-import { darkTheme, RainbowKitProvider, type Theme } from '@rainbow-me/rainbowkit'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { AccountAvatar } from './components/AccountAvatar'
 import { MainLayout } from './components/Layout/MainLayout'
-import { RoflAppBackendAuthProvider } from './contexts/RoflAppBackendAuth/Provider'
 import { RootLayout } from './components/RootLayout'
-import { sapphire } from 'viem/chains'
-import { LandingTemplates } from './pages/LandingTemplates/index.tsx'
+import { LandingTemplates } from './pages/LandingTemplates'
+import { MachineTopUp } from './pages/Dashboard/MachinesDetails/MachineTopUp'
+import { ProtectedLayout } from './components/ProtectedLayout'
 
 import './index.css'
 import '@rainbow-me/rainbowkit/styles.css'
-import { MachineTopUp } from './pages/Dashboard/MachinesDetails/MachineTopUp.tsx'
 
 const queryClient = new QueryClient()
-const rainbowKitTheme: Theme = {
-  ...darkTheme(),
-  fonts: {
-    body: 'inherit',
-  },
-}
 
 const router = createBrowserRouter([
   {
@@ -42,37 +33,82 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        index: true,
-        element: <LandingTemplates />,
         path: 'templates',
+        element: <LandingTemplates />,
       },
       {
-        path: 'dashboard',
+        path: 'explore',
         element: <MainLayout />,
         children: [
           {
             index: true,
-            element: <Dashboard />,
+            element: <Explore />,
+          },
+        ],
+      },
+      {
+        path: 'dashboard',
+        element: <ProtectedLayout />,
+        children: [
+          {
+            path: '/dashboard',
+            element: <MainLayout />,
+            children: [
+              {
+                index: true,
+                element: <Dashboard />,
+              },
+            ],
           },
           {
             path: 'apps',
-            element: <MyApps />,
+            element: <MainLayout />,
+            children: [
+              {
+                index: true,
+                element: <MyApps />,
+              },
+            ],
           },
           {
             path: 'apps/:id',
-            element: <AppDetails />,
+            element: <MainLayout />,
+            children: [
+              {
+                index: true,
+                element: <AppDetails />,
+              },
+            ],
           },
           {
             path: 'machines',
-            element: <Machines />,
+            element: <MainLayout />,
+            children: [
+              {
+                index: true,
+                element: <Machines />,
+              },
+            ],
           },
           {
             path: 'machines/:provider/instances/:id',
-            element: <MachinesDetails />,
+            element: <MainLayout />,
+            children: [
+              {
+                index: true,
+                element: <MachinesDetails />,
+              },
+            ],
           },
           {
             path: 'machines/:provider/instances/:id/top-up',
-            element: <MachineTopUp />,
+            element: <MainLayout />,
+            children: [
+              {
+                index: true,
+                element: <MachineTopUp />,
+              },
+            ],
           },
         ],
       },
@@ -86,16 +122,6 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: 'explore',
-        element: <MainLayout />,
-        children: [
-          {
-            index: true,
-            element: <Explore />,
-          },
-        ],
-      },
-      {
         path: '*',
         element: <NotFound />,
       },
@@ -106,18 +132,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <WagmiProvider config={wagmiConfig}>
     <QueryClientProvider client={queryClient}>
-      <RainbowKitProvider
-        modalSize="compact"
-        initialChain={sapphire}
-        theme={rainbowKitTheme}
-        avatar={({ address, size }) => (
-          <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
-        )}
-      >
-        <RoflAppBackendAuthProvider>
-          <RouterProvider router={router} />
-        </RoflAppBackendAuthProvider>
-      </RainbowKitProvider>
+      <RouterProvider router={router} />
     </QueryClientProvider>
   </WagmiProvider>,
 )

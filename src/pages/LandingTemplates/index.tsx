@@ -7,7 +7,7 @@ import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator
 import { TemplatesList } from '../../components/TemplatesList'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { SimpleRainbowKitConnectButton } from '../../components/RainbowKitConnectButton'
+import { RainbowKitConnectButton } from '../../components/RainbowKitConnectButton'
 import { useAccount } from 'wagmi'
 
 export const LandingTemplates: FC = () => {
@@ -21,18 +21,30 @@ export const LandingTemplates: FC = () => {
             <h1 className="text-2xl font-white font-bold mb-2 text-center mb-8">
               Create your app from a template
             </h1>
-            <p className="text-muted-foreground text-md text-center">
-              {isConnected ? (
-                <Button size="lg" asChild>
-                  <Link to="/dashboard">Get started</Link>
-                </Button>
-              ) : (
-                <SimpleRainbowKitConnectButton>
-                  Connect Wallet
-                  <ArrowRight />
-                </SimpleRainbowKitConnectButton>
-              )}
-            </p>
+            <div className="text-center">
+              <RainbowKitConnectButton>
+                {({ openConnectModal }) => {
+                  return isConnected ? (
+                    <Button size="lg" asChild>
+                      <Link to="/dashboard">
+                        Get started
+                        <ArrowRight />
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        openConnectModal()
+                      }}
+                      className="max-md:w-full"
+                    >
+                      Connect Wallet
+                      <ArrowRight />
+                    </Button>
+                  )
+                }}
+              </RainbowKitConnectButton>
+            </div>
           </div>
           <Separator className="my-8" />
           <TemplatesList />

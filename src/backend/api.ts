@@ -61,14 +61,14 @@ type ArtifactUploadRequest = {
 
 type ArtifactDownloadResponse = string
 
-const fetchNonce = async (address: string): Promise<string> => {
+export const fetchNonce = async (address: string): Promise<string> => {
   const response = await axios.get<NonceResponse>(`${BACKEND_URL}/auth/nonce`, {
     params: { address },
   })
   return response.data.nonce
 }
 
-const login = async ({ message, signature }: LoginRequest): Promise<string> => {
+export const login = async ({ message, signature }: LoginRequest): Promise<string> => {
   const response = await axios.post<LoginResponse>(
     `${BACKEND_URL}/auth/login`,
     { message },
