@@ -21,8 +21,11 @@ const fetchMachineLogs = async ({ schedulerApi, instance, token }: FetchLogsRequ
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
+      // https://github.com/oasisprotocol/oasis-sdk/blob/b45c059/rofl-scheduler/src/serverd/routes.rs#L12-L18
       body: JSON.stringify({
         instance_id: instance,
+        // component_id
+        // since
       }),
     })
 
