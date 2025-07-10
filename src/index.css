@@ -51,3 +51,29 @@
     stroke-dashoffset: 100;
   }
 }
+
+/* TODO: move into ui-library? */
+/* Detect multiple submit buttons in one form */
+@counter-style warn-multiple-submit-buttons {
+  system: fixed;
+  symbols: '' 'DEV: multiple submit buttons in one form' 'DEV: multiple submit buttons in one form'
+    'DEV: multiple submit buttons in one form';
+}
+[data-is-prod='false'] {
+  form {
+    counter-reset: count-submit-buttons;
+  }
+  form button:not([type])::before,
+  form button[type='submit']::before {
+    counter-increment: count-submit-buttons;
+    content: counter(count-submit-buttons, warn-multiple-submit-buttons);
+    color: red;
+  }
+}
+/* Detect buttons but missing a submit button in a form */
+[data-is-prod='false'] {
+  form:not(:has(button[type='submit'], button:not([type]))):has(button)::before {
+    content: 'DEV: this form does not have a submit button';
+    color: red;
+  }
+}
