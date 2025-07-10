@@ -22,7 +22,7 @@ export const CreateFormNavigation: FC<CreateFormNavigationProps> = ({
           Back
         </Button>
       )}
-      <Button className="flex-1" onClick={handleNext} disabled={disabled || isLoading}>
+      <Button className="flex-1" onClick={handleNext} disabled={disabled || isLoading} type="submit">
         {isLoading && <Spinner />}
         Continue
       </Button>
