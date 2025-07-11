@@ -15,7 +15,7 @@ import { useBlockNavigatingAway } from '../pages/CreateApp/useBlockNavigatingAwa
 import { BuildFormData } from '../types/build-form.ts'
 import { convertToDurationTerms } from './helpers.ts'
 import { toastWithDuration } from '../utils/toastWithDuration.tsx'
-import { getReadmeByTemplateId } from '../pages/CreateApp/templates.tsx'
+import { getReadmeByTemplateId, fillTemplate } from '../pages/CreateApp/templates.tsx'
 import { toast } from 'sonner'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
@@ -335,7 +335,7 @@ export function useCreateAndDeployApp() {
       console.log('App', app)
 
       const manifest = yaml.stringify(
-        template.templateParser(appData.metadata!, appData.build!, network, appId),
+        fillTemplate(template.yaml.rofl, appData.metadata!, appData.build!, network, appId),
       )
       const compose = template.yaml.compose
       const readme = getReadmeByTemplateId(appData.template!)
