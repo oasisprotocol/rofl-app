@@ -1,0 +1,14 @@
+services:
+  hl-copy-trader:
+    image: docker.io/ahmedatoasis/hl-copy-trader@sha256:7511e71bd86f768c82e388304943c41e0ea5451eb1adf71c00315916f14629d5
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    volumes:
+      - /run/rofl-appd.sock:/run/rofl-appd.sock
+    environment:
+      - COPY_TRADE_ADDRESS=${COPY_TRADE_ADDRESS}
+      - WITHDRAW_FUNDS_TO=${WITHDRAW_FUNDS_TO}
+      - WITHDRAW=${WITHDRAW}
+    restart: always

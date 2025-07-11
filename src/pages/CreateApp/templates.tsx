@@ -1,12 +1,15 @@
 import { parse } from 'yaml'
 import tgbotThumbnail from '../../../templates/tgbot/app.webp'
 import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw'
+import tgbotCompose from '../../../templates/tgbot/compose.yaml?raw'
 import tbotDocs from '../../../templates/tgbot/README.md?raw'
 import xagentThumbnail from '../../../templates/x-agent/app.webp'
 import xagentTemplate from '../../../templates/x-agent/rofl-template.yaml?raw'
+import xagentCompose from '../../../templates/x-agent/compose.yaml?raw'
 import xAgentDocs from '../../../templates/x-agent/README.md?raw'
 import hlCopyTraderThumbnail from '../../../templates/hl-copy-trader/app.webp'
 import hlCopyTraderTemplate from '../../../templates/hl-copy-trader/rofl-template.yaml?raw'
+import hlCompose from '../../../templates/hl-copy-trader/compose.yaml?raw'
 import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
 import type { MetadataFormData } from './types'
@@ -14,11 +17,8 @@ import { BuildFormData } from '../../types/build-form'
 
 const parsedDefaultDeployments = parse(defaultDeployments)
 const parsedTgbotTemplate = parse(tgbotTemplate)
-const { compose: tgbotCompose, ...tgbotRofl } = parsedTgbotTemplate
 const parsedXagentTemplate = parse(xagentTemplate)
-const { compose: xagentCompose, ...xagentRofl } = parsedXagentTemplate
 const parsedHlTemplate = parse(hlCopyTraderTemplate)
-const { compose: hlCompose, ...hlRofl } = parsedHlTemplate
 
 type ParsedTemplate = {
   name?: string
@@ -125,7 +125,7 @@ export const templates = [
     },
     yaml: {
       compose: tgbotCompose,
-      rofl: tgbotRofl,
+      rofl: parsedTgbotTemplate,
     },
     templateParser: createTemplateParser(tgbotRofl),
   },
@@ -140,7 +140,7 @@ export const templates = [
     },
     yaml: {
       compose: xagentCompose,
-      rofl: xagentRofl,
+      rofl: parsedXagentTemplate,
     },
     templateParser: createTemplateParser(xagentRofl),
   },
@@ -155,7 +155,7 @@ export const templates = [
     },
     yaml: {
       compose: hlCompose,
-      rofl: hlRofl,
+      rofl: parsedHlTemplate,
     },
     templateParser: createTemplateParser(hlRofl),
   },
