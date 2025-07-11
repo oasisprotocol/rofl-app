@@ -16,6 +16,7 @@ import { BuildFormData } from '../types/build-form.ts'
 import { convertToDurationTerms } from './helpers.ts'
 import { toastWithDuration } from '../utils/toastWithDuration.tsx'
 import { getReadmeByTemplateId } from '../pages/CreateApp/templates.tsx'
+import { toast } from 'sonner'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -275,7 +276,7 @@ export function useCreateAndDeployApp() {
       })
 
       let hash
-      console.log('create app?')
+      toast('Create app id?')
       setCurrentStep('creating')
       hash = await sendTransactionAsync(
         rofl
@@ -314,6 +315,7 @@ export function useCreateAndDeployApp() {
       console.log('create app: tx hash', hash)
       const appId = await waitForAppId(hash, network)
       console.log('appId', appId)
+      toast('Got app id ' + appId)
 
       const app = await rofl
         .queryApp()
@@ -344,7 +346,7 @@ export function useCreateAndDeployApp() {
           mr_signer: oasis.misc.fromBase64(e.id).slice(32),
         }))
 
-      console.log('update app with enclaves and secrets?')
+      toast('Save build results and secrets into app config?')
       setCurrentStep('updating')
       hash = await sendTransactionAsync(
         rofl
@@ -374,8 +376,9 @@ export function useCreateAndDeployApp() {
           .toSubcall(),
       )
       await waitForTransactionReceipt(wagmiConfig, { hash })
+      toast('App config updated')
 
-      console.log('queue app deploy?')
+      toast('Queue app deploy?')
       setCurrentStep('deploying')
       hash = await sendTransactionAsync(
         roflmarket
@@ -396,10 +399,9 @@ export function useCreateAndDeployApp() {
           .toSubcall(),
       )
       await waitForTransactionReceipt(wagmiConfig, { hash })
-      console.log('deploy queued', appId)
+      toast('Deploy queued')
 
       await waitForAppScheduler(appId, network)
-      console.log('deployed', appId)
 
       toastWithDuration('App is starting (~5min)', 5 * 60 * 1000)
       return appId
@@ -470,6 +472,7 @@ export function useUpdateApp() {
           .toSubcall(),
       )
       await waitForTransactionReceipt(wagmiConfig, { hash })
+      toast('App updated')
 
       if (secretsViewState.isDirty) {
         const machinesResponse = await GetRuntimeRoflmarketInstances(network, 'sapphire', {
@@ -480,8 +483,8 @@ export function useUpdateApp() {
         for (const machine of activeMachines) {
           const hash = await restartMachine({ machineId: machine.id, provider: machine.provider, network })
           await waitForTransactionReceipt(wagmiConfig, { hash })
+          toastWithDuration('Machine is restarting (~1min)', 1 * 60 * 1000)
         }
-        toastWithDuration('App is restarting (~1min)', 1 * 60 * 1000)
       }
       return appId
     },
