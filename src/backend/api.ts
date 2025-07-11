@@ -472,6 +472,7 @@ export function useUpdateApp() {
           .toSubcall(),
       )
       await waitForTransactionReceipt(wagmiConfig, { hash })
+      toast('App updated')
 
       if (secretsViewState.isDirty) {
         const machinesResponse = await GetRuntimeRoflmarketInstances(network, 'sapphire', {
@@ -482,8 +483,8 @@ export function useUpdateApp() {
         for (const machine of activeMachines) {
           const hash = await restartMachine({ machineId: machine.id, provider: machine.provider, network })
           await waitForTransactionReceipt(wagmiConfig, { hash })
+          toastWithDuration('Machine is restarting (~1min)', 1 * 60 * 1000)
         }
-        toastWithDuration('App is restarting (~1min)', 1 * 60 * 1000)
       }
       return appId
     },
