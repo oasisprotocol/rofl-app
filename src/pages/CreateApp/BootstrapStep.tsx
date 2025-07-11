@@ -25,12 +25,6 @@ export type Template = {
     compose: string
     rofl: Record<string, unknown>
   }
-  templateParser: (
-    metadata: Partial<MetadataFormData>,
-    build: Partial<BuildFormData>,
-    network: 'mainnet' | 'testnet',
-    appId: string,
-  ) => Record<string, unknown>
 }
 
 type BootstrapStepProps = {

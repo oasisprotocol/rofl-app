@@ -15,7 +15,7 @@ import { useBlockNavigatingAway } from '../pages/CreateApp/useBlockNavigatingAwa
 import { BuildFormData } from '../types/build-form.ts'
 import { convertToDurationTerms } from './helpers.ts'
 import { toastWithDuration } from '../utils/toastWithDuration.tsx'
-import { getReadmeByTemplateId } from '../pages/CreateApp/templates.tsx'
+import { getReadmeByTemplateId, fillTemplate } from '../pages/CreateApp/templates.tsx'
 import { toast } from 'sonner'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
@@ -53,6 +53,7 @@ type RoflBuildResultsResponse = {
   manifest_hash: string
   logs: string
   err: string
+  enclaves: null | oasis.types.SGXEnclaveIdentity[] // Added in postprocessing
 }
 
 type ArtifactUploadRequest = {
@@ -111,7 +112,17 @@ const fetchRoflBuildResults = async (taskId: string, token: string): Promise<Rof
       Authorization: `Bearer ${token}`,
     },
   })
-  return response.data
+  let enclaves = null
+  if (response.data.manifest) {
+    const enclaveIds: { id: string }[] = yaml.parse(atob(response.data.manifest)).deployments.default.policy
+      .enclaves
+    enclaves = enclaveIds.map(e => ({
+      // split https://github.com/oasisprotocol/oasis-core/blob/113878af787d6c6f8da22d6b8a33f6a249180c8b/go/common/sgx/common.go#L209-L221
+      mr_enclave: oasis.misc.fromBase64(e.id).slice(0, 32),
+      mr_signer: oasis.misc.fromBase64(e.id).slice(32),
+    }))
+  }
+  return { ...response.data, enclaves }
 }
 
 const uploadArtifact = async ({ id, file }: ArtifactUploadRequest, token: string): Promise<void> => {
@@ -206,7 +217,7 @@ async function waitForBuildResults(taskId: string, token: string, timeout = 600_
   for (let i = 0; i < maxTries; i++) {
     const results = await fetchRoflBuildResults(taskId, token)
     if (results.err) throw new Error('Build failed ' + results.err)
-    if ('oci_reference' in results) return results
+    if ('oci_reference' in results && results.enclaves) return results
     await new Promise(resolve => setTimeout(resolve, interval))
   }
   throw new Error('waitForBuildResults timed out')
@@ -324,7 +335,7 @@ export function useCreateAndDeployApp() {
       console.log('App', app)
 
       const manifest = yaml.stringify(
-        template.templateParser(appData.metadata!, appData.build!, network, appId),
+        fillTemplate(template.yaml.rofl, appData.metadata!, appData.build!, network, appId),
       )
       const compose = template.yaml.compose
       const readme = getReadmeByTemplateId(appData.template!)
@@ -337,14 +348,6 @@ export function useCreateAndDeployApp() {
       const { task_id } = await buildRofl({ manifest, compose }, token)
       const buildResults = await waitForBuildResults(task_id, token)
       console.log('Build results:', buildResults)
-
-      const enclaves = yaml
-        .parse(atob(buildResults.manifest!))
-        .deployments.default.policy.enclaves.map((e: { id: string }) => ({
-          // split https://github.com/oasisprotocol/oasis-core/blob/113878af787d6c6f8da22d6b8a33f6a249180c8b/go/common/sgx/common.go#L209-L221
-          mr_enclave: oasis.misc.fromBase64(e.id).slice(0, 32),
-          mr_signer: oasis.misc.fromBase64(e.id).slice(32),
-        }))
 
       toast('Save build results and secrets into app config?')
       setCurrentStep('updating')
@@ -360,7 +363,7 @@ export function useCreateAndDeployApp() {
             },
             policy: {
               ...app.policy,
-              enclaves: enclaves,
+              enclaves: buildResults.enclaves!,
             },
             secrets: Object.fromEntries(
               Object.entries(appData.agent ?? {}).map(([key, value]) => {

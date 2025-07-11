@@ -1,12 +1,15 @@
 import { parse } from 'yaml'
 import tgbotThumbnail from '../../../templates/tgbot/app.webp'
 import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw'
+import tgbotCompose from '../../../templates/tgbot/compose.yaml?raw'
 import tbotDocs from '../../../templates/tgbot/README.md?raw'
 import xagentThumbnail from '../../../templates/x-agent/app.webp'
 import xagentTemplate from '../../../templates/x-agent/rofl-template.yaml?raw'
+import xagentCompose from '../../../templates/x-agent/compose.yaml?raw'
 import xAgentDocs from '../../../templates/x-agent/README.md?raw'
 import hlCopyTraderThumbnail from '../../../templates/hl-copy-trader/app.webp'
 import hlCopyTraderTemplate from '../../../templates/hl-copy-trader/rofl-template.yaml?raw'
+import hlCompose from '../../../templates/hl-copy-trader/compose.yaml?raw'
 import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
 import type { MetadataFormData } from './types'
@@ -14,11 +17,8 @@ import { BuildFormData } from '../../types/build-form'
 
 const parsedDefaultDeployments = parse(defaultDeployments)
 const parsedTgbotTemplate = parse(tgbotTemplate)
-const { compose: tgbotCompose, ...tgbotRofl } = parsedTgbotTemplate
 const parsedXagentTemplate = parse(xagentTemplate)
-const { compose: xagentCompose, ...xagentRofl } = parsedXagentTemplate
 const parsedHlTemplate = parse(hlCopyTraderTemplate)
-const { compose: hlCompose, ...hlRofl } = parsedHlTemplate
 
 type ParsedTemplate = {
   name?: string
@@ -76,40 +76,39 @@ export const extractResources = (parsedTemplate: ParsedTemplate) => ({
   offerStorage: parsedTemplate.resources?.storage?.size || 0,
 })
 
-const createTemplateParser = (roflData: RoflData) => {
-  return (
-    metadata: Partial<MetadataFormData>,
-    buildData: Partial<BuildFormData>,
-    network: 'mainnet' | 'testnet',
-    appId: string,
-  ) => {
-    return {
-      ...roflData,
-      title: metadata.name,
-      description: metadata.description,
-      author: metadata.author,
-      version: metadata.version,
-      homepage: metadata.homepage,
-      resources: {
-        ...roflData.resources,
-        cpus: buildData.offerCpus,
-        memory: buildData.offerMemory,
-        storage: {
-          ...roflData.resources?.storage,
-          // Reserve 2GB to prevent "ORC exceeds instance storage resources".
-          // https://github.com/oasisprotocol/cli/blob/ee329dbd9e6323d62d4bf69d98521d150721a58c/cmd/rofl/build/tdx.go#L258
-          // https://github.com/oasisprotocol/oasis-sdk/blob/de3c30d/rofl-scheduler/src/manager.rs#L1256
-          size: buildData.offerStorage! - 2048,
-        },
+export const fillTemplate = (
+  roflData: RoflData,
+  metadata: Partial<MetadataFormData>,
+  buildData: Partial<BuildFormData>,
+  network: 'mainnet' | 'testnet',
+  appId: string,
+) => {
+  return {
+    ...roflData,
+    title: metadata.name,
+    description: metadata.description,
+    author: metadata.author,
+    version: metadata.version,
+    homepage: metadata.homepage,
+    resources: {
+      ...roflData.resources,
+      cpus: buildData.offerCpus,
+      memory: buildData.offerMemory,
+      storage: {
+        ...roflData.resources?.storage,
+        // Reserve 2GB to prevent "ORC exceeds instance storage resources".
+        // https://github.com/oasisprotocol/cli/blob/ee329dbd9e6323d62d4bf69d98521d150721a58c/cmd/rofl/build/tdx.go#L258
+        // https://github.com/oasisprotocol/oasis-sdk/blob/de3c30d/rofl-scheduler/src/manager.rs#L1256
+        size: buildData.offerStorage! - 2048,
       },
-      deployments: {
-        default: {
-          ...parsedDefaultDeployments.deployments.default,
-          app_id: appId,
-          network,
-        },
+    },
+    deployments: {
+      default: {
+        ...parsedDefaultDeployments.deployments.default,
+        app_id: appId,
+        network,
       },
-    }
+    },
   }
 }
 
@@ -125,9 +124,8 @@ export const templates = [
     },
     yaml: {
       compose: tgbotCompose,
-      rofl: tgbotRofl,
+      rofl: parsedTgbotTemplate,
     },
-    templateParser: createTemplateParser(tgbotRofl),
   },
   {
     name: parsedXagentTemplate.name,
@@ -140,9 +138,8 @@ export const templates = [
     },
     yaml: {
       compose: xagentCompose,
-      rofl: xagentRofl,
+      rofl: parsedXagentTemplate,
     },
-    templateParser: createTemplateParser(xagentRofl),
   },
   {
     name: parsedHlTemplate.name,
@@ -155,9 +152,8 @@ export const templates = [
     },
     yaml: {
       compose: hlCompose,
-      rofl: hlRofl,
+      rofl: parsedHlTemplate,
     },
-    templateParser: createTemplateParser(hlRofl),
   },
 ]
 

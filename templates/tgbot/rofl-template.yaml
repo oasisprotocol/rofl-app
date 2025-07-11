@@ -48,22 +48,3 @@ secrets:
     type: textarea
     required: false
     maxlength: 1000
-
-compose: |
-  services:
-    ollama:
-      image: "docker.io/ollama/ollama"
-      ports:
-        - "11434:11434"
-      volumes:
-        - /storage/ollama:/root/.ollama
-      entrypoint: ["/usr/bin/bash", "-c", "/bin/ollama serve & sleep 5; ollama pull ${OLLAMA_MODEL}; wait"]
-
-    python-telegram-bot:
-      build: .
-      image: "ghcr.io/oasisprotocol/demo-rofl-tgbot:ollama"
-      platform: linux/amd64
-      environment:
-        - TOKEN=${TOKEN}
-        - OLLAMA_MODEL=${OLLAMA_MODEL}
-        - OLLAMA_SYSTEM_PROMPT=${OLLAMA_SYSTEM_PROMPT}
