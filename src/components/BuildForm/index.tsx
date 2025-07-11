@@ -1,4 +1,4 @@
-import { useEffect, useCallback, type FC, FormEvent } from 'react'
+import { useEffect, useCallback, type FC } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Label } from '@oasisprotocol/ui-library/src/components/ui/label'
@@ -21,7 +21,6 @@ type BuildFormProps = {
   build?: BuildFormData
   children: (props: {
     form: ReturnType<typeof useForm<BuildFormData>>
-    handleFormSubmit: (e?: FormEvent<HTMLFormElement>) => void
     noOffersWarning: boolean
   }) => React.ReactNode
   selectedTemplateRequirements?: {
@@ -157,13 +156,6 @@ export const BuildForm: FC<BuildFormProps> = ({
     ...(hasMonthlyTerms ? ([{ value: 'months', label: 'Months' }] as const) : []),
   ]
 
-  const handleFormSubmit = async () => {
-    const isValid = await form.trigger()
-    if (isValid) {
-      form.handleSubmit(onSubmit)()
-    }
-  }
-
   const noOffersWarning = providersOffersQuery.isFetched ? offers && offers.length === 0 : false
 
   return (
@@ -242,7 +234,7 @@ export const BuildForm: FC<BuildFormProps> = ({
           </div>
         )}
       </div>
-      {children({ form, handleFormSubmit, noOffersWarning: !!noOffersWarning })}
+      {children({ form, noOffersWarning: !!noOffersWarning })}
     </form>
   )
 }

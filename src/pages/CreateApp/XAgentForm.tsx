@@ -24,14 +24,6 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, agent,
     handleNext()
   }
 
-  const handleFormSubmit = () => {
-    form.trigger().then(isValid => {
-      if (isValid) {
-        form.handleSubmit(onSubmit)()
-      }
-    })
-  }
-
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
       <InputFormField
@@ -106,11 +98,7 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, agent,
         ]}
       />
 
-      <CreateFormNavigation
-        handleNext={handleFormSubmit}
-        handleBack={handleBack}
-        disabled={form.formState.isSubmitting}
-      />
+      <CreateFormNavigation handleBack={handleBack} disabled={form.formState.isSubmitting} />
     </form>
   )
 }

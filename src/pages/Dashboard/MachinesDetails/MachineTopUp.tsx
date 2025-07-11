@@ -77,13 +77,6 @@ export const MachineTopUp: FC = () => {
   const handleTopUpSuccess = () => {
     refetchSapphireBalance()
   }
-
-  useEffect(() => {
-    if (machine?.removed) {
-      handleBack()
-    }
-  }, [handleBack, machine?.removed])
-
   return (
     <div>
       <div className="flex pl-6 pt-6 pr-3">
@@ -114,7 +107,7 @@ export const MachineTopUp: FC = () => {
                   handleBack()
                 }}
               >
-                {({ form, handleFormSubmit, noOffersWarning }) => {
+                {({ form, noOffersWarning }) => {
                   const buildCost = form.getValues('roseCostInBaseUnits')
 
                   const hasEnoughBalance =
@@ -131,13 +124,9 @@ export const MachineTopUp: FC = () => {
                       <>
                         {isSapphireBalanceLoading && <Spinner />}
                         <TopUp minAmount={minAmount} onTopUpSuccess={handleTopUpSuccess}>
-                          {({ isValid, onSubmit }) => (
+                          {({ isValid }) => (
                             <>
-                              <CreateFormNavigation
-                                handleNext={onSubmit}
-                                handleBack={handleBack}
-                                disabled={!isValid}
-                              />
+                              <CreateFormNavigation handleBack={handleBack} disabled={!isValid} />
                               {!canNavigateAway && (
                                 <p className="text-xs text-error py-2">
                                   Before navigating away, manually switch the chain to {sapphire.name} in your
@@ -154,7 +143,6 @@ export const MachineTopUp: FC = () => {
                   return (
                     <>
                       <CreateFormNavigation
-                        handleNext={handleFormSubmit}
                         handleBack={handleBack}
                         disabled={machineTopUp.isPending || noOffersWarning}
                         isLoading={machineTopUp.isPending}

@@ -28,14 +28,6 @@ export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
     handleNext()
   }
 
-  const handleFormSubmit = () => {
-    form.trigger().then(isValid => {
-      if (isValid) {
-        form.handleSubmit(onSubmit)()
-      }
-    })
-  }
-
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
       <InputFormField
@@ -54,11 +46,7 @@ export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
 
       {/* Hidden prefilled WITHDRAW="false" */}
 
-      <CreateFormNavigation
-        handleNext={handleFormSubmit}
-        handleBack={handleBack}
-        disabled={form.formState.isSubmitting}
-      />
+      <CreateFormNavigation handleBack={handleBack} disabled={form.formState.isSubmitting} />
     </form>
   )
 }
