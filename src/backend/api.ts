@@ -343,6 +343,10 @@ export function useCreateAndDeployApp() {
       console.log('Build?')
       setCurrentStep('building')
       // TODO: wait + handle error?
+      uploadArtifact(
+        { id: `${appId}-rofl-template-yaml`, file: new Blob([yaml.stringify(template.yaml.rofl)]) },
+        token,
+      )
       uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
       uploadArtifact({ id: `${appId}-compose-yaml`, file: new Blob([compose]) }, token)
       uploadArtifact({ id: `${appId}-readme-md`, file: new Blob([readme]) }, token)
