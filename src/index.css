@@ -68,6 +68,7 @@
     counter-increment: count-submit-buttons;
     content: counter(count-submit-buttons, warn-multiple-submit-buttons);
     color: red;
+    position: absolute; /* Prevent flex gap applying to first submit button when content is '' */
   }
 }
 /* Detect buttons but missing a submit button in a form */
