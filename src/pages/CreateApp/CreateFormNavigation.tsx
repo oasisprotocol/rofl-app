@@ -3,14 +3,12 @@ import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Spinner } from '../../components/Spinner'
 
 type CreateFormNavigationProps = {
-  handleNext: () => void
   handleBack?: () => void
   disabled?: boolean
   isLoading?: boolean
 }
 
 export const CreateFormNavigation: FC<CreateFormNavigationProps> = ({
-  handleNext,
   handleBack,
   disabled = false,
   isLoading = false,
@@ -22,7 +20,7 @@ export const CreateFormNavigation: FC<CreateFormNavigationProps> = ({
           Back
         </Button>
       )}
-      <Button className="flex-1" onClick={handleNext} disabled={disabled || isLoading} type="submit">
+      <Button className="flex-1" disabled={disabled || isLoading} type="submit">
         {isLoading && <Spinner />}
         Continue
       </Button>

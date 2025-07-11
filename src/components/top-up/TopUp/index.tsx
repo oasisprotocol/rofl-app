@@ -1,4 +1,4 @@
-import React, { type FC, FormEvent, type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import React, { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -140,7 +140,7 @@ interface TopUpProps {
   onValidChange?: (isValid: boolean) => void
   onTopUpSuccess?: () => void
   onTopUpError?: (error: Error) => void
-  children?: (props: { isValid: boolean; onSubmit: () => void }) => ReactNode
+  children?: (props: { isValid: boolean }) => ReactNode
 }
 
 const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpSuccess, onTopUpError }) => {
@@ -511,12 +511,6 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
     }
   }
 
-  const handleFormSubmit = async (e?: FormEvent<HTMLFormElement>) => {
-    e?.preventDefault()
-
-    form.handleSubmit(onSubmit)()
-  }
-
   const lastValidProgressStepsRef = useRef<ProgressStep[] | null>(null)
 
   const progressSteps = useMemo(() => {
@@ -732,7 +726,6 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
           </div>
           {children?.({
             isValid: isFormValid && !!quote && !isLoading,
-            onSubmit: handleFormSubmit,
           })}
         </form>
       </div>
@@ -763,7 +756,7 @@ const TopUpLoading: FC<TopUpProps> = props => {
       <>
         <TopUpInitializationFailed />
         {/* Fallback navigation */}
-        {props.children?.({ isValid: false, onSubmit: () => {} })}
+        {props.children?.({ isValid: false })}
       </>
     )
   }

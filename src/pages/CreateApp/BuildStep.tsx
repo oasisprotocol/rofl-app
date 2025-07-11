@@ -48,9 +48,8 @@ export const BuildStep: FC<BuildStepProps> = ({
         selectedTemplateRequirements={selectedTemplateRequirements}
         selectedTemplateId={selectedTemplateId}
       >
-        {({ form, handleFormSubmit, noOffersWarning }) => (
+        {({ form, noOffersWarning }) => (
           <CreateFormNavigation
-            handleNext={handleFormSubmit}
             handleBack={handleBack}
             disabled={form.formState.isSubmitting || noOffersWarning}
           />

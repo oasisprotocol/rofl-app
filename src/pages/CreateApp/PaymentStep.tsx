@@ -114,10 +114,9 @@ export const PaymentStep: FC<PaymentStepProps> = ({
       )}
       {!hasEnoughBalance && minAmount && (
         <TopUp minAmount={minAmount} onTopUpSuccess={refetch} onTopUpError={() => refetch()}>
-          {({ isValid, onSubmit }) => (
+          {({ isValid }) => (
             <>
               <CreateFormNavigation
-                handleNext={onSubmit as () => void}
                 handleBack={() => {
                   if (canNavigateAway) {
                     handleBack()
@@ -143,26 +142,21 @@ export const PaymentStep: FC<PaymentStepProps> = ({
       )}
 
       {(hasEnoughBalance || isTestnet) && (
-        <>
+        <form onSubmit={handleNext} className="w-full">
           <CreateFormNavigation
-            handleNext={() => {
-              if (canNavigateAway) {
-                handleNext()
-              }
-            }}
             handleBack={() => {
               if (canNavigateAway) {
                 handleBack()
               }
             }}
-            disabled={import.meta.env.PROD && isTestnet}
+            disabled={(import.meta.env.PROD && isTestnet) || !canNavigateAway}
           />
           {!canNavigateAway && (
             <p className="text-xs text-error py-2">
               Before navigating away, manually switch the chain to {sapphire.name} in your wallet.
             </p>
           )}
-        </>
+        </form>
       )}
     </CreateLayout>
   )

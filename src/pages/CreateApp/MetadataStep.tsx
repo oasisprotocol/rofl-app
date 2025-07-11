@@ -36,14 +36,6 @@ export const MetadataStep: FC<MetadataStepProps> = ({
     handleNext()
   }
 
-  const handleFormSubmit = () => {
-    form.trigger().then(isValid => {
-      if (isValid) {
-        form.handleSubmit(onSubmit)()
-      }
-    })
-  }
-
   return (
     <CreateLayout
       currentStep={1}
@@ -58,7 +50,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
         <MetadataFormFields control={form.control} />
 
-        <CreateFormNavigation handleNext={handleFormSubmit} disabled={form.formState.isSubmitting} />
+        <CreateFormNavigation disabled={form.formState.isSubmitting} />
       </form>
     </CreateLayout>
   )

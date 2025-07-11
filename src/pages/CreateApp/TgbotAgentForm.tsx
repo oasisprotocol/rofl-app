@@ -29,14 +29,6 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
     handleNext()
   }
 
-  const handleFormSubmit = () => {
-    form.trigger().then(isValid => {
-      if (isValid) {
-        form.handleSubmit(onSubmit)()
-      }
-    })
-  }
-
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
       <SelectFormField
@@ -66,11 +58,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
         type="textarea"
       />
 
-      <CreateFormNavigation
-        handleNext={handleFormSubmit}
-        handleBack={handleBack}
-        disabled={form.formState.isSubmitting}
-      />
+      <CreateFormNavigation handleBack={handleBack} disabled={form.formState.isSubmitting} />
     </form>
   )
 }
