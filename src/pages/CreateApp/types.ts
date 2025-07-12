@@ -1,6 +1,46 @@
 import { z } from 'zod'
 import { BuildFormData } from '../../types/build-form.ts'
 
+/**
+ * This is like z.string().url(), but also accepts domain names without the protocol prefix,
+ * and empty strings
+ */
+const flexibleUrl = z.preprocess(
+  input => {
+    const str = String(input).trim()
+    // Add https: if no protocol is specified, and it looks like a URL (not a handle)
+    if (
+      str &&
+      !str.startsWith('http://') &&
+      !str.startsWith('https://') &&
+      !str.startsWith('@') && // Exclude Twitter handles
+      !str.startsWith('discord:') // Exclude Discord handles
+    ) {
+      return `https://${str}`
+    }
+    return str
+  },
+  z
+    .string()
+    .refine(
+      value => {
+        // Check for Twitter (X) handles: @username (alphanumeric, underscore, 1-15 chars)
+        const twitterHandlePattern = /^@([a-zA-Z0-9_]{1,15})$/
+        // Check for Discord handles: discord:username#discriminator (e.g., username#1234)
+        const discordHandlePattern = /^discord:[a-zA-Z0-9_]+#[0-9]{4}$/
+        // Check for URLs: protocol, domain, and plausible TLD
+        const urlPattern = /^https?:\/\/([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/
+
+        return twitterHandlePattern.test(value) || discordHandlePattern.test(value) || urlPattern.test(value)
+      },
+      {
+        message:
+          'Invalid URL or social handle: must be a valid URL, Twitter handle (@username), or Discord handle (discord:username#1234)',
+      },
+    )
+    .or(z.literal('')),
+) as z.ZodType<string> // Explicitly assert the output type
+
 export const metadataFormSchema = z.object({
   name: z.string().min(1, {
     message: 'Name is required.',
@@ -60,7 +100,7 @@ export const metadataFormSchema = z.object({
         message: 'Version must be valid semver format.',
       },
     ),
-  homepage: z.string().url().or(z.literal('')),
+  homepage: flexibleUrl,
 })
 
 export const tgbotFormSchema = z.object({
