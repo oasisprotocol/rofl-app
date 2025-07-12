@@ -6,7 +6,7 @@ import type { AppData } from '../pages/CreateApp/types'
 import * as yaml from 'yaml'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
-import { GetRuntimeEvents, GetRuntimeRoflmarketInstances } from '../nexus/api'
+import { GetRuntimeEvents, GetRuntimeRoflmarketInstances, RoflMarketInstance } from '../nexus/api'
 import { useConfig, useSendTransaction } from 'wagmi'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { ViewMetadataState, ViewSecretsState } from '../pages/Dashboard/AppDetails/types'
@@ -616,9 +616,9 @@ export function useMachineTopUp() {
   return useMutation<
     void,
     AxiosError<unknown>,
-    { machineId: string; provider: string; network: 'mainnet' | 'testnet'; build: BuildFormData }
+    { machine: RoflMarketInstance; provider: string; network: 'mainnet' | 'testnet'; build: BuildFormData }
   >({
-    mutationFn: async ({ machineId, provider, network, build }) => {
+    mutationFn: async ({ machine, provider, network, build }) => {
       const duration = convertToDurationTerms({
         duration: build.duration,
         number: build.number,
@@ -631,19 +631,48 @@ export function useMachineTopUp() {
       const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
 
       const { term, term_count } = duration
-      const hash = await sendTransactionAsync(
-        roflmarket
-          .callInstanceTopUp()
-          .setBody({
-            provider: oasis.staking.addressFromBech32(provider),
-            id: oasis.misc.fromHex(machineId) as oasisRT.types.MachineID,
-            term,
-            term_count,
-          })
-          .toSubcall(),
-      )
 
-      await waitForTransactionReceipt(wagmiConfig, { hash })
+      if (!machine.removed && machine.status !== oasisRT.types.RoflmarketInstanceStatus.CANCELLED) {
+        const hash = await sendTransactionAsync(
+          roflmarket
+            .callInstanceTopUp()
+            .setBody({
+              provider: oasis.staking.addressFromBech32(provider),
+              id: oasis.misc.fromHex(machine.id) as oasisRT.types.MachineID,
+              term,
+              term_count,
+            })
+            .toSubcall(),
+        )
+        await waitForTransactionReceipt(wagmiConfig, { hash })
+      } else {
+        toast('Previous machine was removed. Queue new machine?')
+        const hash = await sendTransactionAsync(
+          roflmarket
+            .callInstanceCreate()
+            .setBody({
+              provider: oasis.staking.addressFromBech32(provider),
+              offer: oasis.misc.fromHex(machine.offer_id),
+              deployment: {
+                app_id: oasisRT.rofl.fromBech32(machine.deployment.app_id as string),
+                manifest_hash: oasis.misc.fromHex(machine.deployment.manifest_hash as string),
+                metadata: {
+                  // TODO: Security: trusts Nexus about old oci_reference. But if Nexus
+                  // tampers with it, will it fail app.policy.enclaves?
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  'net.oasis.deployment.orc.ref': (machine.deployment.metadata as any)[
+                    'net.oasis.deployment.orc.ref'
+                  ],
+                },
+              },
+              term: duration.term,
+              term_count: duration.term_count,
+            })
+            .toSubcall(),
+        )
+        await waitForTransactionReceipt(wagmiConfig, { hash })
+        toast('New machine queued')
+      }
     },
   })
 }

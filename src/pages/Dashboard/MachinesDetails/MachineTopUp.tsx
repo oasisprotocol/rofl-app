@@ -99,7 +99,7 @@ export const MachineTopUp: FC = () => {
                 offerId={machine!.offer_id}
                 onSubmit={async build => {
                   await machineTopUp.mutateAsync({
-                    machineId: machine!.id,
+                    machine: machine!,
                     provider: provider!,
                     network,
                     build,

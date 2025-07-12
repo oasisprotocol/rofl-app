@@ -16,6 +16,9 @@ import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { MachineResources } from '../../../components/MachineResources'
 import { MachineName } from '../../../components/MachineName'
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
+import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachineRemoved'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { CircleArrowUp } from 'lucide-react'
 
 type AppMetadataProps = {
   id: string
@@ -48,6 +51,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
     deployed_app_id: id,
   })
   const machines = machinesData?.data.instances.filter(machine => !machine.removed)
+  const lastMachineToDuplicate = machinesData?.data.instances[0]
 
   return (
     <div className="space-y-4">
@@ -87,7 +91,19 @@ export const AppMetadata: FC<AppMetadataProps> = ({
         </>
       ) : (
         <DetailsSectionRow label="Machine(s)" className="pb-6 border-b">
-          <span className="text-muted-foreground">Machines data is not available.</span>
+          <div className="flex flex-wrap items-center gap-5">
+            <span className="text-muted-foreground">Machines data is not available.</span>
+            {editEnabled && (lastMachineToDuplicate?.deployment.app_id as string) && (
+              <Button variant="outline" className="-my-2" asChild>
+                <Link
+                  to={`/dashboard/machines/${lastMachineToDuplicate!.provider}/instances/${lastMachineToDuplicate!.id}/top-up`}
+                >
+                  <CircleArrowUp />
+                  Top up new machine based on last one
+                </Link>
+              </Button>
+            )}
+          </div>
         </DetailsSectionRow>
       )}
       <DetailsSectionRow label="Explorer">
