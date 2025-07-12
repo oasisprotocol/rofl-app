@@ -17,6 +17,7 @@ import { convertToDurationTerms } from './helpers.ts'
 import { toastWithDuration } from '../utils/toastWithDuration.tsx'
 import { getReadmeByTemplateId, fillTemplate } from '../pages/CreateApp/templates.tsx'
 import { toast } from 'sonner'
+import { isMachineRemoved } from '../components/MachineStatusIcon/isMachineRemoved.ts'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -481,7 +482,7 @@ export function useUpdateApp() {
         const machinesResponse = await GetRuntimeRoflmarketInstances(network, 'sapphire', {
           deployed_app_id: appId,
         })
-        const activeMachines = machinesResponse.data.instances.filter(m => !m.removed)
+        const activeMachines = machinesResponse.data.instances.filter(m => !isMachineRemoved(m))
         console.log('restart machines?', activeMachines)
         for (const machine of activeMachines) {
           const hash = await restartMachine({ machineId: machine.id, provider: machine.provider, network })
@@ -516,7 +517,7 @@ export function useRemoveApp() {
       const machinesResponse = await GetRuntimeRoflmarketInstances(network, 'sapphire', {
         deployed_app_id: appId,
       })
-      const activeMachines = machinesResponse.data.instances.filter(m => !m.removed)
+      const activeMachines = machinesResponse.data.instances.filter(m => !isMachineRemoved(m))
       console.log('stop machines?', activeMachines)
       for (const machine of activeMachines) {
         const hash = await stopMachine({ machineId: machine.id, provider: machine.provider, network })
@@ -632,7 +633,7 @@ export function useMachineTopUp() {
 
       const { term, term_count } = duration
 
-      if (!machine.removed && machine.status !== oasisRT.types.RoflmarketInstanceStatus.CANCELLED) {
+      if (!isMachineRemoved(machine)) {
         const hash = await sendTransactionAsync(
           roflmarket
             .callInstanceTopUp()

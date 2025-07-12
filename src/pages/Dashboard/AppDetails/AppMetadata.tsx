@@ -50,7 +50,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   } = useGetRuntimeRoflmarketInstances(network, 'sapphire', {
     deployed_app_id: id,
   })
-  const machines = machinesData?.data.instances.filter(machine => !machine.removed)
+  const machines = machinesData?.data.instances.filter(machine => !isMachineRemoved(machine))
   const lastMachineToDuplicate = machinesData?.data.instances[0]
 
   return (
