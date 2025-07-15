@@ -335,6 +335,17 @@ export function useCreateAndDeployApp() {
       console.log('appId', appId)
       toast('Got app id ' + appId)
 
+      const templateRoflYaml = template.yaml.rofl
+      // TODO: wait + handle error?
+      uploadArtifact(
+        { id: `${appId}-rofl-template-yaml`, file: new Blob([yaml.stringify(templateRoflYaml)]) },
+        token,
+      )
+      uploadArtifact(
+        { id: `${appId}-readme-md`, file: new Blob([getReadmeByTemplateId(appData.template!)]) },
+        token,
+      )
+
       const app = await rofl
         .queryApp()
         .setArgs({ id: oasisRT.rofl.fromBech32(appId) })
@@ -342,20 +353,14 @@ export function useCreateAndDeployApp() {
       console.log('App', app)
 
       const manifest = yaml.stringify(
-        fillTemplate(template.yaml.rofl, appData.metadata!, appData.build!, network, appId),
+        fillTemplate(templateRoflYaml, appData.metadata!, appData.build!, network, appId),
       )
       const compose = template.yaml.compose
-      const readme = getReadmeByTemplateId(appData.template!)
       console.log('Build?')
       setCurrentStep('building')
       // TODO: wait + handle error?
-      uploadArtifact(
-        { id: `${appId}-rofl-template-yaml`, file: new Blob([yaml.stringify(template.yaml.rofl)]) },
-        token,
-      )
       uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
       uploadArtifact({ id: `${appId}-compose-yaml`, file: new Blob([compose]) }, token)
-      uploadArtifact({ id: `${appId}-readme-md`, file: new Blob([readme]) }, token)
       const { task_id } = await buildRofl({ manifest, compose }, token)
       const buildResults = await waitForBuildResults(task_id, token)
       console.log('Build results:', buildResults)
@@ -374,7 +379,7 @@ export function useCreateAndDeployApp() {
             },
             policy: {
               ...app.policy,
-              enclaves: buildResults.enclaves!,
+              enclaves: [...app.policy.enclaves, ...buildResults.enclaves!],
             },
             secrets: Object.fromEntries(
               Object.entries(appData.agent ?? {}).map(([key, value]) => {
