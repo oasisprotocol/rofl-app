@@ -11,7 +11,7 @@ export const useScheduler = (schedulerRak: string, provider: string) => {
   const schedulerInstance = schedulerId
     ? schedulerData?.data?.instances.find(instance => instance.rak === schedulerRak)
     : undefined
-  const api = schedulerInstance?.metadata?.['net.oasis.scheduler.api'] as string
+  const api = schedulerInstance?.metadata?.['net.oasis.scheduler.api'] as string | undefined
 
   return {
     api,

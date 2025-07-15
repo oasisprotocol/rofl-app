@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAccount, useSignMessage, useChainId } from 'wagmi'
 import { createSiweMessage } from 'viem/siwe'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 type AuthenticateResponse = {
   token: string
@@ -42,7 +42,7 @@ const fetchMachineLogs = async ({ schedulerApi, instance, token }: FetchLogsRequ
   }
 }
 
-export function useMachineAuth(schedulerApi: string, provider: string) {
+export function useMachineAuth(schedulerApi: string | undefined, provider: string) {
   const { address } = useAccount()
   const { signMessageAsync } = useSignMessage()
   const chainId = useChainId()
@@ -51,6 +51,9 @@ export function useMachineAuth(schedulerApi: string, provider: string) {
     mutationFn: async () => {
       if (!address) {
         throw new Error('No wallet address available')
+      }
+      if (!schedulerApi) {
+        throw new Error('Missing schedulerApi')
       }
 
       const domain = new URL(schedulerApi).hostname
@@ -102,21 +105,24 @@ export function useMachineAuth(schedulerApi: string, provider: string) {
   })
 }
 
-export function useFetchLogsMutation(schedulerApi: string, instance: string) {
-  return useMutation<string[], Error, string>({
-    mutationFn: async (token: string) => {
-      return await fetchMachineLogs({ schedulerApi, instance, token })
+export function useFetchLogs(schedulerApi: string | undefined, instance: string, token: string | null) {
+  return useQuery<string[], Error>({
+    queryKey: [schedulerApi, instance, token],
+    queryFn: async () => {
+      return await fetchMachineLogs({ schedulerApi: schedulerApi!, instance: instance, token: token! })
     },
+    enabled: !!token && !!schedulerApi,
     throwOnError: false,
+    refetchInterval: 10_000,
   })
 }
 
-export function useMachineAccess(schedulerApi: string, provider: string, instance: string) {
+export function useMachineAccess(schedulerApi: string | undefined, provider: string, instance: string) {
   const [token, setToken] = useState<string | null>(null)
   const authMutation = useMachineAuth(schedulerApi, provider)
-  const fetchLogsMutation = useFetchLogsMutation(schedulerApi, instance)
+  const fetchLogsQuery = useFetchLogs(schedulerApi, instance, token)
 
-  const fetchMachineLogsWithAuth = async (): Promise<string[]> => {
+  const startFetchingMachineLogs = async () => {
     let currentToken = token
 
     if (!currentToken) {
@@ -129,14 +135,15 @@ export function useMachineAccess(schedulerApi: string, provider: string, instanc
       throw new Error('Authentication failed - no token available')
     }
 
-    const result = await fetchLogsMutation.mutateAsync(currentToken)
-    return result
+    await new Promise(r => setTimeout(r, 10))
+    fetchLogsQuery.refetch()
   }
 
   return {
-    fetchMachineLogs: fetchMachineLogsWithAuth,
+    startFetchingMachineLogs,
     isAuthenticating: authMutation.isPending,
-    isLoadingLogs: fetchLogsMutation.isPending,
+    isLoadingLogs: fetchLogsQuery.isFetching,
     token,
+    logs: fetchLogsQuery.data ?? [],
   }
 }
