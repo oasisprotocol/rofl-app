@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react'
+import { type FC } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@oasisprotocol/ui-library/src/components/ui/tabs'
 import { CircleArrowUp, Clock } from 'lucide-react'
@@ -22,7 +22,6 @@ import { toastWithDuration } from '../../../utils/toastWithDuration'
 import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachineRemoved'
 
 export const MachinesDetails: FC = () => {
-  const [logs, setLogs] = useState<string[]>([])
   const network = useNetwork()
   const { provider, id } = useParams()
   const roflMachinesQuery = useGetRuntimeRoflmarketProvidersAddressInstancesId(
@@ -143,8 +142,6 @@ export const MachinesDetails: FC = () => {
                 schedulerRak={machine.metadata['net.oasis.scheduler.rak'] as string}
                 provider={machine.provider}
                 instance={machine.id}
-                logs={logs}
-                setLogs={setLogs}
                 isRemoved={isMachineRemoved(machine)}
               />
             )}

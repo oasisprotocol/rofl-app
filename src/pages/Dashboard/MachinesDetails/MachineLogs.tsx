@@ -11,29 +11,19 @@ type MachineLogsProps = {
   schedulerRak: string
   provider: string
   instance: string
-  logs: string[]
-  setLogs: (logs: string[]) => void
   isRemoved?: boolean
 }
 
-export const MachineLogs: FC<MachineLogsProps> = ({
-  schedulerRak,
-  provider,
-  instance,
-  logs,
-  setLogs,
-  isRemoved,
-}) => {
+export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, instance, isRemoved }) => {
   const { api: schedulerApi } = useScheduler(schedulerRak, provider)
-  const { fetchMachineLogs, isAuthenticating, isLoadingLogs } = useMachineAccess(
+  const { startFetchingMachineLogs, isAuthenticating, isLoadingLogs, logs } = useMachineAccess(
     schedulerApi,
     provider,
     instance,
   )
   const handleFetchLogs = async () => {
     try {
-      const fetchedLogs = await fetchMachineLogs()
-      setLogs(fetchedLogs)
+      await startFetchingMachineLogs()
     } catch (error) {
       console.error('Failed to fetch machine logs:', error)
     }
