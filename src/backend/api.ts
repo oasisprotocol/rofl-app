@@ -433,6 +433,191 @@ export function useCreateAndDeployApp() {
   }
 }
 
+/** Based on {@link useCreateAndDeployApp} */
+export function useDeployAppToNewMachine() {
+  const { blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
+  const wagmiConfig = useConfig()
+  const { sendTransactionAsync } = useSendTransaction()
+  const steps = ['creating', 'building', 'updating', 'deploying'] as const
+  const [currentStep, setCurrentStep] = useState<(typeof steps)[number]>('creating')
+  const stepEstimatedDurations: { [step in (typeof steps)[number]]?: number } = {
+    creating: 40_000,
+    building: 80_000,
+    deploying: 80_000,
+  }
+  const stepLabels: { [step in (typeof steps)[number]]: string } = {
+    creating: 'Creating app',
+    building: 'Building app',
+    updating: 'Updating app secrets',
+    deploying: 'Deploying app to machine',
+  }
+
+  const mutation = useMutation<
+    string,
+    AxiosError<unknown>,
+    { token: string; template: Template; appData: AppData; network: 'mainnet' | 'testnet' }
+  >({
+    onSettled() {
+      allowNavigatingAway()
+    },
+    mutationFn: async ({ token, template, appData, network }) => {
+      blockNavigatingAway()
+      const sapphireRuntimeId =
+        network === 'mainnet'
+          ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
+          : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const nic = new oasis.client.NodeInternal(
+        network === 'mainnet' ? 'https://grpc.oasis.io' : 'https://testnet.grpc.oasis.io',
+      )
+
+      const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
+      const rofl = new oasisRT.rofl.Wrapper(sapphireRuntimeId)
+
+      const duration = convertToDurationTerms({
+        duration: appData.build!.duration,
+        number: appData.build!.number,
+      })
+
+      let hash
+      toast('Create app id?')
+      setCurrentStep('creating')
+      hash = await sendTransactionAsync(
+        rofl
+          .callCreate()
+          .setBody({
+            scheme: oasisRT.types.IdentifierScheme.CreatorNonce,
+            policy: {
+              quotes: {
+                pcs: {
+                  tcb_validity_period: 30,
+                  min_tcb_evaluation_data_number: 18,
+                  tdx: {},
+                },
+              },
+              enclaves: [],
+              endorsements: [
+                {
+                  any: {},
+                },
+              ],
+              fees: oasisRT.types.FeePolicy.EndorsingNodePays,
+              max_expiration: 3,
+            },
+            metadata: {
+              'net.oasis.rofl.name': `Draft of ${appData.metadata?.name || ''}`,
+              'net.oasis.rofl.author': appData.metadata?.author || '',
+              'net.oasis.rofl.description': appData.metadata?.description || '',
+              'net.oasis.rofl.version': appData.metadata?.version || '',
+              'net.oasis.rofl.homepage': appData.metadata?.homepage || '',
+              'net.oasis.roflapp.template': appData.template || '',
+              'net.oasis.roflapp.created_using_commit': BUILD_COMMIT,
+            },
+          })
+          .toSubcall(),
+      )
+      console.log('create app: tx hash', hash)
+      const appId = await waitForAppId(hash, network)
+      console.log('appId', appId)
+      toast('Got app id ' + appId)
+
+      const templateRoflYaml = template.yaml.rofl
+      // TODO: wait + handle error?
+      uploadArtifact(
+        { id: `${appId}-rofl-template-yaml`, file: new Blob([yaml.stringify(templateRoflYaml)]) },
+        token,
+      )
+      uploadArtifact(
+        { id: `${appId}-readme-md`, file: new Blob([getReadmeByTemplateId(appData.template!)]) },
+        token,
+      )
+
+      const app = await rofl
+        .queryApp()
+        .setArgs({ id: oasisRT.rofl.fromBech32(appId) })
+        .query(nic)
+      console.log('App', app)
+
+      const manifest = yaml.stringify(
+        fillTemplate(templateRoflYaml, appData.metadata!, appData.build!, network, appId),
+      )
+      const compose = template.yaml.compose
+      console.log('Build?')
+      setCurrentStep('building')
+      // TODO: wait + handle error?
+      uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
+      uploadArtifact({ id: `${appId}-compose-yaml`, file: new Blob([compose]) }, token)
+      const { task_id } = await buildRofl({ manifest, compose }, token)
+      const buildResults = await waitForBuildResults(task_id, token)
+      console.log('Build results:', buildResults)
+
+      toast('Save build results and secrets into app config?')
+      setCurrentStep('updating')
+      hash = await sendTransactionAsync(
+        rofl
+          .callUpdate()
+          .setBody({
+            id: app.id,
+            admin: app.admin,
+            metadata: {
+              ...app.metadata,
+              'net.oasis.rofl.name': appData.metadata?.name || '',
+            },
+            policy: {
+              ...app.policy,
+              enclaves: [...app.policy.enclaves, ...buildResults.enclaves!],
+            },
+            secrets: Object.fromEntries(
+              Object.entries(appData.agent ?? {}).map(([key, value]) => {
+                return [
+                  key,
+                  oasis.misc.fromBase64(
+                    oasisRT.rofl.encryptSecret(key, oasis.misc.fromString(value), app.sek),
+                  ),
+                ]
+              }),
+            ),
+          })
+          .toSubcall(),
+      )
+      await waitForTransactionReceipt(wagmiConfig, { hash })
+      toast('App config updated')
+
+      toast('Queue app deploy?')
+      setCurrentStep('deploying')
+      hash = await sendTransactionAsync(
+        roflmarket
+          .callInstanceCreate()
+          .setBody({
+            provider: oasis.staking.addressFromBech32(appData.build!.provider!),
+            offer: oasis.misc.fromHex(appData.build!.offerId!),
+            deployment: {
+              app_id: app.id,
+              manifest_hash: oasis.misc.fromHex(buildResults.manifest_hash),
+              metadata: {
+                'net.oasis.deployment.orc.ref': buildResults.oci_reference,
+              },
+            },
+            term: duration.term,
+            term_count: duration.term_count,
+          })
+          .toSubcall(),
+      )
+      await waitForTransactionReceipt(wagmiConfig, { hash })
+      toast('Deploy queued')
+
+      await waitForAppScheduler(appId, network)
+
+      toastWithDuration('App is starting (~5min)', 5 * 60 * 1000)
+      return appId
+    },
+  })
+
+  return {
+    ...mutation,
+    progress: { steps, currentStep, stepLabels, stepEstimatedDurations },
+  }
+}
+
 export function useUpdateApp() {
   const wagmiConfig = useConfig()
   const { sendTransactionAsync } = useSendTransaction()
