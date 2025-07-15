@@ -19,6 +19,7 @@ import { MachineLogs } from './MachineLogs'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { MachineName } from '../../../components/MachineName'
 import { toastWithDuration } from '../../../utils/toastWithDuration'
+import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachineRemoved'
 
 export const MachinesDetails: FC = () => {
   const [logs, setLogs] = useState<string[]>([])
@@ -72,7 +73,7 @@ export const MachinesDetails: FC = () => {
                     )}
                   </div>
 
-                  {!machine.removed && (
+                  {!isMachineRemoved(machine) && (
                     <Button variant="outline" className="w-full md:w-auto" asChild>
                       <Link to="./top-up">
                         <CircleArrowUp />
@@ -81,7 +82,7 @@ export const MachinesDetails: FC = () => {
                     </Button>
                   )}
                   <MachineRestart
-                    disabled={machine.removed}
+                    disabled={isMachineRemoved(machine)}
                     onConfirm={async () => {
                       await restartMachine.mutateAsync({
                         machineId: machine.id,
@@ -109,7 +110,7 @@ export const MachinesDetails: FC = () => {
                   )}
                   {machine.deployment && (
                     <DetailsSectionRow
-                      label={machine.removed ? 'Last active app' : 'Active app'}
+                      label={isMachineRemoved(machine) ? 'Last active app' : 'Active app'}
                       className="py-6 border-b"
                     >
                       <Link to={`/dashboard/apps/${machine.deployment?.app_id}`} className="text-primary">
@@ -144,7 +145,7 @@ export const MachinesDetails: FC = () => {
                 instance={machine.id}
                 logs={logs}
                 setLogs={setLogs}
-                isRemoved={machine.removed}
+                isRemoved={isMachineRemoved(machine)}
               />
             )}
           </TabsContent>

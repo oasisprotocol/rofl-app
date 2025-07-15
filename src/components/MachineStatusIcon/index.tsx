@@ -5,23 +5,25 @@ import { Badge } from '@oasisprotocol/ui-library/src/components/ui/badge'
 import { RoflMarketInstance } from '../../nexus/api'
 import * as oasisRT from '@oasisprotocol/client-rt'
 import { Tooltip, TooltipTrigger, TooltipContent } from '@oasisprotocol/ui-library/src/components/ui/tooltip'
+import { isMachineRemoved } from './isMachineRemoved'
 
 type MachineStatusTypes =
   | 'created'
   | 'active'
   | 'removed'
+  | 'expired'
   | 'expiring'
   | 'accepted'
   | 'unknown'
   | 'net.oasis.error'
 
 function getMachineStatus(machine: RoflMarketInstance): MachineStatusTypes {
+  if (isMachineRemoved(machine)) return 'removed'
   if (machine.status === oasisRT.types.RoflmarketInstanceStatus.CREATED) return 'created'
-  if (machine.status === oasisRT.types.RoflmarketInstanceStatus.CANCELLED) return 'removed'
   if (machine.status === oasisRT.types.RoflmarketInstanceStatus.ACCEPTED) {
     const expired = isExpired(machine.paid_until)
     const expiringSoon = !expired && isExpiringSoon(machine.paid_until)
-    if (machine.removed || expired) return 'removed'
+    if (expired) return 'expired'
     if (machine.metadata['net.oasis.error']) return 'net.oasis.error'
     if (expiringSoon) return 'expiring'
 
@@ -89,6 +91,11 @@ export const MachineStatusIcon: FC<MachineStatusIconProps> = ({ machine }) => {
         return {
           icon: <CircleStop className="h-5 w-5" style={{ color: 'var(--error)' }} />,
           tooltip: 'Machine is no longer available',
+        }
+      case 'expired':
+        return {
+          icon: <CircleStop className="h-5 w-5" style={{ color: 'var(--error)' }} />,
+          tooltip: 'Machine payment expired',
         }
       case 'net.oasis.error':
         return {

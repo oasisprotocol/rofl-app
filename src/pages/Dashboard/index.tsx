@@ -9,6 +9,7 @@ import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { AppCard } from '../../components/AppCard'
 import { MachineCard } from '../../components/MachineCard'
 import { useAccount } from 'wagmi'
+import { isMachineRemoved } from '../../components/MachineStatusIcon/isMachineRemoved'
 
 const cardsLimit = 3
 const refetchInterval = 10000 // 10 seconds
@@ -55,7 +56,7 @@ export const Dashboard: FC = () => {
   const appsNumber = data?.data.total_count
   const runningAppsNumber = roflApps?.filter(app => app.num_active_instances > 0).length || 0
   const machinesNumber = machinesData?.data.total_count
-  const runningMachinesNumber = roflMachines?.filter(machine => !machine.removed).length || 0
+  const runningMachinesNumber = roflMachines?.filter(machine => !isMachineRemoved(machine)).length || 0
 
   return (
     <>
