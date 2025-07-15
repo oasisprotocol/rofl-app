@@ -20,6 +20,7 @@ import { ProtectedLayout } from './components/ProtectedLayout'
 
 import './index.css'
 import '@rainbow-me/rainbowkit/styles.css'
+import { AppNewMachine } from './pages/Dashboard/AppDetails/AppNewMachine.tsx'
 
 const queryClient = new QueryClient()
 
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
               {
                 index: true,
                 element: <AppDetails />,
+              },
+              {
+                path: 'new-machine',
+                element: <AppNewMachine />,
               },
             ],
           },
