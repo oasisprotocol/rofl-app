@@ -57,8 +57,14 @@ type RoflBuildResultsResponse = {
   enclaves: null | oasis.types.SGXEnclaveIdentity[] // Added in postprocessing
 }
 
+type ArtifactId =
+  | `${string}-rofl-template-yaml`
+  | `${string}-rofl-yaml`
+  | `${string}-compose-yaml`
+  | `${string}-readme-md`
+
 type ArtifactUploadRequest = {
-  id: string
+  id: ArtifactId
   file: File | Blob
 }
 
@@ -136,7 +142,7 @@ const uploadArtifact = async ({ id, file }: ArtifactUploadRequest, token: string
   })
 }
 
-const downloadArtifact = async (id: string, token: string): Promise<ArtifactDownloadResponse> => {
+const downloadArtifact = async (id: ArtifactId, token: string): Promise<ArtifactDownloadResponse> => {
   const response = await axios.get(`${BACKEND_URL}/artifacts/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -183,7 +189,7 @@ export function useUploadArtifact(token: string | null) {
   })
 }
 
-export function useDownloadArtifact(id: string | null, token: string | null, enabled: boolean = true) {
+export function useDownloadArtifact(id: ArtifactId | null, token: string | null, enabled: boolean = true) {
   return useQuery<ArtifactDownloadResponse, AxiosError<unknown>>({
     queryKey: ['artifact-download', id, token],
     queryFn: () => downloadArtifact(id!, token!),
@@ -343,6 +349,10 @@ export function useCreateAndDeployApp() {
       console.log('Build?')
       setCurrentStep('building')
       // TODO: wait + handle error?
+      uploadArtifact(
+        { id: `${appId}-rofl-template-yaml`, file: new Blob([yaml.stringify(template.yaml.rofl)]) },
+        token,
+      )
       uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
       uploadArtifact({ id: `${appId}-compose-yaml`, file: new Blob([compose]) }, token)
       uploadArtifact({ id: `${appId}-readme-md`, file: new Blob([readme]) }, token)
