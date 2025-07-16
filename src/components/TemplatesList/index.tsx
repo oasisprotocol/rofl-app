@@ -66,12 +66,23 @@ export const TemplatesList: FC<TemplatesListProps> = ({ handleTemplateSelect }) 
       </Card>
       <Card className="border-0 rounded-md">
         <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
+          <span className="text-muted-foreground text-lg font-semibold">Have a different idea?</span>
+          <span className="text-muted-foreground text-sm">
+            Tell us what you want to build and we'll help you get started.
+          </span>
+          <Button variant="secondary" className="mt-4">
+            Share your idea
+          </Button>
+        </CardContent>
+      </Card>
+      <Card className="border-0 rounded-md">
+        <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
           <span className="text-muted-foreground text-lg font-semibold">More coming soon...</span>
         </CardContent>
       </Card>
-      {/* if there is not a multiple of 3 templates (including 2 static cards) add a semi transparent card  */}
-      {(templates.length + 2) % 3 !== 0 && (
-        <Card className="border-0 rounded-md rounded-lg bg-gradient-to-r from-card to-transparent"></Card>
+      {/* if there is not a multiple of 3 templates (including 3 static cards) add a semi transparent card  */}
+      {(templates.length + 3) % 3 !== 0 && (
+        <Card className="border-0 rounded-md bg-gradient-to-r from-card to-transparent"></Card>
       )}
     </div>
   )
