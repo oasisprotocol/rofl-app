@@ -9,6 +9,7 @@ import { ErrorBoundary } from '../ErrorBoundary'
 import { ErrorDisplay } from '../ErrorDisplay'
 import { RoflAppBackendAuthProvider } from '../../contexts/RoflAppBackendAuth/Provider'
 import { RainbowKitProviderWithAuth } from '../../components/RainbowKitProviderWithAuth'
+import { SurveyPopupProvider } from '../../contexts/SurveyPopupProvider'
 
 // TODO: use import { Toaster } from '@oasisprotocol/ui-library' when it doesn't break
 const Toaster = ({ ...props }: ToasterProps) => {
@@ -42,9 +43,11 @@ export const RootLayout: FC = () => (
   <RoflAppBackendAuthProvider>
     <RainbowKitProviderWithAuth>
       <ErrorBoundary fallbackRender={fallbackRender}>
-        <FathomAnalytics />
-        <Toaster />
-        <Outlet />
+        <SurveyPopupProvider>
+          <FathomAnalytics />
+          <Toaster />
+          <Outlet />
+        </SurveyPopupProvider>
       </ErrorBoundary>
     </RainbowKitProviderWithAuth>
   </RoflAppBackendAuthProvider>
