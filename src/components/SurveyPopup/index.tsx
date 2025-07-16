@@ -3,6 +3,7 @@ import { ExternalLink, X } from 'lucide-react'
 import { Card, CardContent } from '@oasisprotocol/ui-library/src/components/ui/card'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import OasisLogoBlue from '../icons/OasisLogoBlue.svg'
+import { toast } from 'sonner'
 
 const SURVEY_LINK = 'https://forms.gle/hiaMTdEZ43PM72QW7'
 
@@ -12,7 +13,10 @@ interface SurveyPopupProps {
 }
 
 export const SurveyPopup: FC<SurveyPopupProps> = ({ onClose, isVisible }) => {
-  if (!isVisible) return null
+  // This is not the most reliable check, but simple enough opposed to hijacking the API, to count active toasts
+  const hasActiveToasts = toast.getHistory().length > 0
+
+  if (!isVisible || hasActiveToasts) return null
 
   return (
     <div className="fixed bottom-5 right-12.5 z-50">
