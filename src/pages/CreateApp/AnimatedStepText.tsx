@@ -82,7 +82,7 @@ export const AnimatedStepText: FC<AnimatedStepTextProps> = ({ step }) => {
 
 export const HeaderSteps: FC<{
   progress: ReturnType<typeof useCreateAndDeployApp>['progress']
-  bootstrapStep: 'create_and_deploy' | 'success' | 'error'
+  bootstrapStep: 'pending' | 'success' | 'error'
 }> = ({ progress, bootstrapStep }) => {
   const { steps, currentStep, stepEstimatedDurations, stepLabels } = progress
   return (
@@ -131,5 +131,27 @@ export const HeaderSteps: FC<{
         </div>
       ))}
     </div>
+  )
+}
+
+export const Steps: FC<{
+  progress: ReturnType<typeof useCreateAndDeployApp>['progress']
+  bootstrapStep: 'pending' | 'success' | 'error'
+}> = ({ progress, bootstrapStep }) => {
+  return (
+    <>
+      <HeaderSteps progress={progress} bootstrapStep={bootstrapStep} />
+      <div className="w-full px-8 py-12 flex flex-col items-center justify-center">
+        {bootstrapStep === 'pending' && (
+          <div className="w-full flex items-center justify-center mb-8">
+            {/* mitigate webm black background */}
+            <video className="mix-blend-lighten" width="310" height="310" autoPlay muted loop playsInline>
+              <source src="https://assets.oasis.io/webm/Oasis-Loader-310x310.webm" type="video/webm" />
+            </video>
+          </div>
+        )}
+        <AnimatedStepText step={bootstrapStep === 'pending' ? progress.currentStep : bootstrapStep} />
+      </div>
+    </>
   )
 }
