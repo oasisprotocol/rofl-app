@@ -26,12 +26,18 @@ const flexibleUrl = z.preprocess(
       value => {
         // Check for Twitter (X) handles: @username (alphanumeric, underscore, 1-15 chars)
         const twitterHandlePattern = /^@([a-zA-Z0-9_]{1,15})$/
-        // Check for Discord handles: discord:username#discriminator (e.g., username#1234)
-        const discordHandlePattern = /^discord:[a-zA-Z0-9_]+#[0-9]{4}$/
+        // Check for Discord handles (both old and new style)
+        const oldDiscordHandlePattern = /^discord:[a-zA-Z0-9_]+#[0-9]{4}$/
+        const newDiscordHandlePattern = /^discord:[a-z0-9][a-z0-9_.]{0,30}[a-z0-9]$/
         // Check for URLs: protocol, domain, and plausible TLD
         const urlPattern = /^https?:\/\/([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/
 
-        return twitterHandlePattern.test(value) || discordHandlePattern.test(value) || urlPattern.test(value)
+        return (
+          twitterHandlePattern.test(value) ||
+          oldDiscordHandlePattern.test(value) ||
+          newDiscordHandlePattern.test(value) ||
+          urlPattern.test(value)
+        )
       },
       {
         message:
