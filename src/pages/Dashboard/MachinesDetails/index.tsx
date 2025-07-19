@@ -117,9 +117,20 @@ export const MachinesDetails: FC = () => {
                       </Link>
                     </DetailsSectionRow>
                   )}
+                  {isMachineRemoved(machine) && (
+                    <DetailsSectionRow label="Status">
+                      <span className="text-error">Removed</span>
+                    </DetailsSectionRow>
+                  )}
                   <DetailsSectionRow label="Created">
                     {new Date(machine.created_at).toLocaleString()}
                   </DetailsSectionRow>
+                  {machine.paid_from && (
+                    <DetailsSectionRow label="Paid">
+                      From {new Date(machine.paid_from).toLocaleString()}, until{' '}
+                      {new Date(machine.paid_until).toLocaleString()}
+                    </DetailsSectionRow>
+                  )}
                   <DetailsSectionRow label="Provider">{machine.provider}</DetailsSectionRow>
                   <DetailsSectionRow label="Instance ID">{machine.id}</DetailsSectionRow>
                   <DetailsSectionRow label="Resources">
