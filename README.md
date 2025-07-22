@@ -6,6 +6,8 @@ interacting with Oasis ROFL (Runtime Offchain Logic) Apps.
 This frontend provides a user-friendly interface to manage off-chain
 applications and view their execution status.
 
+You can access the ROFL app here: <https://rofl.app/>
+
 ## Features
 
 - Create, register and deploy ROFL Apps.
