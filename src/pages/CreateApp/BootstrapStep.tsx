@@ -6,7 +6,7 @@ import type { AppData, MetadataFormData } from './types'
 import { useCreateAndDeployApp } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { useNetwork } from '../../hooks/useNetwork'
-import { AnimatedStepText, HeaderSteps } from './AnimatedStepText'
+import { Steps } from './AnimatedStepText'
 import { BuildFormData } from '../../types/build-form'
 import { ANALYTICS_ENABLED } from '../../constants/analytics-config.ts'
 import { trackEvent } from 'fathom-client'
@@ -35,7 +35,7 @@ type BootstrapStepProps = {
 type BootstrapState = (typeof BootstrapState)[keyof typeof BootstrapState]
 
 export const BootstrapState = {
-  CreateAndDeploy: 'create_and_deploy', // look at createAndDeployAppMutation.progress.currentStep
+  Pending: 'pending', // look at createAndDeployAppMutation.progress.currentStep
   Success: 'success',
   Error: 'error',
 } as const
@@ -43,7 +43,7 @@ export const BootstrapState = {
 export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => {
   const network = useNetwork()
   const [buildTriggered, setBuildTriggered] = useState(false)
-  const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.CreateAndDeploy)
+  const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.Pending)
   const { token } = useRoflAppBackendAuthContext()
 
   const createAndDeployAppMutation = useCreateAndDeployApp()
@@ -83,24 +83,7 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
 
   return (
     <Layout headerContent={<Header />} footerContent={<Footer />}>
-      <HeaderSteps progress={createAndDeployAppMutation.progress} bootstrapStep={bootstrapStep} />
-      <div className="w-full px-8 py-12 flex flex-col items-center justify-center">
-        {bootstrapStep === 'create_and_deploy' && (
-          <div className="w-full flex items-center justify-center mb-8">
-            {/* mitigate webm black background */}
-            <video className="mix-blend-lighten" width="310" height="310" autoPlay muted loop playsInline>
-              <source src="https://assets.oasis.io/webm/Oasis-Loader-310x310.webm" type="video/webm" />
-            </video>
-          </div>
-        )}
-        <AnimatedStepText
-          step={
-            bootstrapStep === 'create_and_deploy'
-              ? createAndDeployAppMutation.progress.currentStep
-              : bootstrapStep
-          }
-        />
-      </div>
+      <Steps progress={createAndDeployAppMutation.progress} bootstrapStep={bootstrapStep} />
     </Layout>
   )
 }

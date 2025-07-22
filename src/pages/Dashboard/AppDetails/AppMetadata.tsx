@@ -19,6 +19,9 @@ import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
 import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachineRemoved'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { CircleArrowUp } from 'lucide-react'
+import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAuth/hooks'
+import { useDownloadArtifact } from '../../../backend/api'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
 type AppMetadataProps = {
   id: string
@@ -50,12 +53,27 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   } = useGetRuntimeRoflmarketInstances(network, 'sapphire', {
     deployed_app_id: id,
   })
+  const { token } = useRoflAppBackendAuthContext()
+  const roflTemplateQuery = useDownloadArtifact(`${id}-rofl-template-yaml`, token)
+
   const machines = machinesData?.data.instances.filter(machine => !isMachineRemoved(machine))
   const lastMachineToDuplicate = machinesData?.data.instances[0]
 
   return (
     <div className="space-y-4">
       {isMachineLoading && <Skeleton className="w-full h-60px]" />}
+
+      <Button
+        variant="outline"
+        className={cn(!roflTemplateQuery.data && 'pointer-events-none opacity-50')}
+        disabled={!roflTemplateQuery.data}
+        asChild
+      >
+        <Link to={`/dashboard/apps/${id}/new-machine`}>
+          <CircleArrowUp />
+          Deploy to new machine
+        </Link>
+      </Button>
 
       {machines && machines.length > 0 && isMachineFetched ? (
         <>
