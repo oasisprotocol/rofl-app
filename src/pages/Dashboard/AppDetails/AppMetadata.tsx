@@ -96,7 +96,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
           </DetailsSectionRow>
           <DetailsSectionRow label="Resources" className=" pb-6 border-b">
             {machines.map((machine, index) => (
-              <span key={machine.id}>
+              <span key={machine.id} className="flex items-center">
                 <MachineResources
                   cpus={machine.resources.cpus}
                   memory={machine.resources.memory}
