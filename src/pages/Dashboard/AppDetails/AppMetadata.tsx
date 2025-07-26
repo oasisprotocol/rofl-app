@@ -62,18 +62,34 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   return (
     <div className="space-y-4">
       {isMachineLoading && <Skeleton className="w-full h-60px]" />}
-
-      <Button
-        variant="outline"
-        className={cn(!roflTemplateQuery.data && 'pointer-events-none opacity-50')}
-        disabled={!roflTemplateQuery.data}
-        asChild
-      >
-        <Link to={`/dashboard/apps/${id}/new-machine`}>
-          <CircleArrowUp />
-          Deploy to new machine
-        </Link>
-      </Button>
+      {editEnabled && (
+        <div className="flex flex-wrap gap-3">
+          <Button
+            variant="outline"
+            className={cn(!lastMachineToDuplicate?.deployment?.app_id && 'pointer-events-none opacity-50')}
+            disabled={!lastMachineToDuplicate?.deployment?.app_id}
+            asChild
+          >
+            <Link
+              to={`/dashboard/machines/${lastMachineToDuplicate?.provider}/instances/${lastMachineToDuplicate?.id}/top-up`}
+            >
+              <CircleArrowUp />
+              Top up new machine based on last one
+            </Link>
+          </Button>
+          <Button
+            variant="outline"
+            className={cn(!roflTemplateQuery.data && 'pointer-events-none opacity-50')}
+            disabled={!roflTemplateQuery.data}
+            asChild
+          >
+            <Link to={`/dashboard/apps/${id}/new-machine`}>
+              <CircleArrowUp />
+              Deploy to new machine
+            </Link>
+          </Button>
+        </div>
+      )}
 
       {machines && machines.length > 0 && isMachineFetched ? (
         <>
@@ -94,7 +110,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
               </span>
             ))}
           </DetailsSectionRow>
-          <DetailsSectionRow label="Resources" className=" pb-6 border-b">
+          <DetailsSectionRow label="Resources" className="pb-6 border-b">
             {machines.map((machine, index) => (
               <span key={machine.id} className="flex items-center">
                 <MachineResources
@@ -111,16 +127,6 @@ export const AppMetadata: FC<AppMetadataProps> = ({
         <DetailsSectionRow label="Machine(s)" className="pb-6 border-b">
           <div className="flex flex-wrap items-center gap-5">
             <span className="text-muted-foreground">Machines data is not available.</span>
-            {editEnabled && (lastMachineToDuplicate?.deployment.app_id as string) && (
-              <Button variant="outline" className="-my-2" asChild>
-                <Link
-                  to={`/dashboard/machines/${lastMachineToDuplicate!.provider}/instances/${lastMachineToDuplicate!.id}/top-up`}
-                >
-                  <CircleArrowUp />
-                  Top up new machine based on last one
-                </Link>
-              </Button>
-            )}
           </div>
         </DetailsSectionRow>
       )}
