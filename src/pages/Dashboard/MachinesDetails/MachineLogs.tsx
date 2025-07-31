@@ -16,11 +16,12 @@ type MachineLogsProps = {
 
 export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, instance, isRemoved }) => {
   const { api: schedulerApi } = useScheduler(schedulerRak, provider)
-  const { startFetchingMachineLogs, isAuthenticating, isLoadingLogs, logs } = useMachineAccess(
-    schedulerApi,
-    provider,
-    instance,
-  )
+  const {
+    startFetchingMachineLogs,
+    isAuthenticating,
+    isLoadingLogs,
+    logs: allLogs,
+  } = useMachineAccess(schedulerApi, provider, instance)
   const handleFetchLogs = async () => {
     try {
       await startFetchingMachineLogs()
@@ -28,7 +29,6 @@ export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, inst
       console.error('Failed to fetch machine logs:', error)
     }
   }
-  const hasLogs = logs.length > 0
 
   if (!schedulerRak) {
     return (
@@ -47,6 +47,14 @@ export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, inst
       ></EmptyState>
     )
   }
+
+  const hasLogs = allLogs.length > 0
+
+  // Hide a message while formatting disk that makes it look like progress is stuck.
+  const misleadingMessageWhileFormattingDisk = 'No test for authenc(hmac(sha256),xts(aes))'
+  const logs = allLogs[allLogs.length - 1]?.includes(misleadingMessageWhileFormattingDisk)
+    ? allLogs.slice(0, -1)
+    : allLogs
 
   // Append sections and indent everything else.
   // https://github.com/oasisprotocol/oasis-sdk/blob/e2061d999426e3455ca4ed7c8a5c82f0b52441e5/rofl-containers/src/main.rs#L110
