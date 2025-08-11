@@ -869,21 +869,22 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oasisprotocol/client-rt@https://github.com/oasisprotocol/oasis-sdk/raw/732ef972559ec246b38e1dc595cb2f11cd87b357/client-sdk/ts-web/rt/oasisprotocol-client-rt-1.2.1-0.tgz":
-  version "1.2.1-0"
-  resolved "https://github.com/oasisprotocol/oasis-sdk/raw/732ef972559ec246b38e1dc595cb2f11cd87b357/client-sdk/ts-web/rt/oasisprotocol-client-rt-1.2.1-0.tgz#4160c1fd02109b41ec646da496080843c7127725"
+"@oasisprotocol/client-rt@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@oasisprotocol/client-rt/-/client-rt-1.3.0.tgz#28923efd5edc04bb8ddbb28c506c029e1b0b0ea5"
+  integrity sha512-YMD0kg0LFk2P0d3VhNRN7OPuX7f5UwsoDhujRa52Q2OchufPrmG9Joss/LSXvPmG0r2pr8OY02mroWa2C6V4PA==
   dependencies:
     "@noble/curves" "^1.6.0"
     "@noble/hashes" "^1.5.0"
-    "@oasisprotocol/client" "^1.2.0"
+    "@oasisprotocol/client" "^1.3.0"
     "@oasisprotocol/deoxysii" "^0.0.6"
     tweetnacl "^1.0.3"
     viem "^2.31.3"
 
-"@oasisprotocol/client@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@oasisprotocol/client/-/client-1.2.0.tgz#59591890eab98f995520c5a605224caa47b255d2"
-  integrity sha512-VihHaniHJqiBEREtNeH6Cx1D9GfJ5u+0ur5P0eZvG+JCLKaC0mk3E9+bh9TLMH0NblMlPxzT32KfekojEetGhA==
+"@oasisprotocol/client@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@oasisprotocol/client/-/client-1.3.0.tgz#1bc5849400a692ba33c9ab7de376c34342e97a57"
+  integrity sha512-eKavJ97/GmdwtFVZ0OqMj5CB/zOHkDJPUZx+mjUItUMurTFc3la0PMeRPkfeDmct9+2kvP+3HsR74JiOq8uW4w==
   dependencies:
     "@noble/hashes" "^1.5.0"
     bech32 "^2.0.0"
