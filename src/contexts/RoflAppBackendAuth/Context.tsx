@@ -4,7 +4,6 @@ import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
 export interface RoflAppBackendAuthContextType {
   token: string | null
   isAuthenticated: boolean
-  isTokenExpired: boolean
   status: AuthenticationStatus
 }
 

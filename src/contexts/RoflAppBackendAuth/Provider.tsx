@@ -62,8 +62,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
     }
   }, 10_000) // Should be less than buffer in isJWTExpired
 
-  const isAuthenticated = !!token && !isJWTExpired(token, address || '') && isConnected
-  const isTokenExpired = token ? isJWTExpired(token, address || '') : false
+  const isAuthenticated = !!token && !!address && !isJWTExpired(token, address) && isConnected
 
   useEffect(() => {
     if (isAuthenticated && location.pathname === '/') {
@@ -93,7 +92,6 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const value = {
     token,
     isAuthenticated,
-    isTokenExpired,
     status,
   }
 
@@ -103,7 +101,11 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
 function isJWTExpired(jwtString: string, address: string) {
   try {
     const jwt = JSON.parse(atob(jwtString.split('.')[1]))
-    if (jwt.address !== address) return true
+
+    if (jwt.address?.toLowerCase() !== address.toLowerCase()) {
+      console.warn('JWT address mismatch', { jwtAddress: jwt.address, currentAddress: address })
+      return true
+    }
 
     // Based on https://github.com/DD-DeCaF/caffeine-vue/blob/da133e7c8ac5e31e4b94d2f70ddad4d26c9cbc46/src/store/modules/session.ts#L133-L144
     // Buffer is the time before *actual* expiry when the token
