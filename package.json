@@ -18,8 +18,8 @@
   "dependencies": {
     "@metamask/jazzicon": "^2.0.0",
     "@monaco-editor/react": "^4.7.0",
-    "@oasisprotocol/client": "^1.2.0",
-    "@oasisprotocol/client-rt": "https://github.com/oasisprotocol/oasis-sdk/raw/732ef972559ec246b38e1dc595cb2f11cd87b357/client-sdk/ts-web/rt/oasisprotocol-client-rt-1.2.1-0.tgz",
+    "@oasisprotocol/client": "^1.3.0",
+    "@oasisprotocol/client-rt": "^1.3.0",
     "@oasisprotocol/ui-library": "file:./ui-library",
     "@rainbow-me/rainbowkit": "^2.2.6",
     "@tanstack/react-query": "^5.80.6",
