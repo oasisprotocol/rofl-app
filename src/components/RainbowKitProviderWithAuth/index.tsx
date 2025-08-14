@@ -40,11 +40,9 @@ export const RainbowKitProviderWithAuth: FC<PropsWithChildren> = ({ children }) 
 
       if (hostname === 'rofl.app') {
         domain = 'rofl.app'
-      } else if (
-        hostname === 'dev.rofl.app' ||
-        hostname.endsWith('.rofl-app.pages.dev') ||
-        hostname === 'localhost'
-      ) {
+      } else if (hostname === 'localhost') {
+        domain = window.location.hostname
+      } else if (hostname === 'dev.rofl.app' || hostname.endsWith('.rofl-app.pages.dev')) {
         domain = 'dev.rofl.app'
       } else {
         domain = 'rofl.app'
