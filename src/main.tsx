@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { WagmiProvider } from 'wagmi'
 import { Landing } from './pages/Landing'
 import { Dashboard } from './pages/Dashboard'
@@ -7,7 +7,6 @@ import { MyApps } from './pages/Dashboard/MyApps'
 import { AppDetails } from './pages/Dashboard/AppDetails'
 import { Machines } from './pages/Dashboard/Machines'
 import { MachinesDetails } from './pages/Dashboard/MachinesDetails'
-import { Create } from './pages/CreateApp'
 import { Explore } from './pages/Explore'
 import { NotFound } from './components/NotFound'
 import { wagmiConfig } from './constants/wagmi-config.ts'
@@ -119,12 +118,13 @@ const router = createBrowserRouter([
       },
       {
         path: 'create',
-        Component: () => {
-          const location = useLocation()
-          // Key is used to reset state on every navigation to this route. Even
-          // if inside create flow and user clicks "Create +" in Header bar.
-          return <Create key={location.key} />
-        },
+        element: <MainLayout />,
+        children: [
+          {
+            index: true,
+            element: <div>Disabled - no token</div>,
+          },
+        ],
       },
       {
         path: '*',
