@@ -7,7 +7,6 @@ import { BuildStep } from './BuildStep'
 import { PaymentStep } from './PaymentStep'
 import { BootstrapStep } from './BootstrapStep'
 import { getTemplateById } from './templates'
-import { ANALYTICS_ENABLED } from '../../constants/analytics-config.ts'
 import { trackEvent } from 'fathom-client'
 
 export const Create: FC = () => {
@@ -24,8 +23,6 @@ export const Create: FC = () => {
   const trackedEvents = useRef<Set<number>>(new Set())
 
   useEffect(() => {
-    if (!ANALYTICS_ENABLED) return
-
     if (currentStep === 1 && !trackedEvents.current.has(1)) {
       // Filter out just visiting create app page, hence step=1
       trackEvent(`Create app flow/start/${appData?.template}`)

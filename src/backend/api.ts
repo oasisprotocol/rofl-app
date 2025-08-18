@@ -19,7 +19,6 @@ import { getReadmeByTemplateId, fillTemplate } from '../pages/CreateApp/template
 import { toast } from 'sonner'
 import { isMachineRemoved } from '../components/MachineStatusIcon/isMachineRemoved.ts'
 import { trackEvent } from 'fathom-client'
-import { ANALYTICS_ENABLED } from '../constants/analytics-config.ts'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -275,9 +274,7 @@ async function waitForAppScheduler(
 }
 
 const trackBootstrapStepEvent = (step: string, templateId?: string) => {
-  if (ANALYTICS_ENABLED) {
-    trackEvent(`Create app flow/bootstrap/${step}${templateId ? `/${templateId}` : ''}`)
-  }
+  trackEvent(`Create app flow/bootstrap/${step}${templateId ? `/${templateId}` : ''}`)
 }
 
 export function useCreateAndDeployApp() {
