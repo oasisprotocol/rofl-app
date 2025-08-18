@@ -208,14 +208,32 @@ async function waitForAppId(creationTxHash: string, network: 'mainnet' | 'testne
     const response = await GetRuntimeEvents(network, 'sapphire', {
       tx_hash: creationTxHash.replace('0x', ''),
       type: 'rofl.app_created',
-      limit: 10,
-      offset: 0,
     })
     const appId = response.data.events?.[0]?.body?.id
     if (appId) return appId as `rofl1${string}`
     await new Promise(resolve => setTimeout(resolve, interval))
   }
   throw new Error('waitForAppId timed out')
+}
+
+async function waitForMachineId(creationTxHash: string, network: 'mainnet' | 'testnet', timeout = 60_000) {
+  const interval = 1000
+  const maxTries = timeout / interval
+  // TODO: could use waitForTransactionReceipt + visiting events in a block to get the machine id
+  for (let i = 0; i < maxTries; i++) {
+    // https://testnet.nexus.oasis.io/v1/sapphire/events?tx_hash=a3491aa5e8e38a756f6b8e1db09cc6288005967c1eea183aa3ca7bdb97cb8cf4&limit=10&offset=0&type=roflmarket.instance_created
+    const response = await GetRuntimeEvents(network, 'sapphire', {
+      tx_hash: creationTxHash.replace('0x', ''),
+      type: 'roflmarket.instance_created',
+    })
+    const machineId = response.data.events?.[0]?.body?.id
+    if (machineId) {
+      await new Promise(r => setTimeout(r, 3000)) // Delay for Nexus to index machine
+      return oasis.misc.toHex(new Uint8Array(response.data.events?.[0]?.body?.id as Array<number>))
+    }
+    await new Promise(resolve => setTimeout(resolve, interval))
+  }
+  throw new Error('waitForMachineId timed out')
 }
 
 async function waitForBuildResults(taskId: string, token: string, timeout = 600_000) {
@@ -767,7 +785,7 @@ export function useMachineTopUp() {
   const wagmiConfig = useConfig()
   const { sendTransactionAsync } = useSendTransaction()
   return useMutation<
-    void,
+    string,
     AxiosError<unknown>,
     { machine: RoflMarketInstance; provider: string; network: 'mainnet' | 'testnet'; build: BuildFormData }
   >({
@@ -798,6 +816,7 @@ export function useMachineTopUp() {
             .toSubcall(),
         )
         await waitForTransactionReceipt(wagmiConfig, { hash })
+        return machine.id
       } else {
         toast('Previous machine was removed. Queue new machine?')
         const hash = await sendTransactionAsync(
@@ -825,6 +844,8 @@ export function useMachineTopUp() {
         )
         await waitForTransactionReceipt(wagmiConfig, { hash })
         toast('New machine queued')
+        const newMachineId = await waitForMachineId(hash, network)
+        return newMachineId
       }
     },
   })

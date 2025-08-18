@@ -98,13 +98,13 @@ export const MachineTopUp: FC = () => {
                 build={buildConfig}
                 offerId={machine!.offer_id}
                 onSubmit={async build => {
-                  await machineTopUp.mutateAsync({
+                  const newOrOldMachineId = await machineTopUp.mutateAsync({
                     machine: machine!,
                     provider: provider!,
                     network,
                     build,
                   })
-                  handleBack()
+                  navigate(`/dashboard/machines/${machine!.provider}/instances/${newOrOldMachineId}`)
                 }}
               >
                 {({ form, noOffersWarning }) => {
