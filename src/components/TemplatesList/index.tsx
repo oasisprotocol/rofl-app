@@ -45,7 +45,7 @@ export const TemplatesList: FC<TemplatesListProps> = ({ handleTemplateSelect }) 
       ))}
       <Card className="border-0 rounded-md">
         <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
-          <span className="text-muted-foreground text-lg font-semibold">Custom build</span>
+          <span className="text-muted-foreground text-lg font-semibold">Create app with CLI?</span>
           <span className="text-muted-foreground text-sm">
             Convert your containerized app into a trustless app in minutes via Oasis CLI.
             <br />
