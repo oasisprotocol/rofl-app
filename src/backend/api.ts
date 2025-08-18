@@ -785,7 +785,7 @@ export function useMachineTopUp() {
   const wagmiConfig = useConfig()
   const { sendTransactionAsync } = useSendTransaction()
   return useMutation<
-    void,
+    string,
     AxiosError<unknown>,
     { machine: RoflMarketInstance; provider: string; network: 'mainnet' | 'testnet'; build: BuildFormData }
   >({
@@ -816,6 +816,7 @@ export function useMachineTopUp() {
             .toSubcall(),
         )
         await waitForTransactionReceipt(wagmiConfig, { hash })
+        return machine.id
       } else {
         toast('Previous machine was removed. Queue new machine?')
         const hash = await sendTransactionAsync(
@@ -843,7 +844,8 @@ export function useMachineTopUp() {
         )
         await waitForTransactionReceipt(wagmiConfig, { hash })
         toast('New machine queued')
-        await waitForMachineId(hash, network)
+        const newMachineId = await waitForMachineId(hash, network)
+        return newMachineId
       }
     },
   })
