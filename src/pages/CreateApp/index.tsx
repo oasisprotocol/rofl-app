@@ -20,6 +20,7 @@ export const Create: FC = () => {
     { component: PaymentStep },
     { component: BootstrapStep },
   ]
+  const selectedTemplate = getTemplateById(appData?.template)
   const trackedEvents = useRef<Set<number>>(new Set())
 
   useEffect(() => {
@@ -27,13 +28,19 @@ export const Create: FC = () => {
 
     if (currentStep === 1 && !trackedEvents.current.has(1)) {
       // Filter out just visiting create app page, hence step=1
-      trackEvent('Create app flow - start')
+      trackEvent(`Create app flow/start/${appData?.template}`)
       trackedEvents.current.add(1)
+    } else if (currentStep === 2 && !trackedEvents.current.has(2)) {
+      trackEvent(`Create app flow/metadata/${appData?.template}`)
+      trackedEvents.current.add(2)
+    } else if (currentStep === 3 && !trackedEvents.current.has(3)) {
+      trackEvent(`Create app flow/agent/${appData?.template}`)
+      trackedEvents.current.add(3)
     } else if (currentStep === 4 && !trackedEvents.current.has(4)) {
-      trackEvent('Create app flow - payment')
+      trackEvent(`Create app flow/payment/${appData?.template}`)
       trackedEvents.current.add(4)
     }
-  }, [currentStep])
+  }, [currentStep, appData?.template])
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -46,8 +53,6 @@ export const Create: FC = () => {
       setCurrentStep(currentStep - 1)
     }
   }
-
-  const selectedTemplate = getTemplateById(appData?.template)
 
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
