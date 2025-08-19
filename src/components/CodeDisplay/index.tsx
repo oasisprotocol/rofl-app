@@ -38,9 +38,10 @@ type CodeDisplayProps = {
   data: string
   className?: string
   readOnly?: boolean
+  onChange?: (value: string | undefined) => void
 }
 
-const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true }) => {
+const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true, onChange }) => {
   if (!data) {
     return null
   }
@@ -53,6 +54,7 @@ const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true })
           language="yaml"
           value={data}
           theme="vs-dark"
+          onChange={onChange}
           options={{
             readOnly,
             fontSize: 14,
@@ -68,10 +70,11 @@ type RawCodeProps = {
   data: string | undefined
   className?: string
   readOnly?: boolean
+  onChange?: (value: string | undefined) => void
 }
 
-export const RawCode: FC<RawCodeProps> = ({ data, className, readOnly }) => {
+export const RawCode: FC<RawCodeProps> = ({ data, className, readOnly, onChange }) => {
   if (!data) return null
 
-  return <CodeDisplay data={data} className={className} readOnly={readOnly} />
+  return <CodeDisplay data={data} className={className} readOnly={readOnly} onChange={onChange} />
 }
