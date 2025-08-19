@@ -21,12 +21,12 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   agent,
   setAppDataForm,
 }) => {
-  const form = useForm<CustomBuildFormData>({
+  const form = useForm({
     resolver: zodResolver(customBuildFormSchema),
     defaultValues: {
       compose: agent?.compose || customBuildCompose,
-      ...agent,
-    },
+      secrets: agent?.secrets || [],
+    } as CustomBuildFormData,
   })
 
   const [composeContent, setComposeContent] = useState<string>(agent?.compose || customBuildCompose)

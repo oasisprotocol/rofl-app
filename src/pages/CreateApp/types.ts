@@ -113,6 +113,14 @@ export const customBuildFormSchema = z.object({
   compose: z.string().min(1, {
     message: 'Compose file is required.',
   }),
+  secrets: z
+    .array(
+      z.object({
+        name: z.string(),
+        value: z.string(),
+      }),
+    )
+    .default([]),
 })
 
 export const tgbotFormSchema = z.object({
