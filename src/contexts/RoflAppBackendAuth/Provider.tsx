@@ -2,7 +2,6 @@ import { useState, useEffect, type ReactNode, useRef } from 'react'
 import { useAccount } from 'wagmi'
 import { RoflAppBackendAuthContext } from './Context'
 import { useInterval } from './useInterval'
-import { ANALYTICS_ENABLED } from '../../constants/analytics-config.ts'
 import { trackEvent } from 'fathom-client'
 import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -26,8 +25,6 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   }, [])
 
   useEffect(() => {
-    if (!ANALYTICS_ENABLED) return
-
     if (!!token && !hasWalletConnected.current) {
       trackEvent('Wallet connected')
       hasWalletConnected.current = true
