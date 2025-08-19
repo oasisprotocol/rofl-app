@@ -1,6 +1,7 @@
 import { type FC, useState, useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import * as yaml from 'yaml'
 import { CreateFormNavigation } from './CreateFormNavigation'
 import { customBuildFormSchema, type CustomBuildFormData } from './types'
 import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator'
@@ -22,7 +23,10 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
 }) => {
   const form = useForm<CustomBuildFormData>({
     resolver: zodResolver(customBuildFormSchema),
-    defaultValues: { ...agent },
+    defaultValues: {
+      compose: agent?.compose || customBuildCompose,
+      ...agent,
+    },
   })
 
   const [composeContent, setComposeContent] = useState<string>(agent?.compose || customBuildCompose)
@@ -30,6 +34,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   useEffect(() => {
     form.setValue('compose', composeContent)
   }, [composeContent, form])
+
   function onSubmit(values: CustomBuildFormData) {
     setAppDataForm({ agent: values })
     handleNext()
@@ -38,10 +43,18 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   const handleComposeChange = (newContent: string | undefined) => {
     const content = newContent || '\n'
     setComposeContent(content)
+    try {
+      if (content) {
+        yaml.parse(content)
+      }
+    } catch (error) {
+      console.log('Invalid YAML syntax:', error)
+    }
   }
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
+      TBA
       <div className="justify-start text-base-foreground text-xl font-semibold leading-7">Secrets</div>
       <div>TBA</div>
       <Separator />
