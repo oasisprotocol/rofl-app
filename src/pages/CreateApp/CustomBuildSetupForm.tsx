@@ -23,7 +23,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     resolver: zodResolver(customBuildFormSchema),
     defaultValues: {
       compose: agent?.compose || customBuildCompose,
-      secrets: agent?.secrets || [],
+      // secrets: agent?.secrets || [],
     } as CustomBuildFormData,
   })
 
