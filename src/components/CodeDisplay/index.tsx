@@ -1,5 +1,8 @@
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
-import { type FC, lazy, Suspense } from 'react'
+import { type FC, lazy, Suspense, useRef } from 'react'
+import { useMonaco } from '@monaco-editor/react'
+import * as yaml from 'yaml'
+import * as monaco from 'monaco-editor'
 
 const TextAreaFallback = ({ value }: { value?: string }) => (
   <textarea
@@ -42,8 +45,47 @@ type CodeDisplayProps = {
 }
 
 export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true, onChange }) => {
+  const monacoInstance = useMonaco()
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+
   if (!data) {
     return null
+  }
+
+  const handleEditorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
+    editorRef.current = editor
+  }
+
+  const handleEditorChange = (value: string | undefined) => {
+    if (!monacoInstance || !editorRef.current || value === undefined) {
+      return
+    }
+
+    const model = editorRef.current.getModel()
+    if (!model) return
+
+    const markers: monaco.editor.IMarkerData[] = []
+
+    try {
+      yaml.parse(value)
+    } catch (e) {
+      const yamlError = e as { message: string; linePos: { line: number; col: number }[] }
+      if (yamlError.linePos && yamlError.linePos.length > 0) {
+        const line = yamlError.linePos[0].line
+        const column = yamlError.linePos[0].col
+        markers.push({
+          startLineNumber: line,
+          endLineNumber: line,
+          startColumn: column,
+          endColumn: model.getLineMaxColumn(line),
+          message: yamlError.message,
+          severity: monacoInstance.MarkerSeverity.Error,
+        })
+      }
+    }
+
+    monacoInstance.editor.setModelMarkers(model, 'yaml-validator', markers)
+    onChange?.(value)
   }
 
   return (
@@ -54,7 +96,8 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
           language="yaml"
           value={data}
           theme="vs-dark"
-          onChange={onChange}
+          onMount={handleEditorDidMount}
+          onChange={handleEditorChange}
           options={{
             readOnly,
             fontSize: 14,
