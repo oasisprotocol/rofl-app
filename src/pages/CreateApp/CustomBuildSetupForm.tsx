@@ -1,7 +1,6 @@
 import { type FC, useState, useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import * as yaml from 'yaml'
 import { CreateFormNavigation } from './CreateFormNavigation'
 import { customBuildFormSchema, type CustomBuildFormData } from './types'
 import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator'
@@ -43,13 +42,6 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   const handleComposeChange = (newContent: string | undefined) => {
     const content = newContent || '\n'
     setComposeContent(content)
-    try {
-      if (content) {
-        yaml.parse(content)
-      }
-    } catch (error) {
-      console.log('Invalid YAML syntax:', error)
-    }
   }
 
   return (
