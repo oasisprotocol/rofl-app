@@ -1,5 +1,6 @@
-import { z } from 'zod'
+import { z, RefinementCtx } from 'zod'
 import { BuildFormData } from '../../types/build-form.ts'
+import * as yaml from 'yaml'
 
 /**
  * This is like z.string().url(), but also accepts domain names without the protocol prefix,
@@ -110,9 +111,24 @@ export const metadataFormSchema = z.object({
 })
 
 export const customBuildFormSchema = z.object({
-  compose: z.string().min(1, {
-    message: 'Compose file is required.',
-  }),
+  compose: z
+    .string()
+    .min(1, {
+      message: 'Compose file is required.',
+    })
+    .superRefine((data, ctx: RefinementCtx) => {
+      try {
+        yaml.parse(data)
+      } catch (error) {
+        const yamlError = error as { message: string; linePos: { line: number; col: number }[] }
+
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: yamlError.message,
+          path: ['compose'],
+        })
+      }
+    }),
   secrets: z
     .array(
       z.object({
