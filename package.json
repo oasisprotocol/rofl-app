@@ -11,6 +11,7 @@
     "lint": "eslint . --cache --ext .js,.ts,.tsx --max-warnings 0",
     "lint-git": "node ./internals/scripts/gitlint.cjs",
     "lint-docs": "markdownlint --ignore '**/node_modules/**' '**/*.md'",
+    "release-tag": "node ./internals/scripts/release-tag.cjs",
     "preview": "vite preview",
     "prettier-check": "prettier src internals --check",
     "prettier": "prettier src internals --write"
