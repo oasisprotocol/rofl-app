@@ -332,7 +332,7 @@ export function useCreateAndDeployApp() {
         rofl
           .callCreate()
           .setBody({
-            scheme: oasisRT.types.IdentifierScheme.CreatorNonce,
+            scheme: oasisRT.types.IdentifierScheme.CreatorRoundIndex,
             policy: {
               quotes: {
                 pcs: {
