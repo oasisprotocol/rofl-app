@@ -1,5 +1,5 @@
 import { type FC, Suspense } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, Navigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 import { ArrowLeft, ArrowRight, Wallet } from 'lucide-react'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
@@ -11,9 +11,25 @@ import { ErrorBoundary } from '../ErrorBoundary'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { AppError, AppErrors } from '../ErrorBoundary/errors.ts'
 
-const ProtectedOutlet: FC = () => {
-  const { isAuthenticated } = useRoflAppBackendAuthContext()
+interface ProtectedOutletProps {
+  redirectPath?: string
+}
+
+const ProtectedOutlet: FC<ProtectedOutletProps> = ({ redirectPath }) => {
+  const { isAuthenticated, status } = useRoflAppBackendAuthContext()
   const { isConnected } = useAccount()
+
+  if (status === 'loading') {
+    return (
+      <div className="flex items-center justify-center h-dvh">
+        <Spinner />
+      </div>
+    )
+  }
+
+  if ((!isConnected || !isAuthenticated) && redirectPath) {
+    return <Navigate to={redirectPath} replace />
+  }
 
   if (!isConnected || !isAuthenticated) {
     return null
@@ -22,12 +38,17 @@ const ProtectedOutlet: FC = () => {
   return <Outlet />
 }
 
-export const ProtectedLayout: FC = () => {
+interface ProtectedLayoutProps {
+  redirectPath?: string
+}
+
+export const ProtectedLayout: FC<ProtectedLayoutProps> = ({ redirectPath }) => {
   const { isAuthenticated, status } = useRoflAppBackendAuthContext()
   const { isConnected } = useAccount()
   const { connectModalOpen } = useConnectModal()
 
-  const showAuthModal = (status === 'loading' || !isConnected || !isAuthenticated) && !connectModalOpen
+  const showAuthModal =
+    (status === 'loading' || !isConnected || !isAuthenticated) && !connectModalOpen && !redirectPath
 
   return (
     <>
@@ -106,7 +127,7 @@ export const ProtectedLayout: FC = () => {
             </div>
           }
         >
-          <ProtectedOutlet />
+          <ProtectedOutlet redirectPath={redirectPath} />
         </Suspense>
       </ErrorBoundary>
     </>
