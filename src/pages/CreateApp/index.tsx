@@ -25,16 +25,16 @@ export const Create: FC = () => {
   useEffect(() => {
     if (currentStep === 1 && !trackedEvents.current.has(1)) {
       // Filter out just visiting create app page, hence step=1
-      trackEvent(`Create app flow/start/${appData?.template}`)
+      trackEvent(`Create app flow/1/start/${appData?.template}`)
       trackedEvents.current.add(1)
     } else if (currentStep === 2 && !trackedEvents.current.has(2)) {
-      trackEvent(`Create app flow/metadata/${appData?.template}`)
+      trackEvent(`Create app flow/2/metadata/${appData?.template}`)
       trackedEvents.current.add(2)
     } else if (currentStep === 3 && !trackedEvents.current.has(3)) {
-      trackEvent(`Create app flow/agent/${appData?.template}`)
+      trackEvent(`Create app flow/3/agent/${appData?.template}`)
       trackedEvents.current.add(3)
     } else if (currentStep === 4 && !trackedEvents.current.has(4)) {
-      trackEvent(`Create app flow/payment/${appData?.template}`)
+      trackEvent(`Create app flow/4/payment/${appData?.template}`)
       trackedEvents.current.add(4)
     }
   }, [currentStep, appData?.template])
