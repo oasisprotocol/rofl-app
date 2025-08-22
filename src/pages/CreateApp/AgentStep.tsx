@@ -13,6 +13,7 @@ type AgentStepProps = {
   setAppDataForm: (data: { agent: AgentFormData | XAgentFormData | HlCopyTraderFormData }) => void
   selectedTemplateName?: string
   selectedTemplateId?: string
+  customStepTitle: string
 }
 
 export const AgentStep: FC<AgentStepProps> = ({
@@ -22,14 +23,16 @@ export const AgentStep: FC<AgentStepProps> = ({
   setAppDataForm,
   selectedTemplateName,
   selectedTemplateId,
+  customStepTitle,
 }) => {
   return (
     <CreateLayout
       currentStep={2}
       selectedTemplateName={selectedTemplateName}
       selectedTemplateId={selectedTemplateId}
+      customStepTitle={customStepTitle}
     >
-      <CreateFormHeader title="Setup Agent" />
+      <CreateFormHeader title={customStepTitle} />
 
       {selectedTemplateId === 'tgbot' && (
         <TgbotAgentForm

@@ -21,6 +21,7 @@ type PaymentStepProps = {
   selectedTemplateName?: string
   selectedTemplateId?: string
   appData?: AppData
+  customStepTitle: string
 }
 
 export const PaymentStep: FC<PaymentStepProps> = ({
@@ -29,6 +30,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
   selectedTemplateName,
   selectedTemplateId,
   appData,
+  customStepTitle,
 }) => {
   const { address } = useAccount()
   const network = useNetwork()
@@ -76,6 +78,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
       currentStep={4}
       selectedTemplateName={selectedTemplateName}
       selectedTemplateId={selectedTemplateId}
+      customStepTitle={customStepTitle}
     >
       <CreateFormHeader
         title="Payment"

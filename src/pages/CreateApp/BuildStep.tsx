@@ -18,6 +18,7 @@ type BuildStepProps = {
     memory: number | undefined
     storage: number | undefined
   }
+  customStepTitle: string
 }
 
 export const BuildStep: FC<BuildStepProps> = ({
@@ -28,6 +29,7 @@ export const BuildStep: FC<BuildStepProps> = ({
   selectedTemplateName,
   selectedTemplateId,
   selectedTemplateRequirements,
+  customStepTitle,
 }) => {
   const onSubmit = (values: BuildFormData) => {
     setAppDataForm({ build: values })
@@ -39,6 +41,7 @@ export const BuildStep: FC<BuildStepProps> = ({
       currentStep={3}
       selectedTemplateName={selectedTemplateName}
       selectedTemplateId={selectedTemplateId}
+      customStepTitle={customStepTitle}
     >
       <CreateFormHeader title="Configure machine" />
 
