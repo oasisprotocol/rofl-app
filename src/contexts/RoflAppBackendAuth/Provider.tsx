@@ -10,7 +10,8 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   const { address, isConnected } = useAccount()
   const navigate = useNavigate()
   const location = useLocation()
-  const [token, setToken] = useState<string | null>(window.localStorage.getItem('jwt'))
+  const token = 'no-token'
+  const [_token, setToken] = useState<string | null>(window.localStorage.getItem('jwt'))
   const [isInitialLoad, setIsInitialLoad] = useState(true)
   const [isTokenExpired, setIsTokenExpired] = useState(false)
 
@@ -110,6 +111,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
 }
 
 function isJWTExpired(jwtString: string, address: string) {
+  return false
   try {
     const jwt = JSON.parse(atob(jwtString.split('.')[1]))
 

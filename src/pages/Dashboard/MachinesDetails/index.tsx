@@ -20,6 +20,9 @@ import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { MachineName } from '../../../components/MachineName'
 import { toastWithDuration } from '../../../utils/toastWithDuration'
 import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachineRemoved'
+import { useSendTransaction } from 'wagmi'
+import * as oasis from '@oasisprotocol/client'
+import * as oasisRT from '@oasisprotocol/client-rt'
 
 export const MachinesDetails: FC = () => {
   const network = useNetwork()
@@ -34,6 +37,7 @@ export const MachinesDetails: FC = () => {
   const machine = data?.data
   const restartMachine = useMachineExecuteRestartCmd()
   const stopMachine = useMachineExecuteStopCmd()
+  const { sendTransactionAsync } = useSendTransaction()
 
   const showBlockingOverlay = restartMachine.isPending || stopMachine.isPending
   return (
@@ -71,6 +75,35 @@ export const MachinesDetails: FC = () => {
                       </>
                     )}
                   </div>
+
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      const sapphireRuntimeId =
+                        network === 'mainnet'
+                          ? oasis.misc.fromHex(
+                              '000000000000000000000000000000000000000000000000f80306c9858e7279',
+                            )
+                          : oasis.misc.fromHex(
+                              '000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c',
+                            )
+                      const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
+                      sendTransactionAsync(
+                        roflmarket
+                          .callInstanceChangeAdmin()
+                          .setBody({
+                            provider: oasis.staking.addressFromBech32(machine.provider),
+                            id: oasis.misc.fromHex(machine.id),
+                            admin: oasis.staking.addressFromBech32(
+                              window.prompt('Change admin to', 'oasis1..')!,
+                            ),
+                          })
+                          .toSubcall(),
+                      )
+                    }}
+                  >
+                    Change admin
+                  </Button>
 
                   {!isMachineRemoved(machine) && (
                     <Button variant="outline" className="w-full md:w-auto" asChild>
