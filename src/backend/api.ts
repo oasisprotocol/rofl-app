@@ -273,8 +273,10 @@ async function waitForAppScheduler(
   throw new Error('waitForAppScheduler timed out')
 }
 
-const trackBootstrapStepEvent = (step: string, templateId?: string) => {
-  trackEvent(`Create app flow/bootstrap/${step}${templateId ? `/${templateId}` : ''}`)
+const trackBootstrapStepEvent = (stepNumber: number, step: string, templateId?: string) => {
+  trackEvent(
+    `Create app flow${stepNumber ? `/${stepNumber}` : ''}/bootstrap/${step}${templateId ? `/${templateId}` : ''}`,
+  )
 }
 
 export function useCreateAndDeployApp() {
@@ -326,7 +328,7 @@ export function useCreateAndDeployApp() {
       toast('Create app id?')
       setCurrentStep('creating')
 
-      trackBootstrapStepEvent('create_app_start', appData.template)
+      trackBootstrapStepEvent(5, 'create_app_start', appData.template)
 
       hash = await sendTransactionAsync(
         rofl
@@ -367,7 +369,7 @@ export function useCreateAndDeployApp() {
       console.log('appId', appId)
       toast('Got app id ' + appId)
 
-      trackBootstrapStepEvent('create_app_completed', appData.template)
+      trackBootstrapStepEvent(6, 'create_app_completed', appData.template)
 
       const roflTemplateYaml = template.yaml.rofl
       // TODO: wait + handle error?
@@ -393,7 +395,7 @@ export function useCreateAndDeployApp() {
       console.log('Build?')
       setCurrentStep('building')
 
-      trackBootstrapStepEvent('building_start', appData.template)
+      trackBootstrapStepEvent(7, 'building_start', appData.template)
 
       // TODO: wait + handle error?
       uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
@@ -402,12 +404,12 @@ export function useCreateAndDeployApp() {
       const buildResults = await waitForBuildResults(task_id, token)
       console.log('Build results:', buildResults)
 
-      trackBootstrapStepEvent('building_completed', appData.template)
+      trackBootstrapStepEvent(8, 'building_completed', appData.template)
 
       toast('Save build results and secrets into app config?')
       setCurrentStep('updating')
 
-      trackBootstrapStepEvent('updating_start', appData.template)
+      trackBootstrapStepEvent(9, 'updating_start', appData.template)
 
       hash = await sendTransactionAsync(
         rofl
@@ -439,12 +441,12 @@ export function useCreateAndDeployApp() {
       await waitForTransactionReceipt(wagmiConfig, { hash })
       toast('App config updated')
 
-      trackBootstrapStepEvent('updating_completed', appData.template)
+      trackBootstrapStepEvent(10, 'updating_completed', appData.template)
 
       toast('Queue app deploy?')
       setCurrentStep('deploying')
 
-      trackBootstrapStepEvent('deploying_start', appData.template)
+      trackBootstrapStepEvent(11, 'deploying_start', appData.template)
 
       hash = await sendTransactionAsync(
         roflmarket
@@ -471,7 +473,7 @@ export function useCreateAndDeployApp() {
 
       toastWithDuration('App is starting (~5min)', 5 * 60 * 1000)
 
-      trackBootstrapStepEvent('deploying_completed', appData.template)
+      trackBootstrapStepEvent(12, 'deploying_completed', appData.template)
 
       return appId
     },
