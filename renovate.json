@@ -26,5 +26,16 @@
       "rangeStrategy": "auto"
     }
   ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["templates/*/rofl-template.yaml"],
+      "matchStrings": [
+        "https://github.com/oasisprotocol/oasis-boot/releases/download/(?<currentValue>v\\d+\\.\\d+\\.\\d+)/[^#]+#(?<currentDigest>[a-f0-9]{64})"
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "oasisprotocol/oasis-boot"
+    }
+  ],
   "rangeStrategy": "bump"
 }
