@@ -74,9 +74,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
             isExpanded={isHelpPanelExpanded}
             setIsExpanded={setIsHelpPanelExpanded}
           />
-          <div className="max-w-lg mx-auto px-8 py-12 flex flex-col gap-8 items-center w-full">
-            {children}
-          </div>
+          <div className="max-w-lg px-8 py-12 flex flex-col gap-8 items-center w-full">{children}</div>
         </div>
       </div>
     </Layout>
