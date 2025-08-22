@@ -1,6 +1,8 @@
 import { type FC } from 'react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { Spinner } from '../../components/Spinner'
+import { ArrowLeft } from 'lucide-react'
 
 type CreateFormNavigationProps = {
   handleBack?: () => void
@@ -14,13 +16,15 @@ export const CreateFormNavigation: FC<CreateFormNavigationProps> = ({
   isLoading = false,
 }) => {
   return (
-    <div className="flex gap-4 w-full pt-4">
+    <div
+      className={cn('flex justify-between gap-4 w-full pt-4', handleBack ? 'justify-between' : 'justify-end')}
+    >
       {handleBack && (
-        <Button className="flex-1" variant="secondary" onClick={handleBack}>
-          Back
+        <Button variant="secondary" onClick={handleBack}>
+          <ArrowLeft />
         </Button>
       )}
-      <Button className="flex-1" disabled={disabled || isLoading} type="submit">
+      <Button disabled={disabled || isLoading} type="submit">
         {isLoading && <Spinner />}
         Continue
       </Button>
