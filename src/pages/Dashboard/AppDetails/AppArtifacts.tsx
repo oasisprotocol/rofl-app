@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import { RawCode } from '../../../components/CodeDisplay'
+import { CodeDisplay } from '../../../components/CodeDisplay'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 
 type AppArtifactsProps = {
@@ -17,13 +17,13 @@ export const AppArtifacts: FC<AppArtifactsProps> = ({ isFetched, roflYaml, compo
           {roflYaml && (
             <div>
               <h3 className="text-lg font-semibold mb-2">rofl.yaml</h3>
-              <RawCode data={roflYaml} />
+              <CodeDisplay data={roflYaml} />
             </div>
           )}
           {composeYaml && (
             <div>
               <h3 className="text-lg font-semibold mb-2">compose.yaml</h3>
-              <RawCode data={composeYaml} />
+              <CodeDisplay data={composeYaml} />
             </div>
           )}
         </>

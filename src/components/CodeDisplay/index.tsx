@@ -37,9 +37,11 @@ const MonacoEditor = lazy(async () => {
 type CodeDisplayProps = {
   data: string
   className?: string
+  readOnly?: boolean
+  onChange?: (value: string | undefined) => void
 }
 
-const CodeDisplay: FC<CodeDisplayProps> = ({ data, className }) => {
+export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true, onChange }) => {
   if (!data) {
     return null
   }
@@ -52,8 +54,9 @@ const CodeDisplay: FC<CodeDisplayProps> = ({ data, className }) => {
           language="yaml"
           value={data}
           theme="vs-dark"
+          onChange={onChange}
           options={{
-            readOnly: true,
+            readOnly,
             fontSize: 14,
             wordWrap: 'on',
           }}
@@ -61,15 +64,4 @@ const CodeDisplay: FC<CodeDisplayProps> = ({ data, className }) => {
       </Suspense>
     </div>
   )
-}
-
-type RawCodeProps = {
-  data: string | undefined
-  className?: string
-}
-
-export const RawCode: FC<RawCodeProps> = ({ data, className }) => {
-  if (!data) return null
-
-  return <CodeDisplay data={data} className={className} />
 }
