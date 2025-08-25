@@ -119,12 +119,18 @@ const router = createBrowserRouter([
       },
       {
         path: 'create',
-        Component: () => {
-          const location = useLocation()
-          // Key is used to reset state on every navigation to this route. Even
-          // if inside create flow and user clicks "Create +" in Header bar.
-          return <Create key={location.key} />
-        },
+        element: <ProtectedLayout redirectPath="/templates" />,
+        children: [
+          {
+            index: true,
+            Component: () => {
+              const location = useLocation()
+              // Key is used to reset state on every navigation to this route. Even
+              // if inside create flow and user clicks "Create +" in Header bar.
+              return <Create key={location.key} />
+            },
+          },
+        ],
       },
       {
         path: '*',
