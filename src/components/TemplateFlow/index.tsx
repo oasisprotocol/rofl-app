@@ -1,16 +1,38 @@
 import { type FC, useEffect, useRef } from 'react'
-import { useCreate } from './useCreate'
-import { TemplateStep } from './TemplateStep'
-import { MetadataStep } from './MetadataStep'
-import { AgentStep } from './AgentStep'
-import { BuildStep } from './BuildStep'
-import { PaymentStep } from './PaymentStep'
-import { BootstrapStep } from './BootstrapStep'
-import { getTemplateById } from './templates'
+import { useLocation } from 'react-router-dom'
+import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator'
+import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { useAccount } from 'wagmi'
 import { trackEvent } from 'fathom-client'
+import { Header } from '../Layout/Header'
+import { Footer } from '../Layout/Footer'
+import { TemplatesList } from '../TemplatesList'
+import { RainbowKitConnectButton } from '../RainbowKitConnectButton'
+import { useCreate } from '../../pages/CreateApp/useCreate'
+import { TemplateStep } from '../../pages/CreateApp/TemplateStep'
+import { MetadataStep } from '../../pages/CreateApp/MetadataStep'
+import { AgentStep } from '../../pages/CreateApp/AgentStep'
+import { BuildStep } from '../../pages/CreateApp/BuildStep'
+import { PaymentStep } from '../../pages/CreateApp/PaymentStep'
+import { BootstrapStep } from '../../pages/CreateApp/BootstrapStep'
+import { getTemplateById } from '../../pages/CreateApp/templates'
 
-export const Create: FC = () => {
+interface TemplateFlowProps {
+  mode?: 'browse' | 'create'
+}
+
+export const TemplateFlow: FC<TemplateFlowProps> = ({ mode }) => {
+  const location = useLocation()
+  const { isConnected } = useAccount()
+
+  const flowMode = mode || (location.pathname.startsWith('/create') ? 'create' : 'browse')
+
   const { currentStep, setCurrentStep, appData, setAppDataForm } = useCreate()
+  const trackedEvents = useRef<Set<number>>(new Set())
+
   const steps = [
     { component: TemplateStep },
     { component: MetadataStep },
@@ -19,12 +41,13 @@ export const Create: FC = () => {
     { component: PaymentStep },
     { component: BootstrapStep },
   ]
+
   const selectedTemplate = getTemplateById(appData?.template)
-  const trackedEvents = useRef<Set<number>>(new Set())
 
   useEffect(() => {
+    if (flowMode !== 'create') return
+
     if (currentStep === 1 && !trackedEvents.current.has(1)) {
-      // Filter out just visiting create app page, hence step=1
       trackEvent(`Create app flow/1/start/${appData?.template}`)
       trackedEvents.current.add(1)
     } else if (currentStep === 2 && !trackedEvents.current.has(2)) {
@@ -37,7 +60,7 @@ export const Create: FC = () => {
       trackEvent(`Create app flow/4/payment/${appData?.template}`)
       trackedEvents.current.add(4)
     }
-  }, [currentStep, appData?.template])
+  }, [flowMode, currentStep, appData?.template])
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -49,6 +72,48 @@ export const Create: FC = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1)
     }
+  }
+
+  if (flowMode === 'browse') {
+    return (
+      <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
+        <Layout headerContent={<Header />} footerContent={<Footer />}>
+          <div className="mx-auto px-8 py-12">
+            <div className="mb-10">
+              <h1 className="text-2xl font-white font-bold text-center mb-8">
+                Create your app from a template
+              </h1>
+              <div className="text-center">
+                <RainbowKitConnectButton>
+                  {({ openConnectModal }) => {
+                    return isConnected ? (
+                      <Button size="lg" asChild>
+                        <Link to="/create">
+                          Get started
+                          <ArrowRight />
+                        </Link>
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          openConnectModal()
+                        }}
+                        className="max-md:w-full"
+                      >
+                        Connect Wallet
+                        <ArrowRight />
+                      </Button>
+                    )
+                  }}
+                </RainbowKitConnectButton>
+              </div>
+            </div>
+            <Separator className="my-8" />
+            <TemplatesList />
+          </div>
+        </Layout>
+      </div>
+    )
   }
 
   return (
