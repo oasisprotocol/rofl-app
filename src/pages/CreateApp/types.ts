@@ -109,6 +109,12 @@ export const metadataFormSchema = z.object({
   homepage: flexibleUrl,
 })
 
+export const customBuildFormSchema = z.object({
+  compose: z.string().min(1, {
+    message: 'Compose file is required.',
+  }),
+})
+
 export const tgbotFormSchema = z.object({
   OLLAMA_MODEL: z.string().min(1, {
     message: 'Model is required.',
@@ -175,6 +181,7 @@ export const hlCopyTraderFormSchema = z.object({
 
 export type TemplateFormData = string
 export type MetadataFormData = z.infer<typeof metadataFormSchema>
+export type CustomBuildFormData = z.infer<typeof customBuildFormSchema>
 export type AgentFormData = z.infer<typeof tgbotFormSchema>
 export type XAgentFormData = z.infer<typeof xAgentFormSchema>
 export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
@@ -182,7 +189,7 @@ export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
 export type AppData = {
   template?: string
   metadata?: MetadataFormData
-  agent?: AgentFormData | XAgentFormData | HlCopyTraderFormData
+  agent?: CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData
   build?: BuildFormData
   payment?: Record<string, unknown>
 }
