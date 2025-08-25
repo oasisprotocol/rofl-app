@@ -34,14 +34,10 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   }, [token])
 
   useEffect(() => {
-    if (isInitialLoad) {
-      // Give some time for the initial authentication check
-      const timer = setTimeout(() => {
-        setIsInitialLoad(false)
-      }, 3000)
-      return () => clearTimeout(timer)
+    if (isInitialLoad && isConnected !== undefined && token !== undefined) {
+      setIsInitialLoad(false)
     }
-  }, [isInitialLoad])
+  }, [isInitialLoad, isConnected, token])
 
   useInterval(() => {
     const currentToken = window.localStorage.getItem('jwt')
