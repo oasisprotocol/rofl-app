@@ -41,7 +41,7 @@ type CodeDisplayProps = {
   onChange?: (value: string | undefined) => void
 }
 
-const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true, onChange }) => {
+export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true, onChange }) => {
   if (!data) {
     return null
   }
@@ -64,17 +64,4 @@ const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true, o
       </Suspense>
     </div>
   )
-}
-
-type RawCodeProps = {
-  data: string | undefined
-  className?: string
-  readOnly?: boolean
-  onChange?: (value: string | undefined) => void
-}
-
-export const RawCode: FC<RawCodeProps> = ({ data, className, readOnly, onChange }) => {
-  if (!data) return null
-
-  return <CodeDisplay data={data} className={className} readOnly={readOnly} onChange={onChange} />
 }

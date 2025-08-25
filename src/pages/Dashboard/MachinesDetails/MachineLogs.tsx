@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { EmptyState } from '../../../components/EmptyState'
 import { useMachineAccess } from '../../../backend/machine-api'
 import { useScheduler } from '../../../hooks/useScheduler'
-import { RawCode } from '../../../components/CodeDisplay'
+import { CodeDisplay } from '../../../components/CodeDisplay'
 import { RotateCw } from 'lucide-react'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 
@@ -128,7 +128,7 @@ export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, inst
             </Button>
           </div>
           {hyperliquidExtractedMessage}
-          <RawCode data={logsWithSections} className="h-[700px]" />
+          <CodeDisplay data={logsWithSections} className="h-[700px]" />
         </>
       )}
     </>
