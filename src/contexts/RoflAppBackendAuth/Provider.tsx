@@ -50,7 +50,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
       setIsTokenExpired(expired)
 
       if (expired) {
-        console.debug('Token expired, requiring re-authentication')
+        // Token expired, requiring re-authentication
       } else if (currentToken !== token) {
         setToken(currentToken)
         setIsTokenExpired(false)
@@ -88,18 +88,6 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
 
   const status = getAuthenticationStatus()
 
-  // TODO: Mark for removal (debug)
-  useEffect(() => {
-    console.debug('Auth state:', {
-      isAuthenticated,
-      isConnected,
-      hasToken: !!token,
-      address,
-      status,
-      isTokenExpired,
-    })
-  }, [isAuthenticated, isConnected, token, address, status, isTokenExpired])
-
   const value = {
     token,
     isAuthenticated,
@@ -114,7 +102,6 @@ function isJWTExpired(jwtString: string, address: string) {
     const jwt = JSON.parse(atob(jwtString.split('.')[1]))
 
     if (jwt.address?.toLowerCase() !== address.toLowerCase()) {
-      console.debug('JWT address mismatch', { jwtAddress: jwt.address, currentAddress: address })
       return true
     }
 
