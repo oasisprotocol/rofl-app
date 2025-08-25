@@ -54,26 +54,28 @@ export const Create: FC = () => {
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
       {currentStep === 0 && <TemplateStep handleNext={handleNext} setAppDataForm={setAppDataForm} />}
-      {currentStep === 1 && (
+      {currentStep === 1 && selectedTemplate && (
         <MetadataStep
           handleNext={handleNext}
           metadata={appData?.metadata}
           setAppDataForm={setAppDataForm}
-          selectedTemplateName={selectedTemplate?.name}
-          selectedTemplateId={selectedTemplate?.id}
+          selectedTemplateName={selectedTemplate.name}
+          selectedTemplateId={selectedTemplate.id}
+          customStepTitle={selectedTemplate.customStepTitle}
         />
       )}
-      {currentStep === 2 && (
+      {currentStep === 2 && selectedTemplate && (
         <AgentStep
           handleNext={handleNext}
           handleBack={handleBack}
           agent={appData?.agent}
           setAppDataForm={setAppDataForm}
-          selectedTemplateName={selectedTemplate?.name}
-          selectedTemplateId={selectedTemplate?.id}
+          selectedTemplateName={selectedTemplate.name}
+          selectedTemplateId={selectedTemplate.id}
+          customStepTitle={selectedTemplate.customStepTitle}
         />
       )}
-      {currentStep === 3 && (
+      {currentStep === 3 && selectedTemplate && (
         <BuildStep
           handleNext={handleNext}
           handleBack={handleBack}
@@ -82,20 +84,22 @@ export const Create: FC = () => {
           selectedTemplateName={selectedTemplate?.name}
           selectedTemplateId={selectedTemplate?.id}
           selectedTemplateRequirements={{
-            tee: selectedTemplate?.yaml.rofl.tee as 'tdx' | 'sgx' | undefined,
-            cpus: selectedTemplate?.yaml.rofl.resources.cpus as number | undefined,
-            memory: selectedTemplate?.yaml.rofl.resources.memory as number | undefined,
-            storage: selectedTemplate?.yaml.rofl.resources.storage.size as number | undefined,
+            tee: selectedTemplate.yaml.rofl.tee as 'tdx' | 'sgx' | undefined,
+            cpus: selectedTemplate.yaml.rofl.resources.cpus as number | undefined,
+            memory: selectedTemplate.yaml.rofl.resources.memory as number | undefined,
+            storage: selectedTemplate.yaml.rofl.resources.storage.size as number | undefined,
           }}
+          customStepTitle={selectedTemplate.customStepTitle}
         />
       )}
-      {currentStep === 4 && (
+      {currentStep === 4 && selectedTemplate && (
         <PaymentStep
           handleNext={handleNext}
           handleBack={handleBack}
           appData={appData}
-          selectedTemplateName={selectedTemplate?.name}
-          selectedTemplateId={selectedTemplate?.id}
+          selectedTemplateName={selectedTemplate.name}
+          selectedTemplateId={selectedTemplate.id}
+          customStepTitle={selectedTemplate.customStepTitle}
         />
       )}
       {currentStep === 5 && <BootstrapStep appData={appData} template={selectedTemplate} />}

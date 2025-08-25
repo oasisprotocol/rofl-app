@@ -17,6 +17,7 @@ type CreateLayoutProps = {
   currentStep?: number
   selectedTemplateName?: string
   selectedTemplateId?: string
+  customStepTitle: string
 }
 
 export const CreateLayout: FC<CreateLayoutProps> = ({
@@ -24,6 +25,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
   currentStep = 1,
   selectedTemplateName,
   selectedTemplateId,
+  customStepTitle,
 }) => {
   const [isHelpPanelExpanded, setIsHelpPanelExpanded] = useState(() => {
     const saved = localStorage.getItem('help-expanded')
@@ -36,7 +38,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
 
   const sidebarItems = [
     { label: 'Input metadata', active: currentStep === 1 },
-    { label: 'Setup agent', active: currentStep === 2 },
+    { label: customStepTitle, active: currentStep === 2 },
     { label: 'Configure machine', active: currentStep === 3 },
     { label: 'Payment', active: currentStep === 4 },
   ]
@@ -74,9 +76,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
             isExpanded={isHelpPanelExpanded}
             setIsExpanded={setIsHelpPanelExpanded}
           />
-          <div className="max-w-lg mx-auto px-8 py-12 flex flex-col gap-8 items-center w-full">
-            {children}
-          </div>
+          <div className="max-w-lg px-8 py-12 flex flex-col gap-8 items-center w-full">{children}</div>
         </div>
       </div>
     </Layout>

@@ -115,6 +115,7 @@ export const fillTemplate = (
 export const templates = [
   {
     name: parsedTgbotTemplate.name,
+    customStepTitle: 'Setup Agent',
     description: parsedTgbotTemplate.description,
     image: tgbotThumbnail,
     id: 'tgbot',
@@ -129,6 +130,7 @@ export const templates = [
   },
   {
     name: parsedXagentTemplate.name,
+    customStepTitle: 'Setup Agent',
     description: parsedXagentTemplate.description,
     image: xagentThumbnail,
     id: 'x-agent',
@@ -143,6 +145,7 @@ export const templates = [
   },
   {
     name: parsedHlTemplate.name,
+    customStepTitle: 'Setup Agent',
     description: parsedHlTemplate.description,
     image: hlCopyTraderThumbnail,
     id: 'hl-copy-trader',

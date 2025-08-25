@@ -13,6 +13,7 @@ type MetadataStepProps = {
   metadata?: MetadataFormData
   selectedTemplateName?: string
   selectedTemplateId?: string
+  customStepTitle: string
 }
 
 export const MetadataStep: FC<MetadataStepProps> = ({
@@ -21,6 +22,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({
   metadata,
   selectedTemplateName,
   selectedTemplateId,
+  customStepTitle,
 }) => {
   const form = useForm<MetadataFormData>({
     resolver: zodResolver(metadataFormSchema),
@@ -41,6 +43,7 @@ export const MetadataStep: FC<MetadataStepProps> = ({
       currentStep={1}
       selectedTemplateName={selectedTemplateName}
       selectedTemplateId={selectedTemplateId}
+      customStepTitle={customStepTitle}
     >
       <CreateFormHeader
         title="Input Metadata"
