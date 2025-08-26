@@ -11,8 +11,10 @@ import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAu
 import * as yaml from 'yaml'
 import { defaultBuildConfig } from '../../CreateApp/templates.tsx'
 import { Steps } from '../../CreateApp/AnimatedStepText.tsx'
+import { useAccount } from 'wagmi'
 
 export const AppNewMachine: FC = () => {
+  const { address } = useAccount()
   const navigate = useNavigate()
   const network = useNetwork()
   const { id } = useParams()
@@ -41,7 +43,7 @@ export const AppNewMachine: FC = () => {
         </Button>
       </div>
       {isLoading && <Skeleton className="w-full h-[36px]" />}
-      {isFetched && deployAppToNewMachineMutation.status === 'idle' && (
+      {isFetched && address && deployAppToNewMachineMutation.status === 'idle' && (
         <div className="py-6 px-6">
           <div className="flex flex-col">
             <div className="flex flex-col items-start gap-2 max-w-md">
@@ -61,6 +63,7 @@ export const AppNewMachine: FC = () => {
                     token,
                     network,
                     build,
+                    address: address,
                   })
                   // Wait for allowNavigatingAway
                   await new Promise(r => setTimeout(r, 10))

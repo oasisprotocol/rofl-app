@@ -396,7 +396,7 @@ export function useCreateAndDeployApp() {
       console.log('App', app)
 
       const manifest = yaml.stringify(
-        fillTemplate(roflTemplateYaml, appData.metadata!, build, network, appId),
+        fillTemplate(roflTemplateYaml, appData.metadata!, build, network, appId, address),
       )
       const compose = template.yaml.compose
       console.log('Build?')
@@ -514,12 +514,18 @@ export function useDeployAppToNewMachine() {
   const mutation = useMutation<
     string,
     AxiosError<unknown>,
-    { token: string; appId: `rofl1${string}`; build: BuildFormData; network: 'mainnet' | 'testnet' }
+    {
+      token: string
+      appId: `rofl1${string}`
+      build: BuildFormData
+      network: 'mainnet' | 'testnet'
+      address: `0x${string}`
+    }
   >({
     onSettled() {
       allowNavigatingAway()
     },
-    mutationFn: async ({ token, appId, build, network }) => {
+    mutationFn: async ({ token, appId, build, network, address }) => {
       blockNavigatingAway()
       const sapphireRuntimeId =
         network === 'mainnet'
@@ -558,6 +564,7 @@ export function useDeployAppToNewMachine() {
           build,
           network,
           appId,
+          address,
         ),
       )
       console.log('Build?')

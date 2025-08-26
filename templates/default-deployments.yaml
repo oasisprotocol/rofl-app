@@ -6,6 +6,6 @@ deployments:
     policy:
       enclaves:
       endorsements:
-        - any: {}
+        - provider_instance_admin:
       fees: endorsing_node
       max_expiration: 3

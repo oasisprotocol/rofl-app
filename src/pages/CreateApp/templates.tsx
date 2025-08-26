@@ -14,6 +14,7 @@ import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
 import type { MetadataFormData } from './types'
 import { BuildFormData } from '../../types/build-form'
+import { getEvmBech32Address } from '../../utils/helpers'
 
 const parsedDefaultDeployments = parse(defaultDeployments)
 const parsedTgbotTemplate = parse(tgbotTemplate)
@@ -82,6 +83,7 @@ export const fillTemplate = (
   buildData: Partial<BuildFormData>,
   network: 'mainnet' | 'testnet',
   appId: string,
+  address: `0x${string}`,
 ) => {
   return {
     ...roflData,
@@ -107,6 +109,14 @@ export const fillTemplate = (
         ...parsedDefaultDeployments.deployments.default,
         app_id: appId,
         network,
+        policy: {
+          ...parsedDefaultDeployments.deployments.default.policy,
+          endorsements: [
+            {
+              provider_instance_admin: getEvmBech32Address(address),
+            },
+          ],
+        },
       },
     },
   }
