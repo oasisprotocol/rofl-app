@@ -8,24 +8,18 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/dialog'
-import { Trash2 } from 'lucide-react'
 
 type RemoveSecretProps = {
   secret: string
   handleRemoveSecret: (secret: string) => void
   open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
-export const RemoveSecret: FC<RemoveSecretProps> = ({ secret, handleRemoveSecret, open }) => {
+export const RemoveSecret: FC<RemoveSecretProps> = ({ secret, handleRemoveSecret, open, onOpenChange }) => {
   return (
-    <Dialog open={open} onOpenChange={() => {}}>
-      {/* <DialogTrigger asChild>
-        <Button disabled={!editEnabled} variant="ghost" className="text-destructive hover:text-destructive">
-          <Trash2 />
-        </Button>
-      </DialogTrigger> */}
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Please confirm your action</DialogTitle>
