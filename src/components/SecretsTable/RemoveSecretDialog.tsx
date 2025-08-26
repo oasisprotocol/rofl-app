@@ -10,14 +10,19 @@ import {
   DialogTitle,
 } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 
-type RemoveSecretProps = {
+type RemoveSecretDialogProps = {
   secret: string
   handleRemoveSecret: (secret: string) => void
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-export const RemoveSecret: FC<RemoveSecretProps> = ({ secret, handleRemoveSecret, open, onOpenChange }) => {
+export const RemoveSecretDialog: FC<RemoveSecretDialogProps> = ({
+  secret,
+  handleRemoveSecret,
+  open,
+  onOpenChange,
+}) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
