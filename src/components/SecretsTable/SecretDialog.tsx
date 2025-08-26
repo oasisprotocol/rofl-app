@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react'
+import { type FC, useEffect } from 'react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import {
   Dialog,
@@ -7,9 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/dialog'
-import { CirclePlus, SquarePen } from 'lucide-react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -25,6 +23,8 @@ const formSchema = z.object({
 })
 
 type SecretDialogProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
   mode: 'add' | 'edit'
   secret?: string
   handleAddSecret?: (name: string, value: string) => void
@@ -33,13 +33,13 @@ type SecretDialogProps = {
 }
 
 export const SecretDialog: FC<SecretDialogProps> = ({
+  open,
+  onOpenChange,
   mode,
   secret,
   handleAddSecret,
   handleEditSecret,
-  editEnabled,
 }) => {
-  const [open, setOpen] = useState(false)
   const isEditMode = mode === 'edit'
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,13 +52,11 @@ export const SecretDialog: FC<SecretDialogProps> = ({
 
   function onCancel() {
     form.reset()
-    setOpen(false)
+    onOpenChange(false)
   }
 
-  function onOpenChange(newOpen: boolean) {
-    if (!newOpen) {
-      onCancel()
-    } else {
+  useEffect(() => {
+    if (open) {
       if (isEditMode && secret) {
         form.reset({
           name: secret,
@@ -70,8 +68,14 @@ export const SecretDialog: FC<SecretDialogProps> = ({
           value: '',
         })
       }
-      setOpen(newOpen)
     }
+  }, [open, isEditMode, secret, form])
+
+  function handleDialogOpenChange(newOpen: boolean) {
+    if (!newOpen) {
+      onCancel()
+    }
+    onOpenChange(newOpen)
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -84,23 +88,11 @@ export const SecretDialog: FC<SecretDialogProps> = ({
     }
 
     form.reset()
-    setOpen(false)
+    onOpenChange(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        {isEditMode ? (
-          <Button variant="ghost" disabled={!editEnabled}>
-            <SquarePen />
-          </Button>
-        ) : (
-          <Button variant="ghost" className="text-primary" disabled={!editEnabled}>
-            <CirclePlus />
-            Add new
-          </Button>
-        )}
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={handleDialogOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{isEditMode ? 'Edit secret' : 'Add new secret'}</DialogTitle>

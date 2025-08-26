@@ -19,7 +19,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@oasisprotocol/ui-library/src/components/ui/dropdown-menu'
-import { MoreVertical } from 'lucide-react'
+import { CirclePlus, MoreVertical } from 'lucide-react'
 
 type SecretsTableProps = {
   appSek: RoflApp['sek']
@@ -36,10 +36,23 @@ export const SecretsTable: FC<SecretsTableProps> = ({
 }) => {
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false)
   const [selectedSecret, setSelectedSecret] = useState<string>('')
+  const [secretDialogState, setSecretDialogState] = useState<{
+    open: boolean
+    mode: 'add' | 'edit'
+    secretKey?: string
+  }>({ open: false, mode: 'add' })
 
   const handleOpenRemoveDialog = (secretKey: string) => {
     setSelectedSecret(secretKey)
     setOpenRemoveDialog(true)
+  }
+
+  const handleOpenAddDialog = () => {
+    setSecretDialogState({ open: true, mode: 'add' })
+  }
+
+  const handleOpenEditDialog = (key: string) => {
+    setSecretDialogState({ open: true, mode: 'edit', secretKey: key })
   }
 
   const hasSecrets = Object.keys(secrets).length > 0
@@ -79,7 +92,6 @@ export const SecretsTable: FC<SecretsTableProps> = ({
                 <span className="text-muted-foreground">Value</span>
               </TableHead>
               <TableHead className="w-10"></TableHead>
-              <TableHead className="w-10"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -91,15 +103,7 @@ export const SecretsTable: FC<SecretsTableProps> = ({
                 <TableCell>
                   <span className="text-muted-foreground">Encrypted</span>
                 </TableCell>
-                <TableCell className="w-10">
-                  <SecretDialog
-                    mode="edit"
-                    secret={key}
-                    editEnabled={editEnabled}
-                    handleEditSecret={handleEditSecret}
-                  />
-                </TableCell>
-                <TableCell className="w-10">
+                <TableCell className="w-10" align="right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon" disabled={!editEnabled}>
@@ -107,7 +111,7 @@ export const SecretsTable: FC<SecretsTableProps> = ({
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      {/* <DropdownMenuItem onClick={() => openEditDialog(key)}>Edit</DropdownMenuItem> */}
+                      <DropdownMenuItem onClick={() => handleOpenEditDialog(key)}>Edit</DropdownMenuItem>
                       <DropdownMenuItem variant="destructive" onClick={() => handleOpenRemoveDialog(key)}>
                         Remove
                       </DropdownMenuItem>
@@ -119,7 +123,21 @@ export const SecretsTable: FC<SecretsTableProps> = ({
           </TableBody>
         </Table>
       )}
-      <SecretDialog mode="add" handleAddSecret={handleEditSecret} editEnabled={editEnabled} />
+
+      <Button variant="ghost" className="text-primary" disabled={!editEnabled} onClick={handleOpenAddDialog}>
+        <CirclePlus />
+        Add new
+      </Button>
+
+      <SecretDialog
+        open={secretDialogState.open}
+        mode={secretDialogState.mode}
+        secret={secretDialogState.secretKey}
+        onOpenChange={open => setSecretDialogState(prev => ({ ...prev, open }))}
+        handleAddSecret={handleEditSecret}
+        handleEditSecret={handleEditSecret}
+        editEnabled={editEnabled}
+      />
 
       <RemoveSecretDialog
         open={openRemoveDialog}
