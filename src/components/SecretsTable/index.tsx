@@ -8,7 +8,7 @@ import {
   TableCell,
 } from '@oasisprotocol/ui-library/src/components/ui/table'
 import { RoflApp, type RoflAppSecrets } from '../../nexus/api'
-import { RemoveSecret } from './RemoveSecret'
+import { RemoveSecretDialog } from './RemoveSecretDialog'
 import { SecretDialog } from './SecretDialog'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
@@ -121,7 +121,7 @@ export const SecretsTable: FC<SecretsTableProps> = ({
       )}
       <SecretDialog mode="add" handleAddSecret={handleEditSecret} editEnabled={editEnabled} />
 
-      <RemoveSecret
+      <RemoveSecretDialog
         open={openRemoveDialog}
         handleRemoveSecret={handleRemoveSecret}
         onOpenChange={setOpenRemoveDialog}
