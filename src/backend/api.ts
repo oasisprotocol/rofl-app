@@ -19,6 +19,7 @@ import { getReadmeByTemplateId, fillTemplate } from '../pages/CreateApp/template
 import { toast } from 'sonner'
 import { isMachineRemoved } from '../components/MachineStatusIcon/isMachineRemoved.ts'
 import { trackEvent } from 'fathom-client'
+import { getOasisAddressBytesFromEvm } from '../utils/helpers.ts'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -300,12 +301,18 @@ export function useCreateAndDeployApp() {
   const mutation = useMutation<
     string,
     AxiosError<unknown>,
-    { token: string; template: Template; appData: AppData; network: 'mainnet' | 'testnet' }
+    {
+      token: string
+      template: Template
+      appData: AppData
+      network: 'mainnet' | 'testnet'
+      address: `0x${string}`
+    }
   >({
     onSettled() {
       allowNavigatingAway()
     },
-    mutationFn: async ({ token, template, appData, network }) => {
+    mutationFn: async ({ token, template, appData, network, address }) => {
       blockNavigatingAway()
       const sapphireRuntimeId =
         network === 'mainnet'
@@ -346,7 +353,7 @@ export function useCreateAndDeployApp() {
               enclaves: [],
               endorsements: [
                 {
-                  any: {},
+                  provider_instance_admin: getOasisAddressBytesFromEvm(address),
                 },
               ],
               fees: oasisRT.types.FeePolicy.EndorsingNodePays,
