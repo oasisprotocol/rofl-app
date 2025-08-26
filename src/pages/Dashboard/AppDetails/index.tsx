@@ -2,7 +2,7 @@ import { useEffect, useState, type FC } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@oasisprotocol/ui-library/src/components/ui/tabs'
 import { AppStatusIcon } from '../../../components/AppStatusIcon'
 import { AppMetadata } from './AppMetadata'
-import { AppSecrets } from './AppSecrets'
+import { SecretsTable } from '../../../components/SecretsTable'
 import { useGetRuntimeRoflAppsId, type RoflAppMetadata, type RoflAppSecrets } from '../../../nexus/api'
 import { useNetwork } from '../../../hooks/useNetwork'
 import { useParams } from 'react-router-dom'
@@ -177,7 +177,7 @@ export const AppDetails: FC = () => {
                   isExpanded={isHelpPanelExpanded}
                   setIsExpanded={setIsHelpPanelExpanded}
                 ></HelpWidget>
-                <AppSecrets
+                <SecretsTable
                   appSek={roflApp.sek}
                   secrets={viewSecretsState.secrets}
                   setViewSecretsState={setViewSecretsState}

@@ -8,21 +8,25 @@ import {
   TableCell,
 } from '@oasisprotocol/ui-library/src/components/ui/table'
 import { LockKeyhole } from 'lucide-react'
-import { RoflApp, type RoflAppSecrets } from '../../../nexus/api'
+import { RoflApp, type RoflAppSecrets } from '../../nexus/api'
 import { RemoveSecret } from './RemoveSecret'
 import { SecretDialog } from './SecretDialog'
-import { type ViewSecretsState } from './types'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
 
-type AppSecretsProps = {
+type SecretsTableProps = {
   appSek: RoflApp['sek']
   secrets: RoflAppSecrets
-  setViewSecretsState: (state: ViewSecretsState) => void
+  setViewSecretsState: (state: { isDirty: boolean; secrets: RoflAppSecrets }) => void
   editEnabled?: boolean
 }
 
-export const AppSecrets: FC<AppSecretsProps> = ({ appSek, secrets, setViewSecretsState, editEnabled }) => {
+export const SecretsTable: FC<SecretsTableProps> = ({
+  appSek,
+  secrets,
+  setViewSecretsState,
+  editEnabled,
+}) => {
   const hasSecrets = Object.keys(secrets).length > 0
 
   function handleRemoveSecret(secret: string) {
