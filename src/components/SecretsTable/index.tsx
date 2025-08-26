@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { useState, type FC } from 'react'
 import {
   Table,
   TableHeader,
@@ -12,6 +12,14 @@ import { RemoveSecret } from './RemoveSecret'
 import { SecretDialog } from './SecretDialog'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
+import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@oasisprotocol/ui-library/src/components/ui/dropdown-menu'
+import { MoreVertical, Trash2 } from 'lucide-react'
 
 type SecretsTableProps = {
   appSek: RoflApp['sek']
@@ -26,6 +34,10 @@ export const SecretsTable: FC<SecretsTableProps> = ({
   setViewSecretsState,
   editEnabled,
 }) => {
+  const [openRemoveDialog, setOpenRemoveDialog] = useState(false)
+  const toggleRemoveDialog = () => {
+    setOpenRemoveDialog(!openRemoveDialog)
+  }
   const hasSecrets = Object.keys(secrets).length > 0
 
   function handleRemoveSecret(secret: string) {
@@ -84,11 +96,36 @@ export const SecretsTable: FC<SecretsTableProps> = ({
                   />
                 </TableCell>
                 <TableCell className="w-10">
+                  <Button
+                    disabled={!editEnabled}
+                    variant="ghost"
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <Trash2 />
+                  </Button>
                   <RemoveSecret
                     editEnabled={editEnabled}
                     secret={key}
                     handleRemoveSecret={handleRemoveSecret}
                   />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled={!editEnabled}
+                        onClick={toggleRemoveDialog}
+                      >
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {/* <DropdownMenuItem onClick={() => openEditDialog(key)}>Edit</DropdownMenuItem> */}
+                      <DropdownMenuItem variant="destructive" onClick={toggleRemoveDialog}>
+                        Remove
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}
