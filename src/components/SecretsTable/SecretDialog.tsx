@@ -13,7 +13,7 @@ import { CirclePlus, SquarePen } from 'lucide-react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { InputFormField } from '../../../components/InputFormField'
+import { InputFormField } from '../InputFormField'
 
 const formSchema = z.object({
   name: z.string().min(1, {
