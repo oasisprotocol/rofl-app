@@ -8,6 +8,7 @@ import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/
 import { useNetwork } from '../../hooks/useNetwork'
 import { Steps } from './AnimatedStepText'
 import { BuildFormData } from '../../types/build-form'
+import { useAccount } from 'wagmi'
 
 // TEMP
 export type Template = {
@@ -39,6 +40,7 @@ export const BootstrapState = {
 } as const
 
 export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => {
+  const { address } = useAccount()
   const network = useNetwork()
   const [buildTriggered, setBuildTriggered] = useState(false)
   const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.Pending)
@@ -48,14 +50,15 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
 
   // Without useEffect onSuccess and onError will not be called
   useEffect(() => {
-    if (!buildTriggered && token && appData && template && network) {
+    if (!buildTriggered && token && appData && template && network && address) {
       setBuildTriggered(true)
       createAndDeployAppMutation.mutate(
         {
-          token: token!,
+          token: token,
           template,
           appData,
           network,
+          address,
         },
         {
           onSuccess: returnedAppId => {
@@ -69,7 +72,7 @@ export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => 
         },
       )
     }
-  }, [buildTriggered, token, appData, template, network, createAndDeployAppMutation])
+  }, [address, buildTriggered, token, appData, template, network, createAndDeployAppMutation])
 
   return (
     <Layout headerContent={<Header />} footerContent={<Footer />}>

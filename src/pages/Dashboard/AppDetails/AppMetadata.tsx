@@ -22,6 +22,8 @@ import { CircleArrowUp } from 'lucide-react'
 import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAuth/hooks'
 import { useDownloadArtifact } from '../../../backend/api'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
+import { useAccount } from 'wagmi'
+import { getEvmBech32Address } from '../../../utils/helpers'
 
 type AppMetadataProps = {
   id: string
@@ -193,6 +195,8 @@ export const AppMetadata: FC<AppMetadataProps> = ({
 }
 
 const Endorsements = ({ endorsements }: { endorsements: unknown }) => {
+  const { address } = useAccount()
+  const oasisAddress = getEvmBech32Address(address!)
   const items = endorsements as Array<{ node?: string; any?: boolean }>
 
   if (items.some(item => 'node' in item)) {
@@ -207,6 +211,17 @@ const Endorsements = ({ endorsements }: { endorsements: unknown }) => {
 
   if (items.length === 1 && 'any' in items[0]) {
     return <>Any</>
+  }
+
+  // TODO: Replace with https://github.com/oasisprotocol/rofl-app/issues/241
+  if (items.length === 1 && 'provider_instance_admin' in items[0]) {
+    return (
+      <>
+        {items[0].provider_instance_admin === oasisAddress
+          ? 'You are currently admin on machine'
+          : `${items[0].provider_instance_admin} is currently admin on machine`}
+      </>
+    )
   }
 
   return <></>
