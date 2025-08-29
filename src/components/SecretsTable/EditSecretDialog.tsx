@@ -22,26 +22,20 @@ const formSchema = z.object({
   }),
 })
 
-type SecretDialogProps = {
+type EditSecretDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
-  mode: 'add' | 'edit'
   secret?: string
-  handleAddSecret?: (name: string, value: string) => void
   handleEditSecret?: (name: string, value: string) => void
   editEnabled?: boolean
 }
 
-export const SecretDialog: FC<SecretDialogProps> = ({
+export const EditSecretDialog: FC<EditSecretDialogProps> = ({
   open,
   onOpenChange,
-  mode,
   secret,
-  handleAddSecret,
   handleEditSecret,
 }) => {
-  const isEditMode = mode === 'edit'
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,19 +51,12 @@ export const SecretDialog: FC<SecretDialogProps> = ({
 
   useEffect(() => {
     if (open) {
-      if (isEditMode && secret) {
-        form.reset({
-          name: secret,
-          value: '',
-        })
-      } else {
-        form.reset({
-          name: '',
-          value: '',
-        })
-      }
+      form.reset({
+        name: secret,
+        value: '',
+      })
     }
-  }, [open, isEditMode, secret, form])
+  }, [open, secret, form])
 
   function handleDialogOpenChange(newOpen: boolean) {
     if (!newOpen) {
@@ -79,13 +66,7 @@ export const SecretDialog: FC<SecretDialogProps> = ({
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (mode === 'add') {
-      handleAddSecret?.(values.name, values.value)
-    }
-
-    if (isEditMode && secret) {
-      handleEditSecret?.(secret, values.value)
-    }
+    handleEditSecret?.(secret!, values.value)
 
     form.reset()
     onOpenChange(false)
@@ -95,21 +76,11 @@ export const SecretDialog: FC<SecretDialogProps> = ({
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Edit secret' : 'Add new secret'}</DialogTitle>
+          <DialogTitle>Edit secret</DialogTitle>
         </DialogHeader>
-        <DialogDescription className="mb-6">
-          {isEditMode
-            ? 'Please provide a new secret value.'
-            : 'Please provide a name and secret for the new entry.'}
-        </DialogDescription>
+        <DialogDescription className="mb-6">Please provide a new secret value.</DialogDescription>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <InputFormField
-            control={form.control}
-            name="name"
-            label="Name"
-            placeholder={isEditMode ? '' : 'Enter secret name'}
-            disabled={isEditMode}
-          />
+          <InputFormField control={form.control} name="name" label="Name" disabled />
 
           <InputFormField control={form.control} name="value" label="Value" type="password" />
 
@@ -118,7 +89,7 @@ export const SecretDialog: FC<SecretDialogProps> = ({
               <Button variant="outline" onClick={onCancel} type="reset">
                 Cancel
               </Button>
-              <Button type="submit">{isEditMode ? 'Replace' : 'Save Changes'}</Button>
+              <Button type="submit">Replace</Button>
             </div>
           </DialogFooter>
         </form>
