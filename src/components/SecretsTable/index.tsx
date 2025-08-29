@@ -9,7 +9,7 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/table'
 import { RoflApp, type RoflAppSecrets } from '../../nexus/api'
 import { RemoveSecretDialog } from './RemoveSecretDialog'
-import { SecretDialog } from './SecretDialog'
+import { EditSecretDialog } from './EditSecretDialog'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
@@ -123,12 +123,10 @@ export const SecretsTable: FC<SecretsTableProps> = ({
 
       <AddSecret disabled={!editEnabled} handleAddSecret={handleEditSecret} />
 
-      <SecretDialog
+      <EditSecretDialog
         open={secretDialogState.open}
-        mode={secretDialogState.mode}
         secret={secretDialogState.secretKey}
         onOpenChange={open => setSecretDialogState(prev => ({ ...prev, open }))}
-        handleAddSecret={handleEditSecret}
         handleEditSecret={handleEditSecret}
         editEnabled={editEnabled}
       />
