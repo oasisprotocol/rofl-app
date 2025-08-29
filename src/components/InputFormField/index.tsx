@@ -9,7 +9,7 @@ import { Eye, EyeOff } from 'lucide-react'
 type InputFormFieldProps<T extends FieldValues> = {
   control: Control<T>
   name: Path<T>
-  label: string
+  label?: string
   placeholder?: string
   type?: 'input' | 'password' | 'number' | 'textarea'
   disabled?: boolean
@@ -40,7 +40,7 @@ export const InputFormField = <T extends FieldValues>({
 
   return (
     <div className="grid gap-2">
-      <Label htmlFor={name}>{label}</Label>
+      {label && <Label htmlFor={name}>{label}</Label>}
       <Controller
         control={control}
         name={name}
