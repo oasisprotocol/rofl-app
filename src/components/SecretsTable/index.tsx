@@ -19,7 +19,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@oasisprotocol/ui-library/src/components/ui/dropdown-menu'
-import { CirclePlus, MoreVertical } from 'lucide-react'
+import { MoreVertical } from 'lucide-react'
+import { AddSecret } from './AddSecret'
 
 type SecretsTableProps = {
   appSek: RoflApp['sek']
@@ -45,10 +46,6 @@ export const SecretsTable: FC<SecretsTableProps> = ({
   const handleOpenRemoveDialog = (secretKey: string) => {
     setSelectedSecret(secretKey)
     setOpenRemoveDialog(true)
-  }
-
-  const handleOpenAddDialog = () => {
-    setSecretDialogState({ open: true, mode: 'add' })
   }
 
   const handleOpenEditDialog = (key: string) => {
@@ -80,7 +77,7 @@ export const SecretsTable: FC<SecretsTableProps> = ({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 gap-4 flex flex-col">
       {hasSecrets && (
         <Table>
           <TableHeader>
@@ -124,10 +121,7 @@ export const SecretsTable: FC<SecretsTableProps> = ({
         </Table>
       )}
 
-      <Button variant="ghost" className="text-primary" disabled={!editEnabled} onClick={handleOpenAddDialog}>
-        <CirclePlus />
-        Add new
-      </Button>
+      <AddSecret disabled={!editEnabled} handleAddSecret={handleEditSecret} />
 
       <SecretDialog
         open={secretDialogState.open}
