@@ -24,9 +24,9 @@ export const TemplateStep: FC<TemplateStepProps> = ({ handleNext, setAppDataForm
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
       <Layout headerContent={<Header />} footerContent={<Footer />}>
-        <div className="max-w-6xl mx-auto px-8 py-12">
+        <div className="mx-auto px-8 py-12">
           <div className="mb-8">
-            <h1 className="text-2xl font-white font-bold mb-2 ">Create app from template</h1>
+            <h1 className="text-2xl font-white font-bold mb-2 ">Start by Selecting a Template</h1>
           </div>
           <TemplatesList handleTemplateSelect={handleTemplateSelect} />
         </div>
