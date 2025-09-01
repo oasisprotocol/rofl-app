@@ -6,8 +6,9 @@ import { AgentStep } from './AgentStep'
 import { BuildStep } from './BuildStep'
 import { PaymentStep } from './PaymentStep'
 import { BootstrapStep } from './BootstrapStep'
-import { getTemplateById } from './templates'
+import { getCustomTemplate, getTemplateById } from './templates'
 import { trackEvent } from 'fathom-client'
+import type { CustomBuildFormData } from './types'
 
 export const Create: FC = () => {
   const { currentStep, setCurrentStep, appData, setAppDataForm } = useCreate()
@@ -19,7 +20,10 @@ export const Create: FC = () => {
     { component: PaymentStep },
     { component: BootstrapStep },
   ]
-  const selectedTemplate = getTemplateById(appData?.template)
+  const selectedTemplate =
+    appData?.template === 'custom-build'
+      ? getCustomTemplate(appData?.template, (appData.agent as CustomBuildFormData)?.compose)
+      : getTemplateById(appData?.template)
   const trackedEvents = useRef<Set<number>>(new Set())
 
   useEffect(() => {
