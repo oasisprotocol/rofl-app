@@ -193,6 +193,19 @@ export const getTemplateById = (id: string | undefined) => {
   return templates.find(template => template.id === id)
 }
 
+export const getCustomTemplate = (id: string | undefined, customCompose: string | undefined) => {
+  const template = getTemplateById(id)
+  if (template) {
+    return {
+      ...template,
+      yaml: {
+        ...template.yaml,
+        compose: customCompose || template.yaml.compose,
+      },
+    }
+  }
+}
+
 export const getReadmeByTemplateId = (templateId: string) => {
   switch (templateId) {
     case 'tgbot':
