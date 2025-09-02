@@ -1,4 +1,6 @@
 import { useEffect, useState, type FC } from 'react'
+import * as oasis from '@oasisprotocol/client'
+import * as oasisRT from '@oasisprotocol/client-rt'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@oasisprotocol/ui-library/src/components/ui/tabs'
 import { AppStatusIcon } from '../../../components/AppStatusIcon'
 import { AppMetadata } from './AppMetadata'
@@ -16,6 +18,7 @@ import { UnsavedChanges } from './UnsavedChanges'
 import { RemoveAppButton } from './RemoveAppButton'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { HelpWidget } from '../../CreateApp/HelpWidget'
+import { AddSecret } from '../../../components/SecretsTable/AddSecret'
 
 function setDefaultMetadataViewState(metadata: RoflAppMetadata | undefined = {}): ViewMetadataState {
   return {
@@ -65,6 +68,22 @@ export const AppDetails: FC = () => {
   const updateApp = useUpdateApp()
 
   const showBlockingOverlay = removeApp.isPending || updateApp.isPending
+
+  const handleAddSecret = (key: string, value: string) => {
+    if (!roflApp?.sek) return
+
+    const secretValue = oasisRT.rofl.encryptSecret(
+      key,
+      oasis.misc.fromString(value),
+      oasis.misc.fromBase64(roflApp.sek),
+    )
+
+    const updatedSecrets = { ...viewSecretsState.secrets, [key]: secretValue }
+    setViewSecretsState({
+      isDirty: true,
+      secrets: updatedSecrets,
+    })
+  }
 
   useEffect(() => {
     if (roflApp) {
@@ -183,6 +202,7 @@ export const AppDetails: FC = () => {
                   setViewSecretsState={setViewSecretsState}
                   editEnabled={editEnabled}
                 />
+                <AddSecret disabled={!editEnabled} handleAddSecret={handleAddSecret} />
               </TabsContent>
               <TabsContent value="compose">
                 <AppArtifacts
