@@ -44,11 +44,25 @@ export const TemplatesList: FC<TemplatesListProps> = ({ handleTemplateSelect }) 
         {templates.map(template => (
           <Card key={template.id} className="rounded-md pt-6 flex flex-col">
             <div className="rounded-t-md h-[160px] -mt-6">
-              <img
-                src={template.image}
-                alt={template.name}
-                className="w-full h-full object-cover rounded-t-md"
-              />
+              {handleTemplateSelect ? (
+                <Button
+                  className="p-0 rounded-t-md rounded-b-none w-full h-full"
+                  variant="ghost"
+                  onClick={() => handleTemplateSelect(template.id)}
+                >
+                  <img
+                    src={template.image}
+                    alt={template.name}
+                    className="w-full h-full object-cover rounded-t-md"
+                  />
+                </Button>
+              ) : (
+                <img
+                  src={template.image}
+                  alt={template.name}
+                  className="w-full h-full object-cover rounded-t-md"
+                />
+              )}
             </div>
             <CardHeader className="gap-0">
               <CardTitle className="text-white text-lg">{template.name}</CardTitle>
