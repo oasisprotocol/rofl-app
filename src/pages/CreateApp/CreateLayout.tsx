@@ -11,6 +11,7 @@ import {
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout'
 import { SidebarItemLabel } from './SidebarItemLabel'
 import { HelpWidget } from './HelpWidget'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
 type CreateLayoutProps = {
   children: ReactNode
@@ -76,7 +77,14 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
             isExpanded={isHelpPanelExpanded}
             setIsExpanded={setIsHelpPanelExpanded}
           />
-          <div className="max-w-lg px-8 py-12 flex flex-col gap-8 items-center w-full">{children}</div>
+          <div
+            className={cn(
+              'px-8 py-12 flex flex-col gap-8 items-center w-full',
+              !(selectedTemplateId === 'custom-build' && currentStep === 2) && 'max-w-lg',
+            )}
+          >
+            {children}
+          </div>
         </div>
       </div>
     </Layout>
