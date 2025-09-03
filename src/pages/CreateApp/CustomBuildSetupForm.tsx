@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { type FC, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { CreateFormNavigation } from './CreateFormNavigation'
@@ -35,6 +35,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   setAppDataForm,
 }) => {
   const { isValidating, validationError, validateCompose, clearValidation } = useComposeValidation()
+  const [passwordFieldResetKey, setPasswordFieldResetKey] = useState(0)
   const form = useForm({
     resolver: zodResolver(customBuildFormSchema),
     defaultValues: {
@@ -110,6 +111,9 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
       form.setValue('name', '')
       form.setValue('value', '')
       form.clearErrors(['name', 'value'])
+      // Used to remount password field component and reset its state.
+      // In case of password visibility enabled we want to make sure next new secret is hidden again
+      setPasswordFieldResetKey(prev => prev + 1)
     }
   }
 
@@ -156,6 +160,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
           <AddSecretFormContent
             formControl={form.control}
             onClick={handleAddSecret}
+            resetKey={passwordFieldResetKey}
             className={cn({
               'mt-0': secrets && Object.keys(secrets).length === 0,
             })}

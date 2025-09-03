@@ -9,6 +9,7 @@ type AddSecretFormContentProps<T extends FieldValues> = {
   disabled?: boolean
   onClick?: () => void
   className?: string
+  resetKey?: number
 }
 
 export const AddSecretFormContent = <T extends FieldValues>({
@@ -16,6 +17,7 @@ export const AddSecretFormContent = <T extends FieldValues>({
   formControl,
   disabled,
   onClick,
+  resetKey,
 }: AddSecretFormContentProps<T>) => {
   return (
     <div className={cn('flex gap-4 mt-4 w-full', className)}>
@@ -29,6 +31,7 @@ export const AddSecretFormContent = <T extends FieldValues>({
       </div>
       <div className="w-1/2">
         <InputFormField
+          key={resetKey}
           control={formControl}
           name={'value' as Path<T>}
           placeholder="Type Value"
