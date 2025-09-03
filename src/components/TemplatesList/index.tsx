@@ -96,7 +96,9 @@ export const TemplatesList: FC<TemplatesListProps> = ({ handleTemplateSelect }) 
         </div>
 
         <Button variant="outline" asChild>
-          <a href="mailto:#">Send E-mail</a>
+          <a href="https://forms.gle/ctNi6FcZK6VXQucL7" target="_blank" rel="noopener noreferrer">
+            Suggest an Idea
+          </a>
         </Button>
       </div>
     </div>
