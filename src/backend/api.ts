@@ -59,6 +59,13 @@ type RoflBuildResultsResponse = {
   enclaves: null | oasis.types.SGXEnclaveIdentity[] // Added in postprocessing
 }
 
+type RoflValidateResponse = {
+  valid: boolean
+  errors?: string[]
+  warnings?: string[]
+  message?: string
+}
+
 type ArtifactId =
   | `${string}-rofl-template-yaml`
   | `${string}-rofl-yaml`
@@ -105,6 +112,23 @@ const buildRofl = async (
   const response = await axios.post<RoflBuildResponse>(
     `${BACKEND_URL}/rofl/build`,
     { manifest, compose },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  )
+  return response.data
+}
+
+const validateRofl = async (
+  { compose }: { compose: string },
+  token: string,
+): Promise<RoflValidateResponse> => {
+  const response = await axios.post<RoflValidateResponse>(
+    `${BACKEND_URL}/rofl/validate`,
+    { compose },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -198,6 +222,16 @@ export function useDownloadArtifact(id: ArtifactId | null, token: string | null,
     enabled: !!id && !!token && enabled,
     staleTime: 0,
     throwOnError: false,
+  })
+}
+
+export function useValidateRofl(token: string | null) {
+  return useMutation<RoflValidateResponse, AxiosError<unknown>, { compose: string }>({
+    mutationFn: data => validateRofl(data, token!),
+    throwOnError: false,
+    onError: error => {
+      console.error('Error validating ROFL:', error)
+    },
   })
 }
 
