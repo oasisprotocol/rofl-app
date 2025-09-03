@@ -52,6 +52,17 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
     return null
   }
 
+  const handleEditorWillMount = (monaco: typeof import('monaco-editor')) => {
+    monaco.editor.defineTheme('customTheme', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [],
+      colors: {
+        'editor.background': '#18181B',
+      },
+    })
+  }
+
   const handleEditorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
     editorRef.current = editor
   }
@@ -95,13 +106,15 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
           loading={<TextAreaFallback value={data} />}
           language="yaml"
           value={data}
-          theme="vs-dark"
+          theme="customTheme"
+          beforeMount={handleEditorWillMount}
           onMount={handleEditorDidMount}
           onChange={handleEditorChange}
           options={{
             readOnly,
             fontSize: 14,
             wordWrap: 'on',
+            scrollBeyondLastLine: false,
           }}
         />
       </Suspense>
