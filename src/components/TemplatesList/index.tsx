@@ -24,7 +24,7 @@ export const TemplatesList: FC<TemplatesListProps> = ({ handleTemplateSelect }) 
         {customTemplate && (
           <Card className="border-0 rounded-md">
             <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
-              <CardTitle className="text-white text-lg">Custom Build</CardTitle>
+              <CardTitle className="text-white text-lg">Custom App</CardTitle>
               <span className="flex flex-col gap-4 text-muted-foreground text-sm">
                 {customTemplate.description}
                 {handleTemplateSelect && (
