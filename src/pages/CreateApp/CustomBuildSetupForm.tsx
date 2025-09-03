@@ -7,6 +7,7 @@ import { SecretsTable } from '../../components/SecretsTable'
 import { CodeDisplay } from '../../components/CodeDisplay'
 import customBuildCompose from '../../../templates/custom-build/compose.yaml?raw'
 import { type RoflAppSecrets } from '../../nexus/api'
+import { AddSecretFormContent } from '../../components/SecretsTable/AddSecretFormContent'
 
 type CustomBuildSetupFormProps = {
   handleNext: () => void
@@ -26,11 +27,14 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     defaultValues: {
       compose: agent?.compose || customBuildCompose,
       secrets: agent?.secrets || {},
+      name: '',
+      value: '',
     } as CustomBuildFormData,
   })
 
   function onSubmit(values: CustomBuildFormData) {
-    setAppDataForm({ agent: values })
+    const { compose, secrets } = values
+    setAppDataForm({ agent: { compose, secrets } as CustomBuildFormData })
     handleNext()
   }
 
@@ -41,6 +45,36 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
 
   const handleSecretsChange = (state: { isDirty: boolean; secrets: Record<string, string> }) => {
     form.setValue('secrets', state.secrets)
+  }
+
+  const handleAddSecret = () => {
+    const name = form.getValues('name')
+    const value = form.getValues('value')
+
+    // Manual validation for adding new secrets. These fields cannot be part of a main form validation
+    let hasError = false
+
+    if (!name || name.trim() === '') {
+      form.setError('name', { type: 'manual', message: 'Name is required.' })
+      hasError = true
+    }
+
+    if (!value || value.trim() === '') {
+      form.setError('value', { type: 'manual', message: 'Secret is required.' })
+      hasError = true
+    }
+
+    if (!hasError && name && value) {
+      const currentSecrets = form.getValues('secrets') || {}
+      const updatedSecrets = {
+        ...currentSecrets,
+        [name]: value,
+      }
+      form.setValue('secrets', updatedSecrets)
+      form.setValue('name', '')
+      form.setValue('value', '')
+      form.clearErrors(['name', 'value'])
+    }
   }
 
   const compose = form.watch('compose')
@@ -65,8 +99,8 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
             secrets={secrets as RoflAppSecrets}
             editEnabled
             setViewSecretsState={handleSecretsChange}
-            appSek=""
           />
+          <AddSecretFormContent formControl={form.control} onClick={handleAddSecret} />
         </div>
       </div>
 

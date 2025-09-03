@@ -22,7 +22,7 @@ import {
 import { MoreVertical } from 'lucide-react'
 
 type SecretsTableProps = {
-  appSek: RoflApp['sek']
+  appSek?: RoflApp['sek']
   secrets: RoflAppSecrets
   setViewSecretsState: (state: { isDirty: boolean; secrets: RoflAppSecrets }) => void
   editEnabled?: boolean
