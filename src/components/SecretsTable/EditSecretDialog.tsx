@@ -72,6 +72,12 @@ export const EditSecretDialog: FC<EditSecretDialogProps> = ({
     onOpenChange(false)
   }
 
+  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    e.stopPropagation()
+    form.handleSubmit(onSubmit)(e)
+  }
+
   return (
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -79,7 +85,7 @@ export const EditSecretDialog: FC<EditSecretDialogProps> = ({
           <DialogTitle>Edit secret</DialogTitle>
         </DialogHeader>
         <DialogDescription className="mb-6">Please provide a new secret value.</DialogDescription>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleFormSubmit} className="space-y-6">
           <InputFormField control={form.control} name="name" label="Name" disabled />
 
           <InputFormField control={form.control} name="value" label="Value" type="password" />

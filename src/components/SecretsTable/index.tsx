@@ -20,7 +20,6 @@ import {
   DropdownMenuItem,
 } from '@oasisprotocol/ui-library/src/components/ui/dropdown-menu'
 import { MoreVertical } from 'lucide-react'
-import { AddSecret } from './AddSecret'
 
 type SecretsTableProps = {
   appSek: RoflApp['sek']
@@ -120,8 +119,6 @@ export const SecretsTable: FC<SecretsTableProps> = ({
           </TableBody>
         </Table>
       )}
-
-      <AddSecret disabled={!editEnabled} handleAddSecret={handleEditSecret} />
 
       <EditSecretDialog
         open={secretDialogState.open}
