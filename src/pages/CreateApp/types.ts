@@ -130,6 +130,8 @@ export const customBuildFormSchema = z.object({
       }
     }),
   secrets: z.record(z.string()).default({}),
+  name: z.string().default(''),
+  value: z.string().default(''),
 })
 
 export const tgbotFormSchema = z.object({
