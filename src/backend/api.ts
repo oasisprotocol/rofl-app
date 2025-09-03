@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { AxiosError } from 'axios'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import type { Template } from '../pages/CreateApp/BootstrapStep'
-import type { AppData } from '../pages/CreateApp/types'
+import type { AppData, CustomBuildFormData } from '../pages/CreateApp/types'
 import * as yaml from 'yaml'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
@@ -418,6 +418,8 @@ export function useCreateAndDeployApp() {
 
       trackBootstrapStepEvent(9, 'updating_start', appData.template)
 
+      const secrets =
+        appData.template === 'custom-build' ? (appData.agent as CustomBuildFormData)?.secrets : appData.agent
       hash = await sendTransactionAsync(
         rofl
           .callUpdate()
@@ -433,11 +435,11 @@ export function useCreateAndDeployApp() {
               enclaves: [...app.policy.enclaves, ...buildResults.enclaves!],
             },
             secrets: Object.fromEntries(
-              Object.entries(appData.agent ?? {}).map(([key, value]) => {
+              Object.entries(secrets ?? {}).map(([key, value]) => {
                 return [
                   key,
                   oasis.misc.fromBase64(
-                    oasisRT.rofl.encryptSecret(key, oasis.misc.fromString(value), app.sek),
+                    oasisRT.rofl.encryptSecret(key, oasis.misc.fromString(String(value)), app.sek),
                   ),
                 ]
               }),

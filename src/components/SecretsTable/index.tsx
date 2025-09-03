@@ -63,11 +63,12 @@ export const SecretsTable: FC<SecretsTableProps> = ({
   }
 
   function handleEditSecret(key: string, value: string) {
-    const secretValue = oasisRT.rofl.encryptSecret(
-      key,
-      oasis.misc.fromString(value),
-      oasis.misc.fromBase64(appSek),
-    )
+    // If appSek is provided, encrypt the secret (for existing apps)
+    // Otherwise, store as plain text (for app creation). It will be encrypted in build step before sending.
+    const secretValue = appSek
+      ? oasisRT.rofl.encryptSecret(key, oasis.misc.fromString(value), oasis.misc.fromBase64(appSek))
+      : value
+
     const updatedSecrets = { ...secrets, [key]: secretValue }
     setViewSecretsState({
       isDirty: true,
