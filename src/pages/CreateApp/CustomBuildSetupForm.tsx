@@ -8,6 +8,7 @@ import { CodeDisplay } from '../../components/CodeDisplay'
 import customBuildCompose from '../../../templates/custom-build/compose.yaml?raw'
 import { type RoflAppSecrets } from '../../nexus/api'
 import { AddSecretFormContent } from '../../components/SecretsTable/AddSecretFormContent'
+import { useComposeValidation } from './useComposeValidation'
 
 type CustomBuildSetupFormProps = {
   handleNext: () => void
@@ -22,6 +23,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   agent,
   setAppDataForm,
 }) => {
+  const { isValidating, validationError, validateCompose, clearValidation } = useComposeValidation()
   const form = useForm({
     resolver: zodResolver(customBuildFormSchema),
     defaultValues: {
@@ -32,15 +34,20 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     } as CustomBuildFormData,
   })
 
-  function onSubmit(values: CustomBuildFormData) {
+  async function onSubmit(values: CustomBuildFormData) {
     const { compose, secrets } = values
-    setAppDataForm({ agent: { compose, secrets } as CustomBuildFormData })
-    handleNext()
+    const isValid = await validateCompose(compose)
+
+    if (isValid) {
+      setAppDataForm({ agent: { compose, secrets } as CustomBuildFormData })
+      handleNext()
+    }
   }
 
   const handleComposeChange = (newContent: string | undefined) => {
     const content = newContent || '\n'
     form.setValue('compose', content)
+    clearValidation()
   }
 
   const handleSecretsChange = (state: { isDirty: boolean; secrets: Record<string, string> }) => {
@@ -89,7 +96,24 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
             compose.yaml
           </div>
         </div>
-        <CodeDisplay className="h-[450px]" data={compose} readOnly={false} onChange={handleComposeChange} />
+        <div className="flex flex-col gap-2">
+          <div>
+            <CodeDisplay
+              className="h-[450px]"
+              data={compose}
+              readOnly={false}
+              onChange={handleComposeChange}
+            />
+          </div>
+          {form.formState.errors.compose && (
+            <div className="text-destructive text-sm">{form.formState.errors.compose.message}</div>
+          )}
+          {validationError && (
+            <div className="[&::first-letter]:uppercase text-destructive text-sm whitespace-pre-wrap">
+              {validationError}
+            </div>
+          )}
+        </div>
       </div>
 
       <div>
@@ -104,7 +128,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
         </div>
       </div>
 
-      <CreateFormNavigation handleBack={handleBack} disabled={form.formState.isSubmitting} />
+      <CreateFormNavigation handleBack={handleBack} disabled={form.formState.isSubmitting || isValidating} />
     </form>
   )
 }
