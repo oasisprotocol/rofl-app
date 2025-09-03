@@ -79,7 +79,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
           />
           <div
             className={cn(
-              'px-8 py-12 flex flex-col gap-8 items-center w-full',
+              'px-6 py-6 flex flex-col gap-8 items-center w-full',
               !(selectedTemplateId === 'custom-build' && currentStep === 2) && 'max-w-lg',
             )}
           >

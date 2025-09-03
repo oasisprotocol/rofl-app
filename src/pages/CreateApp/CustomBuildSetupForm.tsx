@@ -9,6 +9,7 @@ import customBuildCompose from '../../../templates/custom-build/compose.yaml?raw
 import { type RoflAppSecrets } from '../../nexus/api'
 import { AddSecretFormContent } from '../../components/SecretsTable/AddSecretFormContent'
 import { useComposeValidation } from './useComposeValidation'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
 type CustomBuildSetupFormProps = {
   handleNext: () => void
@@ -90,7 +91,6 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mb-6 w-full">
       <div>
-        <div className="justify-start text-base-foreground text-xl font-semibold leading-7 mb-4">Compose</div>
         <div className="self-stretch px-4 py-2 bg-white/10 rounded-tl-lg rounded-tr-lg inline-flex justify-between items-center m-0 w-full">
           <div className="justify-start text-base-foreground text-base font-medium leading-normal">
             compose.yaml
@@ -124,11 +124,21 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
             editEnabled
             setViewSecretsState={handleSecretsChange}
           />
-          <AddSecretFormContent formControl={form.control} onClick={handleAddSecret} />
+          <AddSecretFormContent
+            formControl={form.control}
+            onClick={handleAddSecret}
+            className={cn({
+              'mt-0': secrets && Object.keys(secrets).length === 0,
+            })}
+          />
         </div>
       </div>
 
-      <CreateFormNavigation handleBack={handleBack} disabled={form.formState.isSubmitting || isValidating} />
+      <CreateFormNavigation
+        handleBack={handleBack}
+        disabled={form.formState.isSubmitting || isValidating}
+        isLoading={isValidating}
+      />
     </form>
   )
 }
