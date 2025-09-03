@@ -6,6 +6,7 @@ import { customBuildFormSchema, type CustomBuildFormData } from './types'
 import { SecretsTable } from '../../components/SecretsTable'
 import { CodeDisplay } from '../../components/CodeDisplay'
 import customBuildCompose from '../../../templates/custom-build/compose.yaml?raw'
+import { type RoflAppSecrets } from '../../nexus/api'
 
 type CustomBuildSetupFormProps = {
   handleNext: () => void
@@ -24,7 +25,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     resolver: zodResolver(customBuildFormSchema),
     defaultValues: {
       compose: agent?.compose || customBuildCompose,
-      secrets: agent?.secrets || [],
+      secrets: agent?.secrets || {},
     } as CustomBuildFormData,
   })
 
@@ -38,7 +39,12 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     form.setValue('compose', content)
   }
 
+  const handleSecretsChange = (state: { isDirty: boolean; secrets: Record<string, string> }) => {
+    form.setValue('secrets', state.secrets)
+  }
+
   const compose = form.watch('compose')
+  const secrets = form.watch('secrets')
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mb-6 w-full">
@@ -55,7 +61,12 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
       <div>
         <div className="justify-start text-base-foreground text-xl font-semibold leading-7 mb-4">Secrets</div>
         <div>
-          <SecretsTable secrets={[]} editEnabled setViewSecretsState={val => console.log(val)} appSek="" />
+          <SecretsTable
+            secrets={secrets as RoflAppSecrets}
+            editEnabled
+            setViewSecretsState={handleSecretsChange}
+            appSek=""
+          />
         </div>
       </div>
 
