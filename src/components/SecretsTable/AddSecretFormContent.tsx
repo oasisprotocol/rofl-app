@@ -2,20 +2,23 @@ import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { InputFormField } from '../InputFormField'
 import { Plus } from 'lucide-react'
 import { Control, FieldValues, Path } from 'react-hook-form'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
 type AddSecretFormContentProps<T extends FieldValues> = {
   formControl: Control<T>
   disabled?: boolean
   onClick?: () => void
+  className?: string
 }
 
 export const AddSecretFormContent = <T extends FieldValues>({
+  className,
   formControl,
   disabled,
   onClick,
 }: AddSecretFormContentProps<T>) => {
   return (
-    <div className="flex gap-4 mt-4 w-full">
+    <div className={cn('flex gap-4 mt-4 w-full', className)}>
       <div className="w-1/2">
         <InputFormField
           control={formControl}
