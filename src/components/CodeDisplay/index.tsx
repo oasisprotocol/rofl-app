@@ -41,13 +41,20 @@ type CodeDisplayProps = {
   className?: string
   readOnly?: boolean
   onChange?: (value: string | undefined) => void
+  placeholder?: string
 }
 
-export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true, onChange }) => {
+export const CodeDisplay: FC<CodeDisplayProps> = ({
+  data,
+  className,
+  readOnly = true,
+  onChange,
+  placeholder,
+}) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const monacoInstanceRef = useRef<typeof monaco | null>(null)
 
-  if (!data) {
+  if (data === null || data === undefined) {
     return null
   }
 
@@ -156,6 +163,8 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
             fontSize: 14,
             wordWrap: 'on',
             scrollBeyondLastLine: false,
+            renderLineHighlight: 'none', // overflow through placeholder when turned on
+            placeholder,
           }}
         />
       </Suspense>
