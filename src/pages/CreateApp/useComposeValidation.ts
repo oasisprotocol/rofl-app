@@ -39,7 +39,7 @@ export function useComposeValidation() {
       if (!response.valid) {
         setValidationState({
           isValidating: false,
-          logs: parseLogs(response.logs) || null,
+          logs: response.logs || null,
         })
         return false
       }
