@@ -12,7 +12,6 @@ import hlCopyTraderTemplate from '../../../templates/hl-copy-trader/rofl-templat
 import hlCompose from '../../../templates/hl-copy-trader/compose.yaml?raw'
 import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
 import customBuildTemplate from '../../../templates/custom-build/rofl-template.yaml?raw'
-import customBuildCompose from '../../../templates/custom-build/compose.yaml?raw'
 import customBuildDocs from '../../../templates/custom-build/README.md?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
 import type { MetadataFormData } from './types'
@@ -183,7 +182,7 @@ export const templates = [
       build: extractResources(parsedCustomBuildTemplate),
     },
     yaml: {
-      compose: customBuildCompose,
+      compose: '',
       rofl: parsedCustomBuildTemplate,
     },
   },

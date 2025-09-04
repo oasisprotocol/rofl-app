@@ -5,11 +5,21 @@ import { CreateFormNavigation } from './CreateFormNavigation'
 import { customBuildFormSchema, type CustomBuildFormData } from './types'
 import { SecretsTable } from '../../components/SecretsTable'
 import { CodeDisplay } from '../../components/CodeDisplay'
-import customBuildCompose from '../../../templates/custom-build/compose.yaml?raw'
 import { type RoflAppSecrets } from '../../nexus/api'
 import { AddSecretFormContent } from '../../components/SecretsTable/AddSecretFormContent'
 import { useComposeValidation } from './useComposeValidation'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
+
+const placeholder = `# Paste your docker-compose YAML here\n
+*Example*\n
+services:
+\u00A0\u00A0python-telegram-bot:
+\u00A0\u00A0\u00A0\u00A0build: .
+\u00A0\u00A0\u00A0\u00A0image: 'ghcr.io/oasisprotocol/demo-rofl-tgbot'
+\u00A0\u00A0\u00A0\u00A0platform: linux/amd64
+\u00A0\u00A0\u00A0\u00A0environment:
+\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0- TOKEN\${TOKEN}
+`
 
 type CustomBuildSetupFormProps = {
   handleNext: () => void
@@ -28,7 +38,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   const form = useForm({
     resolver: zodResolver(customBuildFormSchema),
     defaultValues: {
-      compose: agent?.compose || customBuildCompose,
+      compose: agent?.compose || '',
       secrets: agent?.secrets || {},
       name: '',
       value: '',
@@ -46,7 +56,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   }
 
   const handleComposeChange = (newContent: string | undefined) => {
-    const content = newContent || '\n'
+    const content = newContent || ''
     form.setValue('compose', content)
     clearValidation()
   }
@@ -103,6 +113,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
               data={compose}
               readOnly={false}
               onChange={handleComposeChange}
+              placeholder={placeholder}
             />
           </div>
           {form.formState.errors.compose && (

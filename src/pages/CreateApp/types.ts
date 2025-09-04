@@ -113,8 +113,7 @@ export const metadataFormSchema = z.object({
 export const customBuildFormSchema = z.object({
   compose: z
     .string()
-    .min(2, {
-      // there is always empty line in editor
+    .min(1, {
       message: 'Please provide a valid compose file.',
     })
     .superRefine((data, ctx: RefinementCtx) => {
