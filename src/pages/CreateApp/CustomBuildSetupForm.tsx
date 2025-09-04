@@ -46,7 +46,25 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   })
 
   async function onSubmit(values: CustomBuildFormData) {
-    const { compose, secrets } = values
+    const { compose, secrets, name, value } = values
+
+    // Make sure secret inputs are empty before continuing
+    if (name && name.trim() !== '') {
+      form.setError('name', {
+        type: 'manual',
+        message: 'Please add or clear the secret before continuing.',
+      })
+      return
+    }
+
+    if (value && value.trim() !== '') {
+      form.setError('value', {
+        type: 'manual',
+        message: 'Please add or clear the secret before continuing.',
+      })
+      return
+    }
+
     const isValid = await validateCompose(compose)
 
     if (isValid) {
