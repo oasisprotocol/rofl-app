@@ -40,13 +40,13 @@ jobs:
               </tr>
             </table>
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         # Checkout pull request HEAD commit instead of merge commit.
         with:
           submodules: true
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20.x'
           cache: yarn
@@ -64,8 +64,7 @@ jobs:
           # Acquired from Cloudflare dashboard -> Compute > Workers & Pages or dashboard url: https://dash.cloudflare.com/<account-id>/
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # Project created via Cloudflare dashboard or CLI command "npx wrangler pages project create <project-name>"
-          command:
-            pages deploy ./dist --project-name=rofl-app --branch ${{
+          command: pages deploy ./dist --project-name=rofl-app --branch ${{
             github.event_name == 'pull_request' && format('pr-{0}',
             github.event.pull_request.number) || '' }}
       # On a subsequent run the original comment will be updated.
