@@ -21,7 +21,7 @@ const parsedTgbotTemplate = parse(tgbotTemplate)
 const parsedXagentTemplate = parse(xagentTemplate)
 const parsedHlTemplate = parse(hlCopyTraderTemplate)
 
-type ParsedTemplate = {
+export type ParsedTemplate = {
   name?: string
   author?: string
   description?: string
