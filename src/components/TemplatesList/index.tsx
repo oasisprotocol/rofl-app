@@ -16,63 +16,97 @@ type TemplatesListProps = {
 
 export const TemplatesList: FC<TemplatesListProps> = ({ handleTemplateSelect }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {templates.map(template => (
-        <Card key={template.id} className="rounded-md pt-6 flex flex-col">
-          <div className="rounded-t-md h-[160px] -mt-6">
-            <img
-              src={template.image}
-              alt={template.name}
-              className="w-full h-full object-cover rounded-t-md"
-            />
-          </div>
-          <CardHeader className="gap-0">
-            <CardTitle className="text-white text-lg">{template.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 flex-grow">
-            <span className="text-muted-foreground text-sm">
-              {template.description || 'No description available.'}
-            </span>
-          </CardContent>
-          {handleTemplateSelect && (
-            <CardFooter>
-              <Button className="w-full" onClick={() => handleTemplateSelect(template.id)}>
-                Select
-              </Button>
-            </CardFooter>
-          )}
-        </Card>
-      ))}
-      <Card className="border-0 rounded-md">
-        <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
-          <span className="text-muted-foreground text-lg font-semibold">Custom build</span>
-          <span className="text-muted-foreground text-sm">
-            Convert your containerized app into a trustless app in minutes via Oasis CLI.
-            <br />
-            <Button variant="secondary" asChild className="mt-4">
-              <a
-                href="https://docs.oasis.io/build/rofl/quickstart/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="flex items-center justify-center">
-                  <span>Read our Docs</span>
-                  <ArrowUpRight className="ml-2 h-4 w-4" />
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <Card className="border-0 rounded-md">
+          <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
+            <CardHeader className="mt-2 mb-0 w-full">
+              <CardTitle className="text-white text-lg">Custom Build</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <span className="flex flex-col gap-4 text-muted-foreground text-sm">
+                Convert your containerized app into a trustless app in minutes via Oasis CLI.
+                <span>
+                  <Button variant="secondary" asChild className="mt-4">
+                    <a
+                      href="https://docs.oasis.io/build/rofl/quickstart/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="flex items-center justify-center">
+                        <span>Read our Docs</span>
+                        <ArrowUpRight className="ml-2 h-4 w-4" />
+                      </span>
+                    </a>
+                  </Button>
                 </span>
-              </a>
-            </Button>
-          </span>
-        </CardContent>
-      </Card>
-      <Card className="border-0 rounded-md">
-        <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
-          <span className="text-muted-foreground text-lg font-semibold">More coming soon...</span>
-        </CardContent>
-      </Card>
-      {/* if there is not a multiple of 3 templates (including 2 static cards) add a semi transparent card  */}
-      {(templates.length + 2) % 3 !== 0 && (
-        <Card className="border-0 rounded-md rounded-lg bg-gradient-to-r from-card to-transparent"></Card>
-      )}
+              </span>
+            </CardContent>
+          </div>
+        </Card>
+
+        {templates.map(template => (
+          <Card key={template.id} className="rounded-md pt-6 flex flex-col gap-4">
+            <div className="rounded-t-md h-[160px] -mt-6">
+              {handleTemplateSelect ? (
+                <Button
+                  className="p-0 rounded-t-md rounded-b-none w-full h-full"
+                  variant="ghost"
+                  onClick={() => handleTemplateSelect(template.id)}
+                >
+                  <img
+                    src={template.image}
+                    alt={template.name}
+                    className="w-full h-full object-cover rounded-t-md"
+                  />
+                </Button>
+              ) : (
+                <img
+                  src={template.image}
+                  alt={template.name}
+                  className="w-full h-full object-cover rounded-t-md"
+                />
+              )}
+            </div>
+            <div>
+              <CardHeader className="mt-2">
+                <CardTitle className="text-white text-lg">{template.name}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 flex-grow">
+                <span className="text-muted-foreground text-sm">
+                  {template.description || 'No description available.'}
+                </span>
+              </CardContent>
+            </div>
+            {handleTemplateSelect && (
+              <CardFooter>
+                <Button
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => handleTemplateSelect(template.id)}
+                >
+                  Select
+                </Button>
+              </CardFooter>
+            )}
+          </Card>
+        ))}
+      </div>
+
+      <div className="flex flex-col items-center justify-center p-6 border rounded-lg gap-4">
+        <div className="flex flex-col items-center gap-2 w-full">
+          <h3 className="text-card-foreground text-base font-semibold">Got your own ideas?</h3>
+          <p className="text-muted-foreground text-sm">
+            Contact us and suggest it so we can work with you implementing it.
+          </p>
+        </div>
+
+        <Button variant="outline" asChild>
+          <a href="https://forms.gle/ctNi6FcZK6VXQucL7" target="_blank" rel="noopener noreferrer">
+            Suggest an Idea
+          </a>
+        </Button>
+      </div>
     </div>
   )
 }
