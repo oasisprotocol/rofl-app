@@ -74,6 +74,11 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     }
   }
 
+  const navigateBack = () => {
+    setAppDataForm({ agent: { compose, secrets } as CustomBuildFormData })
+    handleBack()
+  }
+
   const handleComposeChange = (newContent: string | undefined) => {
     const content = newContent || ''
     form.setValue('compose', content)
@@ -169,7 +174,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
       </div>
 
       <CreateFormNavigation
-        handleBack={handleBack}
+        handleBack={navigateBack}
         disabled={form.formState.isSubmitting || isValidating}
         isLoading={isValidating}
       />
