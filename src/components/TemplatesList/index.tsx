@@ -17,32 +17,36 @@ type TemplatesListProps = {
 export const TemplatesList: FC<TemplatesListProps> = ({ handleTemplateSelect }) => {
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         <Card className="border-0 rounded-md">
-          <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
-            <CardTitle className="text-white text-lg">Custom Build</CardTitle>
-            <span className="flex flex-col gap-4 text-muted-foreground text-sm">
-              Convert your containerized app into a trustless app in minutes via Oasis CLI.
-              <span>
-                <Button variant="secondary" asChild className="mt-4">
-                  <a
-                    href="https://docs.oasis.io/build/rofl/quickstart/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span className="flex items-center justify-center">
-                      <span>Read our Docs</span>
-                      <ArrowUpRight className="ml-2 h-4 w-4" />
-                    </span>
-                  </a>
-                </Button>
+          <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-center space-y-2">
+            <CardHeader className="mt-2 mb-0 w-full">
+              <CardTitle className="text-white text-lg">Custom Build</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <span className="flex flex-col gap-4 text-muted-foreground text-sm">
+                Convert your containerized app into a trustless app in minutes via Oasis CLI.
+                <span>
+                  <Button variant="secondary" asChild className="mt-4">
+                    <a
+                      href="https://docs.oasis.io/build/rofl/quickstart/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="flex items-center justify-center">
+                        <span>Read our Docs</span>
+                        <ArrowUpRight className="ml-2 h-4 w-4" />
+                      </span>
+                    </a>
+                  </Button>
+                </span>
               </span>
-            </span>
-          </CardContent>
+            </CardContent>
+          </div>
         </Card>
 
         {templates.map(template => (
-          <Card key={template.id} className="rounded-md pt-6 flex flex-col">
+          <Card key={template.id} className="rounded-md pt-6 flex flex-col gap-4">
             <div className="rounded-t-md h-[160px] -mt-6">
               {handleTemplateSelect ? (
                 <Button
@@ -64,14 +68,16 @@ export const TemplatesList: FC<TemplatesListProps> = ({ handleTemplateSelect }) 
                 />
               )}
             </div>
-            <CardHeader className="gap-0">
-              <CardTitle className="text-white text-lg">{template.name}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 flex-grow">
-              <span className="text-muted-foreground text-sm">
-                {template.description || 'No description available.'}
-              </span>
-            </CardContent>
+            <div>
+              <CardHeader className="mt-2">
+                <CardTitle className="text-white text-lg">{template.name}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 flex-grow">
+                <span className="text-muted-foreground text-sm">
+                  {template.description || 'No description available.'}
+                </span>
+              </CardContent>
+            </div>
             {handleTemplateSelect && (
               <CardFooter>
                 <Button
