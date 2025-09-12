@@ -11,7 +11,7 @@ const initAppDataState = (network: 'testnet' | 'mainnet'): AppData => ({
     version: '',
     homepage: '',
   },
-  agent: {
+  inputs: {
     OLLAMA_MODEL: '',
     TOKEN: '',
     OLLAMA_SYSTEM_PROMPT: '',
@@ -49,7 +49,7 @@ export const useCreate = () => {
       ...initData,
       templateId: prevData.templateId,
       metadata: prevData.metadata,
-      agent: prevData.agent,
+      inputs: prevData.inputs,
       // reset network
       // reset build
     }))

@@ -22,7 +22,7 @@ export const Create: FC = () => {
   ]
   const selectedTemplate =
     appData?.templateId === 'custom-build'
-      ? getCustomTemplate(appData?.templateId, (appData.agent as CustomBuildFormData)?.compose)
+      ? getCustomTemplate(appData?.templateId, (appData.inputs as CustomBuildFormData)?.compose)
       : getTemplateById(appData?.templateId)
   const trackedEvents = useRef<Set<number>>(new Set())
 
@@ -72,7 +72,7 @@ export const Create: FC = () => {
         <CustomInputsStep
           handleNext={handleNext}
           handleBack={handleBack}
-          customInputs={appData?.agent}
+          customInputs={appData?.inputs}
           setAppDataForm={setAppDataForm}
           selectedTemplateName={selectedTemplate.name}
           selectedTemplateId={selectedTemplate.id}

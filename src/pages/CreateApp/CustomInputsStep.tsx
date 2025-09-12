@@ -17,7 +17,7 @@ type CustomInputsStepProps = {
   handleBack: () => void
   customInputs?: AgentFormData | XAgentFormData | HlCopyTraderFormData | CustomBuildFormData
   setAppDataForm: (data: {
-    agent: AgentFormData | XAgentFormData | HlCopyTraderFormData | CustomBuildFormData
+    inputs: AgentFormData | XAgentFormData | HlCopyTraderFormData | CustomBuildFormData
   }) => void
   selectedTemplateName?: string
   selectedTemplateId?: string
@@ -33,6 +33,12 @@ export const CustomInputsStep: FC<CustomInputsStepProps> = ({
   selectedTemplateId,
   customStepTitle,
 }) => {
+  const handleSetAppDataForm = (data: {
+    agent: AgentFormData | XAgentFormData | HlCopyTraderFormData | CustomBuildFormData
+  }) => {
+    setAppDataForm({ inputs: data.agent })
+  }
+
   return (
     <CreateLayout
       currentStep={2}
@@ -47,7 +53,7 @@ export const CustomInputsStep: FC<CustomInputsStepProps> = ({
           handleNext={handleNext}
           handleBack={handleBack}
           agent={customInputs as CustomBuildFormData}
-          setAppDataForm={setAppDataForm as (data: { agent: CustomBuildFormData }) => void}
+          setAppDataForm={handleSetAppDataForm}
         />
       )}
 
@@ -56,7 +62,7 @@ export const CustomInputsStep: FC<CustomInputsStepProps> = ({
           handleNext={handleNext}
           handleBack={handleBack}
           agent={customInputs as AgentFormData}
-          setAppDataForm={setAppDataForm as (data: { agent: AgentFormData }) => void}
+          setAppDataForm={handleSetAppDataForm}
         />
       )}
       {selectedTemplateId === 'x-agent' && (
@@ -64,7 +70,7 @@ export const CustomInputsStep: FC<CustomInputsStepProps> = ({
           handleNext={handleNext}
           handleBack={handleBack}
           agent={customInputs as XAgentFormData}
-          setAppDataForm={setAppDataForm as (data: { agent: XAgentFormData }) => void}
+          setAppDataForm={handleSetAppDataForm}
         />
       )}
       {selectedTemplateId === 'hl-copy-trader' && (
@@ -72,7 +78,7 @@ export const CustomInputsStep: FC<CustomInputsStepProps> = ({
           handleNext={handleNext}
           handleBack={handleBack}
           agent={customInputs as HlCopyTraderFormData}
-          setAppDataForm={setAppDataForm as (data: { agent: HlCopyTraderFormData }) => void}
+          setAppDataForm={handleSetAppDataForm}
         />
       )}
     </CreateLayout>
