@@ -454,8 +454,8 @@ export function useCreateAndDeployApp() {
 
       const secrets =
         appData.templateId === 'custom-build'
-          ? (appData.agent as CustomBuildFormData)?.secrets
-          : appData.agent
+          ? (appData.inputs as CustomBuildFormData)?.secrets
+          : appData.inputs
       hash = await sendTransactionAsync(
         rofl
           .callUpdate()

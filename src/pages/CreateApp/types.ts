@@ -207,7 +207,7 @@ export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
 export type AppData = {
   templateId?: string
   metadata?: MetadataFormData
-  agent?: CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData
+  inputs?: CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData
   build?: BuildFormData
   payment?: Record<string, unknown>
 }

@@ -10,7 +10,7 @@ const initAppDataState: AppData = {
     version: '',
     homepage: '',
   },
-  agent: {
+  inputs: {
     OLLAMA_MODEL: '',
     TOKEN: '',
     OLLAMA_SYSTEM_PROMPT: '',
