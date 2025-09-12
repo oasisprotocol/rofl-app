@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { AppData } from './types'
 
 const initAppDataState: AppData = {
-  template: '',
+  templateId: '',
   metadata: {
     name: '',
     author: '',
@@ -10,7 +10,7 @@ const initAppDataState: AppData = {
     version: '',
     homepage: '',
   },
-  agent: {
+  inputs: {
     OLLAMA_MODEL: '',
     TOKEN: '',
     OLLAMA_SYSTEM_PROMPT: '',
