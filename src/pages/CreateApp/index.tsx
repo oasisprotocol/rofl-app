@@ -21,27 +21,27 @@ export const Create: FC = () => {
     { component: BootstrapStep },
   ]
   const selectedTemplate =
-    appData?.template === 'custom-build'
-      ? getCustomTemplate(appData?.template, (appData.agent as CustomBuildFormData)?.compose)
-      : getTemplateById(appData?.template)
+    appData?.templateId === 'custom-build'
+      ? getCustomTemplate(appData?.templateId, (appData.agent as CustomBuildFormData)?.compose)
+      : getTemplateById(appData?.templateId)
   const trackedEvents = useRef<Set<number>>(new Set())
 
   useEffect(() => {
     if (currentStep === 1 && !trackedEvents.current.has(1)) {
       // Filter out just visiting create app page, hence step=1
-      trackEvent(`Create app flow/1/start/${appData?.template}`)
+      trackEvent(`Create app flow/1/start/${appData?.templateId}`)
       trackedEvents.current.add(1)
     } else if (currentStep === 2 && !trackedEvents.current.has(2)) {
-      trackEvent(`Create app flow/2/metadata/${appData?.template}`)
+      trackEvent(`Create app flow/2/metadata/${appData?.templateId}`)
       trackedEvents.current.add(2)
     } else if (currentStep === 3 && !trackedEvents.current.has(3)) {
-      trackEvent(`Create app flow/3/agent/${appData?.template}`)
+      trackEvent(`Create app flow/3/agent/${appData?.templateId}`)
       trackedEvents.current.add(3)
     } else if (currentStep === 4 && !trackedEvents.current.has(4)) {
-      trackEvent(`Create app flow/4/payment/${appData?.template}`)
+      trackEvent(`Create app flow/4/payment/${appData?.templateId}`)
       trackedEvents.current.add(4)
     }
-  }, [currentStep, appData?.template])
+  }, [currentStep, appData?.templateId])
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {

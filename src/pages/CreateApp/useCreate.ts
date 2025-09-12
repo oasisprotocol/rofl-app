@@ -3,7 +3,7 @@ import type { AppData } from './types'
 import { useNetwork } from '../../hooks/useNetwork'
 
 const initAppDataState = (network: 'testnet' | 'mainnet'): AppData => ({
-  template: '',
+  templateId: '',
   metadata: {
     name: '',
     author: '',
@@ -47,7 +47,7 @@ export const useCreate = () => {
     const initData = initAppDataState(network)
     setAppData(prevData => ({
       ...initData,
-      template: prevData.template,
+      templateId: prevData.templateId,
       metadata: prevData.metadata,
       agent: prevData.agent,
       // reset network
