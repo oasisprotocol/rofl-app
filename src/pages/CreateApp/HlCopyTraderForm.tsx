@@ -8,23 +8,23 @@ import { InputFormField } from '../../components/InputFormField'
 type HlCopyTraderFormProps = {
   handleNext: () => void
   handleBack: () => void
-  agent?: HlCopyTraderFormData
-  setAppDataForm: (data: { agent: HlCopyTraderFormData }) => void
+  inputs?: HlCopyTraderFormData
+  setAppDataForm: (data: { inputs: HlCopyTraderFormData }) => void
 }
 
 export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
   handleNext,
   handleBack,
-  agent,
+  inputs,
   setAppDataForm,
 }) => {
   const form = useForm<HlCopyTraderFormData>({
     resolver: zodResolver(hlCopyTraderFormSchema),
-    defaultValues: { ...agent },
+    defaultValues: { ...inputs },
   })
 
   function onSubmit(values: HlCopyTraderFormData) {
-    setAppDataForm({ agent: values })
+    setAppDataForm({ inputs: values })
     handleNext()
   }
 
