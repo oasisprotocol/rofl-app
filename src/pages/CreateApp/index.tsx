@@ -2,7 +2,7 @@ import { type FC, useEffect, useRef } from 'react'
 import { useCreate } from './useCreate'
 import { TemplateStep } from './TemplateStep'
 import { MetadataStep } from './MetadataStep'
-import { AgentStep } from './AgentStep'
+import { CustomInputsStep } from './CustomInputsStep'
 import { BuildStep } from './BuildStep'
 import { PaymentStep } from './PaymentStep'
 import { BootstrapStep } from './BootstrapStep'
@@ -15,7 +15,7 @@ export const Create: FC = () => {
   const steps = [
     { component: TemplateStep },
     { component: MetadataStep },
-    { component: AgentStep },
+    { component: CustomInputsStep },
     { component: BuildStep },
     { component: PaymentStep },
     { component: BootstrapStep },
@@ -69,10 +69,10 @@ export const Create: FC = () => {
         />
       )}
       {currentStep === 2 && selectedTemplate && (
-        <AgentStep
+        <CustomInputsStep
           handleNext={handleNext}
           handleBack={handleBack}
-          agent={appData?.agent}
+          customInputs={appData?.agent}
           setAppDataForm={setAppDataForm}
           selectedTemplateName={selectedTemplate.name}
           selectedTemplateId={selectedTemplate.id}
