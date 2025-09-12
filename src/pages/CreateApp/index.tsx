@@ -72,7 +72,7 @@ export const Create: FC = () => {
         <CustomInputsStep
           handleNext={handleNext}
           handleBack={handleBack}
-          customInputs={appData?.inputs}
+          inputs={appData?.inputs}
           setAppDataForm={setAppDataForm}
           selectedTemplateName={selectedTemplate.name}
           selectedTemplateId={selectedTemplate.id}

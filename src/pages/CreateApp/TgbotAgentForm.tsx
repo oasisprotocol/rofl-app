@@ -9,23 +9,23 @@ import { InputFormField } from '../../components/InputFormField'
 type TgbotAgentFormProps = {
   handleNext: () => void
   handleBack: () => void
-  agent?: AgentFormData
-  setAppDataForm: (data: { agent: AgentFormData }) => void
+  inputs?: AgentFormData
+  setAppDataForm: (data: { inputs: AgentFormData }) => void
 }
 
 export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
   handleNext,
   handleBack,
-  agent,
+  inputs,
   setAppDataForm,
 }) => {
   const form = useForm<AgentFormData>({
     resolver: zodResolver(tgbotFormSchema),
-    defaultValues: { ...agent },
+    defaultValues: { ...inputs },
   })
 
   function onSubmit(values: AgentFormData) {
-    setAppDataForm({ agent: values })
+    setAppDataForm({ inputs: values })
     handleNext()
   }
 

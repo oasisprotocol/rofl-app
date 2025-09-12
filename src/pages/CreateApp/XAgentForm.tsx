@@ -9,18 +9,18 @@ import { InputFormField } from '../../components/InputFormField'
 type XAgentFormProps = {
   handleNext: () => void
   handleBack: () => void
-  agent?: XAgentFormData
-  setAppDataForm: (data: { agent: XAgentFormData }) => void
+  inputs?: XAgentFormData
+  setAppDataForm: (data: { inputs: XAgentFormData }) => void
 }
 
-export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, agent, setAppDataForm }) => {
+export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs, setAppDataForm }) => {
   const form = useForm<XAgentFormData>({
     resolver: zodResolver(xAgentFormSchema),
-    defaultValues: { ...agent },
+    defaultValues: { ...inputs },
   })
 
   function onSubmit(values: XAgentFormData) {
-    setAppDataForm({ agent: values })
+    setAppDataForm({ inputs: values })
     handleNext()
   }
 

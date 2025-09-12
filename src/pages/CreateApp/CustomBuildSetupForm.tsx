@@ -14,14 +14,14 @@ import { composePlaceholder } from './composePlaceholder'
 type CustomBuildSetupFormProps = {
   handleNext: () => void
   handleBack: () => void
-  agent?: CustomBuildFormData
-  setAppDataForm: (data: { agent: CustomBuildFormData }) => void
+  inputs?: CustomBuildFormData
+  setAppDataForm: (data: { inputs: CustomBuildFormData }) => void
 }
 
 export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   handleNext,
   handleBack,
-  agent,
+  inputs,
   setAppDataForm,
 }) => {
   const { isValidating, validationError, validateCompose, clearValidation } = useComposeValidation()
@@ -29,8 +29,8 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
   const form = useForm({
     resolver: zodResolver(customBuildFormSchema),
     defaultValues: {
-      compose: agent?.compose || '',
-      secrets: agent?.secrets || {},
+      compose: inputs?.compose || '',
+      secrets: inputs?.secrets || {},
       name: '',
       value: '',
     } as CustomBuildFormData,
@@ -59,13 +59,13 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     const isValid = await validateCompose(compose)
 
     if (isValid) {
-      setAppDataForm({ agent: { compose, secrets } as CustomBuildFormData })
+      setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData })
       handleNext()
     }
   }
 
   const navigateBack = () => {
-    setAppDataForm({ agent: { compose, secrets } as CustomBuildFormData })
+    setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData })
     handleBack()
   }
 
