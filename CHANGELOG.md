@@ -11,3 +11,17 @@ The format is inspired by [Keep a Changelog].
 <!-- NOTE: towncrier will not alter content above the TOWNCRIER line below. -->
 
 <!-- TOWNCRIER -->
+
+## 1.0.0 (2025-09-16)
+
+### Process Changes
+
+- Add Change Log and the Change Log fragments process for assembling it
+  ([#262](https://github.com/oasisprotocol/rofl-app/issues/262))
+
+  This follows the same Change Log fragments process as is used by [Oasis Core].
+
+  For more details, see [Change Log fragments].
+
+  [Oasis Core]: https://github.com/oasisprotocol/oasis-core
+  [Change Log fragments]: .changelog/README.md
