@@ -1,7 +1,7 @@
 {
   "name": "rofl-app",
   "private": true,
-  "version": "0.9.0",
+  "version": "0.9.1",
   "type": "module",
   "scripts": {
     "checkTs": "tsc --noEmit",
@@ -11,6 +11,8 @@
     "lint": "eslint . --cache --ext .js,.ts,.tsx --max-warnings 0",
     "lint-git": "node ./internals/scripts/gitlint.cjs",
     "lint-docs": "markdownlint --ignore '**/node_modules/**' '**/*.md'",
+    "lint-changelog": "markdownlint --config .changelog/.markdownlint.yml .changelog/",
+    "changelog": "node ./internals/scripts/changelog.cjs",
     "release-tag": "node ./internals/scripts/release-tag.cjs",
     "preview": "vite preview",
     "prettier-check": "prettier src internals --check",
