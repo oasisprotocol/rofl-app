@@ -12,6 +12,13 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.0.1 (2025-09-16)
+
+### Process Changes
+
+- Add release GitHub workflow
+  ([#311](https://github.com/oasisprotocol/rofl-app/issues/311))
+
 ## 1.0.0 (2025-09-16)
 
 ### Process Changes
