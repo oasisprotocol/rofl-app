@@ -27,7 +27,7 @@
     "@rainbow-me/rainbowkit": "^2.2.8",
     "@tanstack/react-query": "^5.80.6",
     "@wagmi/core": "^2.17.3",
-    "axios": "^1.11.0",
+    "axios": "1.12.2",
     "bignumber.js": "^9.3.1",
     "date-fns": "^4.1.0",
     "fathom-client": "^3.7.2",
