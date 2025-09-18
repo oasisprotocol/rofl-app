@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base", ":disableDependencyDashboard"],
+  "prConcurrentLimit": 15,
   "packageRules": [
     {
       "groupName": "lint dependencies",
@@ -9,6 +10,10 @@
     {
       "groupName": "react dependencies",
       "matchPackagePatterns": ["react"]
+    },
+    {
+      "groupName": "wagmi dependencies",
+      "matchPackagePatterns": ["wagmi", "@wagmi/"]
     },
     {
       "groupName": "TypeScript type definitions",
