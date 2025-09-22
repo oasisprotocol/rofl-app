@@ -32,14 +32,14 @@ export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
       <InputFormField
         control={form.control}
-        name="COPY_TRADE_ADDRESS"
+        name="secrets.COPY_TRADE_ADDRESS"
         label="Trader Address to Copy"
         placeholder="0x..."
       />
 
       <InputFormField
         control={form.control}
-        name="WITHDRAW_FUNDS_TO"
+        name="secrets.WITHDRAW_FUNDS_TO"
         label="Withdrawal Address"
         placeholder="0x..."
       />

@@ -28,7 +28,7 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
       <InputFormField
         control={form.control}
-        name="SYSTEM_PROMPT"
+        name="secrets.SYSTEM_PROMPT"
         label="Bot Persona"
         placeholder="Define your bot's personality and behavior. This determines what kind of tweets it will generate..."
         type="textarea"
@@ -36,7 +36,7 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs
 
       <InputFormField
         control={form.control}
-        name="TWITTER_BEARER_TOKEN"
+        name="secrets.TWITTER_BEARER_TOKEN"
         label="Twitter Bearer Token"
         placeholder="Your Twitter Bearer token (from Twitter Developer Portal)"
         type="password"
@@ -44,7 +44,7 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs
 
       <InputFormField
         control={form.control}
-        name="TWITTER_API_KEY"
+        name="secrets.TWITTER_API_KEY"
         label="Twitter API Key"
         placeholder="Your Twitter API key (from Twitter Developer Portal)"
         type="input"
@@ -52,7 +52,7 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs
 
       <InputFormField
         control={form.control}
-        name="TWITTER_API_SECRET"
+        name="secrets.TWITTER_API_SECRET"
         label="Twitter API Secret"
         placeholder="Your Twitter API secret (from Twitter Developer Portal)"
         type="password"
@@ -60,7 +60,7 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs
 
       <InputFormField
         control={form.control}
-        name="TWITTER_ACCESS_TOKEN"
+        name="secrets.TWITTER_ACCESS_TOKEN"
         label="Twitter Access Token"
         placeholder="Your Twitter API access token (from Twitter Developer Portal)"
         type="input"
@@ -68,7 +68,7 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs
 
       <InputFormField
         control={form.control}
-        name="TWITTER_ACCESS_TOKEN_SECRET"
+        name="secrets.TWITTER_ACCESS_TOKEN_SECRET"
         label="Twitter Access Token Secret"
         placeholder="Your Twitter API access token secret (from Twitter Developer Portal)"
         type="password"
@@ -76,7 +76,7 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs
 
       <InputFormField
         control={form.control}
-        name="OPENAI_API_KEY"
+        name="secrets.OPENAI_API_KEY"
         label="OpenAI API Key"
         placeholder="Your OpenAI API key for generating tweet content (sk-...)"
         type="password"
@@ -84,7 +84,7 @@ export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs
 
       <SelectFormField
         control={form.control}
-        name="OPENAI_MODEL"
+        name="secrets.OPENAI_MODEL"
         label="OpenAI Model"
         placeholder="Select the OpenAI model to use for generating tweets"
         options={[

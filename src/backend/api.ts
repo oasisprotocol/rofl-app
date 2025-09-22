@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { AxiosError } from 'axios'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import type { Template } from '../pages/CreateApp/BootstrapStep'
-import type { AppData, CustomBuildFormData } from '../pages/CreateApp/types'
+import type { AppData } from '../pages/CreateApp/types'
 import * as yaml from 'yaml'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
@@ -452,10 +452,7 @@ export function useCreateAndDeployApp() {
 
       trackBootstrapStepEvent(9, 'updating_start', appData.templateId)
 
-      const secrets =
-        appData.templateId === 'custom-build'
-          ? (appData.inputs as CustomBuildFormData)?.secrets
-          : appData.inputs
+      const secrets = appData.inputs?.secrets
       hash = await sendTransactionAsync(
         rofl
           .callUpdate()

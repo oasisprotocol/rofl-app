@@ -33,7 +33,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
       <SelectFormField
         control={form.control}
-        name="OLLAMA_MODEL"
+        name="secrets.OLLAMA_MODEL"
         label="LLM running inside your TEE bot"
         placeholder="Select a model"
         options={[
@@ -44,7 +44,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
 
       <InputFormField
         control={form.control}
-        name="TOKEN"
+        name="secrets.TOKEN"
         label="Telegram API token"
         placeholder="Paste or type API token here"
         type="password"
@@ -52,7 +52,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
 
       <InputFormField
         control={form.control}
-        name="OLLAMA_SYSTEM_PROMPT"
+        name="secrets.OLLAMA_SYSTEM_PROMPT"
         label="LLM system prompt"
         placeholder="Instructions for the agent on how to act, behave..."
         type="textarea"

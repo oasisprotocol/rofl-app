@@ -12,10 +12,12 @@ const initAppDataState = (network: 'testnet' | 'mainnet'): AppData => ({
     homepage: '',
   },
   inputs: {
-    OLLAMA_MODEL: '',
-    TOKEN: '',
-    OLLAMA_SYSTEM_PROMPT: '',
-    WITHDRAW: 'false',
+    secrets: {
+      OLLAMA_MODEL: '',
+      TOKEN: '',
+      OLLAMA_SYSTEM_PROMPT: '',
+      WITHDRAW: 'false',
+    },
   },
   network: network,
   build: {
