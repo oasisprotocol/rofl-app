@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { AxiosError } from 'axios'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import type { Template } from '../pages/CreateApp/BootstrapStep'
-import type { AppData, CustomBuildFormData } from '../pages/CreateApp/types'
+import type { AppData } from '../pages/CreateApp/types'
 import * as yaml from 'yaml'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
@@ -369,7 +369,7 @@ export function useCreateAndDeployApp() {
       toast('Create app id?')
       setCurrentStep('creating')
 
-      trackBootstrapStepEvent(5, 'create_app_start', appData.template)
+      trackBootstrapStepEvent(5, 'create_app_start', appData.templateId)
 
       hash = await sendTransactionAsync(
         rofl
@@ -399,7 +399,7 @@ export function useCreateAndDeployApp() {
               'net.oasis.rofl.description': appData.metadata?.description || '',
               'net.oasis.rofl.version': appData.metadata?.version || '',
               'net.oasis.rofl.homepage': appData.metadata?.homepage || '',
-              'net.oasis.roflapp.template': appData.template || '',
+              'net.oasis.roflapp.template': appData.templateId || '',
               'net.oasis.roflapp.created_using_commit': BUILD_COMMIT,
             },
           })
@@ -410,7 +410,7 @@ export function useCreateAndDeployApp() {
       console.log('appId', appId)
       toast('Got app id ' + appId)
 
-      trackBootstrapStepEvent(6, 'create_app_completed', appData.template)
+      trackBootstrapStepEvent(6, 'create_app_completed', appData.templateId)
 
       const roflTemplateYaml = template.yaml.rofl
       // TODO: wait + handle error?
@@ -419,7 +419,7 @@ export function useCreateAndDeployApp() {
         token,
       )
       uploadArtifact(
-        { id: `${appId}-readme-md`, file: new Blob([getReadmeByTemplateId(appData.template!)]) },
+        { id: `${appId}-readme-md`, file: new Blob([getReadmeByTemplateId(appData.templateId!)]) },
         token,
       )
 
@@ -436,7 +436,7 @@ export function useCreateAndDeployApp() {
       console.log('Build?')
       setCurrentStep('building')
 
-      trackBootstrapStepEvent(7, 'building_start', appData.template)
+      trackBootstrapStepEvent(7, 'building_start', appData.templateId)
 
       // TODO: wait + handle error?
       uploadArtifact({ id: `${appId}-rofl-yaml`, file: new Blob([manifest]) }, token)
@@ -445,15 +445,14 @@ export function useCreateAndDeployApp() {
       const buildResults = await waitForBuildResults(task_id, token)
       console.log('Build results:', buildResults)
 
-      trackBootstrapStepEvent(8, 'building_completed', appData.template)
+      trackBootstrapStepEvent(8, 'building_completed', appData.templateId)
 
       toast('Save build results and secrets into app config?')
       setCurrentStep('updating')
 
-      trackBootstrapStepEvent(9, 'updating_start', appData.template)
+      trackBootstrapStepEvent(9, 'updating_start', appData.templateId)
 
-      const secrets =
-        appData.template === 'custom-build' ? (appData.agent as CustomBuildFormData)?.secrets : appData.agent
+      const secrets = appData.inputs?.secrets
       hash = await sendTransactionAsync(
         rofl
           .callUpdate()
@@ -484,12 +483,12 @@ export function useCreateAndDeployApp() {
       await waitForTransactionReceipt(wagmiConfig, { hash })
       toast('App config updated')
 
-      trackBootstrapStepEvent(10, 'updating_completed', appData.template)
+      trackBootstrapStepEvent(10, 'updating_completed', appData.templateId)
 
       toast('Queue app deploy?')
       setCurrentStep('deploying')
 
-      trackBootstrapStepEvent(11, 'deploying_start', appData.template)
+      trackBootstrapStepEvent(11, 'deploying_start', appData.templateId)
 
       hash = await sendTransactionAsync(
         roflmarket
@@ -516,7 +515,7 @@ export function useCreateAndDeployApp() {
 
       toastWithDuration('App is starting (~5min)', 5 * 60 * 1000)
 
-      trackBootstrapStepEvent(12, 'deploying_completed', appData.template)
+      trackBootstrapStepEvent(12, 'deploying_completed', appData.templateId)
 
       return appId
     },
