@@ -1,6 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base", ":disableDependencyDashboard"],
+  "prConcurrentLimit": 15,
+  "minimumReleaseAge": "20 days",
   "packageRules": [
     {
       "groupName": "lint dependencies",
@@ -9,6 +11,10 @@
     {
       "groupName": "react dependencies",
       "matchPackagePatterns": ["react"]
+    },
+    {
+      "groupName": "wagmi dependencies",
+      "matchPackagePatterns": ["wagmi", "@wagmi/"]
     },
     {
       "groupName": "TypeScript type definitions",
@@ -24,6 +30,11 @@
       "packageNames": ["node"],
       "matchDepTypes": ["engines"],
       "rangeStrategy": "auto"
+    },
+    {
+      "groupName": "Custom manager dependencies",
+      "matchManagers": ["regex"],
+      "minimumReleaseAge": "0 days"
     }
   ],
   "customManagers": [
