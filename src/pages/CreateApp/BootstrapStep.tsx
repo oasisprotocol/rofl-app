@@ -14,7 +14,7 @@ import { useAccount } from 'wagmi'
 export type Template = {
   name: string
   description: string
-  image: string
+  image?: string
   id: string
   initialValues: {
     metadata: Partial<MetadataFormData>
