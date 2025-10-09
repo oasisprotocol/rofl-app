@@ -7,16 +7,15 @@ import { MyApps } from './pages/Dashboard/MyApps'
 import { AppDetails } from './pages/Dashboard/AppDetails'
 import { Machines } from './pages/Dashboard/Machines'
 import { MachinesDetails } from './pages/Dashboard/MachinesDetails'
-import { Create } from './pages/CreateApp'
 import { Explore } from './pages/Explore'
 import { NotFound } from './components/NotFound'
 import { wagmiConfig } from './constants/wagmi-config.ts'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MainLayout } from './components/Layout/MainLayout'
 import { RootLayout } from './components/RootLayout'
-import { LandingTemplates } from './pages/LandingTemplates'
 import { MachineTopUp } from './pages/Dashboard/MachinesDetails/MachineTopUp'
 import { ProtectedLayout } from './components/ProtectedLayout'
+import { TemplateFlow } from './components/TemplateFlow'
 
 import './index.css'
 import '@rainbow-me/rainbowkit/styles.css'
@@ -35,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'templates',
-        element: <LandingTemplates />,
+        element: <TemplateFlow mode="browse" />,
       },
       {
         path: 'explore',
@@ -125,9 +124,7 @@ const router = createBrowserRouter([
             index: true,
             Component: () => {
               const location = useLocation()
-              // Key is used to reset state on every navigation to this route. Even
-              // if inside create flow and user clicks "Create +" in Header bar.
-              return <Create key={location.key} />
+              return <TemplateFlow key={location.key} mode="create" />
             },
           },
         ],
