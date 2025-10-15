@@ -183,5 +183,6 @@ export type AppData = {
   template?: string
   metadata?: MetadataFormData
   agent?: AgentFormData | XAgentFormData | HlCopyTraderFormData
+  network: 'mainnet' | 'testnet'
   build?: BuildFormData
 }
