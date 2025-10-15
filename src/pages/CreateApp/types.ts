@@ -184,5 +184,4 @@ export type AppData = {
   metadata?: MetadataFormData
   agent?: AgentFormData | XAgentFormData | HlCopyTraderFormData
   build?: BuildFormData
-  payment?: Record<string, unknown>
 }

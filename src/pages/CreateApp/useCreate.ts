@@ -25,7 +25,6 @@ const initAppDataState: AppData = {
     offerMemory: 0,
     offerStorage: 0,
   },
-  payment: {},
 }
 
 export const useCreate = () => {
