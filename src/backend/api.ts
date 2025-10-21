@@ -20,6 +20,7 @@ import { toast } from 'sonner'
 import { isMachineRemoved } from '../components/MachineStatusIcon/isMachineRemoved.ts'
 import { trackEvent } from 'fathom-client'
 import { getOasisAddressBytesFromEvm } from '../utils/helpers.ts'
+import type { Config } from '@wagmi/core'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -280,6 +281,29 @@ const trackBootstrapStepEvent = (stepNumber: number, step: string, templateId?: 
   )
 }
 
+async function waitForTransactionAndCheckSuccess(
+  wagmiConfig: Config,
+  hash: `0x${string}`,
+  network: 'mainnet' | 'testnet',
+): Promise<void> {
+  const receipt = await waitForTransactionReceipt(wagmiConfig, { hash })
+
+  if (receipt.status === 'reverted') {
+    throw new Error(`Transaction failed: ${hash}`)
+  }
+
+  const response = await GetRuntimeEvents(network, 'sapphire', {
+    tx_hash: hash.replace('0x', ''),
+  })
+
+  const hasError = response.data.events?.some(event => event.type?.includes('error') || event.body?.error)
+
+  if (hasError) {
+    const errorEvent = response.data.events?.find(event => event.type?.includes('error') || event.body?.error)
+    throw new Error(`Subcall transaction failed: ${errorEvent?.body?.error || 'Unknown error'}`)
+  }
+}
+
 export function useCreateAndDeployApp() {
   const { blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const wagmiConfig = useConfig()
@@ -372,6 +396,7 @@ export function useCreateAndDeployApp() {
           .toSubcall(),
       )
       console.log('create app: tx hash', hash)
+      await waitForTransactionAndCheckSuccess(wagmiConfig, hash, network)
       const appId = await waitForAppId(hash, network)
       console.log('appId', appId)
       toast('Got app id ' + appId)
@@ -445,7 +470,7 @@ export function useCreateAndDeployApp() {
           })
           .toSubcall(),
       )
-      await waitForTransactionReceipt(wagmiConfig, { hash })
+      await waitForTransactionAndCheckSuccess(wagmiConfig, hash, network)
       toast('App config updated')
 
       trackBootstrapStepEvent(10, 'updating_completed', appData.template)
@@ -473,7 +498,7 @@ export function useCreateAndDeployApp() {
           })
           .toSubcall(),
       )
-      await waitForTransactionReceipt(wagmiConfig, { hash })
+      await waitForTransactionAndCheckSuccess(wagmiConfig, hash, network)
       toast('Deploy queued')
 
       await waitForAppScheduler(appId, network)

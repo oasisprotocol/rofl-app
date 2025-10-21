@@ -5,7 +5,6 @@ import { Footer } from '../../components/Layout/Footer'
 import type { AppData, MetadataFormData } from './types'
 import { useCreateAndDeployApp } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
-import { useNetwork } from '../../hooks/useNetwork'
 import { Steps } from './AnimatedStepText'
 import { BuildFormData } from '../../types/build-form'
 import { useAccount } from 'wagmi'
@@ -29,6 +28,7 @@ export type Template = {
 type BootstrapStepProps = {
   appData?: AppData
   template: Template | undefined
+  network: 'mainnet' | 'testnet'
 }
 
 type BootstrapState = (typeof BootstrapState)[keyof typeof BootstrapState]
@@ -39,9 +39,8 @@ export const BootstrapState = {
   Error: 'error',
 } as const
 
-export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template }) => {
+export const BootstrapStep: FC<BootstrapStepProps> = ({ appData, template, network }) => {
   const { address } = useAccount()
-  const network = useNetwork()
   const [buildTriggered, setBuildTriggered] = useState(false)
   const [bootstrapStep, setBootstrapStep] = useState<BootstrapState>(BootstrapState.Pending)
   const { token } = useRoflAppBackendAuthContext()

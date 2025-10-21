@@ -10,7 +10,7 @@ import { getTemplateById } from './templates'
 import { trackEvent } from 'fathom-client'
 
 export const Create: FC = () => {
-  const { currentStep, setCurrentStep, appData, setAppDataForm } = useCreate()
+  const { currentStep, setCurrentStep, appData, setAppDataForm, network } = useCreate()
   const steps = [
     { component: TemplateStep },
     { component: MetadataStep },
@@ -102,7 +102,7 @@ export const Create: FC = () => {
           customStepTitle={selectedTemplate.customStepTitle}
         />
       )}
-      {currentStep === 5 && <BootstrapStep appData={appData} template={selectedTemplate} />}
+      {currentStep === 5 && <BootstrapStep appData={appData} template={selectedTemplate} network={network} />}
     </div>
   )
 }
