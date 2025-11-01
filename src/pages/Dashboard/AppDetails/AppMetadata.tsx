@@ -180,7 +180,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
             }).format(new Date(transaction?.timestamp))}
             <br />
             <a
-              href={`https://explorer.oasis.io/mainnet/sapphire/tx/${transaction.hash}`}
+              href={`https://explorer.oasis.io/${network}/sapphire/tx/${transaction.hash}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary"
