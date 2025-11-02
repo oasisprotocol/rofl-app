@@ -48,5 +48,6 @@
       "depNameTemplate": "oasisprotocol/oasis-boot"
     }
   ],
-  "rangeStrategy": "bump"
+  "rangeStrategy": "bump",
+  "cloneSubmodules": true
 }
