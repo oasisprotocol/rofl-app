@@ -1,6 +1,5 @@
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { type FC, lazy, Suspense, useRef } from 'react'
-import { useMonaco } from '@monaco-editor/react'
 import * as yaml from 'yaml'
 import * as monaco from 'monaco-editor'
 
@@ -45,8 +44,8 @@ type CodeDisplayProps = {
 }
 
 export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true, onChange }) => {
-  const monacoInstance = useMonaco()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const monacoInstanceRef = useRef<typeof monaco | null>(null)
 
   if (!data) {
     return null
@@ -63,11 +62,46 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
     })
   }
 
-  const handleEditorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
+  const highlightErrorLogs = () => {
+    const monacoInstance = monacoInstanceRef.current
+    if (!monacoInstance || !editorRef.current || data === undefined) {
+      return
+    }
+    const model = editorRef.current.getModel()
+    if (!model) return
+
+    const markers: monaco.editor.IMarkerData[] = []
+    for (const [i, line] of data.split('\n').entries()) {
+      if (
+        line.includes('"err"') ||
+        line.toLowerCase().includes('error') ||
+        line.toLowerCase().includes('exception')
+      ) {
+        markers.push({
+          startLineNumber: i + 1,
+          endLineNumber: i + 1,
+          startColumn: 0,
+          endColumn: model.getLineMaxColumn(i + 1),
+          message: 'error?',
+          severity: monacoInstance.MarkerSeverity.Error,
+        })
+      }
+    }
+    // Note: Using monaco from useMonaco() here breaks if you navigate away and back
+    monacoInstance.editor.setModelMarkers(model, 'highlightErrorLogs', markers)
+  }
+
+  const handleEditorDidMount = (
+    editor: monaco.editor.IStandaloneCodeEditor,
+    monacoInstance: typeof monaco,
+  ) => {
     editorRef.current = editor
+    monacoInstanceRef.current = monacoInstance
+    highlightErrorLogs()
   }
 
   const handleEditorChange = (value: string | undefined) => {
+    const monacoInstance = monacoInstanceRef.current
     if (!monacoInstance || !editorRef.current || value === undefined) {
       return
     }
@@ -96,6 +130,9 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
     }
 
     monacoInstance.editor.setModelMarkers(model, 'yaml-validator', markers)
+
+    highlightErrorLogs()
+
     onChange?.(value)
   }
 
@@ -112,6 +149,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
           onChange={handleEditorChange}
           options={{
             readOnly,
+            renderValidationDecorations: 'on',
             fontSize: 14,
             wordWrap: 'on',
             scrollBeyondLastLine: false,
