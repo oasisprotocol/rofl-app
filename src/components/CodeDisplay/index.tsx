@@ -1,6 +1,5 @@
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { type FC, lazy, Suspense, useRef } from 'react'
-import { useMonaco } from '@monaco-editor/react'
 import * as yaml from 'yaml'
 import * as monaco from 'monaco-editor'
 
@@ -45,8 +44,8 @@ type CodeDisplayProps = {
 }
 
 export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = true, onChange }) => {
-  const monacoInstance = useMonaco()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const monacoInstanceRef = useRef<typeof monaco | null>(null)
 
   if (!data) {
     return null
@@ -64,6 +63,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
   }
 
   const highlightErrorLogs = () => {
+    const monacoInstance = monacoInstanceRef.current
     if (!monacoInstance || !editorRef.current || data === undefined) {
       return
     }
@@ -87,15 +87,21 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
         })
       }
     }
+    // Note: Using monaco from useMonaco() here breaks if you navigate away and back
     monacoInstance.editor.setModelMarkers(model, 'highlightErrorLogs', markers)
   }
 
-  const handleEditorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
+  const handleEditorDidMount = (
+    editor: monaco.editor.IStandaloneCodeEditor,
+    monacoInstance: typeof monaco,
+  ) => {
     editorRef.current = editor
+    monacoInstanceRef.current = monacoInstance
     highlightErrorLogs()
   }
 
   const handleEditorChange = (value: string | undefined) => {
+    const monacoInstance = monacoInstanceRef.current
     if (!monacoInstance || !editorRef.current || value === undefined) {
       return
     }
