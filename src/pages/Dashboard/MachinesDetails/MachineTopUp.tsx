@@ -9,7 +9,7 @@ import { trimLongString } from '../../../utils/trimLongString.ts'
 import { BuildForm } from '../../../components/BuildForm'
 import { CreateFormNavigation } from '../../CreateApp/CreateFormNavigation.tsx'
 import { useMachineTopUp } from '../../../backend/api.ts'
-import { useAccount, useBalance, useChainId } from 'wagmi'
+import { BaseError, useAccount, useBalance, useChainId } from 'wagmi'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { NumberUtils } from '../../../utils/number.utils.ts'
 import { BigNumber } from 'bignumber.js'
@@ -153,7 +153,10 @@ export const MachineTopUp: FC = () => {
                         </p>
                       )}
                       {machineTopUp.isError && (
-                        <p className="text-xs text-error break-all">{machineTopUp?.error.message}</p>
+                        <p className="text-xs text-error break-all">
+                          {(machineTopUp?.error as unknown as BaseError).shortMessage ??
+                            machineTopUp?.error.message}
+                        </p>
                       )}
                     </>
                   )
