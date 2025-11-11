@@ -109,27 +109,29 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
     const model = editorRef.current.getModel()
     if (!model) return
 
-    const markers: monaco.editor.IMarkerData[] = []
+    if (!readOnly) {
+      const markers: monaco.editor.IMarkerData[] = []
 
-    try {
-      yaml.parse(value)
-    } catch (e) {
-      const yamlError = e as { message: string; linePos: { line: number; col: number }[] }
-      if (yamlError.linePos && yamlError.linePos.length > 0) {
-        const line = yamlError.linePos[0].line
-        const column = yamlError.linePos[0].col
-        markers.push({
-          startLineNumber: line,
-          endLineNumber: line,
-          startColumn: column,
-          endColumn: model.getLineMaxColumn(line),
-          message: yamlError.message,
-          severity: monacoInstance.MarkerSeverity.Error,
-        })
+      try {
+        yaml.parse(value)
+      } catch (e) {
+        const yamlError = e as { message: string; linePos: { line: number; col: number }[] }
+        if (yamlError.linePos && yamlError.linePos.length > 0) {
+          const line = yamlError.linePos[0].line
+          const column = yamlError.linePos[0].col
+          markers.push({
+            startLineNumber: line,
+            endLineNumber: line,
+            startColumn: column,
+            endColumn: model.getLineMaxColumn(line),
+            message: yamlError.message,
+            severity: monacoInstance.MarkerSeverity.Error,
+          })
+        }
       }
-    }
 
-    monacoInstance.editor.setModelMarkers(model, 'yaml-validator', markers)
+      monacoInstance.editor.setModelMarkers(model, 'yaml-validator', markers)
+    }
 
     highlightErrorLogs(value)
 
