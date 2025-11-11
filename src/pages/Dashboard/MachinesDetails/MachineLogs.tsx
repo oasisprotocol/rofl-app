@@ -30,24 +30,6 @@ export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, inst
     }
   }
 
-  if (!schedulerRak) {
-    return (
-      <EmptyState
-        title="Waiting for scheduler"
-        description="Logs will be available once the scheduler is ready."
-      ></EmptyState>
-    )
-  }
-
-  if (isRemoved) {
-    return (
-      <EmptyState
-        title="Machine has been removed"
-        description="Logs are not available for machines that have been removed."
-      ></EmptyState>
-    )
-  }
-
   const hasLogs = allLogs.length > 0
 
   // Hide a message while formatting disk that makes it look like progress is stuck.
