@@ -62,16 +62,16 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
     })
   }
 
-  const highlightErrorLogs = () => {
+  const highlightErrorLogs = (value: string) => {
     const monacoInstance = monacoInstanceRef.current
-    if (!monacoInstance || !editorRef.current || data === undefined) {
+    if (!monacoInstance || !editorRef.current || value === undefined) {
       return
     }
     const model = editorRef.current.getModel()
     if (!model) return
 
     const markers: monaco.editor.IMarkerData[] = []
-    for (const [i, line] of data.split('\n').entries()) {
+    for (const [i, line] of value.split('\n').entries()) {
       if (
         line.includes('"err"') ||
         line.toLowerCase().includes('error') ||
@@ -97,7 +97,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
   ) => {
     editorRef.current = editor
     monacoInstanceRef.current = monacoInstance
-    highlightErrorLogs()
+    highlightErrorLogs(data)
   }
 
   const handleEditorChange = (value: string | undefined) => {
@@ -131,7 +131,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({ data, className, readOnly = 
 
     monacoInstance.editor.setModelMarkers(model, 'yaml-validator', markers)
 
-    highlightErrorLogs()
+    highlightErrorLogs(value)
 
     onChange?.(value)
   }
