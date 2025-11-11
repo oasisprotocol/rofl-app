@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { Card } from '@oasisprotocol/ui-library/src/components/ui/card.tsx'
 import { AlertTriangle, ExternalLink } from 'lucide-react'
-import { TOP_UP_FAILED_URL } from '../../../constants/top-up-config.ts'
+import { ROSE_APP_URL } from '../../../constants/top-up-config.ts'
 
 export const TopUpInitializationFailed: FC = () => {
   return (
@@ -16,7 +16,7 @@ export const TopUpInitializationFailed: FC = () => {
           you transfer $ROSE to your Sapphire account.
         </p>
         <a
-          href={TOP_UP_FAILED_URL}
+          href={ROSE_APP_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 w-full h-10 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"

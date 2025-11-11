@@ -13,7 +13,6 @@ import { AccountAvatar } from '../AccountAvatar'
 import { useAccount, useDisconnect } from 'wagmi'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
 import { useNavigate } from 'react-router-dom'
-import { ENABLED_CHAINS_IDS } from '../../constants/top-up-config.ts'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks.ts'
 
@@ -30,7 +29,7 @@ const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address
 
 const useNavigateToDashboardOnChainChange = ({ enabled }: { enabled: boolean }) => {
   const { chainId } = useAccount()
-  const [selectedChainId, setselectedChainId] = useState(chainId)
+  const [selectedChainId, setSelectedChainId] = useState(chainId)
   const navigate = useNavigate()
   const { isAuthenticated } = useRoflAppBackendAuthContext()
 
@@ -38,14 +37,11 @@ const useNavigateToDashboardOnChainChange = ({ enabled }: { enabled: boolean }) 
     if (!enabled) return
 
     if (chainId && chainId !== selectedChainId && isAuthenticated) {
-      // slice(1) Ignore sapphire
-      if (!ENABLED_CHAINS_IDS.slice(1).includes(chainId.toString())) {
-        setselectedChainId(chainId)
-        navigate('/dashboard', { replace: true })
-      }
+      setSelectedChainId(chainId)
+      navigate('/dashboard', { replace: true })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, chainId, navigate, selectedChainId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- selectedChainId should not trigger effect
+  }, [enabled, chainId, navigate, isAuthenticated])
 }
 
 interface Props {
