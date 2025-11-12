@@ -1,7 +1,5 @@
 import type { GetBalanceReturnType } from 'wagmi/actions'
 import { NumberUtils } from './number.utils.ts'
-import type { QuoteResponse } from '../backend/top-up'
-import type { Chain, Token } from '../types/top-up'
 
 export abstract class FormatUtils {
   static formatTime(seconds: number): string {
@@ -23,48 +21,10 @@ export abstract class FormatUtils {
     )
   }
 
-  static formatOutputAmount(quote: QuoteResponse | null): string {
-    if (!quote?.destination?.tokenAmount) return '-/-'
-
-    return NumberUtils.formatTokenAmountWithSymbol(
-      quote.destination.tokenAmount,
-      quote.destination.asset.decimals,
-      quote.destination.asset.symbol,
-      6,
-    )
-  }
-
-  static formatGasFee(
-    quote: QuoteResponse | null,
-    chain: Chain | null,
-    token: Token | null,
-    gasPrice: bigint | null | undefined,
-  ): string {
-    const gasLimit = chain?.gasLimit?.trustless?.swap
-    const decimals = token?.decimals
-
-    if (!quote || !chain || !gasPrice || !gasLimit) return '-/-'
-
-    const nativeSymbol = chain.gasToken?.symbol.toUpperCase()
-    return NumberUtils.formatGasFeeWithSymbol(gasLimit, gasPrice, nativeSymbol, decimals, 6)
-  }
-
   static formatBalance(balance: GetBalanceReturnType | null, isLoading?: boolean): string {
     if (isLoading) return 'Loading...'
     if (!balance) return '-/-'
     return balance.formatted
-  }
-
-  static formatSourceAmount(quote: QuoteResponse | null): string {
-    if (!quote?.source?.tokenAmount) return '0'
-
-    return NumberUtils.formatTokenAmount(quote.source.tokenAmount, quote.source.asset.decimals, 6)
-  }
-
-  static formatDestinationAmount(quote: QuoteResponse | null): string {
-    if (!quote?.destination?.tokenAmount) return '0'
-
-    return NumberUtils.formatTokenAmount(quote.destination.tokenAmount, quote.destination.asset.decimals, 6)
   }
 
   static formatNumberInput(value: string): string {

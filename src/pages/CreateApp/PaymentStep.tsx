@@ -152,7 +152,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
                 handleBack()
               }
             }}
-            disabled={(import.meta.env.PROD && isTestnet) || !canNavigateAway}
+            disabled={(import.meta.env.PROD && isTestnet) || !hasEnoughBalance || !canNavigateAway}
           />
           {!canNavigateAway && (
             <p className="text-xs text-error py-2">
