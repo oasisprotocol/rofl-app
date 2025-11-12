@@ -1,0 +1,12 @@
+/*
+  [rainbowkit]: Hacky way to hide Sapphire Mainnet from switch chain modal
+ */
+:global(body):global(.topUp) {
+  [data-rk] {
+    && {
+      [data-testid='rk-chain-option-23294'] {
+        display: none;
+      }
+    }
+  }
+}
