@@ -1,5 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 
+BigNumber.config({ EXPONENTIAL_AT: [-100, 100] })
+
 export abstract class NumberUtils {
   static formatTokenAmount(amount: string, decimals: number = 18, displayDecimals = 6): string {
     if (!amount || amount === '0') return '0'
@@ -7,7 +9,7 @@ export abstract class NumberUtils {
     return BigNumber(amount)
       .dividedBy(BigNumber(10).pow(decimals))
       .dp(displayDecimals, BigNumber.ROUND_DOWN)
-      .toString()
+      .toFixed()
   }
 
   static formatTokenAmountWithSymbol(

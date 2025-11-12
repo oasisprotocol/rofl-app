@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { Card } from '@oasisprotocol/ui-library/src/components/ui/card.tsx'
 import { AlertTriangle, ExternalLink } from 'lucide-react'
-import { ROSE_APP_URL } from '../../../constants/top-up-config.ts'
+import { ROSE_APP_URL } from '../../../constants/global.ts'
 
 export const TopUpInitializationFailed: FC = () => {
   return (
