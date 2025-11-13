@@ -50,9 +50,8 @@ export const deposit = async (
       if (decodedPaymentInitiated.eventName === 'PaymentInitiated') {
         paymentLogIndex = i
       }
-    } catch {
-      return { paymentId: null }
-    }
+      // eslint-disable-next-line no-empty -- Continue in case not PaymentInitiated event
+    } catch {}
   }
 
   let paymentId: string | null = null
