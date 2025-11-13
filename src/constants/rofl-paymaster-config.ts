@@ -38,6 +38,7 @@ export const ROFL_PAYMASTER_TOKEN_CONFIG: RoflPaymasterTokenConfig = {
 }
 
 export const ROFL_PAYMASTER_SAPPHIRE_CONTRACT_CONFIG = {
+  // TODO: replace with actual address once deployed on mainnet
   [sapphire.id]: '0x0000000000000000000000000000000000000000' as Address,
   [sapphireTestnet.id]: '0xa26733606bf8e0bD8d77Bddb707F05d7708EfBf7' as Address,
 }
