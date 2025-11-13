@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { addSeconds } from 'date-fns/addSeconds'
-import { format } from 'date-fns/format'
 
 interface UseCountdownTimerProps {
   initialTimeInSeconds: number
@@ -67,9 +65,10 @@ export const useCountdownTimer = ({ initialTimeInSeconds, onTimeUp }: UseCountdo
 
   const formatTime = (seconds: number): string => {
     const absSeconds = Math.abs(seconds)
-    const baseDate = new Date(0) // Start from epoch
-    const timeDate = addSeconds(baseDate, absSeconds)
-    const formattedTime = format(timeDate, 'm:ss')
+    const minutes = Math.floor((absSeconds % 3600) / 60)
+    const secs = absSeconds % 60
+
+    const formattedTime = `${minutes}:${String(secs).padStart(2, '0')}`
 
     return seconds < 0 ? `-${formattedTime}` : formattedTime
   }
