@@ -50,11 +50,10 @@ export const RoflPaymasterContextProvider: FC<PropsWithChildren> = ({ children }
       throw new Error('PaymentId is required!')
     }
 
-    let isCompleted = false
     let attempts = 0
     const maxAttempts = 60
 
-    while (!isCompleted && attempts < maxAttempts) {
+    while (attempts < maxAttempts) {
       try {
         const isProcessed = await isPaymentProcessed(
           ROFL_PAYMASTER_SAPPHIRE_CONTRACT_CONFIG[chain.id],
@@ -63,8 +62,7 @@ export const RoflPaymasterContextProvider: FC<PropsWithChildren> = ({ children }
         )
 
         if (isProcessed) {
-          isCompleted = true
-          return isProcessed
+          return true
         }
 
         await new Promise(resolve => setTimeout(resolve, 4000))
@@ -76,10 +74,7 @@ export const RoflPaymasterContextProvider: FC<PropsWithChildren> = ({ children }
       }
     }
 
-    if (!isCompleted && attempts >= maxAttempts) {
-      console.warn('Payment processed polling timed out, but payment may still complete')
-    }
-
+    console.warn('Payment processed polling timed out, but payment may still complete')
     return null
   }
 
