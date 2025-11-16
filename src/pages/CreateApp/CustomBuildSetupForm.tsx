@@ -9,17 +9,7 @@ import { type RoflAppSecrets } from '../../nexus/api'
 import { AddSecretFormContent } from '../../components/SecretsTable/AddSecretFormContent'
 import { useComposeValidation } from './useComposeValidation'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
-
-const placeholder = `# Paste your docker-compose YAML here\n
-*Example*\n
-services:
-\u00A0\u00A0python-telegram-bot:
-\u00A0\u00A0\u00A0\u00A0build: .
-\u00A0\u00A0\u00A0\u00A0image: 'ghcr.io/oasisprotocol/demo-rofl-tgbot'
-\u00A0\u00A0\u00A0\u00A0platform: linux/amd64
-\u00A0\u00A0\u00A0\u00A0environment:
-\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0- TOKEN\${TOKEN}
-`
+import { composePlaceholder } from './composePlaceholder'
 
 type CustomBuildSetupFormProps = {
   handleNext: () => void
@@ -136,11 +126,11 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
         <div className="flex flex-col gap-2">
           <div>
             <CodeDisplay
-              className="h-[450px]"
+              className="h-[1300px]"
               data={compose}
               readOnly={false}
               onChange={handleComposeChange}
-              placeholder={placeholder}
+              placeholder={composePlaceholder}
             />
           </div>
           {form.formState.errors.compose && (
