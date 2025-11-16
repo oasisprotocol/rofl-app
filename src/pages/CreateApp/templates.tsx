@@ -11,6 +11,8 @@ import hlCopyTraderThumbnail from '../../../templates/hl-copy-trader/app.webp'
 import hlCopyTraderTemplate from '../../../templates/hl-copy-trader/rofl-template.yaml?raw'
 import hlCompose from '../../../templates/hl-copy-trader/compose.yaml?raw'
 import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
+import customBuildTemplate from '../../../templates/custom-build/rofl-template.yaml?raw'
+import customBuildDocs from '../../../templates/custom-build/README.md?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
 import type { MetadataFormData } from './types'
 import { BuildFormData } from '../../types/build-form'
@@ -20,6 +22,7 @@ const parsedDefaultDeployments = parse(defaultDeployments)
 const parsedTgbotTemplate = parse(tgbotTemplate)
 const parsedXagentTemplate = parse(xagentTemplate)
 const parsedHlTemplate = parse(hlCopyTraderTemplate)
+const parsedCustomBuildTemplate = parse(customBuildTemplate)
 
 type ParsedTemplate = {
   name?: string
@@ -168,10 +171,38 @@ export const templates = [
       rofl: parsedHlTemplate,
     },
   },
+  {
+    name: parsedCustomBuildTemplate.name,
+    customStepTitle: 'Setup Container',
+    description: parsedCustomBuildTemplate.description,
+    image: undefined,
+    id: 'custom-build',
+    initialValues: {
+      metadata: extractMetadata(parsedCustomBuildTemplate),
+      build: extractResources(parsedCustomBuildTemplate),
+    },
+    yaml: {
+      compose: '',
+      rofl: parsedCustomBuildTemplate,
+    },
+  },
 ]
 
 export const getTemplateById = (id: string | undefined) => {
   return templates.find(template => template.id === id)
+}
+
+export const getCustomTemplate = (id: string | undefined, customCompose: string | undefined) => {
+  const template = getTemplateById(id)
+  if (template) {
+    return {
+      ...template,
+      yaml: {
+        ...template.yaml,
+        compose: customCompose || template.yaml.compose,
+      },
+    }
+  }
 }
 
 export const getReadmeByTemplateId = (templateId: string) => {
@@ -182,6 +213,8 @@ export const getReadmeByTemplateId = (templateId: string) => {
       return xAgentDocs
     case 'hl-copy-trader':
       return hlCopyTraderDocs
+    case 'custom-build':
+      return customBuildDocs
     default:
       return ''
   }

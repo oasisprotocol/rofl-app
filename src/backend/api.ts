@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { AxiosError } from 'axios'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import type { Template } from '../pages/CreateApp/BootstrapStep'
-import type { AppData } from '../pages/CreateApp/types'
+import type { AppData, CustomBuildFormData } from '../pages/CreateApp/types'
 import * as yaml from 'yaml'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
@@ -59,6 +59,13 @@ type RoflBuildResultsResponse = {
   enclaves: null | oasis.types.SGXEnclaveIdentity[] // Added in postprocessing
 }
 
+type RoflValidateResponse = {
+  valid: boolean
+  errors?: string[]
+  warnings?: string[]
+  message?: string
+}
+
 type ArtifactId =
   | `${string}-rofl-template-yaml`
   | `${string}-rofl-yaml`
@@ -105,6 +112,23 @@ const buildRofl = async (
   const response = await axios.post<RoflBuildResponse>(
     `${BACKEND_URL}/rofl/build`,
     { manifest, compose },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  )
+  return response.data
+}
+
+const validateRofl = async (
+  { compose }: { compose: string },
+  token: string,
+): Promise<RoflValidateResponse> => {
+  const response = await axios.post<RoflValidateResponse>(
+    `${BACKEND_URL}/rofl/validate`,
+    { compose },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -198,6 +222,16 @@ export function useDownloadArtifact(id: ArtifactId | null, token: string | null,
     enabled: !!id && !!token && enabled,
     staleTime: 0,
     throwOnError: false,
+  })
+}
+
+export function useValidateRofl(token: string | null) {
+  return useMutation<RoflValidateResponse, AxiosError<unknown>, { compose: string }>({
+    mutationFn: data => validateRofl(data, token!),
+    throwOnError: false,
+    onError: error => {
+      console.error('Error validating ROFL:', error)
+    },
   })
 }
 
@@ -418,6 +452,8 @@ export function useCreateAndDeployApp() {
 
       trackBootstrapStepEvent(9, 'updating_start', appData.template)
 
+      const secrets =
+        appData.template === 'custom-build' ? (appData.agent as CustomBuildFormData)?.secrets : appData.agent
       hash = await sendTransactionAsync(
         rofl
           .callUpdate()
@@ -433,11 +469,11 @@ export function useCreateAndDeployApp() {
               enclaves: [...app.policy.enclaves, ...buildResults.enclaves!],
             },
             secrets: Object.fromEntries(
-              Object.entries(appData.agent ?? {}).map(([key, value]) => {
+              Object.entries(secrets ?? {}).map(([key, value]) => {
                 return [
                   key,
                   oasis.misc.fromBase64(
-                    oasisRT.rofl.encryptSecret(key, oasis.misc.fromString(value), app.sek),
+                    oasisRT.rofl.encryptSecret(key, oasis.misc.fromString(String(value)), app.sek),
                   ),
                 ]
               }),

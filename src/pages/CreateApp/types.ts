@@ -1,5 +1,6 @@
-import { z } from 'zod'
+import { z, RefinementCtx } from 'zod'
 import { BuildFormData } from '../../types/build-form.ts'
+import * as yaml from 'yaml'
 
 /**
  * This is like z.string().url(), but also accepts domain names without the protocol prefix,
@@ -109,6 +110,29 @@ export const metadataFormSchema = z.object({
   homepage: flexibleUrl,
 })
 
+export const customBuildFormSchema = z.object({
+  compose: z
+    .string()
+    .min(1, {
+      message: 'Please provide a valid compose file.',
+    })
+    .superRefine((data, ctx: RefinementCtx) => {
+      try {
+        yaml.parse(data)
+      } catch (error) {
+        const yamlError = error as { message: string; linePos: { line: number; col: number }[] }
+
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: yamlError.message,
+        })
+      }
+    }),
+  secrets: z.record(z.string()).default({}),
+  name: z.string().default(''),
+  value: z.string().default(''),
+})
+
 export const tgbotFormSchema = z.object({
   OLLAMA_MODEL: z.string().min(1, {
     message: 'Model is required.',
@@ -175,6 +199,7 @@ export const hlCopyTraderFormSchema = z.object({
 
 export type TemplateFormData = string
 export type MetadataFormData = z.infer<typeof metadataFormSchema>
+export type CustomBuildFormData = z.infer<typeof customBuildFormSchema>
 export type AgentFormData = z.infer<typeof tgbotFormSchema>
 export type XAgentFormData = z.infer<typeof xAgentFormSchema>
 export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
@@ -182,7 +207,7 @@ export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
 export type AppData = {
   template?: string
   metadata?: MetadataFormData
-  agent?: AgentFormData | XAgentFormData | HlCopyTraderFormData
+  agent?: CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData
   network: 'mainnet' | 'testnet'
   build?: BuildFormData
 }
