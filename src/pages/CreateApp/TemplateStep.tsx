@@ -15,7 +15,7 @@ export const TemplateStep: FC<TemplateStepProps> = ({ handleNext, setAppDataForm
   const handleTemplateSelect = (id: string) => {
     const template = templates.find(template => template.id === id)
     setAppDataForm({
-      template: id,
+      templateId: id,
       ...template?.initialValues,
     })
     handleNext()

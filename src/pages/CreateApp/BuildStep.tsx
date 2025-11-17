@@ -43,7 +43,7 @@ export const BuildStep: FC<BuildStepProps> = ({
       selectedTemplateId={selectedTemplateId}
       customStepTitle={customStepTitle}
     >
-      <CreateFormHeader title="Configure machine" />
+      <CreateFormHeader title="Configure Machine" />
 
       <BuildForm
         onSubmit={onSubmit}

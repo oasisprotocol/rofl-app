@@ -3,7 +3,7 @@ import type { AppData } from './types'
 import { useNetwork } from '../../hooks/useNetwork'
 
 const initAppDataState = (network: 'testnet' | 'mainnet'): AppData => ({
-  template: '',
+  templateId: '',
   metadata: {
     name: '',
     author: '',
@@ -11,11 +11,13 @@ const initAppDataState = (network: 'testnet' | 'mainnet'): AppData => ({
     version: '',
     homepage: '',
   },
-  agent: {
-    OLLAMA_MODEL: '',
-    TOKEN: '',
-    OLLAMA_SYSTEM_PROMPT: '',
-    WITHDRAW: 'false',
+  inputs: {
+    secrets: {
+      OLLAMA_MODEL: '',
+      TOKEN: '',
+      OLLAMA_SYSTEM_PROMPT: '',
+      WITHDRAW: 'false',
+    },
   },
   network: network,
   build: {
@@ -47,9 +49,9 @@ export const useCreate = () => {
     const initData = initAppDataState(network)
     setAppData(prevData => ({
       ...initData,
-      template: prevData.template,
+      templateId: prevData.templateId,
       metadata: prevData.metadata,
-      agent: prevData.agent,
+      inputs: prevData.inputs,
       // reset network
       // reset build
     }))

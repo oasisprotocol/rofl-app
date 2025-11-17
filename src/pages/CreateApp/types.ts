@@ -134,67 +134,73 @@ export const customBuildFormSchema = z.object({
 })
 
 export const tgbotFormSchema = z.object({
-  OLLAMA_MODEL: z.string().min(1, {
-    message: 'Model is required.',
+  secrets: z.object({
+    OLLAMA_MODEL: z.string().min(1, {
+      message: 'Model is required.',
+    }),
+    TOKEN: z
+      .string()
+      .min(1, {
+        message: 'Token is required.',
+      })
+      .max(50, {
+        message: 'Token must be less than 50 characters.',
+      }),
+    OLLAMA_SYSTEM_PROMPT: z
+      .string()
+      .min(1, {
+        message: 'Prompt is required.',
+      })
+      .max(1000, {
+        message: 'Prompt must be less than 1000 characters.',
+      }),
   }),
-  TOKEN: z
-    .string()
-    .min(1, {
-      message: 'Token is required.',
-    })
-    .max(50, {
-      message: 'Token must be less than 50 characters.',
-    }),
-  OLLAMA_SYSTEM_PROMPT: z
-    .string()
-    .min(1, {
-      message: 'Prompt is required.',
-    })
-    .max(1000, {
-      message: 'Prompt must be less than 1000 characters.',
-    }),
 })
 
 export const xAgentFormSchema = z.object({
-  SYSTEM_PROMPT: z
-    .string()
-    .min(1, {
-      message: 'Bot persona is required.',
-    })
-    .max(2000, {
-      message: 'Bot persona must be less than 2000 characters.',
+  secrets: z.object({
+    SYSTEM_PROMPT: z
+      .string()
+      .min(1, {
+        message: 'Bot persona is required.',
+      })
+      .max(2000, {
+        message: 'Bot persona must be less than 2000 characters.',
+      }),
+    TWITTER_BEARER_TOKEN: z.string().min(1, {
+      message: 'Twitter Bearer Token is required.',
     }),
-  TWITTER_BEARER_TOKEN: z.string().min(1, {
-    message: 'Twitter Bearer Token is required.',
-  }),
-  TWITTER_API_KEY: z.string().min(1, {
-    message: 'Twitter API Key is required.',
-  }),
-  TWITTER_API_SECRET: z.string().min(1, {
-    message: 'Twitter API Secret is required.',
-  }),
-  TWITTER_ACCESS_TOKEN: z.string().min(1, {
-    message: 'Twitter Access Token is required.',
-  }),
-  TWITTER_ACCESS_TOKEN_SECRET: z.string().min(1, {
-    message: 'Twitter Access Token Secret is required.',
-  }),
-  OPENAI_API_KEY: z.string().min(1, {
-    message: 'OpenAI API Key is required.',
-  }),
-  OPENAI_MODEL: z.string().min(1, {
-    message: 'Model is required.',
+    TWITTER_API_KEY: z.string().min(1, {
+      message: 'Twitter API Key is required.',
+    }),
+    TWITTER_API_SECRET: z.string().min(1, {
+      message: 'Twitter API Secret is required.',
+    }),
+    TWITTER_ACCESS_TOKEN: z.string().min(1, {
+      message: 'Twitter Access Token is required.',
+    }),
+    TWITTER_ACCESS_TOKEN_SECRET: z.string().min(1, {
+      message: 'Twitter Access Token Secret is required.',
+    }),
+    OPENAI_API_KEY: z.string().min(1, {
+      message: 'OpenAI API Key is required.',
+    }),
+    OPENAI_MODEL: z.string().min(1, {
+      message: 'Model is required.',
+    }),
   }),
 })
 
 export const hlCopyTraderFormSchema = z.object({
-  COPY_TRADE_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
-    message: 'Please enter a valid Ethereum address (0x...).',
+  secrets: z.object({
+    COPY_TRADE_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
+      message: 'Please enter a valid Ethereum address (0x...).',
+    }),
+    WITHDRAW_FUNDS_TO: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
+      message: 'Please enter a valid Ethereum address (0x...).',
+    }),
+    WITHDRAW: z.enum(['false', 'true']),
   }),
-  WITHDRAW_FUNDS_TO: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
-    message: 'Please enter a valid Ethereum address (0x...).',
-  }),
-  WITHDRAW: z.enum(['false', 'true']),
 })
 
 export type TemplateFormData = string
@@ -205,9 +211,9 @@ export type XAgentFormData = z.infer<typeof xAgentFormSchema>
 export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
 
 export type AppData = {
-  template?: string
+  templateId?: string
   metadata?: MetadataFormData
-  agent?: CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData
+  inputs?: CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData
   network: 'mainnet' | 'testnet'
   build?: BuildFormData
 }

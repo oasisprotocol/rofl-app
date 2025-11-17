@@ -15,11 +15,11 @@ Before ROFLizing your application, ensure you have:
 
 ## Step-by-Step Setup Instructions
 
-### Step 1: Input metadata
+### Step 1: Input Metadata
 
 Provide basic information about your application.
 
-### Step 2: Setup containers
+### Step 2: Setup Containers
 
 1. **`compose.yaml`** (Required)
 
@@ -39,7 +39,7 @@ Provide basic information about your application.
     - Specify the names and values of the environment variables that are defined
       in the Compose file and add them to the table one by one.
 
-### Step 3: Configure machine
+### Step 3: Configure Machine
 
 Choose the appropriate size of machine where your application will and the
 duration that the machine should run. You are able to extend the duration later

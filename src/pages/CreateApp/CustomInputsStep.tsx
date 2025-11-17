@@ -12,22 +12,22 @@ import {
 } from './types'
 import { CustomBuildSetupForm } from './CustomBuildSetupForm'
 
-type AgentStepProps = {
+type CustomInputsStepProps = {
   handleNext: () => void
   handleBack: () => void
-  agent?: AgentFormData | XAgentFormData | HlCopyTraderFormData | CustomBuildFormData
+  inputs?: AgentFormData | XAgentFormData | HlCopyTraderFormData | CustomBuildFormData
   setAppDataForm: (data: {
-    agent: AgentFormData | XAgentFormData | HlCopyTraderFormData | CustomBuildFormData
+    inputs: AgentFormData | XAgentFormData | HlCopyTraderFormData | CustomBuildFormData
   }) => void
   selectedTemplateName?: string
   selectedTemplateId?: string
   customStepTitle: string
 }
 
-export const AgentStep: FC<AgentStepProps> = ({
+export const CustomInputsStep: FC<CustomInputsStepProps> = ({
   handleNext,
   handleBack,
-  agent,
+  inputs,
   setAppDataForm,
   selectedTemplateName,
   selectedTemplateId,
@@ -46,8 +46,8 @@ export const AgentStep: FC<AgentStepProps> = ({
         <CustomBuildSetupForm
           handleNext={handleNext}
           handleBack={handleBack}
-          agent={agent as CustomBuildFormData}
-          setAppDataForm={setAppDataForm as (data: { agent: CustomBuildFormData }) => void}
+          inputs={inputs as CustomBuildFormData}
+          setAppDataForm={setAppDataForm}
         />
       )}
 
@@ -55,24 +55,24 @@ export const AgentStep: FC<AgentStepProps> = ({
         <TgbotAgentForm
           handleNext={handleNext}
           handleBack={handleBack}
-          agent={agent as AgentFormData}
-          setAppDataForm={setAppDataForm as (data: { agent: AgentFormData }) => void}
+          inputs={inputs as AgentFormData}
+          setAppDataForm={setAppDataForm}
         />
       )}
       {selectedTemplateId === 'x-agent' && (
         <XAgentForm
           handleNext={handleNext}
           handleBack={handleBack}
-          agent={agent as XAgentFormData}
-          setAppDataForm={setAppDataForm as (data: { agent: XAgentFormData }) => void}
+          inputs={inputs as XAgentFormData}
+          setAppDataForm={setAppDataForm}
         />
       )}
       {selectedTemplateId === 'hl-copy-trader' && (
         <HlCopyTraderForm
           handleNext={handleNext}
           handleBack={handleBack}
-          agent={agent as HlCopyTraderFormData}
-          setAppDataForm={setAppDataForm as (data: { agent: HlCopyTraderFormData }) => void}
+          inputs={inputs as HlCopyTraderFormData}
+          setAppDataForm={setAppDataForm}
         />
       )}
     </CreateLayout>

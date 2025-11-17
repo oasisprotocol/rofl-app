@@ -38,9 +38,9 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
   }, [isHelpPanelExpanded])
 
   const sidebarItems = [
-    { label: 'Input metadata', active: currentStep === 1 },
+    { label: 'Input Metadata', active: currentStep === 1 },
     { label: customStepTitle, active: currentStep === 2 },
-    { label: 'Configure machine', active: currentStep === 3 },
+    { label: 'Configure Machine', active: currentStep === 3 },
     { label: 'Payment', active: currentStep === 4 },
   ]
 
