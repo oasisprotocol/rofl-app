@@ -21,7 +21,14 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
 }) => {
   const form = useForm<AgentFormData>({
     resolver: zodResolver(tgbotFormSchema),
-    defaultValues: { ...inputs },
+    defaultValues: {
+      secrets: {
+        OLLAMA_MODEL: '',
+        TOKEN: '',
+        OLLAMA_SYSTEM_PROMPT: '',
+      },
+      ...inputs,
+    },
   })
 
   function onSubmit(values: AgentFormData) {

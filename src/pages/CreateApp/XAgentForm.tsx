@@ -16,7 +16,19 @@ type XAgentFormProps = {
 export const XAgentForm: FC<XAgentFormProps> = ({ handleNext, handleBack, inputs, setAppDataForm }) => {
   const form = useForm<XAgentFormData>({
     resolver: zodResolver(xAgentFormSchema),
-    defaultValues: { ...inputs },
+    defaultValues: {
+      secrets: {
+        SYSTEM_PROMPT: '',
+        TWITTER_BEARER_TOKEN: '',
+        TWITTER_API_KEY: '',
+        TWITTER_API_SECRET: '',
+        TWITTER_ACCESS_TOKEN: '',
+        TWITTER_ACCESS_TOKEN_SECRET: '',
+        OPENAI_API_KEY: '',
+        OPENAI_MODEL: '',
+      },
+      ...inputs,
+    },
   })
 
   function onSubmit(values: XAgentFormData) {
