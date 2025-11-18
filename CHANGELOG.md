@@ -54,14 +54,12 @@ The format is inspired by [Keep a Changelog].
 - Trigger workflows for stable/* branches
   ([#322](https://github.com/oasisprotocol/rofl-app/issues/322))
 
-- Bump rofl-containers to v0.8.2
-  ([#330](https://github.com/oasisprotocol/rofl-app/issues/330))
+- Bump rofl-containers
+  ([#330](https://github.com/oasisprotocol/rofl-app/issues/330),
+   [#343](https://github.com/oasisprotocol/rofl-app/issues/343))
 
 - Fix renovate by enabling cloneSubmodules option
   ([#334](https://github.com/oasisprotocol/rofl-app/issues/334))
-
-- Bump rofl-containers to v0.8.4
-  ([#343](https://github.com/oasisprotocol/rofl-app/issues/343))
 
 - Remove unused top-up feature
   ([#347](https://github.com/oasisprotocol/rofl-app/issues/347))
