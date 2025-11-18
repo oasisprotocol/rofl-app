@@ -11,14 +11,6 @@ const initAppDataState = (network: 'testnet' | 'mainnet'): AppData => ({
     version: '',
     homepage: '',
   },
-  inputs: {
-    secrets: {
-      OLLAMA_MODEL: '',
-      TOKEN: '',
-      OLLAMA_SYSTEM_PROMPT: '',
-      WITHDRAW: 'false',
-    },
-  },
   network: network,
   build: {
     provider: '',

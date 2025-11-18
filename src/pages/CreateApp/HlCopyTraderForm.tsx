@@ -20,7 +20,14 @@ export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
 }) => {
   const form = useForm<HlCopyTraderFormData>({
     resolver: zodResolver(hlCopyTraderFormSchema),
-    defaultValues: { ...inputs },
+    defaultValues: {
+      secrets: {
+        COPY_TRADE_ADDRESS: '',
+        WITHDRAW_FUNDS_TO: '',
+        WITHDRAW: 'false', // Hidden, not editable, prefilled WITHDRAW="false"
+      },
+      ...inputs,
+    },
   })
 
   function onSubmit(values: HlCopyTraderFormData) {
@@ -43,8 +50,6 @@ export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
         label="Withdrawal Address"
         placeholder="0x..."
       />
-
-      {/* Hidden prefilled WITHDRAW="false" */}
 
       <CreateFormNavigation handleBack={handleBack} disabled={form.formState.isSubmitting} />
     </form>
