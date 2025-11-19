@@ -3,7 +3,7 @@ export const composePlaceholder = `# Paste your Compose file (e.g. docker-compos
 
 services:
   db:
-    image: docker.io/library/postgres:15-alpine
+    image: docker.io/library/postgres:18-alpine
     environment:
       - POSTGRES_DB=\${DB_NAME}
       - POSTGRES_USER=\${DB_USER}
