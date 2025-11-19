@@ -126,7 +126,7 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
         <div className="flex flex-col gap-2">
           <div>
             <CodeDisplay
-              className="h-[1300px]"
+              className="h-[790px]"
               data={compose}
               readOnly={false}
               onChange={handleComposeChange}

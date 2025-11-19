@@ -78,3 +78,7 @@
     color: red;
   }
 }
+
+.monaco-editor .editorPlaceholder {
+  white-space: pre;
+}
