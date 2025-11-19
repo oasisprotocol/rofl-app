@@ -173,7 +173,7 @@ export const templates = [
   },
   {
     name: parsedCustomBuildTemplate.name,
-    customStepTitle: 'Setup Container',
+    customStepTitle: 'Setup Containers',
     description: parsedCustomBuildTemplate.description,
     image: undefined,
     id: 'custom-build',

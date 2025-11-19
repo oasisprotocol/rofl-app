@@ -90,7 +90,7 @@ export const MachineStatusIcon: FC<MachineStatusIconProps> = ({ machine }) => {
       case 'removed':
         return {
           icon: <CircleStop className="h-5 w-5" style={{ color: 'var(--error)' }} />,
-          tooltip: 'Machine is no longer available',
+          tooltip: 'Machine has been removed',
         }
       case 'expired':
         return {

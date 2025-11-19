@@ -41,6 +41,7 @@ type CodeDisplayProps = {
   className?: string
   readOnly?: boolean
   onChange?: (value: string | undefined) => void
+  // CSS white-space set in index.css for proper placeholder rendering
   placeholder?: string
 }
 
