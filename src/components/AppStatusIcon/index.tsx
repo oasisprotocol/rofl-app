@@ -31,7 +31,7 @@ export const AppStatusIcon: FC<AppStatusIconProps> = ({ hasActiveInstances, remo
       case 'removed':
         return {
           icon: <CircleStop className="h-5 w-5" style={{ color: 'var(--error)' }} />,
-          tooltip: 'Application is no longer available',
+          tooltip: 'Application has been removed',
         }
       default:
         return null
