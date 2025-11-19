@@ -495,152 +495,137 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
     <div className={`${classes.topUp} flex w-full h-full justify-center items-center`}>
       <div className="flex flex-col w-full">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
-          <div className="space-y-2">
-            <div className="space-y-6">
-              <div className="space-y-2 rounded">
-                <div className="space-y-2">
-                  <div className="space-y-3">
-                    <p className="block text-sm font-medium text-foreground">
-                      Swap to ${ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN.symbol} from
-                    </p>
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="w-full justify-between h-10">
-                        <div className="flex items-center gap-2">
-                          {watchedValues.sourceChain?.id && (
-                            <TokenLogo chainId={watchedValues.sourceChain.id} />
-                          )}
-                          <span className="text-sm font-medium">
-                            {watchedValues.sourceChain?.name || 'Select Chain'}
-                          </span>
-                        </div>
-                        <ChevronDown className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" side="bottom" className="w-[384px]">
-                      {ROFL_PAYMASTER_ENABLED_CHAINS?.filter(
-                        chain => chain.id !== (ROFL_PAYMASTER_DESTINATION_CHAIN.id as number),
-                      ).map(chain => (
-                        <DropdownMenuItem
-                          key={chain.id}
-                          onClick={() => handleChainSelect(chain)}
-                          className="flex items-center gap-2 cursor-pointer"
-                        >
-                          <TokenLogo chainId={chain?.id} />
-                          <span className="text-sm font-medium">{chain.name}</span>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  {errors.sourceChain && <p className="text-xs text-error">{errors.sourceChain.message}</p>}
-
-                  <div className="flex">
-                    <div className="w-full relative">
-                      <Input
-                        placeholder="0"
-                        className="rounded-r-none h-10 pr-12"
-                        value={watchedValues.amount}
-                        onChange={handleAmountChange}
-                        disabled={!watchedValues.sourceToken?.symbol}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 px-2 text-xs"
-                        onClick={handleMaxClick}
-                        disabled={!currentMaxAmount}
-                      >
-                        MAX
-                      </Button>
-                    </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="flex justify-between items-center h-10 px-4 py-2 rounded-r-md rounded-l-none border-l-0 w-[128px]"
-                          disabled={!watchedValues.sourceChain?.id}
-                        >
-                          <div className="flex items-center gap-2">
-                            {(() => {
-                              const selectedToken = selectedChainTokens?.find(
-                                t => t.symbol === watchedValues.sourceToken?.symbol,
-                              )
-
-                              return (
-                                <>
-                                  {selectedToken && <TokenLogo token={selectedToken} />}
-                                  <span
-                                    className={`${watchedValues.sourceToken?.symbol ? 'uppercase ' : ' '}text-foreground text-sm font-medium`}
-                                  >
-                                    {watchedValues.sourceToken?.symbol || 'Token'}
-                                  </span>
-                                </>
-                              )
-                            })()}
-                          </div>
-                          <ChevronDown className="w-4 h-4 text-foreground" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" side="bottom" className="w-[384px]">
-                        {selectedChainTokens?.map(token => (
-                          <DropdownMenuItem
-                            key={token.symbol}
-                            onClick={() => handleTokenSelect(token)}
-                            className="flex items-center gap-2 cursor-pointer"
-                          >
-                            <div className="flex items-center gap-2 flex-1">
-                              <TokenLogo token={token} />
-                              <div className="flex flex-col">
-                                <span className="text-sm font-medium uppercase">{token.symbol}</span>
-                                <span className="text-xs text-muted-foreground">
-                                  {FormatUtils.formatBalance(token.balance, token.isLoadingBalance)}
-                                </span>
-                              </div>
-                            </div>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                  {errors.amount && <p className="text-xs text-error">{errors.amount.message}</p>}
-                  {errors.sourceToken && <p className="text-xs text-error">{errors.sourceToken.message}</p>}
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2 rounded">
-              <div className="space-y-2">
-                <div className="space-y-3">
-                  <p className="text-sm font-medium text-foreground">You will receive</p>
-                </div>
-              </div>
-              <div className="flex">
-                <div className="w-full">
-                  <Input
-                    className="rounded-r-none h-10 pointer-events-none"
-                    placeholder="0"
-                    value={NumberUtils.formatTokenAmount((quote ?? 0n).toString(), 18)}
-                    disabled
-                  />
-                </div>
-                <Button
-                  variant="outline"
-                  className="flex justify-start rounded-l-none h-10 w-[128px] px-3 cursor-default"
-                >
+          <div className="space-y-3">
+            <p className="block text-sm font-medium text-foreground">
+              Swap to ${ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN.symbol} from
+            </p>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-full justify-between h-10">
                   <div className="flex items-center gap-2">
-                    <TokenLogo token={ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN ?? undefined} />
-                    <span className="text-foreground text-sm font-medium uppercase">
-                      {ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN.symbol}
+                    {watchedValues.sourceChain?.id && <TokenLogo chainId={watchedValues.sourceChain.id} />}
+                    <span className="text-sm font-medium">
+                      {watchedValues.sourceChain?.name || 'Select Chain'}
                     </span>
                   </div>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" side="bottom" className="w-[384px]">
+                {ROFL_PAYMASTER_ENABLED_CHAINS?.filter(
+                  chain => chain.id !== (ROFL_PAYMASTER_DESTINATION_CHAIN.id as number),
+                ).map(chain => (
+                  <DropdownMenuItem
+                    key={chain.id}
+                    onClick={() => handleChainSelect(chain)}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <TokenLogo chainId={chain?.id} />
+                    <span className="text-sm font-medium">{chain.name}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {errors.sourceChain && <p className="text-xs text-error">{errors.sourceChain.message}</p>}
+            <div className="flex">
+              <div className="w-full relative">
+                <Input
+                  placeholder="0"
+                  className="rounded-r-none h-10 pr-12"
+                  value={watchedValues.amount}
+                  onChange={handleAmountChange}
+                  disabled={!watchedValues.sourceToken?.symbol}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 px-2 text-xs"
+                  onClick={handleMaxClick}
+                  disabled={!currentMaxAmount}
+                >
+                  MAX
                 </Button>
               </div>
-              {errors.destinationToken && (
-                <p className="text-xs text-error">{errors.destinationToken.message}</p>
-              )}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex justify-between items-center h-10 px-4 py-2 rounded-r-md rounded-l-none border-l-0 w-[128px]"
+                    disabled={!watchedValues.sourceChain?.id}
+                  >
+                    <div className="flex items-center gap-2">
+                      {(() => {
+                        const selectedToken = selectedChainTokens?.find(
+                          t => t.symbol === watchedValues.sourceToken?.symbol,
+                        )
+
+                        return (
+                          <>
+                            {selectedToken && <TokenLogo token={selectedToken} />}
+                            <span
+                              className={`${watchedValues.sourceToken?.symbol ? 'uppercase ' : ' '}text-foreground text-sm font-medium`}
+                            >
+                              {watchedValues.sourceToken?.symbol || 'Token'}
+                            </span>
+                          </>
+                        )
+                      })()}
+                    </div>
+                    <ChevronDown className="w-4 h-4 text-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" side="bottom" className="w-[384px]">
+                  {selectedChainTokens?.map(token => (
+                    <DropdownMenuItem
+                      key={token.symbol}
+                      onClick={() => handleTokenSelect(token)}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2 flex-1">
+                        <TokenLogo token={token} />
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium uppercase">{token.symbol}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {FormatUtils.formatBalance(token.balance, token.isLoadingBalance)}
+                          </span>
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
+            {errors.amount && <p className="text-xs text-error">{errors.amount.message}</p>}
+            {errors.sourceToken && <p className="text-xs text-error">{errors.sourceToken.message}</p>}
+          </div>
+
+          <div className="space-y-3">
+            <p className="text-sm font-medium text-foreground">You will receive</p>
+            <div className="flex">
+              <div className="w-full">
+                <Input
+                  className="rounded-r-none h-10 pointer-events-none"
+                  placeholder="0"
+                  value={NumberUtils.formatTokenAmount((quote ?? 0n).toString(), 18)}
+                  disabled
+                />
+              </div>
+              <Button
+                variant="outline"
+                className="flex justify-start rounded-l-none h-10 w-[128px] px-3 cursor-default"
+              >
+                <div className="flex items-center gap-2">
+                  <TokenLogo token={ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN ?? undefined} />
+                  <span className="text-foreground text-sm font-medium uppercase">
+                    {ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN.symbol}
+                  </span>
+                </div>
+              </Button>
+            </div>
+            {errors.destinationToken && (
+              <p className="text-xs text-error">{errors.destinationToken.message}</p>
+            )}
           </div>
 
           {topUpError && (
