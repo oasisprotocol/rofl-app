@@ -94,9 +94,7 @@ export const SecretsTable: FC<SecretsTableProps> = ({
           <TableBody>
             {Object.keys(secrets).map(key => (
               <TableRow key={key}>
-                <TableCell>
-                  {key}: [{(secrets[key] as string).length} bytes]
-                </TableCell>
+                <TableCell>{key}</TableCell>
                 <TableCell>
                   <span className="text-muted-foreground">Encrypted</span>
                 </TableCell>
