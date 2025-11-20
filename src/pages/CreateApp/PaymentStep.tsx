@@ -62,6 +62,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
     hasEnoughBalance || !sapphireBalance || !amountRequired
       ? null
       : BigNumber(amountRequired).minus(sapphireBalance.value)
+  const isTestnetBlocked = import.meta.env.PROD && isTestnet && selectedTemplateId !== 'custom-build'
 
   const { blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
 
@@ -137,7 +138,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
         </TopUp>
       )}
 
-      {import.meta.env.PROD && isTestnet && (
+      {isTestnetBlocked && (
         <div className="text-sm text-destructive mt-4 text-pretty">
           Functionality is currently blocked on the Oasis Sapphire Testnet. To build and deploy your
           application, please switch to Mainnet.
@@ -152,7 +153,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
                 handleBack()
               }
             }}
-            disabled={(import.meta.env.PROD && isTestnet) || !hasEnoughBalance || !canNavigateAway}
+            disabled={isTestnetBlocked || !hasEnoughBalance || !canNavigateAway}
           />
           {!canNavigateAway && (
             <p className="text-xs text-error py-2">
