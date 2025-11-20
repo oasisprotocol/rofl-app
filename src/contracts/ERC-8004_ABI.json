@@ -1,0 +1,19 @@
+[
+  {
+    "inputs": [
+      { "name": "agentId", "type": "uint256" },
+      { "name": "key", "type": "string" }
+    ],
+    "name": "getMetadata",
+    "outputs": [{ "name": "", "type": "bytes" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "name": "tokenId", "type": "uint256" }],
+    "name": "tokenURI",
+    "outputs": [{ "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
