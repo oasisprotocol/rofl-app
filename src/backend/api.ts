@@ -15,7 +15,12 @@ import { useBlockNavigatingAway } from '../pages/CreateApp/useBlockNavigatingAwa
 import { BuildFormData } from '../types/build-form.ts'
 import { convertToDurationTerms } from './helpers.ts'
 import { toastWithDuration } from '../utils/toastWithDuration.tsx'
-import { getReadmeByTemplateId, fillTemplate } from '../pages/CreateApp/templates.tsx'
+import {
+  getReadmeByTemplateId,
+  fillTemplate,
+  hasRofl8004ServiceSecrets,
+  addRofl8004ServiceToCompose,
+} from '../pages/CreateApp/templates.tsx'
 import { toast } from 'sonner'
 import { isMachineRemoved } from '../components/MachineStatusIcon/isMachineRemoved.ts'
 import { trackEvent } from 'fathom-client'
@@ -432,7 +437,12 @@ export function useCreateAndDeployApp() {
       const manifest = yaml.stringify(
         fillTemplate(roflTemplateYaml, appData.metadata!, build, network, appId, address),
       )
-      const compose = template.yaml.compose
+
+      let compose = template.yaml.compose
+      if (hasRofl8004ServiceSecrets(appData)) {
+        compose = addRofl8004ServiceToCompose(template.yaml.compose)
+      }
+
       console.log('Build?')
       setCurrentStep('building')
 
