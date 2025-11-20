@@ -2,7 +2,7 @@ import { type FC, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { CreateFormNavigation } from './CreateFormNavigation'
-import { customBuildFormSchema, type CustomBuildFormData } from './types'
+import { customBuildFormSchema, type CustomBuildFormData, ERC8004FormData } from './types'
 import { SecretsTable } from '../../components/SecretsTable'
 import { CodeDisplay } from '../../components/CodeDisplay'
 import { type RoflAppSecrets } from '../../nexus/api'
@@ -14,8 +14,8 @@ import { composePlaceholder } from './composePlaceholder'
 type CustomBuildSetupFormProps = {
   handleNext: () => void
   handleBack: () => void
-  inputs?: CustomBuildFormData
-  setAppDataForm: (data: { inputs: CustomBuildFormData }) => void
+  inputs?: CustomBuildFormData & ERC8004FormData
+  setAppDataForm: (data: { inputs: CustomBuildFormData & ERC8004FormData }) => void
 }
 
 export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
@@ -59,13 +59,13 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     const isValid = await validateCompose(compose)
 
     if (isValid) {
-      setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData })
+      setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData & ERC8004FormData })
       handleNext()
     }
   }
 
   const navigateBack = () => {
-    setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData })
+    setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData & ERC8004FormData })
     handleBack()
   }
 
