@@ -133,6 +133,32 @@ export const customBuildFormSchema = z.object({
   value: z.string().default(''),
 })
 
+// Make sure that the secrets object contains variables prefixed with (const ROFL_8004_SERVICE_ENV_PREFIX)
+export const erc8004Schema = z.object({
+  secrets: z.object({
+    // Hardcoded to Sepolia prefix using Infura
+    ERC_8004_RPC_URL: z
+      .string()
+      .min(1, {
+        message: 'Infura API token is required.',
+      })
+      .max(100, {
+        message: 'Infura API token must be less than 100 characters.',
+      }),
+    ERC_8004_PINATA_JWT: z
+      .string()
+      .min(1, {
+        message: 'Pinata JWT is required.',
+      })
+      .max(1000, {
+        message: 'Pinata JWT must be less than 1000 characters.',
+      }),
+    ERC_8004_PRIVATE_KEY: z.string().regex(/^0x[a-fA-F0-9]{64}$/, {
+      message: 'Please enter a valid Ethereum private key (64 hexadecimal characters).',
+    }),
+  }),
+})
+
 export const tgbotFormSchema = z.object({
   secrets: z.object({
     OLLAMA_MODEL: z.string().min(1, {
@@ -203,17 +229,20 @@ export const hlCopyTraderFormSchema = z.object({
   }),
 })
 
-export type TemplateFormData = string
 export type MetadataFormData = z.infer<typeof metadataFormSchema>
 export type CustomBuildFormData = z.infer<typeof customBuildFormSchema>
+export type ERC8004FormData = z.infer<typeof erc8004Schema>
 export type AgentFormData = z.infer<typeof tgbotFormSchema>
 export type XAgentFormData = z.infer<typeof xAgentFormSchema>
 export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
 
+export type AppDataInputs = (CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData) &
+  ERC8004FormData
+
 export type AppData = {
   templateId?: string
   metadata?: MetadataFormData
-  inputs?: CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData
+  inputs?: AppDataInputs
   network: 'mainnet' | 'testnet'
   build?: BuildFormData
 }
