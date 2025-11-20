@@ -1,7 +1,7 @@
 import type { FC } from 'react'
-import { Card } from '@oasisprotocol/ui-library/src/components/ui/card.tsx'
+import { Card } from '@oasisprotocol/ui-library/src/components/ui/card'
 import { ExternalLink } from 'lucide-react'
-import { FAUCET_URL } from '../../../constants/top-up-config.ts'
+import { FAUCET_URL } from '../../../constants/global'
 
 export const FaucetInfo: FC = () => {
   return (
