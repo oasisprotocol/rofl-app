@@ -12,6 +12,33 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.1.1 (2025-11-20)
+
+### Bug Fixes and Improvements
+
+- Small UI improvements:
+  ([#358](https://github.com/oasisprotocol/rofl-app/issues/358),
+   [#360](https://github.com/oasisprotocol/rofl-app/issues/360))
+
+  - align tooltip terminology with Explorer
+  - update custom template compose placeholder
+  - update labels
+
+- Enable testnet deployment for custom-build template
+  ([#362](https://github.com/oasisprotocol/rofl-app/issues/362))
+
+### Documentation Improvements
+
+- Rewrite README to make it clearer and up-to-date
+  ([#357](https://github.com/oasisprotocol/rofl-app/issues/357))
+
+### Internal Changes
+
+- Update dependencies
+  ([#321](https://github.com/oasisprotocol/rofl-app/issues/321),
+   [#344](https://github.com/oasisprotocol/rofl-app/issues/344),
+   [#348](https://github.com/oasisprotocol/rofl-app/issues/348))
+
 ## 1.1.0 (2025-11-18)
 
 ### Features
