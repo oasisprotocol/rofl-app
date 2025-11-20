@@ -78,7 +78,13 @@ export const InputFormField = <T extends FieldValues>({
                 )}
               </div>
             ) : (
-              <Textarea id={name} placeholder={placeholder} {...field} aria-invalid={!!fieldState.error} />
+              <Textarea
+                id={name}
+                placeholder={placeholder}
+                {...field}
+                aria-invalid={!!fieldState.error}
+                disabled={disabled}
+              />
             )}
             {fieldState.error && <div className="text-destructive text-sm">{fieldState.error.message}</div>}
           </>
