@@ -1,3 +1,4 @@
+import * as yaml from 'yaml'
 import { parse } from 'yaml'
 import tgbotThumbnail from '../../../templates/tgbot/app.webp'
 import tgbotTemplate from '../../../templates/tgbot/rofl-template.yaml?raw'
@@ -14,9 +15,10 @@ import hlCopyTraderDocs from '../../../templates/hl-copy-trader/README.md?raw'
 import customBuildTemplate from '../../../templates/custom-build/rofl-template.yaml?raw'
 import customBuildDocs from '../../../templates/custom-build/README.md?raw'
 import defaultDeployments from '../../../templates/default-deployments.yaml?raw'
-import type { MetadataFormData } from './types'
+import type { AppData, MetadataFormData } from './types'
 import { BuildFormData } from '../../types/build-form'
 import { getEvmBech32Address } from '../../utils/helpers'
+import { ROFL_8004_SERVICE_ENV_PREFIX, ROFL_8004_SERVICE_NAME } from '../../constants/rofl-8004.ts'
 
 const parsedDefaultDeployments = parse(defaultDeployments)
 const parsedTgbotTemplate = parse(tgbotTemplate)
@@ -123,6 +125,29 @@ export const fillTemplate = (
       },
     },
   }
+}
+
+export const hasRofl8004ServiceSecrets = (appData: AppData) => {
+  return Object.keys(appData.inputs?.secrets ?? {}).some(key =>
+    key.toUpperCase().startsWith(ROFL_8004_SERVICE_ENV_PREFIX),
+  )
+}
+
+export const addRofl8004ServiceToCompose = (composeYaml: string): string => {
+  const compose = parse(composeYaml)
+
+  compose.services[ROFL_8004_SERVICE_NAME] = {
+    image: 'ghcr.io/oasisprotocol/rofl-8004:latest',
+    platform: 'linux/amd64',
+    environment: {
+      RPC_URL: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_RPC_URL}`,
+      PRIVATE_KEY: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_PRIVATE_KEY}`,
+      PINATA_JWT: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_PINATA_JWT}`,
+    },
+    volumes: ['/run/rofl-appd.sock:/run/rofl-appd.sock'],
+  }
+
+  return yaml.stringify(compose)
 }
 
 export const templates = [
