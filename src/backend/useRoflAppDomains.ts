@@ -7,6 +7,9 @@ import {
 } from '../nexus/api'
 import { isMachineRemoved } from '../components/MachineStatusIcon/isMachineRemoved'
 import { RoflmarketDeployment } from '@oasisprotocol/client-rt/dist/types'
+import { useRoflAppBackendAuthContext } from '../contexts/RoflAppBackendAuth/hooks'
+import { downloadArtifact } from './api'
+import { parsePublishedPortsFromCompose } from './parsePublishedPortsFromCompose'
 
 const MetadataKeySchedulerRAK = 'net.oasis.scheduler.rak'
 const MetadataKeyProxyDomain = 'net.oasis.proxy.domain'
@@ -33,12 +36,20 @@ interface AppExtraConfig {
   Ports: PortMapping[]
 }
 
-export function useRoflAppDomains(network: 'mainnet' | 'testnet', appID: string, extraCfg?: AppExtraConfig) {
+/** Proxy Domains */
+export function useRoflAppDomains(network: 'mainnet' | 'testnet', appID: string) {
   const paratime = 'sapphire' as const
+  const { token } = useRoflAppBackendAuthContext()
 
   const query = useQuery({
-    queryKey: ['useRoflAppDomains', network, appID, paratime, extraCfg],
+    queryKey: ['useRoflAppDomains', network, appID, paratime],
     queryFn: async () => {
+      const composeYaml = await downloadArtifact(`${appID}-compose-yaml`, token || '').catch(() => undefined)
+      const publishedPortsFromCompose = composeYaml ? parsePublishedPortsFromCompose(composeYaml) : []
+      const extraCfg: AppExtraConfig | undefined = publishedPortsFromCompose?.length
+        ? { Ports: publishedPortsFromCompose }
+        : undefined
+
       const appMachines = (await GetRuntimeRoflmarketInstances(network, paratime, { deployed_app_id: appID }))
         .data.instances
 
