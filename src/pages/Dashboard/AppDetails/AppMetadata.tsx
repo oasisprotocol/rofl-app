@@ -62,7 +62,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   const machines = machinesData?.data.instances.filter(machine => !isMachineRemoved(machine))
   const lastMachineToDuplicate = machinesData?.data.instances[0]
 
-  useRoflAppDomains(network, id)
+  const appDomains = useRoflAppDomains(network, id)
 
   return (
     <div className="space-y-4">
@@ -168,6 +168,25 @@ export const AppMetadata: FC<AppMetadataProps> = ({
             {editableState.homepage}
           </a>
         ) : undefined}
+      </DetailsSectionRow>
+      <DetailsSectionRow label="Proxy Domains">
+        <div>
+          {appDomains.isLoading && <Skeleton className="h-[20px] w-[80px]" />}
+          {appDomains.isError && 'Error'}
+          {appDomains.data?.map((port, i) => (
+            <div key={i}>
+              {port.ServiceName && `${port.ServiceName}: `}
+              {isUrlSafe(port.Domain) ? (
+                <a href={port.Domain} target="_blank" rel="noopener noreferrer" className="text-primary">
+                  {port.Domain}
+                </a>
+              ) : (
+                // `https://p<exposed ports>.m899.opf-testnet-rofl-25.rofl.app` is also considered invalid
+                <span>{port.Domain}</span>
+              )}
+            </div>
+          ))}
+        </div>
       </DetailsSectionRow>
       <div className="text-xl font-bold">Policy</div>
       <DetailsSectionRow label="Who can run this app">
