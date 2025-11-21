@@ -60,17 +60,19 @@ export const addRofl8004ServiceToCompose = (composeYaml: string, appData: AppDat
         return acc
       },
       {
+        // TODO: Fails, as docker will default to empty string, and not None(Python)
         // Pre-existing agent ID, if it is already registered.
-        AGENT_ID: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_AGENT_ID}`,
+        // AGENT_ID: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_AGENT_ID-}`,
         // Additional TEE-derived public keys to be stored inside ROFL Metadata
-        PUBLIC_KEY_IDS: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_PUBLIC_KEY_IDS}`,
+        // PUBLIC_KEY_IDS: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_PUBLIC_KEY_IDS-}`,
         // Validator address on ERC-8004 chain.
-        VALIDATOR_ADDRESS: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_VALIDATOR_ADDRESS}`,
+        // VALIDATOR_ADDRESS: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_VALIDATOR_ADDRESS-}`,
       } as Record<string, string>,
     )
 
   compose.services[ROFL_8004_SERVICE_NAME] = {
-    image: 'ghcr.io/oasisprotocol/rofl-8004:latest',
+    image:
+      'ghcr.io/oasisprotocol/rofl-8004:latest@sha256:f57373103814a0ca4c0a03608284451221b026e695b0b8ce9ca3d4153819a349',
     platform: 'linux/amd64',
     environment,
     volumes: ['/run/rofl-appd.sock:/run/rofl-appd.sock'],
