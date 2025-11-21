@@ -40,9 +40,7 @@ export const CreateLayout: FC<CreateLayoutProps> = ({
   const sidebarItems = [
     { label: 'Input Metadata', active: currentStep === 1 },
     { label: customStepTitle, active: currentStep === 2 },
-    ...(selectedTemplateId !== 'custom-build'
-      ? [{ label: 'Setup ERC-8004', active: currentStep === 3 }]
-      : []),
+    { label: 'Setup ERC-8004', active: currentStep === 3 },
     { label: 'Configure Machine', active: currentStep === 4 },
     {
       label: 'Payment',
