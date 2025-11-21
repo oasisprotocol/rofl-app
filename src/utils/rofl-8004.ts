@@ -53,8 +53,8 @@ export const addRofl8004ServiceToCompose = (composeYaml: string, appData: AppDat
           // Exception: ERC8004_SIGNING_KEY does not need to strip the prefix
           const envKey = ['ERC8004_SIGNING_KEY'].includes(key)
             ? key
-            : key.replace(/^ERC8004_/, `${ROFL_8004_SERVICE_ENV_PREFIX}_`)
-          acc[envKey] = appData.inputs?.secrets?.[erc8004Key]
+            : key.replace(`${ROFL_8004_SERVICE_ENV_PREFIX}_`, '')
+          acc[envKey] = `\${${key}}`
         }
 
         return acc
