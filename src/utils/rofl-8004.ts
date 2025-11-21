@@ -59,7 +59,14 @@ export const addRofl8004ServiceToCompose = (composeYaml: string, appData: AppDat
 
         return acc
       },
-      {} as Record<string, string>,
+      {
+        // Pre-existing agent ID, if it is already registered.
+        AGENT_ID: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_AGENT_ID}`,
+        // Additional TEE-derived public keys to be stored inside ROFL Metadata
+        PUBLIC_KEY_IDS: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_PUBLIC_KEY_IDS}`,
+        // Validator address on ERC-8004 chain.
+        VALIDATOR_ADDRESS: `\${${ROFL_8004_SERVICE_ENV_PREFIX}_VALIDATOR_ADDRESS}`,
+      } as Record<string, string>,
     )
 
   compose.services[ROFL_8004_SERVICE_NAME] = {
