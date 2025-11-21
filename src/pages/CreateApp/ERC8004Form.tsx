@@ -2,7 +2,7 @@ import { type FC, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { CreateFormNavigation } from './CreateFormNavigation'
-import { erc8004Schema, type ERC8004FormData, type AppDataInputs } from './types'
+import { erc8004Schema, type ERC8004FormData, type AppDataInputs, type MetadataFormData } from './types'
 import { InputFormField } from '../../components/InputFormField'
 import { Label } from '@oasisprotocol/ui-library/src/components/ui/label'
 import { Checkbox } from '@oasisprotocol/ui-library/src/components/ui/checkbox'
@@ -11,11 +11,12 @@ import { addROFL8004RpcPrefix, stripROFL8004RpcPrefix } from '../../utils/rofl-8
 type Props = {
   handleNext: () => void
   handleBack: () => void
+  metadata?: MetadataFormData
   inputs?: AppDataInputs
   setAppDataForm: (data: { inputs: AppDataInputs }) => void
 }
 
-export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, setAppDataForm }) => {
+export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadata, setAppDataForm }) => {
   const [skipERC8004, setSkipERC8004] = useState(false)
 
   const form = useForm<ERC8004FormData>({
@@ -25,9 +26,9 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, setAppD
         ERC8004_RPC_URL: stripROFL8004RpcPrefix(inputs?.secrets?.ERC8004_RPC_URL),
         ERC8004_PINATA_JWT: '',
         ERC8004_SIGNING_KEY: '',
-        ERC8004_AGENT_NAME: '',
-        ERC8004_AGENT_DESCRIPTION: '',
-        ERC8004_AGENT_VERSION: '',
+        ERC8004_AGENT_NAME: metadata?.name ?? '',
+        ERC8004_AGENT_DESCRIPTION: metadata?.description ?? '',
+        ERC8004_AGENT_VERSION: metadata?.version ?? '',
         ERC8004_AGENT_CATEGORY: '',
         ERC8004_AGENT_IMAGE: '',
         ...inputs?.secrets,

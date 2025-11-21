@@ -89,6 +89,7 @@ export const Create: FC = () => {
           handleNext={handleNext}
           handleBack={handleBack}
           inputs={appData?.inputs}
+          metadata={appData?.metadata}
           setAppDataForm={setAppDataForm}
           selectedTemplateName={selectedTemplate.name}
           selectedTemplateId={selectedTemplate.id}
