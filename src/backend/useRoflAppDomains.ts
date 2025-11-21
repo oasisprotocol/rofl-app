@@ -6,9 +6,11 @@ import {
   RoflMarketInstance,
 } from '../nexus/api'
 import { isMachineRemoved } from '../components/MachineStatusIcon/isMachineRemoved'
+import { RoflmarketDeployment } from '@oasisprotocol/client-rt/dist/types'
 
 const MetadataKeySchedulerRAK = 'net.oasis.scheduler.rak'
 const MetadataKeyProxyDomain = 'net.oasis.proxy.domain'
+const MetadataKeyProxyCustomDomains = 'net.oasis.proxy.custom_domains'
 
 // Try to match Go code https://github.com/oasisprotocol/cli/blob/61749d6/cmd/rofl/build/validate.go#L26-L44
 // PortMapping represents a port mapping.
@@ -31,7 +33,7 @@ interface AppExtraConfig {
   Ports: PortMapping[]
 }
 
-export function useRoflAppDomains(network: 'mainnet' | 'testnet', appID: string, extraCfg: AppExtraConfig) {
+export function useRoflAppDomains(network: 'mainnet' | 'testnet', appID: string, extraCfg?: AppExtraConfig) {
   const paratime = 'sapphire' as const
 
   const query = useQuery({
@@ -59,7 +61,7 @@ export function useRoflAppDomains(network: 'mainnet' | 'testnet', appID: string,
         const numericMachineID = BigInt('0x' + machineID)
         const proxyDomain2 = 'm' + numericMachineID + '.' + proxyDomain1
 
-        appDomains.push(...showMachinePorts(extraCfg, appID, insDsc, proxyDomain2))
+        appDomains.push(...showMachinePorts(extraCfg ?? impliedExtraCfg(insDsc), appID, insDsc, proxyDomain2))
       }
 
       return appDomains
@@ -84,4 +86,31 @@ function showMachinePorts(
       Domain: 'https://' + (p.CustomDomain ?? genericDomain),
     }
   })
+}
+
+function impliedExtraCfg(insDsc: RoflMarketInstance): AppExtraConfig {
+  const customDomains = (insDsc.deployment as unknown as RoflmarketDeployment).metadata?.[
+    MetadataKeyProxyCustomDomains
+  ] as string | undefined
+
+  return {
+    Ports: [
+      // https://github.com/oasisprotocol/oasis-sdk/blob/777bcc4/rofl-scheduler/src/proxy/mod.rs#L231
+      ...(customDomains?.split(' ') || []).map(
+        (CustomDomain): PortMapping => ({
+          ServiceName: '',
+          Port: '<unknown port>',
+          GenericDomain: 'p<unknown port>',
+          CustomDomain: CustomDomain,
+          ProxyMode: 'terminate-tls',
+        }),
+      ),
+      {
+        ServiceName: '',
+        Port: '<exposed ports>',
+        GenericDomain: 'p<exposed ports>',
+        ProxyMode: 'terminate-tls',
+      },
+    ],
+  }
 }
