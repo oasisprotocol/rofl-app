@@ -44,13 +44,17 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
         } as AppDataInputs,
       })
     } else {
+      const nonEmptySecrets = Object.fromEntries(
+        Object.entries({
+          ...values.secrets,
+          ERC8004_RPC_URL: addROFL8004RpcPrefix(values.secrets.ERC8004_RPC_URL || ''),
+        }).filter(([, value]) => value !== '' && value !== null && value !== undefined),
+      )
+
       setAppDataForm({
         inputs: {
           ...values,
-          secrets: {
-            ...values.secrets,
-            ERC8004_RPC_URL: addROFL8004RpcPrefix(values.secrets.ERC8004_RPC_URL || ''),
-          },
+          secrets: nonEmptySecrets,
         } as AppDataInputs,
       })
     }
@@ -84,7 +88,7 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
         type="password"
         name="secrets.ERC8004_SIGNING_KEY"
         label="Private key for agent submittion"
-        placeholder="0x1234567890abcde1234567890abcde1234567890abcde1234567890abcde123"
+        placeholder="1234567890abcde1234567890abcde1234567890abcde1234567890abcde123"
         disabled={skipERC8004}
         info="The private key used to sign and submit your agent to the ERC-8004 registry. Add some funds on Sepolia network."
       />
