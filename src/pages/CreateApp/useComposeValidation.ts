@@ -1,6 +1,8 @@
+import * as yaml from 'yaml'
 import { useState } from 'react'
 import { useValidateRofl } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
+import { ROFL_8004_SERVICE_NAME } from '../../constants/rofl-8004.ts'
 
 type ValidationState = {
   isValidating: boolean
@@ -33,6 +35,20 @@ export function useComposeValidation() {
       isValidating: true,
       validationError: null,
     })
+
+    try {
+      const parsed = yaml.parse(compose)
+      if (parsed?.services?.[ROFL_8004_SERVICE_NAME]) {
+        setValidationState({
+          isValidating: false,
+          validationError: `Service name "${ROFL_8004_SERVICE_NAME}" is reserved and cannot be used.`,
+        })
+        return false
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- ignore YAML parsing error
+    } catch (_err) {
+      // Let backend validation handle the error
+    }
 
     try {
       const response = (await validateRofl({ compose })) as RoflValidateApiResponse
