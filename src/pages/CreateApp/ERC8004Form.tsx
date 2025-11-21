@@ -22,9 +22,14 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, setAppD
     resolver: skipERC8004 ? undefined : zodResolver(erc8004Schema),
     defaultValues: {
       secrets: {
-        ERC_8004_RPC_URL: stripROFL8004RpcPrefix(inputs?.secrets?.ERC_8004_RPC_URL),
-        ERC_8004_PINATA_JWT: '',
-        ERC_8004_PRIVATE_KEY: '',
+        ERC8004_RPC_URL: stripROFL8004RpcPrefix(inputs?.secrets?.ERC8004_RPC_URL),
+        ERC8004_PINATA_JWT: '',
+        ERC8004_SIGNING_KEY: '',
+        ERC8004_AGENT_NAME: '',
+        ERC8004_AGENT_DESCRIPTION: '',
+        ERC8004_AGENT_VERSION: '',
+        ERC8004_AGENT_CATEGORY: '',
+        ERC8004_AGENT_IMAGE: '',
         ...inputs?.secrets,
       },
     },
@@ -43,7 +48,7 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, setAppD
           ...values,
           secrets: {
             ...values.secrets,
-            ERC_8004_RPC_URL: addROFL8004RpcPrefix(values.secrets.ERC_8004_RPC_URL || ''),
+            ERC8004_RPC_URL: addROFL8004RpcPrefix(values.secrets.ERC8004_RPC_URL || ''),
           },
         } as AppDataInputs,
       })
@@ -56,27 +61,75 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, setAppD
       <InputFormField
         control={form.control}
         type="textarea"
-        name="secrets.ERC_8004_PINATA_JWT"
+        name="secrets.ERC8004_PINATA_JWT"
         label="Pinata JWT Token"
         placeholder="1234567890abcde..."
         disabled={skipERC8004}
+        info="Your Pinata JWT token is used to pin agent metadata to IPFS. Get it from pinata.cloud"
       />
 
       <InputFormField
         control={form.control}
         type="password"
-        name="secrets.ERC_8004_RPC_URL"
+        name="secrets.ERC8004_RPC_URL"
         label="Infura API Token"
         placeholder="1234567890abcde1234567890abcde12"
+        disabled={skipERC8004}
+        info="Your Infura API token for Sepolia network. Get it from infura.io"
+      />
+
+      <InputFormField
+        control={form.control}
+        type="password"
+        name="secrets.ERC8004_SIGNING_KEY"
+        label="Private key for agent submittion"
+        placeholder="0x1234567890abcde1234567890abcde1234567890abcde1234567890abcde123"
+        disabled={skipERC8004}
+        info="The private key used to sign and submit your agent to the ERC-8004 registry. Add some funds on Sepolia network."
+      />
+
+      <InputFormField
+        control={form.control}
+        type="input"
+        name="secrets.ERC8004_AGENT_NAME"
+        label="Agent Name (Optional)"
+        placeholder="rofl-agent"
         disabled={skipERC8004}
       />
 
       <InputFormField
         control={form.control}
-        type="password"
-        name="secrets.ERC_8004_PRIVATE_KEY"
-        label="Private key for agent submittion"
-        placeholder="0x1234567890abcde1234567890abcde1234567890abcde1234567890abcde123"
+        type="textarea"
+        name="secrets.ERC8004_AGENT_DESCRIPTION"
+        label="Agent Description (Optional)"
+        placeholder="Oasis ROFL-powered trustless agent"
+        disabled={skipERC8004}
+      />
+
+      <InputFormField
+        control={form.control}
+        type="input"
+        name="secrets.ERC8004_AGENT_IMAGE"
+        label="Agent Image URL (Optional)"
+        placeholder="https://example.com/logo.png"
+        disabled={skipERC8004}
+      />
+
+      <InputFormField
+        control={form.control}
+        type="input"
+        name="secrets.ERC8004_AGENT_VERSION"
+        label="Agent Version (Optional)"
+        placeholder="0.1.0"
+        disabled={skipERC8004}
+      />
+
+      <InputFormField
+        control={form.control}
+        type="input"
+        name="secrets.ERC8004_AGENT_CATEGORY"
+        label="Agent Category (Optional)"
+        placeholder="rofl"
         disabled={skipERC8004}
       />
 

@@ -137,7 +137,7 @@ export const customBuildFormSchema = z.object({
 export const erc8004Schema = z.object({
   secrets: z.object({
     // Hardcoded to Sepolia prefix using Infura
-    ERC_8004_RPC_URL: z
+    ERC8004_RPC_URL: z
       .string()
       .min(1, {
         message: 'Infura API token is required.',
@@ -145,7 +145,7 @@ export const erc8004Schema = z.object({
       .max(100, {
         message: 'Infura API token must be less than 100 characters.',
       }),
-    ERC_8004_PINATA_JWT: z
+    ERC8004_PINATA_JWT: z
       .string()
       .min(1, {
         message: 'Pinata JWT is required.',
@@ -153,9 +153,18 @@ export const erc8004Schema = z.object({
       .max(1000, {
         message: 'Pinata JWT must be less than 1000 characters.',
       }),
-    ERC_8004_PRIVATE_KEY: z.string().regex(/^0x[a-fA-F0-9]{64}$/, {
+    ERC8004_SIGNING_KEY: z.string().regex(/^0x[a-fA-F0-9]{64}$/, {
       message: 'Please enter a valid Ethereum private key (64 hexadecimal characters).',
     }),
+    ERC8004_AGENT_NAME: z.string().optional(),
+    ERC8004_AGENT_DESCRIPTION: z.string().optional(),
+    ERC8004_AGENT_IMAGE: z
+      .string()
+      .url({ message: 'Please enter a valid URL.' })
+      .optional()
+      .or(z.literal('')),
+    ERC8004_AGENT_VERSION: z.string().optional().or(z.literal('')),
+    ERC8004_AGENT_CATEGORY: z.string().optional(),
   }),
 })
 
