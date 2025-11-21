@@ -153,7 +153,7 @@ export const erc8004Schema = z.object({
       .max(1000, {
         message: 'Pinata JWT must be less than 1000 characters.',
       }),
-    ERC8004_SIGNING_KEY: z.string().regex(/^0x[a-fA-F0-9]{64}$/, {
+    ERC8004_SIGNING_KEY: z.string().regex(/^[a-fA-F0-9]{64}$/, {
       message: 'Please enter a valid Ethereum private key (64 hexadecimal characters).',
     }),
     ERC8004_AGENT_NAME: z.string().optional(),
