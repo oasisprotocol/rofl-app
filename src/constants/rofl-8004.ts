@@ -2,7 +2,7 @@ import { sepolia } from 'viem/chains'
 import { createPublicClient, http } from 'viem'
 
 export const ROFL_8004_SERVICE_NAME = 'rofl-8004'
-export const ROFL_8004_SERVICE_ENV_PREFIX = 'ERC_8004'
+export const ROFL_8004_SERVICE_ENV_PREFIX = 'ERC8004'
 export const ROFL_8004_SERVICE_RPC_URL_BASE = 'https://sepolia.infura.io/v3/'
 
 export const ROFL_8004_CHAIN = sepolia
