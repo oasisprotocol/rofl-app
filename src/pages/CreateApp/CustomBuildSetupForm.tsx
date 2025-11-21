@@ -10,6 +10,7 @@ import { AddSecretFormContent } from '../../components/SecretsTable/AddSecretFor
 import { useComposeValidation } from './useComposeValidation'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { composePlaceholder } from './composePlaceholder'
+import { ROFL_8004_SERVICE_ENV_PREFIX } from '../../constants/rofl-8004.ts'
 
 type CustomBuildSetupFormProps = {
   handleNext: () => void
@@ -88,6 +89,14 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
 
     if (!name || name.trim() === '') {
       form.setError('name', { type: 'manual', message: 'Name is required.' })
+      hasError = true
+    }
+
+    if (name && name.startsWith(ROFL_8004_SERVICE_ENV_PREFIX)) {
+      form.setError('name', {
+        type: 'manual',
+        message: `Secret names starting with "${ROFL_8004_SERVICE_ENV_PREFIX}" are reserved and cannot be used.`,
+      })
       hasError = true
     }
 
