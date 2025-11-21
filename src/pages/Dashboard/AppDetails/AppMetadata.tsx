@@ -24,6 +24,7 @@ import { useDownloadArtifact } from '../../../backend/api'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { useAccount } from 'wagmi'
 import { getEvmBech32Address } from '../../../utils/helpers'
+import { useRoflAppDomains } from '../../../backend/useRoflAppDomains'
 
 type AppMetadataProps = {
   id: string
@@ -60,6 +61,8 @@ export const AppMetadata: FC<AppMetadataProps> = ({
 
   const machines = machinesData?.data.instances.filter(machine => !isMachineRemoved(machine))
   const lastMachineToDuplicate = machinesData?.data.instances[0]
+
+  useRoflAppDomains(network, id)
 
   return (
     <div className="space-y-4">
