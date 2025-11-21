@@ -38,6 +38,7 @@ export const CustomInputsStep: FC<CustomInputsStepProps> = ({
     setAppDataForm({
       inputs: {
         ...(inputs ?? {}),
+        ...appDataInputs.inputs,
         secrets: {
           ...(inputs?.secrets ?? {}),
           ...appDataInputs.inputs.secrets,
