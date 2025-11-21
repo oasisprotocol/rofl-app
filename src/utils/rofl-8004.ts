@@ -1,9 +1,14 @@
 import {
   ROFL_8004_CHAIN,
   ROFL_8004_METADATA_KEY,
+  ROFL_8004_SERVICE_ENV_PREFIX,
+  ROFL_8004_SERVICE_NAME,
   ROFL_8004_SERVICE_RPC_URL_BASE,
 } from '../constants/rofl-8004.ts'
 import { RoflInstance } from '../nexus/generated/api.ts'
+import { AppData, ERC8004FormData } from '../pages/CreateApp/types.ts'
+import * as yaml from 'yaml'
+import { parse } from 'yaml'
 
 export const stripROFL8004RpcPrefix = (url: string | undefined): string => {
   if (!url) return ''
@@ -28,3 +33,41 @@ export const fromMetadataToAgentId = (metadata: RoflInstance['metadata']) => {
 }
 
 export const tokenURIToLink = (tokenURI: string) => tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
+
+export const hasRofl8004ServiceSecrets = (appData: AppData) => {
+  return Object.keys(appData.inputs?.secrets ?? {}).some(key =>
+    key.toUpperCase().startsWith(ROFL_8004_SERVICE_ENV_PREFIX),
+  )
+}
+
+export const addRofl8004ServiceToCompose = (composeYaml: string, appData: AppData): string => {
+  const compose = parse(composeYaml)
+
+  const environment = Object.keys(appData.inputs?.secrets ?? {})
+    .filter(key => key.toUpperCase().startsWith(ROFL_8004_SERVICE_ENV_PREFIX))
+    .reduce(
+      (acc, key) => {
+        const erc8004Key = key as keyof ERC8004FormData['secrets']
+
+        if (appData.inputs?.secrets?.[erc8004Key]) {
+          // Exception: ERC8004_SIGNING_KEY does not need to strip the prefix
+          const envKey = ['ERC8004_SIGNING_KEY'].includes(key)
+            ? key
+            : key.replace(/^ERC8004_/, `${ROFL_8004_SERVICE_ENV_PREFIX}_`)
+          acc[envKey] = appData.inputs?.secrets?.[erc8004Key]
+        }
+
+        return acc
+      },
+      {} as Record<string, string>,
+    )
+
+  compose.services[ROFL_8004_SERVICE_NAME] = {
+    image: 'ghcr.io/oasisprotocol/rofl-8004:latest',
+    platform: 'linux/amd64',
+    environment,
+    volumes: ['/run/rofl-appd.sock:/run/rofl-appd.sock'],
+  }
+
+  return yaml.stringify(compose)
+}

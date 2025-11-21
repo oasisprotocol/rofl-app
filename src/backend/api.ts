@@ -15,16 +15,12 @@ import { useBlockNavigatingAway } from '../pages/CreateApp/useBlockNavigatingAwa
 import { BuildFormData } from '../types/build-form.ts'
 import { convertToDurationTerms } from './helpers.ts'
 import { toastWithDuration } from '../utils/toastWithDuration.tsx'
-import {
-  getReadmeByTemplateId,
-  fillTemplate,
-  hasRofl8004ServiceSecrets,
-  addRofl8004ServiceToCompose,
-} from '../pages/CreateApp/templates.tsx'
+import { getReadmeByTemplateId, fillTemplate } from '../pages/CreateApp/templates.tsx'
 import { toast } from 'sonner'
 import { isMachineRemoved } from '../components/MachineStatusIcon/isMachineRemoved.ts'
 import { trackEvent } from 'fathom-client'
 import { getOasisAddressBytesFromEvm } from '../utils/helpers.ts'
+import { addRofl8004ServiceToCompose, hasRofl8004ServiceSecrets } from '../utils/rofl-8004.ts'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -440,7 +436,7 @@ export function useCreateAndDeployApp() {
 
       let compose = template.yaml.compose
       if (hasRofl8004ServiceSecrets(appData)) {
-        compose = addRofl8004ServiceToCompose(template.yaml.compose)
+        compose = addRofl8004ServiceToCompose(template.yaml.compose, appData)
       }
 
       console.log('Build?')
