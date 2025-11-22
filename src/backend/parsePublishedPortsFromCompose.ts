@@ -1,5 +1,8 @@
 import * as yaml from 'yaml'
 
+// https://docs.docker.com/reference/compose-file/services/#ports
+type PortMapping = string | number | { published?: string | number /* ignore other props */ }
+
 // Try to match Go code https://github.com/oasisprotocol/cli/blob/61749d6/cmd/rofl/build/validate.go#L182-L203
 export function parsePublishedPortsFromCompose(composeYaml: string) {
   const compose = yaml.parse(composeYaml)
@@ -7,7 +10,7 @@ export function parsePublishedPortsFromCompose(composeYaml: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return Object.entries<any>(compose.services).flatMap(([serviceName, service]) => {
     if (!service.ports) return []
-    return (service.ports as string[]).flatMap((portMapping: string) => {
+    return (service.ports as PortMapping[]).flatMap(portMapping => {
       const portPublished = publishedPortFromMapping(portMapping)
       if (!portPublished) return []
       const proxyMode = service.annotations?.[`net.oasis.proxy.ports.${portPublished}.mode`]
@@ -29,21 +32,15 @@ export function parsePublishedPortsFromCompose(composeYaml: string) {
   })
 }
 
-function publishedPortFromMapping(portMapping: string) {
+function publishedPortFromMapping(portMapping: PortMapping) {
+  if (typeof portMapping === 'number') return undefined
+  if (typeof portMapping === 'object') return portMapping.published?.toString()
   if (typeof portMapping !== 'string' || portMapping === '') return undefined
 
-  // Regex to match and capture the host port only when a container port mapping is present.
-  // (?:(?:\d{1,3}\.){3}\d{1,3}:)?      - Optional non-capturing group for an IP address and colon
-  // (\d+(?:-\d+)?)                     - CAPTURE GROUP 1: The host port or port range (e.g., "80", "80-90")
-  // :                                  - REQUIRED colon, indicating a port mapping
-  // \d+(?:-\d+)?                       - The container port or port range
-  // (?:(?:\/tcp)?)                     - Optional non-capturing group for protocol /tcp
-  //   https://github.com/oasisprotocol/cli/blob/61749d6/cmd/rofl/build/validate.go#L182
-  const match = portMapping.match(
-    /^(?:(?:\d{1,3}\.){3}\d{1,3}:)?(\d+(?:-\d+)?):(?:\d+(?:-\d+)?(?:(?:\/tcp)?))?$/,
-  )
-
-  return match ? match[1] : undefined
+  // https://github.com/oasisprotocol/cli/blob/61749d6/cmd/rofl/build/validate.go#L182
+  if (portMapping.replace('/tcp', '').includes('/')) return undefined
+  if (portMapping.replace('/tcp', '').split(':').length <= 1) return undefined
+  return portMapping.replace('/tcp', '').split(':').slice(-2)[0]
 }
 
 // TODO: move into vitest
@@ -64,6 +61,9 @@ const testCases = [
   { value: 'udp', expected: undefined },
   { value: '', expected: undefined },
   { value: '1.1.1.1:80:80', expected: '80' },
+  { value: '::1:6001:6002', expected: '6001' },
+  { value: '[::1]:6001:6002', expected: '6001' },
+  { value: '[2001:aa:bb:cc:dd:ee:ff:1]:6001:6002', expected: '6001' },
 ]
 testCases.forEach(test => {
   const result = publishedPortFromMapping(test.value)
