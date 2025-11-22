@@ -168,7 +168,7 @@ const uploadArtifact = async ({ id, file }: ArtifactUploadRequest, token: string
   })
 }
 
-const downloadArtifact = async (id: ArtifactId, token: string): Promise<ArtifactDownloadResponse> => {
+export const downloadArtifact = async (id: ArtifactId, token: string): Promise<ArtifactDownloadResponse> => {
   const response = await axios.get(`${BACKEND_URL}/artifacts/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
