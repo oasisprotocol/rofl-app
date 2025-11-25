@@ -24,7 +24,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
     defaultValues: {
       secrets: {
         OLLAMA_MODEL: '',
-        TOKEN: '',
+        TELEGRAM_API_TOKEN: '',
         OLLAMA_SYSTEM_PROMPT: '',
       },
       ...inputs,
@@ -51,7 +51,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
 
       <InputFormField
         control={form.control}
-        name="secrets.TOKEN"
+        name="secrets.TELEGRAM_API_TOKEN"
         label="Telegram API token"
         placeholder="Paste or type API token here"
         type="password"

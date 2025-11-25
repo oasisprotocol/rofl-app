@@ -35,7 +35,7 @@ secrets:
     options:
       - "gemma3:1b": "Gemma 3 1B"
       - "deepseek-r1:1.5b": "Deepseek 1.5B"
-  - name: TOKEN
+  - name: TELEGRAM_API_TOKEN
     title: "Telegram API token"
     description: "Request your Telegram bot API token by sending `/newbot` command to the @BotFather account"
     type: text
