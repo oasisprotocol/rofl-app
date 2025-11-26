@@ -788,17 +788,13 @@ export function useMachineExecuteRestartCmd() {
           : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
       const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
 
-      const restartRequest = {
-        wipe_storage: false,
-      }
-
-      const command = {
+      const encodedCommand = oasis.misc.toCBOR({
         // https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/build/rofl/scheduler/commands.go#L9-L42
         method: 'Restart',
-        args: restartRequest,
-      }
-
-      const encodedCommand = oasis.misc.toCBOR(command)
+        args: {
+          wipe_storage: false,
+        },
+      })
 
       return await sendTransactionAsync(
         roflmarket
@@ -830,17 +826,13 @@ export function useMachineExecuteStopCmd() {
           : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
       const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
 
-      const restartRequest = {
-        wipe_storage: false,
-      }
-
-      const command = {
+      const encodedCommand = oasis.misc.toCBOR({
         // https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/build/rofl/scheduler/commands.go#L9-L42
         method: 'Terminate',
-        args: restartRequest,
-      }
-
-      const encodedCommand = oasis.misc.toCBOR(command)
+        args: {
+          wipe_storage: false,
+        },
+      })
 
       return await sendTransactionAsync(
         roflmarket
