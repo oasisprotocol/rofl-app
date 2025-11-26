@@ -927,3 +927,75 @@ export function useMachineTopUp() {
     },
   })
 }
+
+export function getEvmBech32Address(evmAddress: string) {
+  const evmBytes = oasis.misc.fromHex(evmAddress.replace('0x', ''))
+  const address = oasis.address.fromData(
+    oasisRT.address.V0_SECP256K1ETH_CONTEXT_IDENTIFIER,
+    oasisRT.address.V0_SECP256K1ETH_CONTEXT_VERSION,
+    evmBytes,
+  )
+  const bech32Address = oasisRT.address.toBech32(address)
+  return bech32Address
+}
+
+export function useGrantLogsPermission() {
+  const { sendTransactionAsync } = useSendTransaction()
+  return useMutation<
+    `0x${string}`,
+    AxiosError<unknown>,
+    { machine: RoflMarketInstance; provider: string; network: 'mainnet' | 'testnet' }
+  >({
+    mutationFn: async ({ machine, provider, network }) => {
+      const sapphireRuntimeId =
+        network === 'mainnet'
+          ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
+          : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
+
+      const encodedCommand = oasis.misc.toCBOR({
+        // https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/build/rofl/scheduler/commands.go#L9-L42
+        method: 'Deploy',
+        args: {
+          deployment: {
+            app_id: oasisRT.rofl.fromBech32(machine.deployment.app_id as string),
+            manifest_hash: oasis.misc.fromHex(machine.deployment.manifest_hash as string),
+            metadata: {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ...(machine.deployment.metadata as any),
+              // https://github.com/oasisprotocol/oasis-sdk/blob/b38b693/rofl-scheduler/src/types.rs#L49-L53
+              'net.oasis.scheduler.permissions': oasis.misc.toBase64(
+                oasis.misc.toCBOR({
+                  'log.view': [
+                    oasis.staking.addressFromBech32(
+                      getEvmBech32Address(
+                        window.prompt(
+                          'grant logs view permissions',
+                          '0xC3ecf872F643C6238Aa20673798eed6F7dA199e9',
+                        )!,
+                      ),
+                    ),
+                  ],
+                }),
+              ),
+            },
+          },
+          wipe_storage: false,
+        },
+      })
+
+      return await sendTransactionAsync(
+        roflmarket
+          .callInstanceExecuteCmds()
+          .setBody({
+            provider: oasis.staking.addressFromBech32(provider),
+            id: oasis.misc.fromHex(machine.id) as oasisRT.types.MachineID,
+            cmds: [encodedCommand],
+          })
+          .toSubcall(),
+      )
+      // Doesn't wait for transaction receipt
+      // Takes about 1 minute to complete after transaction receipt.
+    },
+  })
+}
