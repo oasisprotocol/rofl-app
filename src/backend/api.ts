@@ -966,6 +966,16 @@ export function useGrantLogsPermission() {
               // https://github.com/oasisprotocol/oasis-sdk/blob/b38b693/rofl-scheduler/src/types.rs#L49-L53
               'net.oasis.scheduler.permissions': oasis.misc.toBase64(
                 oasis.misc.toCBOR({
+                  // Keep other permissions
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  ...((machine.deployment.metadata as any)?.['net.oasis.scheduler.permissions'] &&
+                    (oasis.misc.fromCBOR(
+                      oasis.misc.fromBase64(
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        (machine.deployment.metadata as any)?.['net.oasis.scheduler.permissions'],
+                      ),
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    ) as any)),
                   'log.view': [
                     oasis.staking.addressFromBech32(
                       getEvmBech32Address(
