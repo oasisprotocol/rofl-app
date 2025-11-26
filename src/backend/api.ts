@@ -904,6 +904,14 @@ export function useMachineTopUp() {
                   'net.oasis.deployment.orc.ref': (machine.deployment.metadata as any)[
                     'net.oasis.deployment.orc.ref'
                   ],
+                  // Copy permissions like log.view
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  ...((machine.deployment.metadata as any)['net.oasis.scheduler.permissions'] && {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    'net.oasis.scheduler.permissions': (machine.deployment.metadata as any)[
+                      'net.oasis.scheduler.permissions'
+                    ],
+                  }),
                 },
               },
               term: duration.term,
