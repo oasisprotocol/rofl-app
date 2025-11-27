@@ -13,7 +13,11 @@ import {
 } from '../../../nexus/api'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { MachineResources } from '../../../components/MachineResources'
-import { useMachineExecuteRestartCmd, useMachineExecuteStopCmd } from '../../../backend/api'
+import {
+  useGrantLogsPermission,
+  useMachineExecuteRestartCmd,
+  useMachineExecuteStopCmd,
+} from '../../../backend/api'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { MachineLogs } from './MachineLogs'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
@@ -34,6 +38,7 @@ export const MachinesDetails: FC = () => {
   const machine = data?.data
   const restartMachine = useMachineExecuteRestartCmd()
   const stopMachine = useMachineExecuteStopCmd()
+  const grantLogsPermission = useGrantLogsPermission()
 
   const showBlockingOverlay = restartMachine.isPending || stopMachine.isPending
   return (
@@ -71,7 +76,6 @@ export const MachinesDetails: FC = () => {
                       </>
                     )}
                   </div>
-
                   {!isMachineRemoved(machine) && (
                     <Button variant="outline" className="w-full md:w-auto" asChild>
                       <Link to="./top-up">
@@ -89,6 +93,21 @@ export const MachinesDetails: FC = () => {
                         network,
                       })
                       toastWithDuration('Machine is restarting (~1min)', 1 * 60 * 1000)
+                    }}
+                  />
+                  Grant logs and restart:
+                  <MachineRestart
+                    disabled={isMachineRemoved(machine)}
+                    onConfirm={async () => {
+                      await grantLogsPermission.mutateAsync({
+                        machine: machine,
+                        provider: machine.provider,
+                        network,
+                      })
+                      toastWithDuration(
+                        'Logs view permission granted. Machine is restarting (~1min)',
+                        1 * 60 * 1000,
+                      )
                     }}
                   />
                   <TabsList className="w-full md:w-auto">
