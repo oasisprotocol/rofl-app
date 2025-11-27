@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { Header } from './Header'
 import { Footer } from './Footer'
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import {
   Sidebar,
   SidebarContent,
@@ -58,7 +58,6 @@ const breadcrumbConfigs = [
 ]
 
 export const MainLayout: FC = () => {
-  const navigate = useNavigate()
   const location = useLocation()
 
   const getBreadcrumbConfig = () => {
@@ -113,12 +112,14 @@ export const MainLayout: FC = () => {
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <Button
-                      onClick={() => navigate('/dashboard')}
                       variant="ghost"
                       className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                      asChild
                     >
-                      <LayoutDashboard className="h-4 w-4 text-sidebar-foreground" />
-                      Dashboard
+                      <NavLink to="/dashboard">
+                        <LayoutDashboard className="h-4 w-4 text-sidebar-foreground" />
+                        Dashboard
+                      </NavLink>
                     </Button>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -126,34 +127,36 @@ export const MainLayout: FC = () => {
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
                       <Button
-                        onClick={() => navigate('/dashboard/apps')}
                         variant="ghost"
                         className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                        asChild
                       >
-                        Apps
+                        <NavLink to="/dashboard/apps">Apps</NavLink>
                       </Button>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
                       <Button
-                        onClick={() => navigate('/dashboard/machines')}
                         variant="ghost"
                         className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                        asChild
                       >
-                        Machines
+                        <NavLink to="/dashboard/machines">Machines</NavLink>
                       </Button>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
                 <SidebarMenuButton asChild>
                   <Button
-                    onClick={() => navigate('/explore')}
                     variant="ghost"
                     className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                    asChild
                   >
-                    <Compass className="h-4 w-4 text-sidebar-foreground" />
-                    Explore
+                    <NavLink to="/explore">
+                      <Compass className="h-4 w-4 text-sidebar-foreground" />
+                      Explore
+                    </NavLink>
                   </Button>
                 </SidebarMenuButton>
               </SidebarMenu>
