@@ -138,7 +138,7 @@ export const tgbotFormSchema = z.object({
     OLLAMA_MODEL: z.string().min(1, {
       message: 'Model is required.',
     }),
-    TOKEN: z
+    TELEGRAM_API_TOKEN: z
       .string()
       .min(1, {
         message: 'Token is required.',

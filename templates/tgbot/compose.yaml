@@ -12,6 +12,6 @@ services:
     image: "ghcr.io/oasisprotocol/demo-rofl-tgbot:ollama"
     platform: linux/amd64
     environment:
-      - TOKEN=${TOKEN}
+      - TELEGRAM_API_TOKEN=${TELEGRAM_API_TOKEN}
       - OLLAMA_MODEL=${OLLAMA_MODEL}
       - OLLAMA_SYSTEM_PROMPT=${OLLAMA_SYSTEM_PROMPT}
