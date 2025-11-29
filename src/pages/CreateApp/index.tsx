@@ -9,6 +9,7 @@ import { BootstrapStep } from './BootstrapStep'
 import { getCustomTemplate, getTemplateById } from './templates'
 import { trackEvent } from 'fathom-client'
 import type { CustomBuildFormData } from './types'
+import { ERC8004Step } from './ERC8004Step.tsx'
 
 export const Create: FC = () => {
   const { currentStep, setCurrentStep, appData, setAppDataForm } = useCreate()
@@ -16,6 +17,7 @@ export const Create: FC = () => {
     { component: TemplateStep },
     { component: MetadataStep },
     { component: CustomInputsStep },
+    { component: ERC8004Step },
     { component: BuildStep },
     { component: PaymentStep },
     { component: BootstrapStep },
@@ -38,8 +40,11 @@ export const Create: FC = () => {
       trackEvent(`Create app flow/3/agent/${appData?.templateId}`)
       trackedEvents.current.add(3)
     } else if (currentStep === 4 && !trackedEvents.current.has(4)) {
-      trackEvent(`Create app flow/4/payment/${appData?.templateId}`)
+      trackEvent(`Create app flow/4/erc-8004/${appData?.templateId}`)
       trackedEvents.current.add(4)
+    } else if (currentStep === 5 && !trackedEvents.current.has(5)) {
+      trackEvent(`Create app flow/5/payment/${appData?.templateId}`)
+      trackedEvents.current.add(5)
     }
   }, [currentStep, appData?.templateId])
 
@@ -80,6 +85,18 @@ export const Create: FC = () => {
         />
       )}
       {currentStep === 3 && selectedTemplate && (
+        <ERC8004Step
+          handleNext={handleNext}
+          handleBack={handleBack}
+          inputs={appData?.inputs}
+          metadata={appData?.metadata}
+          setAppDataForm={setAppDataForm}
+          selectedTemplateName={selectedTemplate.name}
+          selectedTemplateId={selectedTemplate.id}
+          customStepTitle={selectedTemplate.customStepTitle}
+        />
+      )}
+      {currentStep === 4 && selectedTemplate && (
         <BuildStep
           handleNext={handleNext}
           handleBack={handleBack}
@@ -96,7 +113,7 @@ export const Create: FC = () => {
           customStepTitle={selectedTemplate.customStepTitle}
         />
       )}
-      {currentStep === 4 && selectedTemplate && (
+      {currentStep === 5 && selectedTemplate && (
         <PaymentStep
           handleNext={handleNext}
           handleBack={handleBack}
@@ -106,7 +123,7 @@ export const Create: FC = () => {
           customStepTitle={selectedTemplate.customStepTitle}
         />
       )}
-      {currentStep === 5 && <BootstrapStep appData={appData} template={selectedTemplate} />}
+      {currentStep === 6 && <BootstrapStep appData={appData} template={selectedTemplate} />}
     </div>
   )
 }
