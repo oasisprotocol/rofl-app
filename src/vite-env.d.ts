@@ -9,7 +9,6 @@ interface ImportMetaEnv {
   VITE_WALLET_CONNECT_PROJECT_ID: string
   VITE_ROFL_APP_BACKEND: string
   VITE_FATHOM_SIDE_ID: string
-  VITE_NITRO_PARTNER_ID: string
 }
 
 interface ImportMeta {
