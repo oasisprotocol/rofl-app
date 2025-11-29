@@ -6,7 +6,8 @@ import { erc8004Schema, type ERC8004FormData, type AppDataInputs, type MetadataF
 import { InputFormField } from '../../components/InputFormField'
 import { Label } from '@oasisprotocol/ui-library/src/components/ui/label'
 import { Checkbox } from '@oasisprotocol/ui-library/src/components/ui/checkbox'
-import { addROFL8004RpcPrefix, stripROFL8004RpcPrefix } from '../../utils/rofl-8004.ts'
+import { ROFL_8004_SUPPORTED_CHAINS } from '../../constants/rofl-8004.ts'
+import { SelectFormField } from '../../components/SelectFormField'
 
 type Props = {
   handleNext: () => void
@@ -23,7 +24,8 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
     resolver: skipERC8004 ? undefined : zodResolver(erc8004Schema),
     defaultValues: {
       secrets: {
-        ERC8004_RPC_URL: stripROFL8004RpcPrefix(inputs?.secrets?.ERC8004_RPC_URL),
+        ERC8004_CHAIN_SELECTION: 'custom',
+        ERC8004_RPC_URL: (inputs as ERC8004FormData | undefined)?.secrets?.ERC8004_RPC_URL ?? '',
         ERC8004_PINATA_JWT: '',
         ERC8004_SIGNING_KEY: '',
         ERC8004_AGENT_NAME: metadata?.name ?? '',
@@ -31,10 +33,22 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
         ERC8004_AGENT_VERSION: metadata?.version ?? '',
         ERC8004_AGENT_CATEGORY: '',
         ERC8004_AGENT_IMAGE: '',
-        ...inputs?.secrets,
+        ...(inputs as ERC8004FormData | undefined)?.secrets,
       },
     },
   })
+
+  const chainSelection = form.watch('secrets.ERC8004_CHAIN_SELECTION')
+  const isCustomChain = chainSelection === 'custom'
+
+  // Prepare chain options
+  const chainOptions = [
+    ...Object.entries(ROFL_8004_SUPPORTED_CHAINS).map(([key, config]) => ({
+      value: key,
+      label: config.chain.name,
+    })),
+    { value: 'custom', label: 'Custom RPC URL' },
+  ]
 
   function onSubmit(values: ERC8004FormData) {
     if (skipERC8004) {
@@ -47,9 +61,20 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
       const nonEmptySecrets = Object.fromEntries(
         Object.entries({
           ...values.secrets,
-          ERC8004_RPC_URL: addROFL8004RpcPrefix(values.secrets.ERC8004_RPC_URL || ''),
-        }).filter(([, value]) => value !== '' && value !== null && value !== undefined),
-      )
+          ERC8004_RPC_URL:
+            values.secrets.ERC8004_CHAIN_SELECTION !== 'custom'
+              ? ROFL_8004_SUPPORTED_CHAINS[
+                  values.secrets.ERC8004_CHAIN_SELECTION as keyof typeof ROFL_8004_SUPPORTED_CHAINS
+                ]?.rpcUrl
+              : values.secrets.ERC8004_RPC_URL,
+        }).filter(
+          ([key, value]) =>
+            !['ERC8004_CHAIN_SELECTION'].includes(key) &&
+            value !== '' &&
+            value !== null &&
+            value !== undefined,
+        ),
+      ) as ERC8004FormData['secrets']
 
       setAppDataForm({
         inputs: {
@@ -63,6 +88,27 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
+      <SelectFormField
+        control={form.control}
+        name="secrets.ERC8004_CHAIN_SELECTION"
+        label="Chain for token registration"
+        placeholder="Select chain"
+        options={chainOptions}
+        disabled={skipERC8004}
+      />
+
+      {isCustomChain && (
+        <InputFormField
+          control={form.control}
+          type="input"
+          name="secrets.ERC8004_RPC_URL"
+          label="Custom RPC URL"
+          placeholder="https://your-rpc-url.com"
+          disabled={skipERC8004}
+          info="Enter the full RPC URL for your chain"
+        />
+      )}
+
       <InputFormField
         control={form.control}
         type="textarea"
@@ -71,26 +117,6 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
         placeholder="1234567890abcde..."
         disabled={skipERC8004}
         info="Your Pinata JWT token is used to pin agent metadata to IPFS. Get it from pinata.cloud"
-      />
-
-      <InputFormField
-        control={form.control}
-        type="password"
-        name="secrets.ERC8004_RPC_URL"
-        label="Infura API Token"
-        placeholder="1234567890abcde1234567890abcde12"
-        disabled={skipERC8004}
-        info="Your Infura API token for Sepolia network. Get it from infura.io"
-      />
-
-      <InputFormField
-        control={form.control}
-        type="password"
-        name="secrets.ERC8004_SIGNING_KEY"
-        label="Private key for agent submittion"
-        placeholder="1234567890abcde1234567890abcde1234567890abcde1234567890abcde123"
-        disabled={skipERC8004}
-        info="The private key used to sign and submit your agent to the ERC-8004 registry. Add some funds on Sepolia network."
       />
 
       <InputFormField
@@ -136,6 +162,16 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
         label="Agent Category (Optional)"
         placeholder="rofl"
         disabled={skipERC8004}
+      />
+
+      <InputFormField
+        control={form.control}
+        type="password"
+        name="secrets.ERC8004_SIGNING_KEY"
+        label="Private key for agent submittion (Optional)"
+        placeholder="1234567890abcde1234567890abcde1234567890abcde1234567890abcde123"
+        disabled={skipERC8004}
+        info="The private key used to sign and submit your agent to the ERC-8004 registry. Add some funds on selected network for token registration."
       />
 
       <div className="flex items-center gap-2 mt-12">

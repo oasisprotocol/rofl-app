@@ -1,6 +1,7 @@
 import { z, RefinementCtx } from 'zod'
 import { BuildFormData } from '../../types/build-form.ts'
 import * as yaml from 'yaml'
+import { sepolia } from 'viem/chains'
 
 /**
  * This is like z.string().url(), but also accepts domain names without the protocol prefix,
@@ -134,39 +135,60 @@ export const customBuildFormSchema = z.object({
 })
 
 // Make sure that the secrets object contains variables prefixed with (const ROFL_8004_SERVICE_ENV_PREFIX)
-export const erc8004Schema = z.object({
-  secrets: z.object({
-    // Hardcoded to Sepolia prefix using Infura
-    ERC8004_RPC_URL: z
-      .string()
-      .min(1, {
-        message: 'Infura API token is required.',
-      })
-      .max(100, {
-        message: 'Infura API token must be less than 100 characters.',
-      }),
-    ERC8004_PINATA_JWT: z
-      .string()
-      .min(1, {
-        message: 'Pinata JWT is required.',
-      })
-      .max(1000, {
-        message: 'Pinata JWT must be less than 1000 characters.',
-      }),
-    ERC8004_SIGNING_KEY: z.string().regex(/^[a-fA-F0-9]{64}$/, {
-      message: 'Please enter a valid Ethereum private key (64 hexadecimal characters).',
+export const erc8004Schema = z
+  .object({
+    secrets: z.object({
+      ERC8004_CHAIN_SELECTION: z.enum([sepolia.id.toString(), 'custom']).optional(),
+      ERC8004_RPC_URL: z
+        .string()
+        .url({ message: 'Please enter a valid URL.' })
+        .max(200, {
+          message: 'RPC URL must be less than 200 characters.',
+        })
+        .optional()
+        .or(z.literal('')),
+      ERC8004_PINATA_JWT: z
+        .string()
+        .min(1, {
+          message: 'Pinata JWT is required.',
+        })
+        .max(1000, {
+          message: 'Pinata JWT must be less than 1000 characters.',
+        }),
+      ERC8004_SIGNING_KEY: z
+        .string()
+        .optional()
+        .or(z.literal(''))
+        .refine(
+          value => {
+            if (!value || value === '') return true
+            return /^[a-fA-F0-9]{64}$/.test(value)
+          },
+          {
+            message: 'Please enter a valid Ethereum private key (64 hexadecimal characters).',
+          },
+        ),
+      ERC8004_AGENT_NAME: z.string().optional(),
+      ERC8004_AGENT_DESCRIPTION: z.string().optional(),
+      ERC8004_AGENT_IMAGE: z
+        .string()
+        .url({ message: 'Please enter a valid URL.' })
+        .optional()
+        .or(z.literal('')),
+      ERC8004_AGENT_VERSION: z.string().optional().or(z.literal('')),
+      ERC8004_AGENT_CATEGORY: z.string().optional(),
     }),
-    ERC8004_AGENT_NAME: z.string().optional(),
-    ERC8004_AGENT_DESCRIPTION: z.string().optional(),
-    ERC8004_AGENT_IMAGE: z
-      .string()
-      .url({ message: 'Please enter a valid URL.' })
-      .optional()
-      .or(z.literal('')),
-    ERC8004_AGENT_VERSION: z.string().optional().or(z.literal('')),
-    ERC8004_AGENT_CATEGORY: z.string().optional(),
-  }),
-})
+  })
+  .superRefine((data, ctx) => {
+    // Custom validation: if using custom chain, RPC URL is required
+    if (data.secrets.ERC8004_CHAIN_SELECTION === 'custom' && !data.secrets.ERC8004_RPC_URL) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'RPC URL is required when using a custom chain.',
+        path: ['secrets', 'ERC8004_RPC_URL'],
+      })
+    }
+  })
 
 export const tgbotFormSchema = z.object({
   secrets: z.object({
