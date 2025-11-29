@@ -63,7 +63,7 @@ export const useCountdownTimer = ({ initialTimeInSeconds, onTimeUp }: UseCountdo
     }
   }, [isActive, onTimeUp])
 
-  const formatTime = (seconds: number): string => {
+  const formatMinutesAndSeconds = (seconds: number): string => {
     const absSeconds = Math.abs(seconds)
     const minutes = Math.floor((absSeconds % 3600) / 60)
     const secs = absSeconds % 60
@@ -75,7 +75,7 @@ export const useCountdownTimer = ({ initialTimeInSeconds, onTimeUp }: UseCountdo
 
   return {
     timeLeft,
-    formattedTime: formatTime(timeLeft),
+    formattedTime: formatMinutesAndSeconds(timeLeft),
     isNegative: timeLeft < 0,
     start,
     stop,
