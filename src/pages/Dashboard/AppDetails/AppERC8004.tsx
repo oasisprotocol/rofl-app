@@ -12,14 +12,13 @@ type Props = {
 }
 
 export const AppERC8004: FC<Props> = ({ roflInstances }) => {
-  // TODO: Display all instances
   const [instance] = roflInstances
-  const tokenId = fromMetadataToAgentId(instance.metadata)
+  const [chainId, tokenId] = fromMetadataToAgentId(instance.metadata)
   const {
     isLoading: isLoadingTokenURI,
     data: tokenURI,
     error: tokenURIError,
-  } = useERC8004TokenURI(BigInt(tokenId))
+  } = useERC8004TokenURI(chainId!, tokenId!, !!chainId && !!tokenId)
 
   const {
     data: metadata,

@@ -1,35 +1,29 @@
 import {
-  ROFL_8004_CHAIN,
+  ROFL_8004_DOCKER_IMAGE,
   ROFL_8004_METADATA_KEY,
   ROFL_8004_SERVICE_ENV_PREFIX,
   ROFL_8004_SERVICE_NAME,
-  ROFL_8004_SERVICE_RPC_URL_BASE,
+  ROFL_8004_SUPPORTED_CHAINS,
 } from '../constants/rofl-8004.ts'
 import { RoflInstance } from '../nexus/generated/api.ts'
 import { AppData, ERC8004FormData } from '../pages/CreateApp/types.ts'
 import * as yaml from 'yaml'
 import { parse } from 'yaml'
 
-export const stripROFL8004RpcPrefix = (url: string | undefined): string => {
-  if (!url) return ''
-  return url.startsWith(ROFL_8004_SERVICE_RPC_URL_BASE)
-    ? url.slice(ROFL_8004_SERVICE_RPC_URL_BASE.length)
-    : url
-}
-export const addROFL8004RpcPrefix = (apiToken: string): string => {
-  if (!apiToken) return ''
-  return `${ROFL_8004_SERVICE_RPC_URL_BASE}${apiToken}`
-}
-
-export const fromMetadataToAgentId = (metadata: RoflInstance['metadata']) => {
+export const fromMetadataToAgentId = (metadata: RoflInstance['metadata']): [number | null, bigint | null] => {
   const agentId = metadata?.[ROFL_8004_METADATA_KEY] as string
   const splitAgentId = agentId?.split(':')
   const chainId = Number(splitAgentId[0])
 
-  if (chainId !== ROFL_8004_CHAIN.id)
-    throw new Error(`Invalid chainId: ${chainId}. Expected: ${ROFL_8004_CHAIN.id}`)
+  if (!Object.keys(ROFL_8004_SUPPORTED_CHAINS).includes(chainId.toString())) {
+    console.warn(
+      `Invalid chainId: ${chainId}. Expected: ${Object.keys(ROFL_8004_SUPPORTED_CHAINS).join(',')}`,
+    )
+    // Silently fail
+    return [null, null]
+  }
 
-  return BigInt(splitAgentId[1])
+  return [chainId, BigInt(splitAgentId[1])]
 }
 
 export const tokenURIToLink = (tokenURI: string) => tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')

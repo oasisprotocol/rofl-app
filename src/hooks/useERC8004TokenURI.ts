@@ -9,6 +9,7 @@ interface UseERC8004TokenURIReturnType {
 }
 
 export function useERC8004TokenURI(
+  chainId: number | string,
   agentId: bigint | undefined,
   enabled = true,
 ): UseERC8004TokenURIReturnType {
@@ -23,7 +24,7 @@ export function useERC8004TokenURI(
     setError(null)
 
     try {
-      const result = await getTokenURI(agentId)
+      const result = await getTokenURI(chainId, agentId)
 
       setData(result)
     } catch (err) {
@@ -35,11 +36,11 @@ export function useERC8004TokenURI(
   }
 
   useEffect(() => {
-    if (enabled && agentId) {
+    if (enabled && chainId && agentId) {
       fetchTokenURI()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [agentId, enabled])
+  }, [agentId, chainId && enabled])
 
   return {
     data,

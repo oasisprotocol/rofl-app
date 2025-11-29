@@ -1,10 +1,20 @@
 import ERC_8004_ABI from './ERC-8004_ABI.json'
-import { ROFL_8004_AGENT_IDENTITY_CONTRACT, ROFL_8004_PUBLIC_CLIENT } from '../constants/rofl-8004.ts'
+import { ROFL_8004_SUPPORTED_CHAINS } from '../constants/rofl-8004.ts'
+import { createPublicClient, http } from 'viem'
 
-export const getMetadata = async (agentId: bigint, key?: string): Promise<`0x${string}`> => {
+export const getMetadata = async (
+  chainId: number | string,
+  agentId: bigint,
+  key?: string,
+): Promise<`0x${string}`> => {
+  const supportedNetwork = ROFL_8004_SUPPORTED_CHAINS[chainId.toString()]
+
   try {
-    return (await ROFL_8004_PUBLIC_CLIENT.readContract({
-      address: ROFL_8004_AGENT_IDENTITY_CONTRACT,
+    return (await createPublicClient({
+      chain: supportedNetwork.chain,
+      transport: http(),
+    }).readContract({
+      address: supportedNetwork.identityContract as `0x${string}`,
       abi: ERC_8004_ABI,
       functionName: 'getMetadata',
       args: [agentId, key],
@@ -15,10 +25,15 @@ export const getMetadata = async (agentId: bigint, key?: string): Promise<`0x${s
   }
 }
 
-export const getTokenURI = async (agentId: bigint): Promise<string> => {
+export const getTokenURI = async (chainId: number | string, agentId: bigint): Promise<string> => {
+  const supportedNetwork = ROFL_8004_SUPPORTED_CHAINS[chainId.toString()]
+
   try {
-    return (await ROFL_8004_PUBLIC_CLIENT.readContract({
-      address: ROFL_8004_AGENT_IDENTITY_CONTRACT,
+    return (await createPublicClient({
+      chain: supportedNetwork.chain,
+      transport: http(),
+    }).readContract({
+      address: supportedNetwork.identityContract as `0x${string}`,
       abi: ERC_8004_ABI,
       functionName: 'tokenURI',
       args: [agentId],
