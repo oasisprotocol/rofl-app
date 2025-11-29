@@ -4,7 +4,7 @@ import { CreateFormHeader } from './CreateFormHeader'
 import { CreateFormNavigation } from './CreateFormNavigation'
 import { useAccount, useBalance, useChainId } from 'wagmi'
 import { NumberUtils } from '../../utils/number.utils.ts'
-import { TopUp } from '../../components/top-up/TopUp'
+import { TopUp } from '../../components/rofl-paymaster/TopUp'
 import { PaymentCostBreakdown } from './PaymentCostBreakdown.tsx'
 import { Spinner } from '../../components/Spinner'
 import { BigNumber } from 'bignumber.js'
@@ -14,6 +14,8 @@ import { useNetwork } from '../../hooks/useNetwork.ts'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useTicker } from '../../hooks/useTicker'
 import { useBlockNavigatingAway } from './useBlockNavigatingAway.ts'
+
+const { VITE_FEATURE_FLAG_PAYMASTER } = import.meta.env
 
 type PaymentStepProps = {
   handleNext: () => void
@@ -111,7 +113,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
       )}
       {!hasEnoughBalance && minAmount && (
         <p className="text-sm text-foreground font-semibold text-center my-4">
-          You need more ROSE to complete this process.
+          You need more ${chain.nativeCurrency.symbol} to complete this process.
           <br />
           Top up your wallet below.
         </p>
@@ -138,14 +140,14 @@ export const PaymentStep: FC<PaymentStepProps> = ({
         </TopUp>
       )}
 
-      {isTestnetBlocked && (
+      {isTestnetBlocked && !VITE_FEATURE_FLAG_PAYMASTER && (
         <div className="text-sm text-destructive mt-4 text-pretty">
           Functionality is currently blocked on the Oasis Sapphire Testnet. To build and deploy your
           application, please switch to Mainnet.
         </div>
       )}
 
-      {(hasEnoughBalance || isTestnet) && (
+      {(hasEnoughBalance || (isTestnet && !VITE_FEATURE_FLAG_PAYMASTER)) && (
         <form onSubmit={handleNext} className="w-full">
           <CreateFormNavigation
             handleBack={() => {

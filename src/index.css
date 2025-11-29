@@ -18,13 +18,7 @@
  */
 [data-rk] {
   && {
-    [data-testid='rk-chain-option-1'],
-    [data-testid='rk-chain-option-56'],
-    [data-testid='rk-chain-option-728126428'],
-    [data-testid='rk-chain-option-8453'],
-    [data-testid='rk-chain-option-42161'],
-    [data-testid='rk-chain-option-43114'],
-    [data-testid='rk-chain-option-137'] {
+    [data-testid='rk-chain-option-11155111'] {
       display: none;
     }
   }
