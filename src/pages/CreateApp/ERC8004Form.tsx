@@ -33,6 +33,9 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
         ERC8004_AGENT_VERSION: metadata?.version ?? '',
         ERC8004_AGENT_CATEGORY: '',
         ERC8004_AGENT_IMAGE: '',
+        ERC8004_AGENT_MCP: '',
+        ERC8004_AGENT_A2A: '',
+        ERC8004_AGENT_ENS: '',
         ...(inputs as ERC8004FormData | undefined)?.secrets,
       },
     },
@@ -88,10 +91,21 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-6 w-full">
+      <div className="flex items-center gap-2 mb-4">
+        <Checkbox
+          id="skip-erc-8004"
+          checked={skipERC8004}
+          onCheckedChange={checked => setSkipERC8004(checked === true)}
+        />
+        <Label htmlFor="skip-erc-8004">Skip ERC-8004 Identity Registration</Label>
+      </div>
+
+      <hr />
+
       <SelectFormField
         control={form.control}
         name="secrets.ERC8004_CHAIN_SELECTION"
-        label="Chain for token registration"
+        label="Chain for trustless agent registration"
         placeholder="Select chain"
         options={chainOptions}
         disabled={skipERC8004}
@@ -105,7 +119,7 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
           label="Custom RPC URL"
           placeholder="https://your-rpc-url.com"
           disabled={skipERC8004}
-          info="Enter the full RPC URL for your chain"
+          info="Enter the full RPC URL for trustless agent registration"
         />
       )}
 
@@ -166,6 +180,33 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
 
       <InputFormField
         control={form.control}
+        type="input"
+        name="secrets.ERC8004_AGENT_MCP"
+        label="Agent MCP (Optonal)"
+        placeholder="https://mcp.agent.com"
+        disabled={skipERC8004}
+      />
+
+      <InputFormField
+        control={form.control}
+        type="input"
+        name="secrets.ERC8004_AGENT_A2A"
+        label="Agent A2A (Optonal)"
+        placeholder="https://agent.example/.well-known/agent-card.json"
+        disabled={skipERC8004}
+      />
+
+      <InputFormField
+        control={form.control}
+        type="input"
+        name="secrets.ERC8004_AGENT_ENS"
+        label="Agent ENS (Optonal)"
+        placeholder="agent.eth"
+        disabled={skipERC8004}
+      />
+
+      <InputFormField
+        control={form.control}
         type="password"
         name="secrets.ERC8004_SIGNING_KEY"
         label="Private key for agent submittion (Optional)"
@@ -173,15 +214,6 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
         disabled={skipERC8004}
         info="The private key used to sign and submit your agent to the ERC-8004 registry. Add some funds on selected network for token registration."
       />
-
-      <div className="flex items-center gap-2 mt-12">
-        <Checkbox
-          id="skip-erc-8004"
-          checked={skipERC8004}
-          onCheckedChange={checked => setSkipERC8004(checked === true)}
-        />
-        <Label htmlFor="skip-erc-8004">I don't want to use ERC-8004 Identity Registration</Label>
-      </div>
 
       <CreateFormNavigation handleBack={handleBack} disabled={form.formState.isSubmitting} />
     </form>

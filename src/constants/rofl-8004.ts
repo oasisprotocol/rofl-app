@@ -14,3 +14,5 @@ export const ROFL_8004_SUPPORTED_CHAINS = {
     identityContract: '0x8004a6090cd10a7288092483047b097295fb8847',
   },
 }
+
+export const ERC_8004_ETHEREUM_EIP_URL = 'https://eips.ethereum.org/EIPS/eip-8004'
