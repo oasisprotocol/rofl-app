@@ -175,8 +175,11 @@ export const erc8004Schema = z
         .url({ message: 'Please enter a valid URL.' })
         .optional()
         .or(z.literal('')),
-      ERC8004_AGENT_VERSION: z.string().optional().or(z.literal('')),
+      ERC8004_AGENT_VERSION: z.string().optional(),
       ERC8004_AGENT_CATEGORY: z.string().optional(),
+      ERC8004_AGENT_MCP: z.string().optional(),
+      ERC8004_AGENT_A2A: z.string().optional(),
+      ERC8004_AGENT_ENS: z.string().optional(),
     }),
   })
   .superRefine((data, ctx) => {
