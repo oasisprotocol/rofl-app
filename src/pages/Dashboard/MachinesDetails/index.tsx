@@ -29,6 +29,12 @@ export const MachinesDetails: FC = () => {
     'sapphire',
     provider!,
     id!,
+    {
+      // @ts-expect-error Incorrect type demands queryKey
+      query: {
+        refetchInterval: 10_000, // Most useful when waiting for net.oasis.scheduler.rak
+      },
+    },
   )
   const { data, isLoading, isFetched } = roflMachinesQuery
   const machine = data?.data
