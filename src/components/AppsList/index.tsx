@@ -20,6 +20,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
   const network = useNetwork(type === 'dashboard' ? undefined : 'mainnet')
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } = useInfiniteQuery({
+    // TODO: missing address param
     queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire'), type],
     queryFn: async ({ pageParam = 0 }) => {
       const result = await GetRuntimeRoflApps(network, 'sapphire', {

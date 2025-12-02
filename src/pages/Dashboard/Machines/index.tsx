@@ -16,6 +16,7 @@ export const Machines: FC = () => {
   const network = useNetwork()
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } = useInfiniteQuery({
+    // TODO: wrong path and missing address param
     queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire')],
     queryFn: async ({ pageParam = 0 }) => {
       const result = await GetRuntimeRoflmarketInstances(network, 'sapphire', {

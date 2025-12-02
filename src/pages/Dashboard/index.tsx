@@ -27,6 +27,7 @@ export const Dashboard: FC = () => {
       sort_by: 'created_at_desc',
     },
     {
+      // TODO: fragile - will break if we make sort_by customizable
       query: {
         queryKey: ['roflAppsPolling', network, address],
         refetchInterval: refetchInterval,
