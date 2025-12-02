@@ -27,9 +27,8 @@ export const Dashboard: FC = () => {
       sort_by: 'created_at_desc',
     },
     {
-      // TODO: fragile - will break if we make sort_by customizable
+      // @ts-expect-error Incorrect type demands queryKey
       query: {
-        queryKey: ['roflAppsPolling', network, address],
         refetchInterval: refetchInterval,
       },
     },
@@ -44,8 +43,8 @@ export const Dashboard: FC = () => {
       admin: address,
     },
     {
+      // @ts-expect-error Incorrect type demands queryKey
       query: {
-        queryKey: ['roflmachinePolling', network, address],
         refetchInterval: refetchInterval,
       },
     },

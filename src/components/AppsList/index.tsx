@@ -19,16 +19,21 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
   // Fallback is needed to render Explore page content without wallet connection
   const network = useNetwork(type === 'dashboard' ? undefined : 'mainnet')
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } = useInfiniteQuery({
-    // TODO: missing address param
-    queryKey: [...getGetRuntimeRoflAppsQueryKey(network, 'sapphire'), type],
-    queryFn: async ({ pageParam = 0 }) => {
-      const result = await GetRuntimeRoflApps(network, 'sapphire', {
+  const appsQueryParams = (pageParam = 0) =>
+    [
+      network,
+      'sapphire',
+      {
         limit: pageLimit,
         offset: pageParam,
         admin: type === 'dashboard' ? address : undefined,
         sort_by: type === 'dashboard' ? 'created_at_desc' : undefined,
-      })
+      },
+    ] satisfies Parameters<typeof GetRuntimeRoflApps>
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } = useInfiniteQuery({
+    queryKey: ['infinite', ...getGetRuntimeRoflAppsQueryKey(...appsQueryParams())],
+    queryFn: async ({ pageParam = 0 }) => {
+      const result = await GetRuntimeRoflApps(...appsQueryParams(pageParam))
       return result
     },
     initialPageParam: 0,
