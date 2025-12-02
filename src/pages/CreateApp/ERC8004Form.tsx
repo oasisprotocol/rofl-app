@@ -18,7 +18,7 @@ type Props = {
 }
 
 export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadata, setAppDataForm }) => {
-  const [skipERC8004, setSkipERC8004] = useState(false)
+  const [skipERC8004, setSkipERC8004] = useState(true)
 
   const form = useForm<ERC8004FormData>({
     resolver: skipERC8004 ? undefined : zodResolver(erc8004Schema),
