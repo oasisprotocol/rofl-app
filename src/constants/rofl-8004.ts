@@ -17,3 +17,5 @@ export const ROFL_8004_SUPPORTED_CHAINS = {
 }
 
 export const ERC_8004_ETHEREUM_EIP_URL = 'https://eips.ethereum.org/EIPS/eip-8004'
+export const get8004ScanUrl = (chainName: string, agentId: string) =>
+  `https://www.8004scan.io/${chainName}/agent/${agentId}`

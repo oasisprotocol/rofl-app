@@ -198,6 +198,7 @@ export const AppDetails: FC = () => {
                   policy={roflApp.policy}
                   setViewMetadataState={setViewMetadataState}
                   editEnabled={editEnabled}
+                  instancesWithERC8004Token={instancesWithERC8004Token}
                 />
               </TabsContent>
               <TabsContent value="secrets" className="relative pt-10">
@@ -223,7 +224,7 @@ export const AppDetails: FC = () => {
               </TabsContent>
               {hasInstancesWithERC8004Token && (
                 <TabsContent value="erc-8004">
-                  <AppERC8004 roflInstances={instancesWithERC8004Token} />
+                  <AppERC8004 instancesWithERC8004Token={instancesWithERC8004Token} />
                 </TabsContent>
               )}
             </Tabs>

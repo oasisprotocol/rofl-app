@@ -4,21 +4,24 @@ import axios from 'axios'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { RoflInstance } from '../../../nexus/generated/api.ts'
 import { useERC8004TokenURI } from '../../../hooks/useERC8004TokenURI.ts'
-import { fromMetadataToAgentId, tokenURIToLink } from '../../../utils/rofl-8004.ts'
+import { fromMetadataToAgentMetadata, tokenURIToLink } from '../../../utils/rofl-8004.ts'
 import { CodeDisplay } from '../../../components/CodeDisplay'
 
 type Props = {
-  roflInstances: RoflInstance[]
+  instancesWithERC8004Token: RoflInstance[]
 }
 
-export const AppERC8004: FC<Props> = ({ roflInstances }) => {
-  const [instance] = roflInstances
-  const [chainId, tokenId] = fromMetadataToAgentId(instance.metadata)
+export const AppERC8004: FC<Props> = ({ instancesWithERC8004Token }) => {
+  const [instance] = instancesWithERC8004Token
+  const agentMetadata = fromMetadataToAgentMetadata(instance.metadata)
+  const agentChainId = agentMetadata?.chainId
+  const agentTokenId = agentMetadata?.agentId
+
   const {
     isLoading: isLoadingTokenURI,
     data: tokenURI,
     error: tokenURIError,
-  } = useERC8004TokenURI(chainId!, tokenId!, !!chainId && !!tokenId)
+  } = useERC8004TokenURI(agentChainId!, agentTokenId!, !!agentChainId && !!agentTokenId)
 
   const {
     data: metadata,

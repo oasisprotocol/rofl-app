@@ -10,7 +10,9 @@ import { AppData, ERC8004FormData } from '../pages/CreateApp/types.ts'
 import * as yaml from 'yaml'
 import { parse } from 'yaml'
 
-export const fromMetadataToAgentId = (metadata: RoflInstance['metadata']): [number | null, bigint | null] => {
+export const fromMetadataToAgentMetadata = (
+  metadata: RoflInstance['metadata'],
+): { chainId: number | null; agentId: bigint | null; chainName: string | null } | null => {
   const agentId = metadata?.[ROFL_8004_METADATA_KEY] as string
   const splitAgentId = agentId?.split(':')
   const chainId = Number(splitAgentId[0])
@@ -20,10 +22,14 @@ export const fromMetadataToAgentId = (metadata: RoflInstance['metadata']): [numb
       `Invalid chainId: ${chainId}. Expected: ${Object.keys(ROFL_8004_SUPPORTED_CHAINS).join(',')}`,
     )
     // Silently fail
-    return [null, null]
+    return null
   }
 
-  return [chainId, BigInt(splitAgentId[1])]
+  return {
+    chainId,
+    chainName: ROFL_8004_SUPPORTED_CHAINS[chainId.toString()].chain.name.toLowerCase(),
+    agentId: BigInt(splitAgentId[1]),
+  }
 }
 
 export const tokenURIToLink = (tokenURI: string) => tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
