@@ -12,6 +12,7 @@ export const ROFL_8004_SUPPORTED_CHAINS = {
     chain: sepolia,
     rpcUrl: sepolia.rpcUrls.default.http,
     identityContract: '0x8004a6090cd10a7288092483047b097295fb8847',
+    validatorAddress: '0x7cd2eccd146b6626c8a500ab5644b1a506115e6f',
   },
 }
 

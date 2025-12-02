@@ -25,7 +25,7 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
     defaultValues: {
       secrets: {
         ERC8004_CHAIN_SELECTION: 'custom',
-        ERC8004_RPC_URL: (inputs as ERC8004FormData | undefined)?.secrets?.ERC8004_RPC_URL ?? '',
+        ERC8004_RPC_URL: inputs?.secrets?.ERC8004_RPC_URL ?? '',
         ERC8004_PINATA_JWT: '',
         ERC8004_SIGNING_KEY: '',
         ERC8004_AGENT_NAME: metadata?.name ?? '',
@@ -36,7 +36,7 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
         ERC8004_AGENT_MCP: '',
         ERC8004_AGENT_A2A: '',
         ERC8004_AGENT_ENS: '',
-        ...(inputs as ERC8004FormData | undefined)?.secrets,
+        ...inputs?.secrets,
       },
     },
   })
@@ -44,7 +44,6 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
   const chainSelection = form.watch('secrets.ERC8004_CHAIN_SELECTION')
   const isCustomChain = chainSelection === 'custom'
 
-  // Prepare chain options
   const chainOptions = [
     ...Object.entries(ROFL_8004_SUPPORTED_CHAINS).map(([key, config]) => ({
       value: key,
@@ -70,6 +69,12 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
                   values.secrets.ERC8004_CHAIN_SELECTION as keyof typeof ROFL_8004_SUPPORTED_CHAINS
                 ]?.rpcUrl
               : values.secrets.ERC8004_RPC_URL,
+          ERC8004_VALIDATOR_ADDRESS:
+            values.secrets.ERC8004_CHAIN_SELECTION !== 'custom'
+              ? ROFL_8004_SUPPORTED_CHAINS[
+                  values.secrets.ERC8004_CHAIN_SELECTION as keyof typeof ROFL_8004_SUPPORTED_CHAINS
+                ]?.validatorAddress
+              : values.secrets.ERC8004_VALIDATOR_ADDRESS,
         }).filter(
           ([key, value]) =>
             !['ERC8004_CHAIN_SELECTION'].includes(key) &&
@@ -112,15 +117,26 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
       />
 
       {isCustomChain && (
-        <InputFormField
-          control={form.control}
-          type="input"
-          name="secrets.ERC8004_RPC_URL"
-          label="Custom RPC URL"
-          placeholder="https://your-rpc-url.com"
-          disabled={skipERC8004}
-          info="Enter the full RPC URL for trustless agent registration"
-        />
+        <>
+          <InputFormField
+            control={form.control}
+            type="input"
+            name="secrets.ERC8004_RPC_URL"
+            label="Custom RPC URL"
+            placeholder="https://your-rpc-url.com"
+            disabled={skipERC8004}
+            info="Enter the full RPC URL for trustless agent registration"
+          />
+
+          <InputFormField
+            control={form.control}
+            type="input"
+            name="secrets.ERC8004_VALIDATOR_ADDRESS"
+            label="Validator address (Optional)"
+            placeholder="0x1234567890abcde1234567890abcde1234567890"
+            disabled={skipERC8004}
+          />
+        </>
       )}
 
       <InputFormField
@@ -209,7 +225,7 @@ export const ERC8004Form: FC<Props> = ({ handleNext, handleBack, inputs, metadat
         control={form.control}
         type="password"
         name="secrets.ERC8004_SIGNING_KEY"
-        label="Private key for agent submittion (Optional)"
+        label="Private key for trustless agent registration (Optional)"
         placeholder="1234567890abcde1234567890abcde1234567890abcde1234567890abcde123"
         disabled={skipERC8004}
         info="The private key used to sign and submit your agent to the ERC-8004 registry. Add some funds on selected network for token registration."

@@ -147,6 +147,19 @@ export const erc8004Schema = z
         })
         .optional()
         .or(z.literal('')),
+      ERC8004_VALIDATOR_ADDRESS: z
+        .string()
+        .optional()
+        .or(z.literal(''))
+        .refine(
+          value => {
+            if (!value || value === '') return true
+            return /^0x[a-fA-F0-9]{40}$/.test(value)
+          },
+          {
+            message: 'Please enter a valid address.',
+          },
+        ),
       ERC8004_PINATA_JWT: z
         .string()
         .min(1, {
@@ -165,7 +178,7 @@ export const erc8004Schema = z
             return /^[a-fA-F0-9]{64}$/.test(value)
           },
           {
-            message: 'Please enter a valid Ethereum private key (64 hexadecimal characters).',
+            message: 'Please enter a valid private key (64 hexadecimal characters).',
           },
         ),
       ERC8004_AGENT_NAME: z.string().optional(),
