@@ -1,12 +1,12 @@
 import { useEffect, type FC } from 'react'
 import { MachinesEmptyState } from './emptyState'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 import { useAccount } from 'wagmi'
 import { useNetwork } from '../../../hooks/useNetwork'
-import { getGetRuntimeRoflmarketInstancesQueryKey, GetRuntimeRoflmarketInstances } from '../../../nexus/api'
+import { GetRuntimeRoflmarketInstances } from '../../../nexus/api'
 import { MachineCard } from '../../../components/MachineCard'
+import { useNexusInfiniteQuery } from '../../../utils/useNexusInfiniteQuery'
 
 const pageLimit = 9
 
@@ -15,29 +15,21 @@ export const Machines: FC = () => {
   const { ref, inView } = useInView()
   const network = useNetwork()
 
-  const machinesQueryParams = (pageParam = 0) =>
-    [
-      network,
-      'sapphire',
-      {
-        limit: pageLimit,
-        offset: pageParam,
-        admin: address,
-      },
-    ] satisfies Parameters<typeof GetRuntimeRoflmarketInstances>
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } = useInfiniteQuery({
-    queryKey: ['infinite', ...getGetRuntimeRoflmarketInstancesQueryKey(...machinesQueryParams())],
-    queryFn: async ({ pageParam = 0 }) => {
-      const result = await GetRuntimeRoflmarketInstances(...machinesQueryParams(pageParam))
-      return result
-    },
-    initialPageParam: 0,
-    enabled: isConnected,
-    getNextPageParam: (lastPage, allPages) => {
-      const totalFetched = allPages.length * pageLimit
-      return lastPage.data.instances.length < lastPage.data.total_count ? totalFetched : undefined
-    },
-  })
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } =
+    useNexusInfiniteQuery({
+      queryKeyPrefix: 'machines',
+      queryFn: GetRuntimeRoflmarketInstances,
+      resultsField: 'instances',
+      params: [
+        network,
+        'sapphire',
+        {
+          limit: pageLimit,
+          admin: address,
+        },
+      ],
+      enabled: isConnected,
+    })
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {

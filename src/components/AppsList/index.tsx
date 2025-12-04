@@ -1,11 +1,11 @@
 import { useEffect, type FC, type ReactNode } from 'react'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { AppCard } from '../AppCard'
-import { getGetRuntimeRoflAppsQueryKey, GetRuntimeRoflApps } from '../../nexus/api'
+import { GetRuntimeRoflApps } from '../../nexus/api'
 import { useNetwork } from '../../hooks/useNetwork'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 import { useAccount } from 'wagmi'
+import { useNexusInfiniteQuery } from '../../utils/useNexusInfiniteQuery'
 
 type AppsListProps = {
   emptyState: ReactNode
@@ -19,30 +19,22 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
   // Fallback is needed to render Explore page content without wallet connection
   const network = useNetwork(type === 'dashboard' ? undefined : 'mainnet')
 
-  const appsQueryParams = (pageParam = 0) =>
-    [
-      network,
-      'sapphire',
-      {
-        limit: pageLimit,
-        offset: pageParam,
-        admin: type === 'dashboard' ? address : undefined,
-        sort_by: type === 'dashboard' ? 'created_at_desc' : undefined,
-      },
-    ] satisfies Parameters<typeof GetRuntimeRoflApps>
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } = useInfiniteQuery({
-    queryKey: ['infinite', ...getGetRuntimeRoflAppsQueryKey(...appsQueryParams())],
-    queryFn: async ({ pageParam = 0 }) => {
-      const result = await GetRuntimeRoflApps(...appsQueryParams(pageParam))
-      return result
-    },
-    initialPageParam: 0,
-    enabled: type === 'explore' || (type === 'dashboard' && isConnected),
-    getNextPageParam: (lastPage, allPages) => {
-      const totalFetched = allPages.length * pageLimit
-      return lastPage.data.rofl_apps.length < lastPage.data.total_count ? totalFetched : undefined
-    },
-  })
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } =
+    useNexusInfiniteQuery({
+      queryKeyPrefix: 'rofl_apps',
+      queryFn: GetRuntimeRoflApps,
+      resultsField: 'rofl_apps',
+      params: [
+        network,
+        'sapphire',
+        {
+          limit: pageLimit,
+          admin: type === 'dashboard' ? address : undefined,
+          sort_by: type === 'dashboard' ? 'created_at_desc' : undefined,
+        },
+      ],
+      enabled: type === 'explore' || (type === 'dashboard' && isConnected),
+    })
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
