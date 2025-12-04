@@ -113,10 +113,10 @@ export const MainLayout: FC = () => {
                   <SidebarMenuButton asChild>
                     <Button
                       variant="ghost"
-                      className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                      className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                       asChild
                     >
-                      <NavLink to="/dashboard">
+                      <NavLink to="/dashboard" end>
                         <LayoutDashboard className="h-4 w-4 text-sidebar-foreground" />
                         Dashboard
                       </NavLink>
@@ -128,10 +128,12 @@ export const MainLayout: FC = () => {
                     <SidebarMenuSubButton asChild>
                       <Button
                         variant="ghost"
-                        className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                        className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                         asChild
                       >
-                        <NavLink to="/dashboard/apps">Apps</NavLink>
+                        <NavLink to="/dashboard/apps" end>
+                          Apps
+                        </NavLink>
                       </Button>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -139,10 +141,12 @@ export const MainLayout: FC = () => {
                     <SidebarMenuSubButton asChild>
                       <Button
                         variant="ghost"
-                        className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                        className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                         asChild
                       >
-                        <NavLink to="/dashboard/machines">Machines</NavLink>
+                        <NavLink to="/dashboard/machines" end>
+                          Machines
+                        </NavLink>
                       </Button>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -150,10 +154,10 @@ export const MainLayout: FC = () => {
                 <SidebarMenuButton asChild>
                   <Button
                     variant="ghost"
-                    className="w-full justify-start p-2 h-8 rounded-md cursor-pointer"
+                    className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                     asChild
                   >
-                    <NavLink to="/explore">
+                    <NavLink to="/explore" end>
                       <Compass className="h-4 w-4 text-sidebar-foreground" />
                       Explore
                     </NavLink>
