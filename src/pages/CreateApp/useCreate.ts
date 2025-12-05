@@ -36,7 +36,7 @@ export const useCreate = () => {
   }
 
   if (appData.network !== network) {
-    setCurrentStep(step => (step > 3 ? 3 : step))
+    setCurrentStep(step => (step > 4 ? 4 : step))
     // If user switches chain then reset provider + offer id
     const initData = initAppDataState(network)
     setAppData(prevData => ({
