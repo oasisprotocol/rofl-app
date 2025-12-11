@@ -469,7 +469,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
       },
       {
         id: 3,
-        label: 'Executing bridge transaction',
+        label: 'Executing deposit transaction',
         description: 'Initiating cross-chain token transfer',
       },
       {
