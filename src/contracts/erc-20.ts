@@ -1,4 +1,4 @@
-import { Address, maxUint256 } from 'viem'
+import { Address } from 'viem'
 import {
   readContract,
   waitForTransactionReceipt,
@@ -43,7 +43,7 @@ export const checkAndSetErc20Allowance = async (
   approvalAddress: Address,
   amount: bigint,
   userAddress: Address,
-  allowanceAmount = maxUint256,
+  allowanceAmount = amount,
 ): Promise<void> => {
   // Transactions with the native token don't need approval
   if (tokenAddress.toLowerCase() === ROFL_PAYMASTER_NATIVE_TOKEN_ADDRESS) {
