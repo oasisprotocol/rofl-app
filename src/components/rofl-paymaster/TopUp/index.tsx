@@ -35,7 +35,6 @@ import { RoflPaymasterContextProvider } from '../../../contexts/RoflPaymaster/Pr
 import { useRoflPaymasterContext } from '../../../contexts/RoflPaymaster/hooks'
 import { ChainNativeCurrency } from '../../../types/rofl-paymaster'
 import { TransactionSummary } from '../TransactionSummary'
-import { TopUpInitializationFailed } from '../TopUpInitializationFailed'
 
 const { VITE_FEATURE_FLAG_PAYMASTER } = import.meta.env
 
@@ -663,16 +662,6 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
 export const TopUp: FC<TopUpProps> = props => {
   const network = useNetwork()
-
-  if (network === 'mainnet') {
-    return (
-      <>
-        <TopUpInitializationFailed />
-        {/* Fallback navigation */}
-        {props.children?.({ isValid: false })}
-      </>
-    )
-  }
 
   if (network === 'testnet' && !VITE_FEATURE_FLAG_PAYMASTER) {
     return <FaucetInfo />
