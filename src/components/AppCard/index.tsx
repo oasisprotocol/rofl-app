@@ -77,7 +77,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex justify-between only:*:grow">
         {type === 'dashboard' && (
           <Button variant="secondary" asChild>
             <Link to={`/dashboard/apps/${app.id}`}>View details</Link>
@@ -98,10 +98,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
         <Button
           variant="secondary"
           asChild
-          className={cn(
-            'bg-background',
-            type !== 'dashboard' && machinesWithOnlyLogsPermission.length <= 0 && 'grow',
-          )}
+          className="bg-background"
         >
           <a
             href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${app.id}`}
