@@ -9,14 +9,18 @@ import { AppStatusIcon } from '../AppStatusIcon'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { trimLongString } from '../../utils/trimLongString'
 import { formatDistanceToNow, parseISO } from 'date-fns'
+import { useAccount } from 'wagmi'
+import { ViewWithOnlyLogsPermission } from './ViewWithOnlyLogsPermission'
 
 type AppCardProps = {
   app: RoflApp
-  network: string
+  network: 'mainnet' | 'testnet'
   type?: 'explore' | 'dashboard'
 }
 
 export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
+  const { address } = useAccount()
+
   return (
     <Card className="rounded-md">
       <CardHeader className="">
@@ -61,14 +65,16 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex justify-between only:*:grow">
         {type === 'dashboard' && (
           <Button variant="secondary" asChild>
             <Link to={`/dashboard/apps/${app.id}`}>View details</Link>
           </Button>
         )}
 
-        <Button variant="secondary" asChild className={cn('bg-background', type === 'explore' && 'w-full')}>
+        {type === 'explore' && address && <ViewWithOnlyLogsPermission app={app} network={network} />}
+
+        <Button variant="secondary" asChild className="bg-background">
           <a
             href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${app.id}`}
             target="_blank"
