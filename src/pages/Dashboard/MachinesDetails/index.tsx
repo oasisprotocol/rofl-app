@@ -29,6 +29,7 @@ import { useAccount } from 'wagmi'
 import { getEvmBech32Address } from '../../../utils/helpers'
 import { appDetailsPath } from '../../paths'
 import { hasViewLogsPermission } from '../../../utils/hasViewLogsPermission'
+import { WhoCanViewLogs } from './WhoCanViewLogs'
 
 export const MachinesDetails: FC = () => {
   const account = useAccount()
@@ -185,6 +186,9 @@ export const MachinesDetails: FC = () => {
                   </DetailsSectionRow>
                   <DetailsSectionRow label="Node ID" className="pb-6 border-b">
                     {machine.node_id}
+                  </DetailsSectionRow>
+                  <DetailsSectionRow label="Who can view logs" className="pb-6 border-b">
+                    <WhoCanViewLogs machine={machine} />
                   </DetailsSectionRow>
                 </>
               )}
