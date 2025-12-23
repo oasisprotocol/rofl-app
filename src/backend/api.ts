@@ -788,17 +788,13 @@ export function useMachineExecuteRestartCmd() {
           : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
       const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
 
-      const restartRequest = {
-        wipe_storage: false,
-      }
-
-      const command = {
+      const encodedCommand = oasis.misc.toCBOR({
         // https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/build/rofl/scheduler/commands.go#L9-L42
         method: 'Restart',
-        args: restartRequest,
-      }
-
-      const encodedCommand = oasis.misc.toCBOR(command)
+        args: {
+          wipe_storage: false,
+        },
+      })
 
       return await sendTransactionAsync(
         roflmarket
@@ -830,17 +826,13 @@ export function useMachineExecuteStopCmd() {
           : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
       const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
 
-      const restartRequest = {
-        wipe_storage: false,
-      }
-
-      const command = {
+      const encodedCommand = oasis.misc.toCBOR({
         // https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/build/rofl/scheduler/commands.go#L9-L42
         method: 'Terminate',
-        args: restartRequest,
-      }
-
-      const encodedCommand = oasis.misc.toCBOR(command)
+        args: {
+          wipe_storage: false,
+        },
+      })
 
       return await sendTransactionAsync(
         roflmarket
@@ -912,6 +904,14 @@ export function useMachineTopUp() {
                   'net.oasis.deployment.orc.ref': (machine.deployment.metadata as any)[
                     'net.oasis.deployment.orc.ref'
                   ],
+                  // Copy permissions like log.view
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  ...((machine.deployment.metadata as any)['net.oasis.scheduler.permissions'] && {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    'net.oasis.scheduler.permissions': (machine.deployment.metadata as any)[
+                      'net.oasis.scheduler.permissions'
+                    ],
+                  }),
                 },
               },
               term: duration.term,
@@ -924,6 +924,77 @@ export function useMachineTopUp() {
         const newMachineId = await waitForMachineId(hash, network)
         return newMachineId
       }
+    },
+  })
+}
+
+export function useGrantLogsPermission() {
+  const { sendTransactionAsync } = useSendTransaction()
+  return useMutation<
+    `0x${string}`,
+    AxiosError<unknown>,
+    {
+      machine: RoflMarketInstance
+      provider: string
+      network: 'mainnet' | 'testnet'
+      evmAddress: `0x${string}`
+    }
+  >({
+    mutationFn: async ({ machine, provider, network, evmAddress }) => {
+      const sapphireRuntimeId =
+        network === 'mainnet'
+          ? oasis.misc.fromHex('000000000000000000000000000000000000000000000000f80306c9858e7279')
+          : oasis.misc.fromHex('000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c')
+      const roflmarket = new oasisRT.roflmarket.Wrapper(sapphireRuntimeId)
+
+      const encodedCommand = oasis.misc.toCBOR({
+        // https://github.com/oasisprotocol/cli/blob/b6894a1bb6ea7918a9b2ba3efe30b1911388e2f6/build/rofl/scheduler/commands.go#L9-L42
+        method: 'Deploy',
+        args: {
+          deployment: {
+            app_id: oasisRT.rofl.fromBech32(machine.deployment.app_id as string),
+            manifest_hash: oasis.misc.fromHex(machine.deployment.manifest_hash as string),
+            metadata: {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ...(machine.deployment.metadata as any),
+              // https://github.com/oasisprotocol/oasis-sdk/blob/b38b693/rofl-scheduler/src/types.rs#L49-L53
+              'net.oasis.scheduler.permissions': oasis.misc.toBase64(
+                oasis.misc.toCBOR({
+                  // Keep other permissions
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  ...((machine.deployment.metadata as any)?.['net.oasis.scheduler.permissions'] &&
+                    (oasis.misc.fromCBOR(
+                      oasis.misc.fromBase64(
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        (machine.deployment.metadata as any)?.['net.oasis.scheduler.permissions'],
+                      ),
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    ) as any)),
+                  'log.view': [
+                    oasis.staking.addressFromBech32(
+                      oasisRT.address.toBech32(getOasisAddressBytesFromEvm(evmAddress)),
+                    ),
+                  ],
+                }),
+              ),
+            },
+          },
+          wipe_storage: false,
+        },
+      })
+
+      return await sendTransactionAsync(
+        roflmarket
+          .callInstanceExecuteCmds()
+          .setBody({
+            provider: oasis.staking.addressFromBech32(provider),
+            id: oasis.misc.fromHex(machine.id) as oasisRT.types.MachineID,
+            cmds: [encodedCommand],
+          })
+          .toSubcall(),
+      )
+      // Doesn't wait for transaction receipt
+      // Takes about 1 minute to complete after transaction receipt.
     },
   })
 }
