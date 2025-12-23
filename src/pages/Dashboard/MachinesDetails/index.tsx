@@ -6,6 +6,7 @@ import { formatDistanceToNow, parseISO, isFuture } from 'date-fns'
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow'
 import { MachineRestart } from './MachineRestart'
+import { GrantLogsPermissionDialog } from './GrantLogsPermissionDialog'
 import { useNetwork } from '../../../hooks/useNetwork'
 import {
   useGetRuntimeRoflAppsId,
@@ -13,7 +14,11 @@ import {
 } from '../../../nexus/api'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { MachineResources } from '../../../components/MachineResources'
-import { useMachineExecuteRestartCmd, useMachineExecuteStopCmd } from '../../../backend/api'
+import {
+  useGrantLogsPermission,
+  useMachineExecuteRestartCmd,
+  useMachineExecuteStopCmd,
+} from '../../../backend/api'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { MachineLogs } from './MachineLogs'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
@@ -40,8 +45,10 @@ export const MachinesDetails: FC = () => {
   const machine = data?.data
   const restartMachine = useMachineExecuteRestartCmd()
   const stopMachine = useMachineExecuteStopCmd()
+  const grantLogsPermission = useGrantLogsPermission()
 
-  const showBlockingOverlay = restartMachine.isPending || stopMachine.isPending
+  const showBlockingOverlay =
+    restartMachine.isPending || stopMachine.isPending || grantLogsPermission.isPending
   return (
     <>
       <div>
@@ -77,7 +84,6 @@ export const MachinesDetails: FC = () => {
                       </>
                     )}
                   </div>
-
                   {!isMachineRemoved(machine) && (
                     <Button variant="outline" className="w-full md:w-auto" asChild>
                       <Link to="./top-up">
@@ -95,6 +101,21 @@ export const MachinesDetails: FC = () => {
                         network,
                       })
                       toastWithDuration('Machine is restarting (~1min)', 1 * 60 * 1000)
+                    }}
+                  />
+                  <GrantLogsPermissionDialog
+                    disabled={isMachineRemoved(machine)}
+                    onConfirm={async evmAddress => {
+                      await grantLogsPermission.mutateAsync({
+                        machine: machine,
+                        provider: machine.provider,
+                        network,
+                        evmAddress,
+                      })
+                      toastWithDuration(
+                        'Logs view permission granted. Machine is restarting (~1min)',
+                        1 * 60 * 1000,
+                      )
                     }}
                   />
                   <TabsList className="w-full md:w-auto">
