@@ -78,7 +78,7 @@ export const PaymentStep: FC<PaymentStepProps> = ({
 
   return (
     <CreateLayout
-      currentStep={4}
+      currentStep={5}
       selectedTemplateName={selectedTemplateName}
       selectedTemplateId={selectedTemplateId}
       customStepTitle={customStepTitle}

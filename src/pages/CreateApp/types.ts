@@ -1,6 +1,7 @@
 import { z, RefinementCtx } from 'zod'
 import { BuildFormData } from '../../types/build-form.ts'
 import * as yaml from 'yaml'
+import { sepolia } from 'viem/chains'
 
 /**
  * This is like z.string().url(), but also accepts domain names without the protocol prefix,
@@ -133,6 +134,78 @@ export const customBuildFormSchema = z.object({
   value: z.string().default(''),
 })
 
+// Make sure that the secrets object contains variables prefixed with (const ROFL_8004_SERVICE_ENV_PREFIX)
+export const erc8004Schema = z
+  .object({
+    secrets: z.object({
+      ERC8004_CHAIN_SELECTION: z.enum([sepolia.id.toString(), 'custom']).optional(),
+      ERC8004_RPC_URL: z
+        .string()
+        .url({ message: 'Please enter a valid URL.' })
+        .max(200, {
+          message: 'RPC URL must be less than 200 characters.',
+        })
+        .optional()
+        .or(z.literal('')),
+      ERC8004_VALIDATOR_ADDRESS: z
+        .string()
+        .optional()
+        .or(z.literal(''))
+        .refine(
+          value => {
+            if (!value || value === '') return true
+            return /^0x[a-fA-F0-9]{40}$/.test(value)
+          },
+          {
+            message: 'Please enter a valid address.',
+          },
+        ),
+      ERC8004_PINATA_JWT: z
+        .string()
+        .min(1, {
+          message: 'Pinata JWT is required.',
+        })
+        .max(1000, {
+          message: 'Pinata JWT must be less than 1000 characters.',
+        }),
+      ERC8004_SIGNING_KEY: z
+        .string()
+        .optional()
+        .or(z.literal(''))
+        .refine(
+          value => {
+            if (!value || value === '') return true
+            return /^[a-fA-F0-9]{64}$/.test(value)
+          },
+          {
+            message: 'Please enter a valid private key (64 hexadecimal characters).',
+          },
+        ),
+      ERC8004_AGENT_NAME: z.string().optional(),
+      ERC8004_AGENT_DESCRIPTION: z.string().optional(),
+      ERC8004_AGENT_IMAGE: z
+        .string()
+        .url({ message: 'Please enter a valid URL.' })
+        .optional()
+        .or(z.literal('')),
+      ERC8004_AGENT_VERSION: z.string().optional(),
+      ERC8004_AGENT_CATEGORY: z.string().optional(),
+      ERC8004_AGENT_MCP: z.string().optional(),
+      ERC8004_AGENT_A2A: z.string().optional(),
+      ERC8004_AGENT_ENS: z.string().optional(),
+    }),
+  })
+  .superRefine((data, ctx) => {
+    // Custom validation: if using custom chain, RPC URL is required
+    if (data.secrets.ERC8004_CHAIN_SELECTION === 'custom' && !data.secrets.ERC8004_RPC_URL) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'RPC URL is required when using a custom chain.',
+        path: ['secrets', 'ERC8004_RPC_URL'],
+      })
+    }
+  })
+
 export const tgbotFormSchema = z.object({
   secrets: z.object({
     OLLAMA_MODEL: z.string().min(1, {
@@ -203,17 +276,20 @@ export const hlCopyTraderFormSchema = z.object({
   }),
 })
 
-export type TemplateFormData = string
 export type MetadataFormData = z.infer<typeof metadataFormSchema>
 export type CustomBuildFormData = z.infer<typeof customBuildFormSchema>
+export type ERC8004FormData = z.infer<typeof erc8004Schema>
 export type AgentFormData = z.infer<typeof tgbotFormSchema>
 export type XAgentFormData = z.infer<typeof xAgentFormSchema>
 export type HlCopyTraderFormData = z.infer<typeof hlCopyTraderFormSchema>
 
+export type AppDataInputs = (CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData) &
+  ERC8004FormData
+
 export type AppData = {
   templateId?: string
   metadata?: MetadataFormData
-  inputs?: CustomBuildFormData | AgentFormData | XAgentFormData | HlCopyTraderFormData
+  inputs?: AppDataInputs
   network: 'mainnet' | 'testnet'
   build?: BuildFormData
 }
