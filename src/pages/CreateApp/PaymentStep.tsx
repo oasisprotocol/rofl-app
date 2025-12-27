@@ -113,7 +113,9 @@ export const PaymentStep: FC<PaymentStepProps> = ({
       )}
       {!hasEnoughBalance && minAmount && (
         <p className="text-sm text-foreground font-semibold text-center my-4">
-          You need more ${chain.nativeCurrency.symbol} to complete this process.
+          You need more $
+          {network === 'mainnet' ? sapphire.nativeCurrency.symbol : sapphireTestnet.nativeCurrency.symbol} to
+          complete this process.
           <br />
           Top up your wallet below.
         </p>
