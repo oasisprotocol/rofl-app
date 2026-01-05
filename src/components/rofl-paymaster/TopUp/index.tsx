@@ -36,8 +36,6 @@ import { TransactionSummary } from '../TransactionSummary'
 import { usePaymaster } from '../../../hooks/usePaymaster'
 import { ChainLogo } from '../TokenLogo/ChainLogo'
 
-const { VITE_FEATURE_FLAG_PAYMASTER } = import.meta.env
-
 const bridgeFormSchema = z.object({
   sourceChain: z
     .object({
@@ -612,7 +610,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 export const TopUp: FC<TopUpProps> = props => {
   const network = useNetwork()
 
-  if (network === 'testnet' && !VITE_FEATURE_FLAG_PAYMASTER) {
+  if (network === 'testnet') {
     return <FaucetInfo />
   }
 
