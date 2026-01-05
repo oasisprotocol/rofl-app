@@ -1,4 +1,4 @@
-import React, { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import React, { type FC, type ReactNode, useEffect, useMemo, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -16,12 +16,10 @@ import type { GetBalanceReturnType } from 'wagmi/actions'
 import { useAccount } from 'wagmi'
 import { NumberUtils } from '../../../utils/number.utils'
 import { FormatUtils } from '../../../utils/format.utils'
-import { checkAndSetErc20Allowance, getErc20Balance, switchToChain } from '../../../contracts/erc-20'
+import { getErc20Balance } from '../../../contracts/erc-20'
 import { FaucetInfo } from '../FaucetInfo'
 import { ProgressStep, TopUpProgressDialog } from '../TopUpProgressDialog'
 import { useNetwork } from '../../../hooks/useNetwork'
-import { sapphireTestnet } from 'viem/chains'
-import { useChainModal } from '@rainbow-me/rainbowkit'
 import { Chain } from 'viem'
 import classes from './index.module.css'
 import {
@@ -29,12 +27,14 @@ import {
   ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN,
   ROFL_PAYMASTER_ENABLED_CHAINS,
   ROFL_PAYMASTER_EXPECTED_TIME,
+  ROFL_PAYMASTER_MIN_USD_VALUE,
   ROFL_PAYMASTER_TOKEN_CONFIG,
 } from '../../../constants/rofl-paymaster-config'
 import { RoflPaymasterContextProvider } from '../../../contexts/RoflPaymaster/Provider'
-import { useRoflPaymasterContext } from '../../../contexts/RoflPaymaster/hooks'
 import { ChainNativeCurrency } from '../../../types/rofl-paymaster'
 import { TransactionSummary } from '../TransactionSummary'
+import { usePaymaster } from '../../../hooks/usePaymaster'
+import { ChainLogo } from '../TokenLogo/ChainLogo'
 
 const { VITE_FEATURE_FLAG_PAYMASTER } = import.meta.env
 
@@ -60,6 +60,9 @@ const bridgeFormSchema = z.object({
     .min(1, 'Amount is required')
     .refine(val => NumberUtils.isValidAmount(val), {
       message: 'Amount must be a valid positive number',
+    })
+    .refine(val => Number(val) >= ROFL_PAYMASTER_MIN_USD_VALUE, {
+      message: `Minimum amount is $${ROFL_PAYMASTER_MIN_USD_VALUE}`,
     }),
   destinationChain: z
     .object({
@@ -97,25 +100,9 @@ interface TopUpProps {
 
 const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpSuccess, onTopUpError }) => {
   const { address } = useAccount()
-  const { openChainModal } = useChainModal()
-  const { getQuote, createDeposit, pollPayment } = useRoflPaymasterContext()
 
   const [selectedChainTokens, setSelectedChainTokens] = useState<TokenWithBalance[] | null>(null)
-  const [quote, setQuote] = useState<bigint | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [topUpError, setTopUpError] = useState('')
-
-  const [currentStep, setCurrentStep] = useState<number | null>(null)
-  const [stepStatuses, setStepStatuses] = useState<{
-    [key: number]: 'pending' | 'processing' | 'completed' | 'error'
-  }>({})
-
-  const updateStepStatus = (stepId: number, status: 'pending' | 'processing' | 'completed' | 'error') => {
-    setStepStatuses(prev => ({
-      ...prev,
-      [stepId]: status,
-    }))
-  }
+  const [isTokenDropdownOpen, setIsTokenDropdownOpen] = useState(false)
 
   useEffect(() => {
     document.body.classList.add('topUp')
@@ -142,6 +129,78 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
       },
     },
   })
+
+  // Auto-select source chain if only one option is available
+  useEffect(() => {
+    const availableChains = ROFL_PAYMASTER_ENABLED_CHAINS?.filter(
+      chain => chain.id !== (ROFL_PAYMASTER_DESTINATION_CHAIN.id as number),
+    )
+
+    if (availableChains?.length === 1 && !form.getValues('sourceChain.id')) {
+      const chain = availableChains[0]
+      form.setValue('sourceChain', { id: chain.id, name: chain.name })
+    }
+  }, [form])
+
+  const sourceTokenSymbol = form.watch('sourceToken.symbol')
+  const sourceTokenAddress = form.watch('sourceToken.contractAddress')
+  const selectedSourceToken = useMemo(() => {
+    return selectedChainTokens?.find(
+      t => t.symbol === sourceTokenSymbol && t.contractAddress === sourceTokenAddress,
+    )
+  }, [selectedChainTokens, sourceTokenSymbol, sourceTokenAddress])
+
+  const paymasterTokenConfig = useMemo(() => {
+    if (!selectedSourceToken) return null
+    return {
+      contractAddress: selectedSourceToken.contractAddress,
+      symbol: selectedSourceToken.symbol,
+      decimals: selectedSourceToken.decimals,
+      name: selectedSourceToken.name,
+    }
+  }, [selectedSourceToken])
+
+  const progressSteps: ProgressStep[] = [
+    {
+      id: 1,
+      label: 'Validating chain connection',
+      description: 'Ensuring wallet is connected to correct blockchain network',
+    },
+    {
+      id: 2,
+      label: 'Approving token spend',
+      description: 'Granting permission to smart contract for token transfer',
+    },
+    {
+      id: 3,
+      label: 'Executing deposit transaction',
+      description: 'Initiating cross-chain token transfer',
+    },
+    {
+      id: 4,
+      label: 'Confirming completion',
+      description: 'Monitoring transaction until tokens arrive on destination chain',
+      expectedTimeInSeconds: ROFL_PAYMASTER_EXPECTED_TIME,
+    },
+    {
+      id: 5,
+      label: 'Validating chain connection',
+      description: 'Ensuring wallet is connected to correct blockchain network',
+    },
+  ]
+
+  const {
+    getQuote,
+    startTopUp,
+    currentStep,
+    stepStatuses,
+    isLoading,
+    error: paymasterError,
+    quote,
+  } = usePaymaster(paymasterTokenConfig, progressSteps, [])
+
+  const currentStepId = currentStep?.id ?? null
+  const topUpError = paymasterError
 
   const {
     watch,
@@ -185,11 +244,8 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
   // Custom validation for minimum amount
   useEffect(() => {
-    // TODO: Remove, temporary validation removal for testing
-    return
-
     if (quote) {
-      if (NumberUtils.isLessThan(quote!.toString(), minAmount.toString())) {
+      if (NumberUtils.isLessThan(quote.toString(), minAmount.toString())) {
         setError('destinationToken', {
           type: 'manual',
           message: `Amount cannot be less than minimum (${NumberUtils.formatTokenAmountWithSymbol(minAmount.toString())})`,
@@ -233,6 +289,14 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
         setSelectedChainTokens(tokensWithBalance)
 
+        // Auto-select token if only one exists
+        if (tokensWithBalance.length === 1) {
+          setValue('sourceToken', {
+            symbol: tokensWithBalance[0].symbol,
+            contractAddress: tokensWithBalance[0].contractAddress,
+          })
+        }
+
         for (let i = 0; i < tokensWithBalance.length; i++) {
           const token = tokensWithBalance[i]
           try {
@@ -257,13 +321,10 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
     }
 
     getTokensByChainId(sourceChain.id)
-  }, [watchedValues.sourceChain, setValue, address])
+  }, [watchedValues.sourceChain.id, setValue, address, watchedValues.sourceChain])
 
   useEffect(() => {
     const { sourceChain, sourceToken, amount, destinationChain, destinationToken } = watchedValues
-
-    setQuote(null)
-    setTopUpError('')
 
     if (
       !sourceChain?.id ||
@@ -280,7 +341,6 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
     }
 
     const fetchQuote = async () => {
-      setIsLoading(true)
       try {
         const selectedSourceToken = selectedChainTokens?.find(token => token.symbol === sourceToken.symbol)
 
@@ -291,18 +351,10 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
         const expandedAmount = BigInt(NumberUtils.expandAmount(amount, selectedSourceToken.decimals))
 
-        const quoteResponse = await getQuote(
-          selectedSourceToken.contractAddress,
-          expandedAmount,
-          ROFL_PAYMASTER_DESTINATION_CHAIN,
-        )
-
-        setQuote(quoteResponse)
+        await getQuote({ amount: expandedAmount })
       } catch (error) {
-        setQuote(null)
-        setTopUpError((error as Error).message)
-      } finally {
-        setIsLoading(false)
+        // Error handling is managed by hook state
+        console.error('Error fetching quote', error)
       }
     }
 
@@ -310,11 +362,11 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    watchedValues.sourceChain.id,
-    watchedValues.sourceToken.symbol,
+    watchedValues.sourceChain?.id,
+    watchedValues.sourceToken?.symbol,
     watchedValues.amount,
-    watchedValues.destinationChain.id,
-    watchedValues.destinationToken.symbol,
+    watchedValues.destinationChain?.id,
+    watchedValues.destinationToken?.symbol,
     selectedChainTokens,
     getQuote,
   ])
@@ -325,14 +377,12 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
     setSelectedChainTokens(null)
     setValue('sourceToken', { symbol: '', contractAddress: '' })
     setValue('amount', '0')
-    setQuote(null)
   }
 
   const handleTokenSelect = (token: TokenWithBalance) => {
     setValue('sourceToken', { symbol: token.symbol, contractAddress: token.contractAddress })
 
     setValue('amount', '0')
-    setQuote(null)
   }
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -357,138 +407,18 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
     if (!quote) return
 
-    setIsLoading(true)
-    setTopUpError('')
-
     const tokenWithBalance = selectedChainTokens!.find(({ contractAddress }) => contractAddress)!
     try {
-      // Step 1: Chain validation and switching
-      setCurrentStep(1)
-      updateStepStatus(1, 'processing')
-      const switchToSource = await switchToChain({
-        targetChainId: formData.sourceChain.id!,
-        address,
+      await startTopUp({
+        amount: BigInt(NumberUtils.expandAmount(formData.amount, tokenWithBalance.decimals)),
+        sourceChainId: formData.sourceChain.id!,
       })
-
-      if (!switchToSource.success) {
-        throw new Error(switchToSource.error)
-      }
-      updateStepStatus(1, 'completed')
-
-      // Step 2: Token allowance approval
-      setCurrentStep(2)
-      updateStepStatus(2, 'processing')
-
-      await checkAndSetErc20Allowance(
-        formData.sourceToken.contractAddress as `0x${string}`,
-        ROFL_PAYMASTER_TOKEN_CONFIG[formData.sourceChain.id!].paymasterContractAddress,
-        BigInt(NumberUtils.expandAmount(formData.amount, tokenWithBalance.decimals)),
-        address as `0x${string}`,
-      )
-      updateStepStatus(2, 'completed')
-
-      // Step 3: Execute cross-chain transaction
-      setCurrentStep(3)
-      updateStepStatus(3, 'processing')
-
-      const { paymentId } = await createDeposit(
-        formData.sourceToken.contractAddress as `0x${string}`,
-        BigInt(NumberUtils.expandAmount(formData.amount, tokenWithBalance.decimals)),
-        address as `0x${string}`,
-        formData.sourceChain.id!,
-      )
-      updateStepStatus(3, 'completed')
-
-      // Step 4: Monitor payout completion
-      setCurrentStep(4)
-      updateStepStatus(4, 'processing')
-
-      await pollPayment(paymentId, ROFL_PAYMASTER_DESTINATION_CHAIN)
-      updateStepStatus(4, 'completed')
-
-      // Step 5: Switch back to app chain
-      setCurrentStep(5)
-      updateStepStatus(5, 'processing')
-
-      const switchToAppChain = await switchToChain({
-        targetChainId: sapphireTestnet.id,
-        address,
-      })
-
-      if (!switchToAppChain.success) {
-        console.error(switchToAppChain.error)
-        updateStepStatus(5, 'error')
-        openChainModal?.()
-      } else {
-        updateStepStatus(5, 'completed')
-      }
-
-      setCurrentStep(null)
       onTopUpSuccess?.()
     } catch (error) {
       console.error('Topup transaction failed:', error)
-      if (currentStep) {
-        updateStepStatus(currentStep, 'error')
-      }
-
-      setTopUpError((error as Error).message)
       onTopUpError?.(error as Error)
-      setCurrentStep(null)
-    } finally {
-      const switchToAppChainResult = await switchToChain({
-        targetChainId: sapphireTestnet.id,
-        address,
-      })
-
-      if (!switchToAppChainResult.success) {
-        console.error(switchToAppChainResult.error)
-        openChainModal?.()
-      }
-
-      setIsLoading(false)
     }
   }
-
-  const lastValidProgressStepsRef = useRef<ProgressStep[] | null>(null)
-
-  const progressSteps = useMemo(() => {
-    if (!quote) {
-      return lastValidProgressStepsRef.current || []
-    }
-
-    const steps = [
-      {
-        id: 1,
-        label: 'Validating chain connection',
-        description: 'Ensuring wallet is connected to correct blockchain network',
-      },
-      {
-        id: 2,
-        label: 'Approving token spend',
-        description: 'Granting permission to smart contract for token transfer',
-      },
-      {
-        id: 3,
-        label: 'Executing deposit transaction',
-        description: 'Initiating cross-chain token transfer',
-      },
-      {
-        id: 4,
-        label: 'Confirming completion',
-        description: 'Monitoring transaction until tokens arrive on destination chain',
-        expectedTimeInSeconds: ROFL_PAYMASTER_EXPECTED_TIME,
-      },
-      {
-        id: 5,
-        label: 'Validating chain connection',
-        description: 'Ensuring wallet is connected to correct blockchain network',
-      },
-    ]
-
-    lastValidProgressStepsRef.current = steps
-
-    return steps
-  }, [quote])
 
   return (
     <div className={`${classes.topUp} flex w-full h-full justify-center items-center`}>
@@ -502,7 +432,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full justify-between h-10">
                   <div className="flex items-center gap-2">
-                    {watchedValues.sourceChain?.id && <TokenLogo chainId={watchedValues.sourceChain.id} />}
+                    {watchedValues.sourceChain?.id && <ChainLogo chainId={watchedValues.sourceChain.id} />}
                     <span className="text-sm font-medium">
                       {watchedValues.sourceChain?.name || 'Select Chain'}
                     </span>
@@ -510,7 +440,11 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" side="bottom" className="w-[384px]">
+              <DropdownMenuContent
+                align="end"
+                side="bottom"
+                className="w-(--radix-dropdown-menu-trigger-width)"
+              >
                 {ROFL_PAYMASTER_ENABLED_CHAINS?.filter(
                   chain => chain.id !== (ROFL_PAYMASTER_DESTINATION_CHAIN.id as number),
                 ).map(chain => (
@@ -519,7 +453,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                     onClick={() => handleChainSelect(chain)}
                     className="flex items-center gap-2 cursor-pointer"
                   >
-                    <TokenLogo chainId={chain?.id} />
+                    <ChainLogo chainId={chain?.id} />
                     <span className="text-sm font-medium">{chain.name}</span>
                   </DropdownMenuItem>
                 ))}
@@ -535,6 +469,16 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                   onChange={handleAmountChange}
                   disabled={!watchedValues.sourceToken?.symbol}
                 />
+                {!watchedValues.sourceToken?.symbol && (
+                  <div
+                    className="absolute inset-0 z-10 cursor-pointer"
+                    onClick={() => {
+                      if (watchedValues.sourceChain?.id) {
+                        setIsTokenDropdownOpen(true)
+                      }
+                    }}
+                  />
+                )}
                 <Button
                   type="button"
                   variant="ghost"
@@ -546,11 +490,11 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                   MAX
                 </Button>
               </div>
-              <DropdownMenu>
+              <DropdownMenu open={isTokenDropdownOpen} onOpenChange={setIsTokenDropdownOpen}>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    className="flex justify-between items-center h-10 px-4 py-2 rounded-r-md rounded-l-none border-l-0 w-[128px]"
+                    className="flex justify-between items-center h-10 px-4 py-2 rounded-r-md rounded-l-none border-l-0 w-32"
                     disabled={!watchedValues.sourceChain?.id}
                   >
                     <div className="flex items-center gap-2">
@@ -561,7 +505,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
 
                         return (
                           <>
-                            {selectedToken && <TokenLogo token={selectedToken} />}
+                            {selectedToken && <TokenLogo tokenSymbol={selectedToken.symbol} />}
                             <span
                               className={`${watchedValues.sourceToken?.symbol ? 'uppercase ' : ' '}text-foreground text-sm font-medium`}
                             >
@@ -574,7 +518,11 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                     <ChevronDown className="w-4 h-4 text-foreground" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" side="bottom" className="w-[384px]">
+                <DropdownMenuContent
+                  align="end"
+                  side="bottom"
+                  className="w-(--radix-dropdown-menu-trigger-width)"
+                >
                   {selectedChainTokens?.map(token => (
                     <DropdownMenuItem
                       key={token.symbol}
@@ -582,11 +530,15 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
                       className="flex items-center gap-2 cursor-pointer"
                     >
                       <div className="flex items-center gap-2 flex-1">
-                        <TokenLogo token={token} />
+                        <TokenLogo tokenSymbol={token.symbol} />
                         <div className="flex flex-col">
                           <span className="text-sm font-medium uppercase">{token.symbol}</span>
                           <span className="text-xs text-muted-foreground">
-                            {FormatUtils.formatBalance(token.balance, token.isLoadingBalance)}
+                            {token.isLoadingBalance
+                              ? 'Loading...'
+                              : token.balance
+                                ? Number(token.balance.formatted).toFixed(2)
+                                : '-/-'}
                           </span>
                         </div>
                       </div>
@@ -612,12 +564,12 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
               </div>
               <Button
                 variant="outline"
-                className="flex justify-start rounded-l-none h-10 w-[128px] px-3 cursor-default"
+                className="flex justify-start rounded-l-none h-10 w-32 px-3 cursor-default"
               >
                 <div className="flex items-center gap-2">
-                  <TokenLogo token={ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN ?? undefined} />
+                  <TokenLogo tokenSymbol={ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN?.symbol ?? undefined} />
                   <span className="text-foreground text-sm font-medium uppercase">
-                    {ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN.symbol}
+                    {ROFL_PAYMASTER_DESTINATION_CHAIN_TOKEN?.symbol}
                   </span>
                 </div>
               </Button>
@@ -628,7 +580,7 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
           </div>
 
           {topUpError && (
-            <p className="text-xs text-error break-words">
+            <p className="text-xs text-error wrap-break-word">
               {topUpError.length > 150 ? `${topUpError.slice(0, 150)}...` : topUpError}
             </p>
           )}
@@ -647,14 +599,11 @@ const TopUpCmp: FC<TopUpProps> = ({ children, minAmount, onValidChange, onTopUpS
       </div>
 
       <TopUpProgressDialog
-        isOpen={currentStep !== null}
-        currentStep={currentStep}
+        isOpen={currentStepId !== null}
+        currentStep={currentStepId}
         stepStatuses={stepStatuses}
         progressSteps={progressSteps}
-        onClose={() => {
-          setCurrentStep(null)
-          setStepStatuses({})
-        }}
+        onClose={() => {}}
       />
     </div>
   )
