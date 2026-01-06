@@ -16,11 +16,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { InputFormField } from '../../../components/InputFormField'
 import { FileText } from 'lucide-react'
+import { isAddress } from 'viem'
 
 const formSchema = z.object({
-  evmAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
-    message: 'Please enter a valid Sapphire address (0x followed by 40 hex characters)',
-  }),
+  evmAddress: z
+    .string()
+    .regex(/^0x[a-fA-F0-9]{40}$/, {
+      message: 'Please enter a valid Sapphire address (0x followed by 40 hex characters)',
+    })
+    .refine(val => isAddress(val, { strict: true }) as boolean, { message: 'Address checksum is invalid' }),
 })
 
 type GrantLogsPermissionDialogProps = {
