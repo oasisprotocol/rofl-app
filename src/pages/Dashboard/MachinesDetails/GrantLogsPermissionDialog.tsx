@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import {
   Dialog,
@@ -37,25 +37,13 @@ export const GrantLogsPermissionDialog: FC<GrantLogsPermissionDialogProps> = ({ 
     },
   })
 
-  useEffect(() => {
-    if (open) {
-      form.reset({
-        evmAddress: '0x',
-      })
-    }
-  }, [open, form])
-
-  const handleOpenChange = (newOpen: boolean) => {
-    setOpen(newOpen)
-  }
-
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     onConfirm(values.evmAddress as `0x${string}`)
     setOpen(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="w-full md:w-auto" disabled={disabled}>
           <FileText />
