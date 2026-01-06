@@ -47,9 +47,6 @@ export const GrantLogsPermissionDialog: FC<GrantLogsPermissionDialogProps> = ({ 
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen)
-    if (!newOpen) {
-      form.reset()
-    }
   }
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
