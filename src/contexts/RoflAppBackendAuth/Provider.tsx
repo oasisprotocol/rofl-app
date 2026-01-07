@@ -39,6 +39,14 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
     }
   }, [isInitialLoad, isConnected, token])
 
+  useEffect(() => {
+    const currentToken = window.localStorage.getItem('jwt')
+    if (currentToken && address) {
+      const expired = isJWTExpired(currentToken, address)
+      setIsTokenExpired(expired)
+    }
+  }, [address, token])
+
   useInterval(() => {
     const currentToken = window.localStorage.getItem('jwt')
     if (currentToken && address) {
