@@ -4,11 +4,18 @@ import {
   ROFL_8004_SERVICE_ENV_PREFIX,
   ROFL_8004_SERVICE_NAME,
   ROFL_8004_SUPPORTED_CHAINS,
+  ROFL_8004_VOLUME_NAME,
 } from '../constants/rofl-8004.ts'
 import { RoflInstance } from '../nexus/generated/api.ts'
 import { AppData, ERC8004FormData } from '../pages/CreateApp/types.ts'
 import * as yaml from 'yaml'
 import { parse } from 'yaml'
+
+interface ComposeFile {
+  services: Record<string, unknown>
+  volumes?: Record<string, unknown | null>
+  [key: string]: unknown
+}
 
 export const fromMetadataToAgentMetadata = (
   metadata: RoflInstance['metadata'],
@@ -41,7 +48,7 @@ export const hasRofl8004ServiceSecrets = (appData: AppData) => {
 }
 
 export const addRofl8004ServiceToCompose = (composeYaml: string, appData: AppData): string => {
-  const compose = parse(composeYaml)
+  const compose = parse(composeYaml) as ComposeFile
 
   const environment = Object.keys(appData.inputs?.secrets ?? {})
     .filter(key => key.toUpperCase().startsWith(ROFL_8004_SERVICE_ENV_PREFIX))
@@ -71,8 +78,13 @@ export const addRofl8004ServiceToCompose = (composeYaml: string, appData: AppDat
     image: ROFL_8004_DOCKER_IMAGE,
     platform: 'linux/amd64',
     environment,
-    volumes: ['/run/rofl-appd.sock:/run/rofl-appd.sock'],
+    volumes: ['/run/rofl-appd.sock:/run/rofl-appd.sock', `${ROFL_8004_VOLUME_NAME}:/root/.rofl-8004`],
   }
+
+  if (!compose.volumes) {
+    compose.volumes = {}
+  }
+  compose.volumes[ROFL_8004_VOLUME_NAME] = null
 
   return yaml.stringify(compose)
 }

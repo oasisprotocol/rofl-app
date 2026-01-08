@@ -2,7 +2,7 @@ import * as yaml from 'yaml'
 import { useState } from 'react'
 import { useValidateRofl } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
-import { ROFL_8004_SERVICE_NAME } from '../../constants/rofl-8004.ts'
+import { ROFL_8004_SERVICE_NAME, ROFL_8004_VOLUME_NAME } from '../../constants/rofl-8004.ts'
 
 type ValidationState = {
   isValidating: boolean
@@ -42,6 +42,14 @@ export function useComposeValidation() {
         setValidationState({
           isValidating: false,
           validationError: `Service name "${ROFL_8004_SERVICE_NAME}" is reserved and cannot be used.`,
+        })
+        return false
+      }
+
+      if (parsed?.volumes?.[ROFL_8004_VOLUME_NAME]) {
+        setValidationState({
+          isValidating: false,
+          validationError: `Volume name "${ROFL_8004_VOLUME_NAME}" is reserved and cannot be used.`,
         })
         return false
       }
