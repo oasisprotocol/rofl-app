@@ -70,7 +70,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   const appDomains = useRoflAppDomains(network, id)
 
   const [instance] = instancesWithERC8004Token
-  const agentMetadata = fromMetadataToAgentMetadata(instance.metadata)
+  const agentMetadata = instance ? fromMetadataToAgentMetadata(instance.metadata) : undefined
   const agentChainName = agentMetadata?.chainName
   const agentTokenId = agentMetadata?.agentId
 
