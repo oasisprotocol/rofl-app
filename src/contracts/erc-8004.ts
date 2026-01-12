@@ -12,7 +12,7 @@ export const getMetadata = async (
   try {
     return (await createPublicClient({
       chain: supportedNetwork.chain,
-      transport: http(),
+      transport: http(supportedNetwork.rpcUrl[0]),
     }).readContract({
       address: supportedNetwork.identityContract as `0x${string}`,
       abi: ERC_8004_ABI,
@@ -31,7 +31,7 @@ export const getTokenURI = async (chainId: number | string, agentId: bigint): Pr
   try {
     return (await createPublicClient({
       chain: supportedNetwork.chain,
-      transport: http(),
+      transport: http(supportedNetwork.rpcUrl[0]),
     }).readContract({
       address: supportedNetwork.identityContract as `0x${string}`,
       abi: ERC_8004_ABI,
