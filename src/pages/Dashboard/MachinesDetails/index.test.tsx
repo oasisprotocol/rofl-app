@@ -10,6 +10,7 @@ const mockUseGetRuntimeRoflmarketProvidersAddressInstancesId = vi.fn()
 const mockUseGetRuntimeRoflAppsId = vi.fn()
 const mockUseMachineExecuteRestartCmd = vi.fn()
 const mockUseMachineExecuteStopCmd = vi.fn()
+const mockUseGrantLogsPermission = vi.fn()
 
 // Mock react-router-dom
 vi.mock('react-router-dom', () => ({
@@ -41,6 +42,7 @@ vi.mock('../../../nexus/api', () => ({
 vi.mock('../../../backend/api', () => ({
   useMachineExecuteRestartCmd: () => mockUseMachineExecuteRestartCmd(),
   useMachineExecuteStopCmd: () => mockUseMachineExecuteStopCmd(),
+  useGrantLogsPermission: () => mockUseGrantLogsPermission(),
 }))
 
 // Mock UI components
@@ -58,7 +60,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
     React.createElement(
       'button',
       {
-        onClick: onClick || (() => {}),
+        onClick: onClick || (() => { }),
         className,
         variant,
         disabled,
@@ -77,6 +79,22 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
     open ? React.createElement('div', { 'data-testid': 'dialog' }, children) : null,
   DialogContent: ({ children }: any) =>
     React.createElement('div', { 'data-testid': 'dialog-content' }, children),
+  DialogTrigger: ({ children, asChild }: any) => {
+    if (asChild && children) {
+      return React.cloneElement(children, { 'data-testid': 'dialog-trigger' })
+    }
+    return React.createElement('button', { 'data-testid': 'dialog-trigger' }, children)
+  },
+  DialogHeader: ({ children }: any) =>
+    React.createElement('div', { 'data-testid': 'dialog-header' }, children),
+  DialogTitle: ({ children }: any) =>
+    React.createElement('h2', { 'data-testid': 'dialog-title' }, children),
+  DialogDescription: ({ children }: any) =>
+    React.createElement('p', { 'data-testid': 'dialog-description' }, children),
+  DialogFooter: ({ children }: any) =>
+    React.createElement('div', { 'data-testid': 'dialog-footer' }, children),
+  DialogClose: ({ children }: any) =>
+    React.createElement('button', { 'data-testid': 'dialog-close' }, children),
 }))
 
 // Mock other components
@@ -139,6 +157,7 @@ vi.mock('./MachineLogs', () => ({
 vi.mock('lucide-react', () => ({
   CircleArrowUp: () => React.createElement('span', { 'data-testid': 'top-up-icon' }),
   Clock: () => React.createElement('span', { 'data-testid': 'clock-icon' }),
+  FileText: () => React.createElement('span', { 'data-testid': 'file-text-icon' }),
 }))
 
 vi.mock('../../../utils/toastWithDuration', () => ({
@@ -195,6 +214,11 @@ describe('MachinesDetails', () => {
     })
 
     mockUseMachineExecuteStopCmd.mockReturnValue({
+      mutateAsync: vi.fn(),
+      isPending: false,
+    })
+
+    mockUseGrantLogsPermission.mockReturnValue({
       mutateAsync: vi.fn(),
       isPending: false,
     })
