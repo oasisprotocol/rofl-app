@@ -19,6 +19,7 @@ import { RemoveAppButton } from './RemoveAppButton'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { HelpWidget } from '../../CreateApp/HelpWidget'
 import { AddSecret } from '../../../components/SecretsTable/AddSecret'
+import { useAccount } from 'wagmi'
 
 function setDefaultMetadataViewState(metadata: RoflAppMetadata | undefined = {}): ViewMetadataState {
   return {
@@ -43,6 +44,7 @@ function setDefaultSecretsViewState(secrets: RoflAppSecrets | undefined = {}): V
 }
 
 export const AppDetails: FC = () => {
+  const account = useAccount()
   const [viewMetadataState, setViewMetadataState] = useState({
     ...setDefaultMetadataViewState(),
   })
@@ -63,7 +65,7 @@ export const AppDetails: FC = () => {
   )
   const { data: readme } = useDownloadArtifact(`${id}-readme-md`, token)
 
-  const editEnabled = !!token && !roflApp?.removed
+  const editEnabled = !!token && !roflApp?.removed && roflApp?.admin_eth === account.address
   const removeApp = useRemoveApp()
   const updateApp = useUpdateApp()
 
@@ -159,6 +161,7 @@ export const AppDetails: FC = () => {
                 <div className="flex items-center gap-8">
                   {roflApp && !roflApp?.removed && (
                     <RemoveAppButton
+                      disabled={!editEnabled}
                       stakedAmount={roflApp.stake}
                       onConfirm={async () => {
                         if (roflApp.metadata['net.oasis.roflapp.template'] === 'hl-copy-trader') {

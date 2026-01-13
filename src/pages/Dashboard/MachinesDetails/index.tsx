@@ -25,8 +25,11 @@ import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { MachineName } from '../../../components/MachineName'
 import { toastWithDuration } from '../../../utils/toastWithDuration'
 import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachineRemoved'
+import { useAccount } from 'wagmi'
+import { getEvmBech32Address } from '../../../utils/helpers'
 
 export const MachinesDetails: FC = () => {
+  const account = useAccount()
   const network = useNetwork()
   const { provider, id } = useParams()
   const roflMachinesQuery = useGetRuntimeRoflmarketProvidersAddressInstancesId(
@@ -93,7 +96,11 @@ export const MachinesDetails: FC = () => {
                     </Button>
                   )}
                   <MachineRestart
-                    disabled={isMachineRemoved(machine)}
+                    disabled={
+                      isMachineRemoved(machine) ||
+                      !account.address ||
+                      machine.admin !== getEvmBech32Address(account.address)
+                    }
                     onConfirm={async () => {
                       await restartMachine.mutateAsync({
                         machineId: machine.id,
@@ -104,7 +111,11 @@ export const MachinesDetails: FC = () => {
                     }}
                   />
                   <GrantLogsPermissionDialog
-                    disabled={isMachineRemoved(machine)}
+                    disabled={
+                      isMachineRemoved(machine) ||
+                      !account.address ||
+                      machine.admin !== getEvmBech32Address(account.address)
+                    }
                     onConfirm={async evmAddress => {
                       await grantLogsPermission.mutateAsync({
                         machine: machine,

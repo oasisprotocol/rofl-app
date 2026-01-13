@@ -17,14 +17,15 @@ import { fromBaseUnits } from '../../../utils/number-utils'
 type RemoveAppButtonProps = {
   onConfirm: () => void
   stakedAmount: string
+  disabled?: boolean
 }
 
-export const RemoveAppButton: FC<RemoveAppButtonProps> = ({ stakedAmount, onConfirm }) => {
+export const RemoveAppButton: FC<RemoveAppButtonProps> = ({ stakedAmount, onConfirm, disabled }) => {
   const ticker = useTicker()
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" disabled={disabled}>
           <Trash2 className="h-4 w-4" />
         </Button>
       </DialogTrigger>
