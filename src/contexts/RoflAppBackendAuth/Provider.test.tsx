@@ -1,10 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import { RoflAppBackendAuthProvider } from './Provider'
 import { useRoflAppBackendAuthContext } from './hooks'
-import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
-import { trackEvent } from 'fathom-client'
 
 // Get the mocked useAccount function - it's already mocked in setup.ts
 const mockedUseAccount = vi.mocked(useAccount)
@@ -336,7 +334,7 @@ describe('RoflAppBackendAuthProvider', () => {
       return <span data-testid="status">{context.status}</span>
     }
 
-    const { container } = render(
+    const { container: _container } = render(
       <RoflAppBackendAuthProvider>
         <TestComponent />
       </RoflAppBackendAuthProvider>,

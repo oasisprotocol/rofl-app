@@ -47,10 +47,10 @@ describe('AccountAvatar', () => {
 
     it('should render with different oasis addresses', () => {
       const account1 = { address: 'oasis1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqupr77p' }
-      const { container: container1 } = render(<AccountAvatar account={account1} diameter={32} />)
+      const { container: _container1 } = render(<AccountAvatar account={account1} diameter={32} />)
 
       const account2 = { address: 'oasis1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqyqrr5s' }
-      const { container: container2 } = render(<AccountAvatar account={account2} diameter={32} />)
+      const { container: _container2 } = render(<AccountAvatar account={account2} diameter={32} />)
 
       expect(screen.getAllByTestId('jazz-icon')).toHaveLength(2)
     })
@@ -74,10 +74,10 @@ describe('AccountAvatar', () => {
 
     it('should render with different ethereum addresses', () => {
       const account1 = { address_eth: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb' }
-      const { container: container1 } = render(<AccountAvatar account={account1} diameter={32} />)
+      const { container: _container1 } = render(<AccountAvatar account={account1} diameter={32} />)
 
       const account2 = { address_eth: '0x1234567890123456789012345678901234567890' }
-      const { container: container2 } = render(<AccountAvatar account={account2} diameter={32} />)
+      const { container: _container2 } = render(<AccountAvatar account={account2} diameter={32} />)
 
       expect(screen.getAllByTestId('jazz-icon')).toHaveLength(2)
     })

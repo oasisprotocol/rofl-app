@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render } from '@testing-library/react'
 import * as React from 'react'
-import { BrowserRouter } from 'react-router-dom'
 
 // Mock the fathom-client module BEFORE any imports
 vi.mock('fathom-client', () => ({

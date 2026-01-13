@@ -4,9 +4,6 @@ import * as React from 'react'
 import { AppMetadata } from './AppMetadata'
 import { MemoryRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 // Create mock functions
 const mockUseGetRuntimeRoflAppsIdTransactions = vi.fn()
@@ -111,7 +108,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/skeleton', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, className, disabled, asChild, ...props }: any) =>
+  Button: ({ children, className, disabled, _asChild, ...props }: any) =>
     React.createElement('button', { className, disabled, ...props }, children),
 }))
 

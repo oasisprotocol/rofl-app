@@ -1,9 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { Cards } from './Cards'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
 
 // Mock dependencies
 vi.mock('../../components/Card/index', () => ({
@@ -274,7 +272,7 @@ describe('Cards Component', () => {
     })
 
     it('should render ecosystem card with proper structure', () => {
-      const { container } = render(<Cards />)
+      const { container: _container } = render(<Cards />)
       const ecosystemCard = screen.getByTestId('card-explore-the-ecosystem')
       expect(ecosystemCard).toBeInTheDocument()
       expect(ecosystemCard.querySelector('h3')).toHaveTextContent('Explore the ecosystem')
@@ -335,7 +333,7 @@ describe('Cards Component', () => {
     })
 
     it('should handle missing image gracefully', () => {
-      const { container } = render(<Cards />)
+      const { container: _container } = render(<Cards />)
 
       // Cards without images should still render
       expect(screen.getByTestId('card-start-with-templates')).toBeInTheDocument()

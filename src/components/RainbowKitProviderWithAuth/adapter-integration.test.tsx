@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render } from '@testing-library/react'
-import { sapphire, sapphireTestnet } from 'viem/chains'
-import { createSiweMessage } from 'viem/siwe'
+import { sapphire } from 'viem/chains'
 
 // Mock backend API
 const mockFetchNonce = vi.fn(() => Promise.resolve('mock-nonce-123'))
@@ -50,10 +49,6 @@ vi.mock('../../components/AccountAvatar', () => ({
 }))
 
 import { RainbowKitProviderWithAuth } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 describe('RainbowKitProviderWithAuth - Adapter Integration Tests', () => {
   beforeEach(() => {

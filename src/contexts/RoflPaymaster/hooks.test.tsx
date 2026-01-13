@@ -2,8 +2,6 @@ import { describe, it, expect, vi } from 'vitest'
 import { renderHook } from '@testing-library/react'
 import { useRoflPaymasterContext } from './hooks'
 import { RoflPaymasterContextProvider } from './Provider'
-import { RoflAppPaymasterProvider } from '../contexts/RoflPaymaster/Provider'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Mock the contract functions at the top level
 vi.mock('../../contracts/crossChainPaymaster', () => ({

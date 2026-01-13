@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
 import { renderHook } from '@testing-library/react'
 import { useInterval } from './useInterval'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 describe('useInterval', () => {
   beforeEach(() => {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -77,7 +77,7 @@ describe('Landing Page Integration Tests', () => {
     })
 
     it('should maintain correct DOM structure', () => {
-      const { container } = render(
+      const { container: _container } = render(
         <MemoryRouter>
           <Landing />
         </MemoryRouter>,
@@ -92,7 +92,7 @@ describe('Landing Page Integration Tests', () => {
     })
 
     it('should render Hero before Cards', () => {
-      const { container } = render(
+      const { container: _container } = render(
         <MemoryRouter>
           <Landing />
         </MemoryRouter>,
@@ -162,7 +162,7 @@ describe('Landing Page Integration Tests', () => {
     })
 
     it('should maintain visual hierarchy', () => {
-      const { container } = render(
+      const { container: _container } = render(
         <MemoryRouter>
           <Landing />
         </MemoryRouter>,
@@ -179,7 +179,7 @@ describe('Landing Page Integration Tests', () => {
 
   describe('Responsive behavior', () => {
     it('should have responsive wrapper classes', () => {
-      const { container } = render(
+      const { container: _container } = render(
         <MemoryRouter>
           <Landing />
         </MemoryRouter>,

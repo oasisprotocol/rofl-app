@@ -159,7 +159,7 @@ describe('RootLayout', () => {
       { initialEntries: ['/'] },
     )
 
-    const { container } = render(<RouterProvider router={router} />)
+    const { container: _container } = render(<RouterProvider router={router} />)
 
     const authProvider = screen.getByTestId('auth-provider')
     const rainbowkitProvider = screen.getByTestId('rainbowkit-provider')

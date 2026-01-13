@@ -89,7 +89,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/select', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/radio-group', () => ({
-  RadioGroup: ({ children, onValueChange, value }: any) =>
+  RadioGroup: ({ children, _onValueChange, value }: any) =>
     React.createElement('div', { 'data-testid': 'radio-group', 'data-value': value }, children),
   RadioGroupItem: ({ value, id }: any) =>
     React.createElement('input', { type: 'radio', value, id, 'data-testid': `radio-${id}` }),
@@ -104,7 +104,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/form', () => ({
 }))
 
 vi.mock('../../components/InputFormField', () => ({
-  InputFormField: ({ control, name, label, placeholder, type, min }: any) =>
+  InputFormField: ({ _control, name, label, placeholder, type, min }: any) =>
     React.createElement('div', null, [
       React.createElement('label', { key: 'label', htmlFor: name }, label),
       React.createElement('input', {
@@ -120,7 +120,7 @@ vi.mock('../../components/InputFormField', () => ({
 }))
 
 vi.mock('../../components/SelectFormField', () => ({
-  SelectFormField: ({ control, name, label, placeholder, options, disabled }: any) =>
+  SelectFormField: ({ _control, name, label, _placeholder, options, disabled }: any) =>
     React.createElement('div', null, [
       React.createElement('label', { key: 'label', htmlFor: name }, label),
       React.createElement(
@@ -142,11 +142,11 @@ vi.mock('../../components/SelectFormField', () => ({
 vi.mock('./BuildStepOffers', () => ({
   BuildStepOffers: ({
     offer,
-    fieldValue,
-    multiplyNumber,
-    duration,
-    onCostCalculated,
-    network,
+    _fieldValue,
+    _multiplyNumber,
+    _duration,
+    _onCostCalculated,
+    _network,
     disabled,
   }: any) =>
     React.createElement(
@@ -203,7 +203,7 @@ const createMockForm = (defaultValues: any = {}) => {
 vi.mock('react-hook-form', () => ({
   useForm: (props: any) => createMockForm(props?.defaultValues),
   Controller: ({ render }: any) => render({ field: {}, fieldState: { error: null } }),
-  zodResolver: (schema: any) => (data: any, context: any) => ({ values: data, errors: {} }),
+  zodResolver: (_schema: any) => (data: any, _context: any) => ({ values: data, errors: {} }),
 }))
 
 const createTestQueryClient = () =>
@@ -346,7 +346,7 @@ describe('BuildForm', () => {
           number: '5',
         }}
       >
-        {({ form }) => (
+        {({ _form }) => (
           <div>
             <button type="submit">Submit</button>
           </div>
@@ -451,7 +451,7 @@ describe('BuildForm', () => {
       isFetched: true,
     })
 
-    renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ form }) => <div>Form</div>}</BuildForm>)
+    renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ _form }) => <div>Form</div>}</BuildForm>)
 
     // Lines 232-234: Should show "No offers available" warning
     expect(screen.getByText(/No offers available for the provider/)).toBeInTheDocument()
@@ -508,7 +508,7 @@ describe('BuildForm', () => {
 
     renderWithQueryClient(
       <BuildForm onSubmit={mockOnSubmit}>
-        {({ form }) => (
+        {({ _form }) => (
           <div>
             <span data-testid="offer-count">2</span>
             <span data-testid="offer1-present">true</span>
@@ -535,7 +535,7 @@ describe('BuildForm', () => {
       isFetched: false,
     })
 
-    renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ form }) => <div>Form</div>}</BuildForm>)
+    renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ _form }) => <div>Form</div>}</BuildForm>)
 
     // Should not show the warning when query is not fetched
     expect(screen.queryByText(/No offers available for the provider/)).not.toBeInTheDocument()
@@ -565,7 +565,7 @@ describe('BuildForm', () => {
         isFetched: true,
       })
 
-      renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ form }) => <div>Form</div>}</BuildForm>)
+      renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ _form }) => <div>Form</div>}</BuildForm>)
 
       // offer2 should not be rendered
       expect(screen.queryByTestId('offer-offer2')).not.toBeInTheDocument()
@@ -604,7 +604,7 @@ describe('BuildForm', () => {
             storage: undefined,
           }}
         >
-          {({ form }) => <div>Form</div>}
+          {({ _form }) => <div>Form</div>}
         </BuildForm>,
       )
 
@@ -646,7 +646,7 @@ describe('BuildForm', () => {
             storage: undefined,
           }}
         >
-          {({ form }) => <div>Form</div>}
+          {({ _form }) => <div>Form</div>}
         </BuildForm>,
       )
 
@@ -683,7 +683,7 @@ describe('BuildForm', () => {
           onSubmit={mockOnSubmit}
           selectedTemplateRequirements={{ tee: undefined, cpus: 3, memory: undefined, storage: undefined }}
         >
-          {({ form }) => <div>Form</div>}
+          {({ _form }) => <div>Form</div>}
         </BuildForm>,
       )
 
@@ -720,7 +720,7 @@ describe('BuildForm', () => {
           onSubmit={mockOnSubmit}
           selectedTemplateRequirements={{ tee: undefined, cpus: undefined, memory: 5000, storage: undefined }}
         >
-          {({ form }) => <div>Form</div>}
+          {({ _form }) => <div>Form</div>}
         </BuildForm>,
       )
 
@@ -757,7 +757,7 @@ describe('BuildForm', () => {
           onSubmit={mockOnSubmit}
           selectedTemplateRequirements={{ tee: undefined, cpus: undefined, memory: undefined, storage: 1500 }}
         >
-          {({ form }) => <div>Form</div>}
+          {({ _form }) => <div>Form</div>}
         </BuildForm>,
       )
 
@@ -800,7 +800,7 @@ describe('BuildForm', () => {
           onSubmit={mockOnSubmit}
           selectedTemplateRequirements={{ tee: 'tdx', cpus: 3, memory: 5000, storage: 1500 }}
         >
-          {({ form }) => <div>Form</div>}
+          {({ _form }) => <div>Form</div>}
         </BuildForm>,
       )
 
@@ -843,7 +843,7 @@ describe('BuildForm', () => {
             storage: undefined,
           }}
         >
-          {({ form }) => <div>Form</div>}
+          {({ _form }) => <div>Form</div>}
         </BuildForm>,
       )
 
@@ -878,7 +878,7 @@ describe('BuildForm', () => {
         isFetched: true,
       })
 
-      renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ form }) => <div>Form</div>}</BuildForm>)
+      renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ _form }) => <div>Form</div>}</BuildForm>)
 
       // Check that months option is available
       const durationSelect = screen.getByTestId('select-duration')
@@ -908,7 +908,7 @@ describe('BuildForm', () => {
         isFetched: true,
       })
 
-      renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ form }) => <div>Form</div>}</BuildForm>)
+      renderWithQueryClient(<BuildForm onSubmit={mockOnSubmit}>{({ _form }) => <div>Form</div>}</BuildForm>)
 
       // Component should render without errors even without monthly terms
       expect(screen.getByText('Duration')).toBeInTheDocument()

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 
 // The Monaco Editor is already mocked in setup.ts, so we can just test the component
 import { CodeDisplay } from './index'

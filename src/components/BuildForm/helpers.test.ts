@@ -75,7 +75,7 @@ describe('BuildForm helpers', () => {
       const offer1 = createMockOffer('1000000000000000000')
       const offer2 = createMockOffer('1000000000000000000')
 
-      const result = sortOffersByPaymentTerms(offer1, offer2)
+      const _result = sortOffersByPaymentTerms(offer1, offer2)
 
       // Equal values should still sort (order determined by sort algorithm)
       expect([offer1, offer2].sort(sortOffersByPaymentTerms)).toHaveLength(2)

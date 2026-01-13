@@ -14,7 +14,7 @@ vi.mock('../../Spinner', () => ({
 
 // Mock Dialog components
 vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
-  Dialog: ({ open, onOpenChange, children }: any) =>
+  Dialog: ({ open, _onOpenChange, children }: any) =>
     open ? React.createElement('div', { 'data-testid': 'dialog' }, children) : null,
   DialogContent: ({ children, className }: any) => React.createElement('div', { className }, children),
   DialogHeader: ({ children }: any) => React.createElement('div', { children }, children),
@@ -24,7 +24,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
 
 // Mock Button component
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, _asChild, ...props }: any) =>
     React.createElement('button', { onClick, className, ...props }, children),
 }))
 
@@ -189,7 +189,7 @@ describe('TopUpProgressDialog', () => {
       },
       currentStep: 4,
     }
-    const { container } = render(<TopUpProgressDialog {...props} />)
+    const { container: _container } = render(<TopUpProgressDialog {...props} />)
 
     // Verify the hook was called with the expected time
     expect(mockCountdown.reset).toHaveBeenCalled()
@@ -216,7 +216,7 @@ describe('TopUpProgressDialog', () => {
       currentStep: 4,
     }
 
-    const { container } = render(<TopUpProgressDialog {...props} />)
+    const { container: _container } = render(<TopUpProgressDialog {...props} />)
 
     // Verify the hook methods are called
     expect(mockCountdown.reset).toHaveBeenCalled()

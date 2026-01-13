@@ -56,7 +56,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/sheet', () => ({
-  Sheet: ({ children, open, onOpenChange }: any) => {
+  Sheet: ({ children, open, _onOpenChange }: any) => {
     return React.createElement(
       'div',
       {

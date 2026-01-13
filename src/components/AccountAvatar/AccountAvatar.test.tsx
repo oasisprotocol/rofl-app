@@ -13,7 +13,7 @@ vi.mock('../JazzIcon', () => ({
 
 // Mock the addressToJazzIconSeed function
 vi.mock('../JazzIcon/addressToJazzIconSeed', () => ({
-  addressToJazzIconSeed: vi.fn(account => 12345),
+  addressToJazzIconSeed: vi.fn(_account => 12345),
 }))
 
 describe('AccountAvatar', () => {

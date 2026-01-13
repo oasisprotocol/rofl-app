@@ -4,7 +4,6 @@ import { useRoflAppBackendAuthContext } from './hooks'
 import { RoflAppBackendAuthProvider } from './Provider'
 import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
-import { trackEvent } from 'fathom-client'
 
 // Get the mocked useAccount function - it's already mocked in setup.ts
 const mockedUseAccount = vi.mocked(useAccount)

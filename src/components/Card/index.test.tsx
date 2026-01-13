@@ -21,7 +21,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/card', () => ({
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
   Button: ({ children, disabled, className, asChild, ...props }: any) => {
-    const Comp = asChild ? children : 'button'
+    const _Comp = asChild ? children : 'button'
     if (asChild) {
       return <>{children}</>
     }

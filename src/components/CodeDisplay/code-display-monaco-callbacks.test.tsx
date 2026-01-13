@@ -1,12 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import * as React from 'react'
 
 // Import the component
 import { CodeDisplay } from './index'
 
 // Import the mocked MonacoEditor to access helper functions
-import MonacoEditorMock from '@monaco-editor/react'
 
 /**
  * This test file actually triggers the Monaco editor callbacks

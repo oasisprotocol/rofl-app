@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor } from '@testing-library/react'
-import * as React from 'react'
+import * as _React from 'react'
 
 // These tests document the expected behavior of FathomAnalytics
 // The actual component cannot be tested in isolation because ANALYTICS_ENABLED
@@ -19,7 +18,6 @@ vi.mock('react-router-dom', () => ({
 
 import { load, trackPageview } from 'fathom-client'
 import { useLocation } from 'react-router-dom'
-import { BrowserRouter } from 'react-router-dom'
 
 describe('FathomAnalytics Coverage Tests', () => {
   beforeEach(() => {

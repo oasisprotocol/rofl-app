@@ -4,12 +4,12 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import * as React from 'react'
 import {
   createTestQueryClient,
-  createQueryClientWrapper,
+  _createQueryClientWrapper,
   cleanupReactQuery,
 } from '../test/test-utils-react-query'
 
 // Use the globally mocked axios - don't mock nexus/api since we want the real code
-const mockedAxios = {
+const _mockedAxios = {
   get: (global as any).__mockAxiosGet as ReturnType<typeof vi.fn>,
   post: (global as any).__mockAxiosPost as ReturnType<typeof vi.fn>,
   put: (global as any).__mockAxiosPut as ReturnType<typeof vi.fn>,

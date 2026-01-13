@@ -1,6 +1,7 @@
 # Testing Guide
 
-This document provides a comprehensive guide for testing the ROFL App application.
+This document provides a comprehensive guide for testing the ROFL App
+application.
 
 ## Table of Contents
 
@@ -27,7 +28,8 @@ We use the following testing tools:
 
 ### Installation
 
-Testing dependencies are already included in `package.json`. After cloning the repository:
+Testing dependencies are already included in `package.json`. After cloning
+the repository:
 
 ```bash
 yarn install
@@ -62,7 +64,9 @@ yarn test:run
 yarn test:coverage
 ```
 
-This generates a coverage report in the `coverage/` directory with multiple formats:
+This generates a coverage report in the `coverage/` directory with multiple
+formats:
+
 - HTML report: `coverage/index.html`
 - JSON: `coverage/coverage-final.json`
 - LCOV: `coverage/lcov.info`
@@ -79,7 +83,8 @@ This launches the Vitest UI for an interactive test experience.
 
 ### Component Tests
 
-Use the custom `render` function from `test-utils.tsx` which includes all necessary providers:
+Use the custom `render` function from `test-utils.tsx` which includes all
+necessary providers:
 
 ```tsx
 import { render, screen } from '@/test/test-utils'
@@ -176,6 +181,7 @@ describe('myUtility', () => {
    - Avoid testing internal state or methods
 
 2. **Write descriptive test names**
+
    ```tsx
    // Good
    it('should display error message when API call fails')
@@ -185,6 +191,7 @@ describe('myUtility', () => {
    ```
 
 3. **Use appropriate assertions**
+
    ```tsx
    // Good
    expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument()
@@ -204,6 +211,7 @@ describe('myUtility', () => {
 ### Component Testing
 
 1. **Test user interactions**
+
    ```tsx
    import { render, screen } from '@testing-library/react'
    import userEvent from '@testing-library/user-event'
@@ -229,6 +237,7 @@ describe('myUtility', () => {
    - Empty state
 
 3. **Test accessibility**
+
    ```tsx
    it('should be accessible', () => {
      render(<MyComponent />)
@@ -239,6 +248,7 @@ describe('myUtility', () => {
 ### Hook Testing
 
 1. **Test hook behavior**
+
    ```tsx
    it('should update state when action is called', () => {
      const { result } = renderHook(() => useMyHook())
@@ -252,6 +262,7 @@ describe('myUtility', () => {
    ```
 
 2. **Test error handling**
+
    ```tsx
    it('should handle errors gracefully', async () => {
      const { result } = renderHook(() => useMyHook())
@@ -350,6 +361,7 @@ The ROFL app has comprehensive test coverage exceeding industry standards:
 ### Coverage Thresholds
 
 Configured in `vitest.config.ts`:
+
 - Statements: 80%
 - Branches: 75%
 - Functions: 80%
@@ -372,14 +384,16 @@ xdg-open coverage/index.html  # Linux
 start coverage/index.html  # Windows
 ```
 
-
 ### CI/CD Integration
 
-Coverage reports are automatically generated in CI/CD and uploaded as artifacts. Failed coverage thresholds will cause the build to fail.
+Coverage reports are automatically generated in CI/CD and uploaded as
+artifacts. Failed coverage thresholds will cause the build to fail.
 
 ## Resources
 
 - [Vitest Documentation](https://vitest.dev/)
 - [React Testing Library](https://testing-library.com/react)
 - [MSW Documentation](https://mswjs.io/)
-- [Testing Best Practices](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
+- [Testing Best Practices][best-practices]
+
+[best-practices]: https://kentcdodds.com/blog/common-mistakes-with-react-testing-library

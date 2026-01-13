@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
-import { ProtectedLayout } from './index'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
@@ -21,7 +20,7 @@ vi.mock('@rainbow-me/rainbowkit', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, variant, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, variant, _asChild, ...props }: any) =>
     React.createElement(
       'button',
       { onClick, className, variant, 'data-variant': variant, ...props },
@@ -52,12 +51,7 @@ vi.mock('../RainbowKitConnectButton', () => ({
 }))
 
 // Import ErrorBoundary for testing
-import { ErrorBoundary } from '../ErrorBoundary'
 import { AppError, AppErrors } from '../ErrorBoundary/errors'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 const mockUseAccount = vi.mocked(useAccount)
 const mockUseRoflAppBackendAuthContext = vi.mocked(useRoflAppBackendAuthContext)
@@ -67,11 +61,11 @@ const mockUseConnectModal = vi.mocked(useConnectModal)
 const TestPage = () => React.createElement('div', { 'data-testid': 'test-page' }, 'Protected Content')
 
 // Test component that throws an error
-const ThrowErrorComponent = () => {
+const _ThrowErrorComponent = () => {
   throw new AppError('Test error', AppErrors.WalletNotConnected)
 }
 
-const renderWithRouter = (component: React.ReactElement, initialEntries = ['/']) => {
+const _renderWithRouter = (component: React.ReactElement, initialEntries = ['/']) => {
   return render(
     React.createElement(
       MemoryRouter,
@@ -133,7 +127,7 @@ describe('ProtectedLayout - ErrorBoundary Coverage', () => {
         )
       }
 
-      const { container } = render(React.createElement('div', null, fallbackRender({ error })))
+      const { container: _container } = render(React.createElement('div', null, fallbackRender({ error })))
       expect(screen.getByText('Please connect your wallet to continue')).toBeInTheDocument()
     })
 
@@ -157,7 +151,7 @@ describe('ProtectedLayout - ErrorBoundary Coverage', () => {
         )
       }
 
-      const { container } = render(React.createElement('div', null, fallbackRender({ error })))
+      const { container: _container } = render(React.createElement('div', null, fallbackRender({ error })))
       expect(screen.getByText('Something went wrong. Please try again.')).toBeInTheDocument()
     })
 
@@ -181,7 +175,7 @@ describe('ProtectedLayout - ErrorBoundary Coverage', () => {
         )
       }
 
-      const { container } = render(React.createElement('div', null, fallbackRender({ error })))
+      const { container: _container } = render(React.createElement('div', null, fallbackRender({ error })))
       expect(screen.getByText('Something went wrong. Please try again.')).toBeInTheDocument()
     })
   })

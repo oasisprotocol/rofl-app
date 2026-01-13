@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { BigNumber } from 'bignumber.js'
 import { TopUp } from './index'
@@ -64,7 +63,7 @@ vi.mock('../TopUpInitializationFailed', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, className, asChild, ...props }: any) => (
+  Button: ({ children, onClick, disabled, className, _asChild, ...props }: any) => (
     <button onClick={onClick} disabled={disabled} className={className} {...props}>
       {children}
     </button>
@@ -98,7 +97,7 @@ vi.mock('../../../contexts/RoflPaymaster/Provider', () => ({
 }))
 
 // Mock environment variable
-const originalEnv = import.meta.env
+const _originalEnv = import.meta.env
 
 describe('TopUp', () => {
   const mockMinAmount = new BigNumber(1000000)
@@ -150,7 +149,7 @@ describe('TopUp', () => {
     })
 
     it('should render TopUpInitializationFailed on mainnet', () => {
-      const { rerender } = render(<TopUp {...defaultProps} />)
+      const { rerender: _rerender } = render(<TopUp {...defaultProps} />)
 
       // We need to force re-render with mocked useNetwork returning 'mainnet'
       // This is a simplified test - in a real scenario, the mock would need to be set up differently
@@ -183,7 +182,7 @@ describe('TopUp', () => {
         },
       })
 
-      const { rerender } = render(<TopUp {...defaultProps} />)
+      const { rerender: _rerender } = render(<TopUp {...defaultProps} />)
 
       // The FaucetInfo would be shown in the actual component with different environment
       expect(screen.queryByTestId('faucet-info')).not.toBeInTheDocument()
@@ -369,7 +368,7 @@ describe('TopUp', () => {
       render(<TopUp {...defaultProps} />)
 
       // Initially no error
-      const errorElements = document.querySelectorAll('.text-error')
+      const _errorElements = document.querySelectorAll('.text-error')
     })
   })
 

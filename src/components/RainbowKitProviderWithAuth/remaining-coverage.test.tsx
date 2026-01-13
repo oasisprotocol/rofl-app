@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { sapphire, sapphireTestnet } from 'viem/chains'
+import { render } from '@testing-library/react'
+import { sapphire } from 'viem/chains'
 import * as React from 'react'
 
 // Store the actual adapter created by the component
@@ -27,7 +27,7 @@ vi.mock('@rainbow-me/rainbowkit', () => {
     getDefaultConfig: vi.fn(() => ({})),
     createAuthenticationAdapter: (config: any) => config,
     RainbowKitAuthenticationProvider: MockRainbowKitAuthenticationProvider,
-    RainbowKitProvider: ({ children, ...props }: any) => <>{children}</>,
+    RainbowKitProvider: ({ children, ..._props }: any) => <>{children}</>,
     darkTheme: () => ({}),
     useChainModal: () => ({
       chainModalOpen: false,
@@ -112,9 +112,7 @@ const queryClient = new QueryClient({
 })
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  )
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 }
 
 describe('RainbowKitProviderWithAuth - Remaining Coverage', () => {

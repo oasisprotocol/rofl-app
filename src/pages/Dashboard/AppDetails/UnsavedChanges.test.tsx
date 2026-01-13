@@ -566,7 +566,7 @@ describe('UnsavedChanges', () => {
     })
 
     it('should wrap onConfirm callback correctly', () => {
-      const onDiscard = vi.fn()
+      const _onDiscard = vi.fn()
       const onConfirm = vi.fn()
 
       // Simulate the callback logic from lines 37-39

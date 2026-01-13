@@ -4,7 +4,7 @@ import * as React from 'react'
 import { MachineRestart } from './MachineRestart'
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, variant, disabled, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, variant, disabled, _asChild, ...props }: any) =>
     React.createElement(
       'button',
       {
@@ -22,7 +22,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
   Dialog: ({ children }: any) => {
     return React.createElement('div', { 'data-testid': 'dialog' }, children)
   },
-  DialogTrigger: ({ children, asChild, ...props }: any) => {
+  DialogTrigger: ({ children, _asChild, ...props }: any) => {
     const child = React.Children.only(children)
     return React.cloneElement(child, {
       ...props,
@@ -38,7 +38,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
     React.createElement('p', { 'data-testid': 'dialog-description' }, children),
   DialogFooter: ({ children }: any) =>
     React.createElement('div', { 'data-testid': 'dialog-footer' }, children),
-  DialogClose: ({ children, asChild, onClick, ...props }: any) => {
+  DialogClose: ({ children, _asChild, onClick, ...props }: any) => {
     const child = React.Children.only(children)
     return React.cloneElement(child, {
       ...props,
@@ -114,7 +114,7 @@ describe('MachineRestart', () => {
   })
 
   it('should render button with outline variant', () => {
-    const { container } = render(<MachineRestart onConfirm={mockOnConfirm} />)
+    const { container: _container } = render(<MachineRestart onConfirm={mockOnConfirm} />)
 
     const button = screen.getByRole('button', { name: /Restart/ })
     expect(button).toHaveAttribute('variant', 'outline')

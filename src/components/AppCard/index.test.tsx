@@ -3,8 +3,6 @@ import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { AppCard } from './index'
 import { MemoryRouter } from 'react-router-dom'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
 
 // Mock ui-library components
 vi.mock('@oasisprotocol/ui-library/src/components/ui/tooltip', () => ({

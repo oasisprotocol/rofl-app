@@ -155,7 +155,7 @@ describe('ErrorBoundary', () => {
     })
 
     it('should prioritize fallbackRender over fallbackContent when both are provided', () => {
-      const fallbackRender = ({ error }: { error: Error }) =>
+      const fallbackRender = ({ _error }: { error: Error }) =>
         React.createElement('div', { 'data-testid': 'render-fallback' }, 'From Render')
       const fallbackContent = React.createElement(
         'div',
@@ -232,7 +232,9 @@ describe('ErrorBoundary', () => {
 
   describe('error state management', () => {
     it('should set hasError to true when error occurs', () => {
-      const { container } = render(React.createElement(ErrorBoundary, null, React.createElement(ThrowError)))
+      const { container: _container } = render(
+        React.createElement(ErrorBoundary, null, React.createElement(ThrowError)),
+      )
 
       // After catching error, should render error display
       expect(screen.getByTestId('error-display')).toBeInTheDocument()

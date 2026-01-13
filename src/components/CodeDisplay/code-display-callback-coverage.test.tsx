@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import * as React from 'react'
 import * as yaml from 'yaml'
 
@@ -80,7 +80,7 @@ describe('CodeDisplay - Callback Coverage Tests', () => {
       let threw = false
       try {
         yaml.parse(validYaml)
-      } catch (e) {
+      } catch {
         threw = true
       }
 
@@ -161,7 +161,7 @@ describe('CodeDisplay - Callback Coverage Tests', () => {
     it('should test readOnly check and highlightYamlErrors call', () => {
       // Test line 143: if (!readOnly) highlightYamlErrors(newData)
       const readOnly = false
-      const newData = 'key: value'
+      const _newData = 'key: value'
 
       if (!readOnly) {
         // Would call highlightYamlErrors here
@@ -172,7 +172,7 @@ describe('CodeDisplay - Callback Coverage Tests', () => {
     it('should test skipping highlightYamlErrors when readOnly is true', () => {
       // Test line 143: if (!readOnly) highlightYamlErrors(newData)
       const readOnly = true
-      const newData = 'key: value'
+      const _newData = 'key: value'
 
       if (!readOnly) {
         // Would call highlightYamlErrors here, but this won't execute

@@ -1,4 +1,5 @@
 // Export a helper function to get hostname for testability
+// eslint-disable-next-line react-refresh/only-export-components
 export const getHostname = () => window.location.hostname
 
 export const BuildBadge = () => {

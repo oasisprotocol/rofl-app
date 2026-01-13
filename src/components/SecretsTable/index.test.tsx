@@ -401,7 +401,7 @@ describe('SecretsTable', () => {
       />,
     )
 
-    const table1 = document.querySelector('table')
+    const _table1 = document.querySelector('table')
 
     rerender(
       <SecretsTable
@@ -782,10 +782,10 @@ describe('SecretsTable', () => {
 
   describe('handleEditSecret function with encryption (lines 68-77)', () => {
     it('should encrypt secret when appSek is provided', () => {
-      const secrets: RoflAppSecrets = { SECRET1: 'value1' }
+      const _secrets: RoflAppSecrets = { SECRET1: 'value1' }
       const appSek = 'base64_encoded_key'
-      const key = 'SECRET1'
-      const value = 'new_value'
+      const _key = 'SECRET1'
+      const _value = 'new_value'
 
       // The encryption happens using oasisRT.rofl.encryptSecret
       // This test verifies the logic flow
@@ -797,9 +797,9 @@ describe('SecretsTable', () => {
     })
 
     it('should store plain text when appSek is not provided', () => {
-      const secrets: RoflAppSecrets = { SECRET1: 'value1' }
+      const _secrets: RoflAppSecrets = { SECRET1: 'value1' }
       const appSek = undefined
-      const key = 'SECRET1'
+      const _key = 'SECRET1'
       const value = 'new_value'
 
       // When appSek doesn't exist, plain text is stored

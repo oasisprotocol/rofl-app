@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
 import { ViewMetadataState, ViewSecretsState } from './types'
-import { RoflAppSecrets } from '../../../nexus/api'
 
 describe('Dashboard/AppDetails/types', () => {
   describe('ViewMetadataState', () => {

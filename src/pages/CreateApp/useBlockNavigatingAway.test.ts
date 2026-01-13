@@ -1,9 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
 import { useBlockNavigatingAway } from './useBlockNavigatingAway'
 import { useBlocker } from 'react-router-dom'
-import { BrowserRouter } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Mock useBlocker from react-router-dom
 vi.mock('react-router-dom', () => ({

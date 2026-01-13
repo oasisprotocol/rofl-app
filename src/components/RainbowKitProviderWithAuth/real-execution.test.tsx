@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, render } from '@testing-library/react'
-import { sapphire, sapphireTestnet } from 'viem/chains'
+import { render } from '@testing-library/react'
+import { sapphire } from 'viem/chains'
 import * as React from 'react'
 
 // Mock backend API
@@ -57,11 +57,6 @@ vi.mock('../../components/AccountAvatar', () => ({
 
 import { createAuthenticationAdapter } from '@rainbow-me/rainbowkit'
 import { RainbowKitProviderWithAuth } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 describe('RainbowKitProviderWithAuth - Real Execution Paths', () => {
   beforeEach(() => {
@@ -123,7 +118,8 @@ describe('RainbowKitProviderWithAuth - Real Execution Paths', () => {
           const chainId = sapphire.id
 
           if (currentChainId !== chainId) {
-            if (!false) {
+            const chainModalOpen = false
+            if (!chainModalOpen) {
               // openChainModal would be called here
             }
             return false
@@ -189,7 +185,7 @@ describe('RainbowKitProviderWithAuth - Real Execution Paths', () => {
 
       const adapter = createAuthenticationAdapter({
         getNonce: async () => 'mock-nonce',
-        createMessage: ({ nonce, address, chainId }) => `Message`,
+        createMessage: ({ _nonce, _address, _chainId }) => `Message`,
         verify: async ({ message, signature }) => {
           const currentChainId = sapphire.id
           const chainId = sapphire.id
@@ -234,7 +230,7 @@ describe('RainbowKitProviderWithAuth - Real Execution Paths', () => {
 
       const adapter = createAuthenticationAdapter({
         getNonce: async () => 'mock-nonce',
-        createMessage: ({ nonce, address, chainId }) => `Message`,
+        createMessage: ({ _nonce, _address, _chainId }) => `Message`,
         verify: async ({ message, signature }) => {
           try {
             const currentChainId = sapphire.id
@@ -280,7 +276,7 @@ describe('RainbowKitProviderWithAuth - Real Execution Paths', () => {
 
       const adapter = createAuthenticationAdapter({
         getNonce: async () => 'mock-nonce',
-        createMessage: ({ nonce, address, chainId }) => `Message`,
+        createMessage: ({ _nonce, _address, _chainId }) => `Message`,
         verify: async () => true,
         signOut: async () => {
           // Line 97: Try block
@@ -312,7 +308,7 @@ describe('RainbowKitProviderWithAuth - Real Execution Paths', () => {
 
       const adapter = createAuthenticationAdapter({
         getNonce: async () => 'mock-nonce',
-        createMessage: ({ nonce, address, chainId }) => `Message`,
+        createMessage: ({ _nonce, _address, _chainId }) => `Message`,
         verify: async () => true,
         signOut: async () => {
           // Line 97: Try block
@@ -343,7 +339,7 @@ describe('RainbowKitProviderWithAuth - Real Execution Paths', () => {
 
       const adapter = createAuthenticationAdapter({
         getNonce: async () => 'mock-nonce',
-        createMessage: ({ nonce, address, chainId }) => `Message`,
+        createMessage: ({ _nonce, _address, _chainId }) => `Message`,
         verify: async () => true,
         signOut: async () => {
           try {
@@ -395,8 +391,8 @@ describe('RainbowKitProviderWithAuth - Real Execution Paths', () => {
 
       const adapter = createAuthenticationAdapter({
         getNonce: async () => 'mock-nonce',
-        createMessage: ({ nonce, address, chainId }) => `Message`,
-        verify: async ({ message, signature }) => {
+        createMessage: ({ _nonce, _address, _chainId }) => `Message`,
+        verify: async ({ _message, _signature }) => {
           // Lines 72-77: Chain mismatch handling
           const currentChainId = 1 // Ethereum
           const chainId = sapphire.id // 23294
@@ -427,8 +423,8 @@ describe('RainbowKitProviderWithAuth - Real Execution Paths', () => {
     it('should not open chain modal when already open', async () => {
       const adapter = createAuthenticationAdapter({
         getNonce: async () => 'mock-nonce',
-        createMessage: ({ nonce, address, chainId }) => `Message`,
-        verify: async ({ message, signature }) => {
+        createMessage: ({ _nonce, _address, _chainId }) => `Message`,
+        verify: async ({ _message, _signature }) => {
           const currentChainId = 1 // Ethereum
           const chainId = sapphire.id // 23294
           const chainModalOpen = true // Already open

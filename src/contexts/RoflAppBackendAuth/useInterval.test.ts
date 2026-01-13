@@ -1,7 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { renderHook, act } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { renderHook } from '@testing-library/react'
 import { useInterval } from './useInterval'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 describe('contexts/RoflAppBackendAuth/useInterval', () => {
   describe('useInterval', () => {

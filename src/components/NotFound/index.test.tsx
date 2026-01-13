@@ -81,7 +81,7 @@ describe('NotFound', () => {
   })
 
   it('should have correct component structure', () => {
-    const { container } = render(<NotFound />)
+    const { container: _container } = render(<NotFound />)
 
     const layout = screen.getByTestId('layout')
     expect(layout).toBeInTheDocument()

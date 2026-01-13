@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import { render } from '@testing-library/react'
 import { TokenLogo } from './index'
 
 describe('TokenLogo Component', () => {
@@ -352,7 +352,7 @@ describe('TokenLogo Component', () => {
     })
 
     it('should use chainId to find token when token not provided', () => {
-      const chainId = 1
+      const _chainId = 1
       const foundToken = {
         name: 'Ether',
         symbol: 'ETH',

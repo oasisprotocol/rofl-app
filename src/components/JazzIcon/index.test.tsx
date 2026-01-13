@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { JazzIcon } from './index'
 
 // Mock jazzicon library - must be defined inline due to vi.mock hoisting
@@ -58,10 +58,10 @@ describe('JazzIcon', () => {
 
     it('should replace children when diameter changes', () => {
       const { container, rerender } = render(<JazzIcon diameter={20} seed={12345} />)
-      const initialChildren = container.querySelector('span')?.children.length
+      const _initialChildren = container.querySelector('span')?.children.length
 
       rerender(<JazzIcon diameter={40} seed={12345} />)
-      const updatedChildren = container.querySelector('span')?.children.length
+      const _updatedChildren = container.querySelector('span')?.children.length
 
       expect(container.querySelector('.jazzicon')).toHaveAttribute('data-diameter', '40')
     })

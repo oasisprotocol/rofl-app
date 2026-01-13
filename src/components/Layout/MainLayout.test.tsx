@@ -105,7 +105,6 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/breadcrumb', () => ({
 
 // Import MainLayout after mocks are set up
 import { MainLayout } from './MainLayout'
-import { BrowserRouter } from 'react-router-dom'
 
 const wrapper = ({ children }: { children: React.ReactNode }) =>
   React.createElement(MemoryRouter, {}, children)

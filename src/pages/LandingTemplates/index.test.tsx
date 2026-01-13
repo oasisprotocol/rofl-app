@@ -2,8 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { LandingTemplates } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
 
 // Mock dependencies
 vi.mock('@oasisprotocol/ui-library/src/components/ui/layout', () => ({
@@ -25,7 +23,7 @@ vi.mock('../../components/Layout/Footer', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, _asChild, ...props }: any) =>
     React.createElement('button', { onClick, className, ...props }, children),
 }))
 
@@ -191,7 +189,7 @@ describe('LandingTemplates Component', () => {
     })
 
     it('should apply padding and margin classes to main container', () => {
-      const { container } = render(<LandingTemplates />)
+      const { container: _container } = render(<LandingTemplates />)
       const mainContainer = screen.getByTestId('layout-main').firstChild as HTMLElement
       expect(mainContainer).toHaveClass('mx-auto')
       expect(mainContainer).toHaveClass('px-8')
@@ -206,7 +204,7 @@ describe('LandingTemplates Component', () => {
     })
 
     it('should apply margin bottom to heading section', () => {
-      const { container } = render(<LandingTemplates />)
+      const { container: _container } = render(<LandingTemplates />)
       // Find the div with mb-10 class (the first div in the main container)
       const mainContainer = screen.getByTestId('layout-main').firstChild as HTMLElement
       const headingSection = mainContainer?.querySelector('.mb-10')
@@ -214,7 +212,7 @@ describe('LandingTemplates Component', () => {
     })
 
     it('should apply margin to Separator', () => {
-      const { container } = render(<LandingTemplates />)
+      const { container: _container } = render(<LandingTemplates />)
       const separator = screen.getByTestId('separator')
       expect(separator).toHaveClass('my-8')
     })
@@ -247,7 +245,7 @@ describe('LandingTemplates Component', () => {
     })
 
     it('should render components in correct order', () => {
-      const { container } = render(<LandingTemplates />)
+      const { container: _container } = render(<LandingTemplates />)
       const layoutMain = screen.getByTestId('layout-main')
       const children = Array.from(layoutMain?.children || [])
 
@@ -336,7 +334,7 @@ describe('LandingTemplates Component', () => {
 
   describe('Responsive behavior', () => {
     it('should have proper responsive container classes', () => {
-      const { container } = render(<LandingTemplates />)
+      const { container: _container } = render(<LandingTemplates />)
       const mainContainer = screen.getByTestId('layout-main').firstChild as HTMLElement
       expect(mainContainer).toHaveClass('mx-auto')
       expect(mainContainer).toHaveClass('px-8')

@@ -82,7 +82,6 @@ describe('wagmi-config', () => {
 
     it('should include ROFL_PAYMASTER_ENABLED_CHAINS from config', async () => {
       const { wagmiConfig: config } = await import('./wagmi-config')
-      const { ROFL_PAYMASTER_ENABLED_CHAINS } = await import('./rofl-paymaster-config')
       // Config should have sapphire and sapphireTestnet at minimum
       expect(config.chains.map(c => c.id)).toContain(sapphire.id)
       expect(config.chains.map(c => c.id)).toContain(sapphireTestnet.id)

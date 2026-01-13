@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useTicker } from './useTicker'
 import { Ticker, networkTicker } from '../constants/ticker'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Mock the useNetwork hook
 const mockUseNetwork = vi.fn()

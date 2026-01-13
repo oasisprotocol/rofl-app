@@ -2,8 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { MachinesDetails } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
 
 // Define mock variables at module level
 const mockUseGetRuntimeRoflmarketProvidersAddressInstancesId = vi.fn()
@@ -56,11 +54,11 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/tabs', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, variant, disabled, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, variant, disabled, _asChild, ...props }: any) =>
     React.createElement(
       'button',
       {
-        onClick: onClick || (() => { }),
+        onClick: onClick || (() => {}),
         className,
         variant,
         disabled,
@@ -87,8 +85,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
   },
   DialogHeader: ({ children }: any) =>
     React.createElement('div', { 'data-testid': 'dialog-header' }, children),
-  DialogTitle: ({ children }: any) =>
-    React.createElement('h2', { 'data-testid': 'dialog-title' }, children),
+  DialogTitle: ({ children }: any) => React.createElement('h2', { 'data-testid': 'dialog-title' }, children),
   DialogDescription: ({ children }: any) =>
     React.createElement('p', { 'data-testid': 'dialog-description' }, children),
   DialogFooter: ({ children }: any) =>
@@ -99,7 +96,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
 
 // Mock other components
 vi.mock('../../../components/MachineStatusIcon', () => ({
-  MachineStatusIcon: ({ machine }: any) =>
+  MachineStatusIcon: ({ _machine }: any) =>
     React.createElement('span', { 'data-testid': 'machine-status' }, 'Active'),
 }))
 
@@ -123,7 +120,7 @@ vi.mock('../../../components/MachineResources', () => ({
 }))
 
 vi.mock('../../../components/MachineName', () => ({
-  MachineName: ({ machine, network }: any) =>
+  MachineName: ({ machine, _network }: any) =>
     React.createElement('span', { 'data-machine-id': machine.id }, `Machine ${machine.id}`),
 }))
 

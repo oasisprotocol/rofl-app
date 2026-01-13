@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useCountdownTimer } from './useCountdownTimer'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 describe('useCountdownTimer', () => {
   beforeEach(() => {

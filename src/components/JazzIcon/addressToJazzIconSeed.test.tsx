@@ -4,7 +4,7 @@ import { addressToJazzIconSeed } from './addressToJazzIconSeed'
 // Mock the oasisprotocol/client module
 vi.mock('@oasisprotocol/client', () => ({
   staking: {
-    addressFromBech32: vi.fn((address: string) => {
+    addressFromBech32: vi.fn((_address: string) => {
       // Mock implementation that returns a Uint8Array
       // For oasis1 address, return a mock byte array
       const bytes = new Uint8Array(32)

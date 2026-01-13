@@ -4,10 +4,6 @@ import { AppDetails } from './index'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React from 'react'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 // Create mock functions that we can control
 const mockUseGetRuntimeRoflAppsId = vi.fn()
@@ -30,7 +26,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/tabs', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, variant, disabled, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, variant, disabled, _asChild, ...props }: any) =>
     React.createElement(
       'button',
       {
@@ -193,7 +189,7 @@ const createTestWrapper = () => {
     },
   )
 
-  const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  const TestWrapper = ({ _children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
     </QueryClientProvider>
@@ -626,8 +622,8 @@ describe('AppDetails (index)', () => {
     it('should execute hl-copy-trader confirmation logic', async () => {
       // This test specifically covers lines 164-170
       const originalConfirm = window.confirm
-      let confirmCalled = false
-      let confirmMessage = ''
+      const _confirmCalled = false
+      const _confirmMessage = ''
 
       window.confirm = vi.fn((msg: string) => {
         confirmCalled = true
@@ -646,7 +642,7 @@ describe('AppDetails (index)', () => {
       })
 
       const mockMutateAsync = vi.fn().mockResolvedValue({})
-      const mockRefetch = vi.fn()
+      const _mockRefetch = vi.fn()
       mockUseRemoveApp.mockReturnValue({
         mutateAsync: mockMutateAsync,
         isPending: false,

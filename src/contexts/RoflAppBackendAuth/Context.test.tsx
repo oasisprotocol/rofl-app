@@ -1,8 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { renderHook } from '@testing-library/react'
 import { RoflAppBackendAuthContext, RoflAppBackendAuthContextType } from './Context'
 import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 describe('RoflAppBackendAuth Context', () => {
   describe('RoflAppBackendAuthContext', () => {

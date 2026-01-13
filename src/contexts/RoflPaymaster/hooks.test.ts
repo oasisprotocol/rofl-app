@@ -3,8 +3,6 @@ import { renderHook } from '@testing-library/react'
 import { useRoflPaymasterContext } from './hooks'
 import { RoflPaymasterContextProvider } from './Provider'
 import * as React from 'react'
-import { RoflAppPaymasterProvider } from '../contexts/RoflPaymaster/Provider'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 describe('contexts/RoflPaymaster/hooks', () => {
   describe('useRoflPaymasterContext', () => {

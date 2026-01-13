@@ -414,7 +414,7 @@ describe('backend/machine-api', () => {
       // This test ensures the defensive error message at lines 135-136 is correct
       // even though reaching those lines requires exceptional circumstances
       // We verify this by checking the error message structure
-      const defensiveErrorMessage = 'Authentication failed - no token available'
+      const _defensiveErrorMessage = 'Authentication failed - no token available'
 
       // Mock a scenario where auth might fail silently
       mockFetch.mockRejectedValueOnce(new Error('Connection timeout'))

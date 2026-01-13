@@ -18,7 +18,7 @@ const getReact = () => {
       return [value, setValue]
     },
     useRef: (initial: any) => ({ current: initial }),
-    useEffect: () => { },
+    useEffect: () => {},
     useMemo: (fn: any) => fn(),
     useContext: () => null,
     createContext: () => ({
@@ -60,7 +60,8 @@ export const useForm = (props: any = {}) => {
 
   // Store this form instance so Controller can access it
   useEffect(() => {
-    formInstances.set(formRef.current, {
+    const currentFormRef = formRef.current
+    formInstances.set(currentFormRef, {
       getValues: () => formValuesRef.current,
       setValue: (name: string, value: any) => {
         setFormValues((prev: any) => ({
@@ -70,14 +71,14 @@ export const useForm = (props: any = {}) => {
       },
     })
     return () => {
-      formInstances.delete(formRef.current)
+      formInstances.delete(currentFormRef)
     }
   }, [])
 
   // Create stable function references using refs
   const stableFormRef = useRef({
     register: () => ({}),
-    unregister: () => { },
+    unregister: () => {},
     handleSubmit: (fn: any) => (e: any) => {
       e?.preventDefault?.()
       return fn(formValuesRef.current)
@@ -116,8 +117,8 @@ export const useForm = (props: any = {}) => {
     reset: (newValues?: any) => {
       setFormValues(newValues ?? defaultValues)
     },
-    clearErrors: () => { },
-    setError: () => { },
+    clearErrors: () => {},
+    setError: () => {},
     control: { _formRef: formRef.current },
   })
 
@@ -165,8 +166,8 @@ export const Controller: React.FC<any> = ({ name, control, render, defaultValue 
         }
       }
     },
-    onBlur: () => { },
-    ref: () => { },
+    onBlur: () => {},
+    ref: () => {},
   }
   const mockFieldState = {
     invalid: false,
@@ -187,7 +188,7 @@ export const FormProvider: React.FC<any> = ({ children, ...props }) => {
   const FormContext = createContext(null)
 
   // Get existing context or create new one
-  const context = useContext(FormContext)
+  const _context = useContext(FormContext)
 
   const Provider = (FormContext as any).Provider || (({ children }: any) => children)
 
@@ -196,6 +197,8 @@ export const FormProvider: React.FC<any> = ({ children, ...props }) => {
 
 // Mock useFormContext hook
 export const useFormContext = () => {
+  // Always call useForm to satisfy rules of hooks - the result is only used when context is null
+  const fallbackForm = useForm()
   const R = getReact()
   const useContext = R.useContext
 
@@ -203,7 +206,7 @@ export const useFormContext = () => {
     (R as any).createContext?.(null) || { Provider: ({ children }: any) => children },
   )
   if (!context) {
-    return useForm()
+    return fallbackForm
   }
   return context
 }
@@ -211,14 +214,14 @@ export const useFormContext = () => {
 // Mock useFieldArray hook
 export const useFieldArray = () => ({
   fields: [],
-  append: () => { },
-  prepend: () => { },
-  insert: () => { },
-  swap: () => { },
-  move: () => { },
-  update: () => { },
-  replace: () => { },
-  remove: () => { },
+  append: () => {},
+  prepend: () => {},
+  insert: () => {},
+  swap: () => {},
+  move: () => {},
+  update: () => {},
+  replace: () => {},
+  remove: () => {},
 })
 
 // Re-export types

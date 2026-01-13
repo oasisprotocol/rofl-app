@@ -6,10 +6,6 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 // Mock all dependencies
 vi.mock('wagmi', () => ({

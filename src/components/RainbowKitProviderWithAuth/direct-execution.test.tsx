@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
-import { sapphire, sapphireTestnet } from 'viem/chains'
-import { createAuthenticationAdapter } from '@rainbow-me/rainbowkit'
+import { render, screen } from '@testing-library/react'
+import { sapphire } from 'viem/chains'
 import * as React from 'react'
 
 // Mock backend API
@@ -65,10 +64,6 @@ vi.mock('../../components/AccountAvatar', () => ({
 }))
 
 import { RainbowKitProviderWithAuth } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 describe('RainbowKitProviderWithAuth - Direct Adapter Execution', () => {
   beforeEach(() => {
@@ -120,7 +115,7 @@ describe('RainbowKitProviderWithAuth - Direct Adapter Execution', () => {
       mockLogin.mockResolvedValueOnce('test-jwt-token')
 
       // Render the component - this creates the adapter with real methods
-      const { container } = render(
+      const { container: _container } = render(
         <RainbowKitProviderWithAuth>
           <div data-testid="test-child">Test</div>
         </RainbowKitProviderWithAuth>,

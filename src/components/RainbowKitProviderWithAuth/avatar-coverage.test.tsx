@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render } from '@testing-library/react'
-import { sapphire, sapphireTestnet } from 'viem/chains'
+import { sapphire } from 'viem/chains'
 import * as React from 'react'
 
 // Store the avatar prop
@@ -9,7 +9,7 @@ let capturedAvatar: any = null
 // Mock RainbowKit to capture the avatar prop
 vi.mock('@rainbow-me/rainbowkit', () => {
   const MockRainbowKitAuthenticationProvider = ({
-    adapter,
+    _adapter,
     children,
   }: {
     adapter: any
@@ -21,7 +21,7 @@ vi.mock('@rainbow-me/rainbowkit', () => {
   const MockRainbowKitProvider = ({
     avatar,
     children,
-    ...props
+    ..._props
   }: {
     avatar?: any
     children: React.ReactNode
@@ -96,10 +96,6 @@ vi.mock('../../components/AccountAvatar', () => ({
 }))
 
 import { RainbowKitProviderWithAuth } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 describe('RainbowKitProviderWithAuth - Avatar Coverage (line 113)', () => {
   beforeEach(() => {

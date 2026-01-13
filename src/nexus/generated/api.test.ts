@@ -1,6 +1,4 @@
 import { describe, it, expect, vi } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Mock @tanstack/react-query
 vi.mock('@tanstack/react-query', () => ({
@@ -25,7 +23,6 @@ describe('nexus generated api', () => {
     })
 
     it('should have Layer type as union of enum values', async () => {
-      const { Layer } = await import('./api')
       const layer: Layer = 'emerald'
       expect(layer).toBe('emerald')
     })
@@ -43,7 +40,6 @@ describe('nexus generated api', () => {
     })
 
     it('should have Runtime type as union of enum values', async () => {
-      const { Runtime } = await import('./api')
       const runtime: Runtime = 'sapphire'
       expect(runtime).toBe('sapphire')
     })
@@ -51,7 +47,7 @@ describe('nexus generated api', () => {
 
   describe('StakingAddress type', () => {
     it('should be defined as string type', async () => {
-      const api = await import('./api')
+      const _api = await import('./api')
       // StakingAddress is a type, not a value, so it won't exist at runtime
       // But we can verify the pattern it should match
       // oasis1 (6 chars) + 40 hex characters = 46 total

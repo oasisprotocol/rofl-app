@@ -1,8 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { AppsList } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
 
 // Mock dependencies
 const mockUseInView = vi.fn(() => ({ ref: vi.fn(), inView: false }))
@@ -91,7 +89,7 @@ describe('AppsList Component', () => {
 
   describe('dashboard type', () => {
     it('should render app cards when connected and apps exist', () => {
-      const { container } = render(<AppsList emptyState={<div>No apps</div>} type="dashboard" />)
+      const { container: _container } = render(<AppsList emptyState={<div>No apps</div>} type="dashboard" />)
 
       expect(screen.getByTestId('app-card-app-0')).toBeInTheDocument()
       expect(screen.getByTestId('app-card-app-1')).toBeInTheDocument()
@@ -110,7 +108,7 @@ describe('AppsList Component', () => {
 
   describe('explore type', () => {
     it('should render app cards', () => {
-      const { container } = render(<AppsList emptyState={<div>No apps</div>} type="explore" />)
+      const { container: _container } = render(<AppsList emptyState={<div>No apps</div>} type="explore" />)
 
       expect(screen.getByTestId('app-card-app-0')).toBeInTheDocument()
     })
@@ -378,7 +376,7 @@ describe('AppsList Component', () => {
 
   describe('AppCard rendering', () => {
     it('should pass correct props to AppCard for dashboard', () => {
-      const { container } = render(<AppsList emptyState={<div>No apps</div>} type="dashboard" />)
+      const { container: _container } = render(<AppsList emptyState={<div>No apps</div>} type="dashboard" />)
 
       const firstCard = screen.getByTestId('app-card-app-0')
       expect(firstCard).toHaveTextContent('app-0')
@@ -387,7 +385,7 @@ describe('AppsList Component', () => {
     })
 
     it('should pass correct props to AppCard for explore', () => {
-      const { container } = render(<AppsList emptyState={<div>No apps</div>} type="explore" />)
+      const { container: _container } = render(<AppsList emptyState={<div>No apps</div>} type="explore" />)
 
       const firstCard = screen.getByTestId('app-card-app-0')
       expect(firstCard).toHaveTextContent('app-0')

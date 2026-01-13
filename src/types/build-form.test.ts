@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
 import { buildFormSchema, BuildFormData } from './build-form'
-import { ZodError } from 'zod'
 
 describe('buildFormSchema', () => {
   const validData = {

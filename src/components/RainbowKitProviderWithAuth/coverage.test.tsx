@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import * as React from 'react'
 
@@ -60,10 +60,6 @@ vi.mock('viem/siwe', () => ({
 }))
 
 import { RainbowKitProviderWithAuth } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 describe('RainbowKitProviderWithAuth Coverage Tests', () => {
   beforeEach(() => {

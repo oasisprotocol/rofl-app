@@ -5,38 +5,38 @@ import { Create } from './index'
 
 // Mock the step components
 vi.mock('./TemplateStep', () => ({
-  TemplateStep: ({ handleNext, setAppDataForm }: any) =>
+  TemplateStep: ({ _handleNext, _setAppDataForm }: any) =>
     React.createElement('div', { 'data-testid': 'template-step' }, 'Template Step'),
 }))
 
 vi.mock('./MetadataStep', () => ({
-  MetadataStep: ({ handleNext, metadata, setAppDataForm, selectedTemplateName }: any) =>
+  MetadataStep: ({ _handleNext, _metadata, _setAppDataForm, _selectedTemplateName }: any) =>
     React.createElement('div', { 'data-testid': 'metadata-step' }, 'Metadata Step'),
 }))
 
 vi.mock('./CustomInputsStep', () => ({
-  CustomInputsStep: ({ handleNext, handleBack, inputs, setAppDataForm, selectedTemplateName }: any) =>
+  CustomInputsStep: ({ _handleNext, _handleBack, _inputs, _setAppDataForm, _selectedTemplateName }: any) =>
     React.createElement('div', { 'data-testid': 'custom-inputs-step' }, 'Custom Inputs Step'),
 }))
 
 vi.mock('./BuildStep', () => ({
   BuildStep: ({
-    handleNext,
-    handleBack,
-    build,
-    setAppDataForm,
-    selectedTemplateName,
-    selectedTemplateRequirements,
+    _handleNext,
+    _handleBack,
+    _build,
+    _setAppDataForm,
+    _selectedTemplateName,
+    _selectedTemplateRequirements,
   }: any) => React.createElement('div', { 'data-testid': 'build-step' }, 'Build Step'),
 }))
 
 vi.mock('./PaymentStep', () => ({
-  PaymentStep: ({ handleNext, handleBack, appData, selectedTemplateName }: any) =>
+  PaymentStep: ({ _handleNext, _handleBack, _appData, _selectedTemplateName }: any) =>
     React.createElement('div', { 'data-testid': 'payment-step' }, 'Payment Step'),
 }))
 
 vi.mock('./BootstrapStep', () => ({
-  BootstrapStep: ({ appData, template }: any) =>
+  BootstrapStep: ({ _appData, _template }: any) =>
     React.createElement('div', { 'data-testid': 'bootstrap-step' }, 'Bootstrap Step'),
 }))
 

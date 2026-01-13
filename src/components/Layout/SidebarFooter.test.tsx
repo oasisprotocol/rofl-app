@@ -15,7 +15,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/sidebar', () => ({
 
 // Mock ui-library button component
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, className, asChild, ...props }: any) =>
+  Button: ({ children, className, _asChild, ...props }: any) =>
     React.createElement('button', { className, ...props }, children),
 }))
 

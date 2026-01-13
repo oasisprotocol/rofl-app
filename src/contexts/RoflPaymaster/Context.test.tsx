@@ -1,8 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { renderHook } from '@testing-library/react'
 import { RoflPaymasterContext, RoflPaymasterProviderContext, RoflPaymasterProviderState } from './Context'
 import type { Address, Chain } from 'viem'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 describe('RoflPaymaster Context', () => {
   describe('RoflPaymasterContext', () => {
@@ -128,8 +126,8 @@ describe('RoflPaymaster Context', () => {
     })
 
     it('should have correct function signatures', () => {
-      const mockAddress: Address = '0x1234567890123456789012345678901234567890' as Address
-      const mockChain: Chain = {
+      const _mockAddress: Address = '0x1234567890123456789012345678901234567890' as Address
+      const _mockChain: Chain = {
         id: 1,
         name: 'Test Chain',
         nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
@@ -138,18 +136,18 @@ describe('RoflPaymaster Context', () => {
 
       const validContext: RoflPaymasterProviderContext = {
         state: { token: null },
-        getQuote: async (tokenContractAddress: Address, amount: bigint, chain: Chain) => {
+        getQuote: async (_tokenContractAddress: Address, _amount: bigint, _chain: Chain) => {
           return BigInt(0)
         },
         createDeposit: async (
-          tokenContractAddress: Address,
-          amount: bigint,
-          recipient: Address,
-          chainId: number,
+          _tokenContractAddress: Address,
+          _amount: bigint,
+          _recipient: Address,
+          _chainId: number,
         ) => {
           return { paymentId: 'test-payment-id' }
         },
-        pollPayment: async (paymentId: string, chain: Chain) => {
+        pollPayment: async (_paymentId: string, _chain: Chain) => {
           return true
         },
       }

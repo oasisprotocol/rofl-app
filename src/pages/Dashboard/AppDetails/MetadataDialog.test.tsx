@@ -20,7 +20,7 @@ vi.mock('react-hook-form', () => ({
 
 // Mock zodResolver
 vi.mock('@hookform/resolvers/zod', () => ({
-  zodResolver: vi.fn(() => (schema: any) => (data: any) => data),
+  zodResolver: vi.fn(() => (_schema: any) => (data: any) => data),
 }))
 
 // Mock Dialog components
@@ -33,7 +33,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
         {React.Children.map(children, child => {
           if (child?.type?.name === 'DialogTrigger') {
             return React.cloneElement(child, {
-              onClick: (e: any) => {
+              onClick: (_e: any) => {
                 onOpenChange(true)
               },
             })
@@ -69,11 +69,11 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
 
 // Mock Button component
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, variant, disabled, type, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, variant, disabled, type, _asChild, ...props }: any) =>
     React.createElement(
       'button',
       {
-        onClick: onClick || (() => { }),
+        onClick: onClick || (() => {}),
         className: `${className || ''} ${variant || ''}`,
         variant,
         disabled,
@@ -87,7 +87,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
 
 // Mock dependencies
 vi.mock('../../../components/MetadataFormFields', () => ({
-  MetadataFormFields: ({ control }: { control: any }) => (
+  MetadataFormFields: ({ _control }: { control: any }) => (
     <div data-testid="metadata-form-fields">
       <input data-field="name" />
       <input data-field="author" />

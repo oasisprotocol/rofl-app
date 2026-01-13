@@ -59,7 +59,7 @@ describe('Explore Component', () => {
     })
 
     it('should have correct component composition', () => {
-      const { container } = render(<Explore />)
+      const { container: _container } = render(<Explore />)
 
       expect(screen.getByTestId('apps-list')).toBeInTheDocument()
       expect(screen.getByTestId('empty-state')).toBeInTheDocument()
@@ -200,7 +200,7 @@ describe('Explore Component', () => {
       const { container } = render(<Explore />)
 
       const appsList = screen.getByTestId('apps-list')
-      const emptyState = screen.getByTestId('explore-empty-state')
+      const _emptyState = screen.getByTestId('explore-empty-state')
 
       // Verify hierarchy: container -> appsList -> emptyState wrapper -> ExploreEmptyState
       expect(container.contains(appsList)).toBe(true)

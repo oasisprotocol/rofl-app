@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Control, FieldPath, FieldValues, Controller } from 'react-hook-form'
+import { Control, FieldValues } from 'react-hook-form'
 import { SelectFormField } from './index'
 
 // Mock the UI library components
@@ -140,7 +140,7 @@ describe('SelectFormField', () => {
 
     render(<SelectFormField control={mockControl} name="testField" label="Test Label" options={[]} />)
 
-    const label = screen.getByTestId('label')
+    const _label = screen.getByTestId('label')
     const trigger = screen.getByTestId('select-trigger')
 
     // The trigger should have an id attribute

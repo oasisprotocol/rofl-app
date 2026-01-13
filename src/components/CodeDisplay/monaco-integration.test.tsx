@@ -1,9 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor } from '@testing-library/react'
-import * as monaco from 'monaco-editor'
+import { render } from '@testing-library/react'
+import * as _monaco from 'monaco-editor'
 
 // Import Monaco types
-import type { editor } from 'monaco-editor'
 
 // Import the component
 import { CodeDisplay } from './index'

@@ -4,9 +4,6 @@ import { useNetwork } from './useNetwork'
 import { useAccount } from 'wagmi'
 import { sapphire, sapphireTestnet, sepolia } from 'viem/chains'
 import { AppError, AppErrors } from '../components/ErrorBoundary/errors'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const mockUseAccount = vi.mocked(useAccount)
 

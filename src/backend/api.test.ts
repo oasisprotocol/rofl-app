@@ -1,14 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import axios from 'axios'
 import { renderHook, act, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import * as React from 'react'
-import * as wagmi from 'wagmi'
-import * as wagmiCore from '@wagmi/core'
-import * as oasis from '@oasisprotocol/client'
-import * as oasisRT from '@oasisprotocol/client-rt'
-import * as nexusApi from '../nexus/api'
-import type { Template } from '../pages/CreateApp/BootstrapStep'
+import * as _wagmi from 'wagmi'
+import * as _wagmiCore from '@wagmi/core'
+import * as _oasis from '@oasisprotocol/client'
+import * as _oasisRT from '@oasisprotocol/client-rt'
+import * as _nexusApi from '../nexus/api'
 import type { AppData } from '../pages/CreateApp/types'
 import type { BuildFormData } from '../types/build-form.ts'
 import { ViewMetadataState, ViewSecretsState } from '../pages/Dashboard/AppDetails/types'
@@ -57,7 +55,7 @@ vi.mock('@wagmi/core', () => ({
 vi.mock('@oasisprotocol/client', () => ({
   misc: {
     fromHex: vi.fn(() => new Uint8Array(32)),
-    fromBase64: vi.fn((str: string) => {
+    fromBase64: vi.fn((_str: string) => {
       const arr = new Uint8Array(64)
       arr.fill(1)
       return arr
@@ -158,7 +156,7 @@ vi.mock('@oasisprotocol/client-rt', () => {
   }
 })
 
-const GetRuntimeEventsMock = vi.fn((network, runtime, params) =>
+const GetRuntimeEventsMock = vi.fn((_network, _runtime, _params) =>
   Promise.resolve({
     data: {
       events: [
@@ -172,7 +170,7 @@ const GetRuntimeEventsMock = vi.fn((network, runtime, params) =>
   }),
 )
 
-const GetRuntimeRoflmarketInstancesMock = vi.fn((network, runtime, params) =>
+const GetRuntimeRoflmarketInstancesMock = vi.fn((_network, _runtime, _params) =>
   Promise.resolve({
     data: {
       instances: [
@@ -580,7 +578,7 @@ describe('backend/api', () => {
       await act(async () => {
         try {
           await result.current.mutateAsync({ compose: 'test' })
-        } catch (e) {
+        } catch {
           // Expected
         }
       })
@@ -1047,7 +1045,7 @@ describe('backend/api', () => {
             id: 'test-rofl-yaml',
             file: new Blob(['test']),
           })
-        } catch (e) {
+        } catch {
           // Expected
         }
       })
@@ -1126,6 +1124,11 @@ describe('backend/api', () => {
         'app789-compose-yaml',
         'app000-readme-md',
       ] as const
+      const _wagmi = '*'
+      const _wagmiCore = '*'
+      const _oasis = '*'
+      const _oasisRT = '*'
+      const _nexusApi = '*'
 
       for (const id of validIds) {
         const result = await downloadArtifact(id, 'token123')

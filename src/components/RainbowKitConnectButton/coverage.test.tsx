@@ -7,10 +7,6 @@ import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/
 import { useNavigate } from 'react-router-dom'
 import { sapphire, sapphireTestnet, mainnet } from 'viem/chains'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 // Mock all dependencies
 vi.mock('@oasisprotocol/ui-library/src/hooks/use-mobile', () => ({
@@ -31,7 +27,7 @@ vi.mock('react-router-dom', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, variant, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, variant, _asChild, ...props }: any) =>
     React.createElement(
       'button',
       { onClick, className, variant, 'data-variant': variant, ...props },
@@ -157,7 +153,7 @@ describe('RainbowKitConnectButton - Coverage Tests', () => {
         'Connect Wallet',
       )
 
-      const { container } = render(button)
+      const { container: _container } = render(button)
       expect(screen.getByText('Connect Wallet')).toBeInTheDocument()
     })
   })

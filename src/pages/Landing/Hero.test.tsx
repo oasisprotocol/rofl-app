@@ -2,8 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import * as React from 'react'
 import { Hero } from './Hero'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
 
 // Mock dependencies
 vi.mock('react-router-dom', () => ({
@@ -11,7 +9,7 @@ vi.mock('react-router-dom', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, _asChild, ...props }: any) =>
     React.createElement('button', { onClick, className, ...props }, children),
 }))
 

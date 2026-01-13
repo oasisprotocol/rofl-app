@@ -3,8 +3,6 @@ import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { Machines } from './index'
 import * as useNexusInfiniteQueryModule from '../../../utils/useNexusInfiniteQuery'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
 
 vi.mock('wagmi', () => ({
   useAccount: vi.fn(() => ({

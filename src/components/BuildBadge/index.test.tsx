@@ -36,14 +36,14 @@ describe('BuildBadge', () => {
 
   it('should render custom branch badge for branch.rofl-app.pages.dev hostname', () => {
     vi.stubGlobal('location', { ...originalLocation, hostname: 'feature-new-ui.rofl-app.pages.dev' })
-    const { container } = render(<BuildBadge />)
+    const { container: _container } = render(<BuildBadge />)
 
     expect(screen.getByText('feature-new-ui')).toBeInTheDocument()
   })
 
   it('should render PR number badge for numeric PR hostname', () => {
     vi.stubGlobal('location', { ...originalLocation, hostname: '456.rofl-app.pages.dev' })
-    const { container } = render(<BuildBadge />)
+    const { container: _container } = render(<BuildBadge />)
 
     expect(screen.getByText('456')).toBeInTheDocument()
   })
@@ -118,14 +118,14 @@ describe('BuildBadge', () => {
 
   it('should handle complex subdomain names', () => {
     vi.stubGlobal('location', { ...originalLocation, hostname: 'my-feature-branch.rofl-app.pages.dev' })
-    const { container } = render(<BuildBadge />)
+    const { container: _container } = render(<BuildBadge />)
 
     expect(screen.getByText('my-feature-branch')).toBeInTheDocument()
   })
 
   it('should handle subdomain with numbers and hyphens', () => {
     vi.stubGlobal('location', { ...originalLocation, hostname: 'pr-123-fix-bug.rofl-app.pages.dev' })
-    const { container } = render(<BuildBadge />)
+    const { container: _container } = render(<BuildBadge />)
 
     expect(screen.getByText('pr-123-fix-bug')).toBeInTheDocument()
   })
@@ -133,14 +133,14 @@ describe('BuildBadge', () => {
   it('should handle very long subdomain names', () => {
     const longSubdomain = 'a'.repeat(100)
     vi.stubGlobal('location', { ...originalLocation, hostname: `${longSubdomain}.rofl-app.pages.dev` })
-    const { container } = render(<BuildBadge />)
+    const { container: _container } = render(<BuildBadge />)
 
     expect(screen.getByText(longSubdomain)).toBeInTheDocument()
   })
 
   it('should handle subdomain with underscores', () => {
     vi.stubGlobal('location', { ...originalLocation, hostname: 'feature_my_branch.rofl-app.pages.dev' })
-    const { container } = render(<BuildBadge />)
+    const { container: _container } = render(<BuildBadge />)
 
     expect(screen.getByText('feature_my_branch')).toBeInTheDocument()
   })
@@ -164,19 +164,19 @@ describe('BuildBadge', () => {
   it('should render all badge types correctly', () => {
     // Test DEV
     vi.stubGlobal('location', { ...originalLocation, hostname: 'dev.rofl.app' })
-    const { container: devContainer, unmount: unmountDev } = render(<BuildBadge />)
+    const { container: _devContainer, unmount: unmountDev } = render(<BuildBadge />)
     expect(screen.getByText('DEV')).toBeInTheDocument()
     unmountDev()
 
     // Test STG
     vi.stubGlobal('location', { ...originalLocation, hostname: 'stg.rofl.app' })
-    const { container: stgContainer, unmount: unmountStg } = render(<BuildBadge />)
+    const { container: _stgContainer, unmount: unmountStg } = render(<BuildBadge />)
     expect(screen.getByText('STG')).toBeInTheDocument()
     unmountStg()
 
     // Test PR
     vi.stubGlobal('location', { ...originalLocation, hostname: 'pr-456.rofl-app.pages.dev' })
-    const { container: prContainer } = render(<BuildBadge />)
+    const { container: _prContainer } = render(<BuildBadge />)
     expect(screen.getByText('pr-456')).toBeInTheDocument()
   })
 })

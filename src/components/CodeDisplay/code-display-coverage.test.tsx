@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import * as yaml from 'yaml'
 
 // Import the component
@@ -318,7 +318,7 @@ describe('CodeDisplay - Coverage Tests', () => {
       let threw = false
       try {
         yaml.parse(invalidYaml)
-      } catch (e) {
+      } catch {
         threw = true
       }
       expect(threw).toBe(true)

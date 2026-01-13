@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { sapphire, sapphireTestnet } from 'viem/chains'
+import { sapphire } from 'viem/chains'
 import * as React from 'react'
 
 // Store the actual adapter created by the component
@@ -21,7 +21,7 @@ vi.mock('@rainbow-me/rainbowkit', () => {
   return {
     createAuthenticationAdapter: (config: any) => config,
     RainbowKitAuthenticationProvider: MockRainbowKitAuthenticationProvider,
-    RainbowKitProvider: ({ children, ...props }: any) => <>{children}</>,
+    RainbowKitProvider: ({ children, ..._props }: any) => <>{children}</>,
     darkTheme: () => ({}),
     useChainModal: () => ({
       chainModalOpen: false,

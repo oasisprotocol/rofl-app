@@ -2,9 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { MachineTopUp } from './MachineTopUp'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
 
 // Mock react-router-dom
 vi.mock('react-router-dom', () => ({
@@ -86,7 +83,7 @@ vi.mock('../../../backend/api', () => ({
 
 // Mock UI components
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, variant, disabled, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, variant, disabled, _asChild, ...props }: any) =>
     React.createElement(
       'button',
       {
@@ -629,7 +626,7 @@ describe('MachineTopUp', () => {
     render(<MachineTopUp />)
 
     // Should show TopUp since balance is null
-    const topUpButton = screen.queryByTestId('top-up-button')
+    const _topUpButton = screen.queryByTestId('top-up-button')
     // In this case, minAmount would be null due to the condition
     // and we'd show the regular submit flow
     expect(screen.getByTestId('submit-button')).toBeInTheDocument()

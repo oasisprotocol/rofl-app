@@ -62,7 +62,7 @@ describe('Landing Page', () => {
   })
 
   it('should have correct structure with Layout children', () => {
-    const { container } = render(<Landing />)
+    const { container: _container } = render(<Landing />)
     const layoutMain = screen.getByTestId('layout-main')
     expect(layoutMain).toContainElement(screen.getByTestId('hero'))
     expect(layoutMain).toContainElement(screen.getByTestId('cards'))
@@ -82,7 +82,7 @@ describe('Landing Page', () => {
   })
 
   it('should have correct component composition', () => {
-    const { container } = render(<Landing />)
+    const { container: _container } = render(<Landing />)
 
     // Verify all main components are present
     expect(screen.getByTestId('layout')).toBeInTheDocument()
@@ -94,7 +94,7 @@ describe('Landing Page', () => {
   })
 
   it('should render Hero before Cards', () => {
-    const { container } = render(<Landing />)
+    const { container: _container } = render(<Landing />)
     const layoutMain = screen.getByTestId('layout-main')
     const children = layoutMain?.children
 

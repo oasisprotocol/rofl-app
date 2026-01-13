@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { getOperationId } from '@orval/core'
 
 // Mock getOperationId
 vi.mock('@orval/core', async () => {
@@ -88,7 +87,7 @@ describe('removeNetworkFromName.mjs - Orval operation name transformer', () => {
     })
 
     it('should have correct file extension', async () => {
-      const fs = await import('fs')
+      const _fs = await import('fs')
       const path = await import('path')
 
       const filePath = path.resolve('./src/nexus/removeNetworkFromName.mjs')

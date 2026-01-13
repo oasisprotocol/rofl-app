@@ -43,7 +43,7 @@ describe('HelpWidget', () => {
   })
 
   it('should hide help button when panel is expanded', () => {
-    const { container } = render(
+    const { container: _container } = render(
       <HelpWidget markdown="Test content" isExpanded={true} setIsExpanded={vi.fn()} />,
     )
     // The button uses conditional classes based on isExpanded state

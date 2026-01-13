@@ -15,7 +15,7 @@ vi.mock('wagmi', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, asChild, ...props }: any) => <button {...props}>{children}</button>,
+  Button: ({ children, _asChild, ...props }: any) => <button {...props}>{children}</button>,
 }))
 
 vi.mock('../../utils/hasViewLogsPermission', () => ({
@@ -31,8 +31,6 @@ import type { RoflApp } from '../../nexus/api'
 import { useAccount } from 'wagmi'
 import { hasViewLogsPermission } from '../../utils/hasViewLogsPermission'
 import { isMachineRemoved } from '../MachineStatusIcon/isMachineRemoved'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
 
 const mockUseGetRuntimeRoflmarketInstances = vi.mocked(useGetRuntimeRoflmarketInstances)
 const mockUseAccount = vi.mocked(useAccount)
@@ -207,7 +205,7 @@ describe('ViewWithOnlyLogsPermission', () => {
 
     it('should filter out machines without logs permission', () => {
       mockIsMachineRemoved.mockReturnValue(false)
-      mockHasViewLogsPermission.mockImplementation((machine, address) => {
+      mockHasViewLogsPermission.mockImplementation((machine, _address) => {
         return machine.id === 'machine-1' ? new Uint8Array([1, 2, 3]) : false
       })
 

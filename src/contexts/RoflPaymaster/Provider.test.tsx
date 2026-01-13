@@ -34,7 +34,6 @@ vi.mock('../../constants/rofl-paymaster-config', () => ({
 
 import { calculateRoseAmount, isPaymentProcessed } from '../../contracts/crossChainPaymaster'
 import { deposit } from '../../contracts/paymasterVault'
-import { RoflAppPaymasterProvider } from '../contexts/RoflPaymaster/Provider'
 
 const mockCalculateRoseAmount = vi.mocked(calculateRoseAmount)
 const mockIsPaymentProcessed = vi.mocked(isPaymentProcessed)

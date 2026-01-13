@@ -6,11 +6,9 @@ import { Control, useForm } from 'react-hook-form'
 
 describe('AddSecretFormContent', () => {
   let mockControl: Control<any>
-  let mockOnClick: ReturnType<typeof vi.fn>
 
   beforeEach(() => {
     vi.clearAllMocks()
-    mockOnClick = vi.fn()
   })
 
   const renderComponent = (props = {}) => {
@@ -92,7 +90,7 @@ describe('AddSecretFormContent', () => {
 
   it('should reset value input when resetKey changes', () => {
     const { rerender } = render(<AddSecretFormContent formControl={mockControl} resetKey={1} />)
-    const valueInput1 = screen.getByPlaceholderText('Type Value')
+    const _valueInput1 = screen.getByPlaceholderText('Type Value')
 
     rerender(<AddSecretFormContent formControl={mockControl} resetKey={2} />)
     const valueInput2 = screen.getByPlaceholderText('Type Value')

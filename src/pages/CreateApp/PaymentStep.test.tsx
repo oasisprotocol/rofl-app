@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import { PaymentStep } from './PaymentStep'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiProvider } from 'wagmi'
@@ -398,7 +398,8 @@ describe('PaymentStep', () => {
 
     it('should not block on mainnet', () => {
       // Mainnet should not be blocked
-      const isTestnetBlocked = import.meta.env.PROD && false && 'tgbot' !== 'custom-build'
+      const isTestnet = false
+      const isTestnetBlocked = import.meta.env.PROD && isTestnet && 'tgbot' !== 'custom-build'
       expect(isTestnetBlocked).toBe(false)
     })
   })
@@ -680,7 +681,7 @@ describe('PaymentStep', () => {
       mockUseChainId.mockReturnValue(23295) // Testnet chain ID
       mockUseNetwork.mockReturnValue('testnet')
 
-      const { container } = renderComponent({ selectedTemplateId: 'tgbot' })
+      const { container: _container } = renderComponent({ selectedTemplateId: 'tgbot' })
 
       // Component should render without error
       expect(screen.getByTestId('create-layout')).toBeInTheDocument()

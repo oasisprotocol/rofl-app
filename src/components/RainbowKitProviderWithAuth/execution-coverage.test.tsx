@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor } from '@testing-library/react'
-import { sapphire, sapphireTestnet } from 'viem/chains'
+import { render } from '@testing-library/react'
+import { sapphire } from 'viem/chains'
 import {
-  createAuthenticationAdapter,
-  RainbowKitAuthenticationProvider,
-  RainbowKitProvider,
+  _createAuthenticationAdapter,
+  _RainbowKitAuthenticationProvider,
+  _RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
 import * as React from 'react'
 
@@ -57,10 +57,6 @@ vi.mock('../../components/AccountAvatar', () => ({
 }))
 
 import { RainbowKitProviderWithAuth } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 describe('RainbowKitProviderWithAuth - Execution Path Coverage', () => {
   beforeEach(() => {

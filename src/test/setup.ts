@@ -85,12 +85,12 @@ vi.mock('axios', async () => {
   }
 })
 
-  // Export mock functions for use in tests
-  ; (global as any).__mockAxiosGet = mockAxiosGet
-  ; (global as any).__mockAxiosPost = mockAxiosPost
-  ; (global as any).__mockAxiosPut = mockAxiosPut
-  ; (global as any).__mockAxiosDelete = mockAxiosDelete
-  ; (global as any).__mockAxiosPatch = mockAxiosPatch
+// Export mock functions for use in tests
+;(global as any).__mockAxiosGet = mockAxiosGet
+;(global as any).__mockAxiosPost = mockAxiosPost
+;(global as any).__mockAxiosPut = mockAxiosPut
+;(global as any).__mockAxiosDelete = mockAxiosDelete
+;(global as any).__mockAxiosPatch = mockAxiosPatch
 
 // Mock wagmi globally for consistent mocking across tests
 vi.mock('wagmi', () => ({
@@ -265,12 +265,12 @@ class MockIntersectionObserver implements IntersectionObserver {
   readonly rootMargin: string = ''
   readonly thresholds: ReadonlyArray<number> = []
 
-  disconnect(): void { }
-  observe(): void { }
+  disconnect(): void {}
+  observe(): void {}
   takeRecords(): IntersectionObserverEntry[] {
     return []
   }
-  unobserve(): void { }
+  unobserve(): void {}
 }
 
 Object.defineProperty(window, 'IntersectionObserver', {
@@ -281,9 +281,9 @@ Object.defineProperty(window, 'IntersectionObserver', {
 
 // Mock ResizeObserver
 class MockResizeObserver implements ResizeObserver {
-  disconnect(): void { }
-  observe(): void { }
-  unobserve(): void { }
+  disconnect(): void {}
+  observe(): void {}
+  unobserve(): void {}
 }
 
 Object.defineProperty(window, 'ResizeObserver', {
@@ -373,7 +373,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/sheet', () => ({
-  Sheet: ({ children, open, onOpenChange }: any) =>
+  Sheet: ({ children, open, _onOpenChange }: any) =>
     // @ts-ignore
     React.createElement('div', { 'data-testid': 'sheet', 'data-open': open }, children),
   SheetContent: ({ children }: any) =>
@@ -428,7 +428,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/table', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
-  Dialog: ({ children, open, onOpenChange }: any) =>
+  Dialog: ({ children, open, _onOpenChange }: any) =>
     // @ts-ignore
     React.createElement('div', { 'data-testid': 'dialog', 'data-open': open }, children),
   DialogContent: ({ children, className }: any) =>
@@ -449,7 +449,7 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/dialog', () => ({
   DialogTrigger: ({ children, asChild }: any) =>
     // @ts-ignore
     asChild ? children : React.createElement('button', null, children),
-  DialogClose: ({ children, className, ...props }: any) =>
+  DialogClose: ({ children, _className, ..._props }: any) =>
     // @ts-ignore
     children,
 }))
@@ -493,11 +493,11 @@ vi.mock('@oasisprotocol/ui-library/src/components/ui/skeleton', () => ({
 
 // Mock Worker for Monaco
 global.Worker = class Worker {
-  constructor() { }
-  postMessage() { }
-  terminate() { }
-  addEventListener() { }
-  removeEventListener() { }
+  constructor() {}
+  postMessage() {}
+  terminate() {}
+  addEventListener() {}
+  removeEventListener() {}
 } as any
 
 // Mock Monaco Editor
@@ -550,22 +550,22 @@ vi.mock('@monaco-editor/react', () => {
     return loading
       ? loading
       : React.createElement('textarea', {
-        'data-testid': 'monaco-editor',
-        value: value,
-        onChange: handleChange,
-        readOnly: options?.readOnly,
-        placeholder: options?.placeholder,
-      })
+          'data-testid': 'monaco-editor',
+          value: value,
+          onChange: handleChange,
+          readOnly: options?.readOnly,
+          placeholder: options?.placeholder,
+        })
   })
 
-    // Export helper functions for testing
-    ; (MonacoEditorMock as any).__triggerChange = (newValue: string) => {
-      if (currentOnChange) {
-        currentOnChange(newValue)
-      }
+  // Export helper functions for testing
+  ;(MonacoEditorMock as any).__triggerChange = (newValue: string) => {
+    if (currentOnChange) {
+      currentOnChange(newValue)
     }
-    ; (MonacoEditorMock as any).__getCurrentEditor = () => currentEditor
-    ; (MonacoEditorMock as any).__getCurrentMonaco = () => currentMonaco
+  }
+  ;(MonacoEditorMock as any).__getCurrentEditor = () => currentEditor
+  ;(MonacoEditorMock as any).__getCurrentMonaco = () => currentMonaco
 
   return {
     default: MonacoEditorMock,
@@ -592,11 +592,11 @@ vi.mock('monaco-editor', () => ({
 // Mock environment variables
 process.env.VITE_ROFL_APP_BACKEND = 'http://localhost:3000'
 
-  // Declare global constants for build-time variables
-  ; (global as any).GITHUB_REPOSITORY_URL = 'https://github.com/oasisprotocol/rofl-app/'
-  ; (global as any).APP_VERSION = '1.0.0'
-  ; (global as any).BUILD_COMMIT = 'abc123def456'
-  ; (global as any).BUILD_DATETIME = Date.now()
+// Declare global constants for build-time variables
+;(global as any).GITHUB_REPOSITORY_URL = 'https://github.com/oasisprotocol/rofl-app/'
+;(global as any).APP_VERSION = '1.0.0'
+;(global as any).BUILD_COMMIT = 'abc123def456'
+;(global as any).BUILD_DATETIME = Date.now()
 
 // Store original location for BuildBadge tests
 const _originalLocation: Location | null = null
@@ -648,7 +648,7 @@ const suppressedPatterns = [
   'Allowance',
   'allowance',
   'Approving',
-  // Deployment/Update errors  
+  // Deployment/Update errors
   'Deployment error:',
   'Update error:',
   // Transaction logs from tests

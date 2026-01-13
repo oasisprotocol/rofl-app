@@ -66,21 +66,19 @@ vi.mock('../Spinner', () => ({
 
 vi.mock('../RainbowKitConnectButton', () => ({
   RainbowKitConnectButton: ({ children }: any) => (
-    <div data-testid="connect-button">
-      {children ? children({ openConnectModal: vi.fn() }) : 'Connect'}
-    </div>
+    <div data-testid="connect-button">{children ? children({ openConnectModal: vi.fn() }) : 'Connect'}</div>
   ),
 }))
 
 vi.mock('../ErrorBoundary', () => ({
-  ErrorBoundary: ({ children, fallbackRender }: any) => {
+  ErrorBoundary: ({ children, _fallbackRender }: any) => {
     // For testing, just render children
     return <>{children}</>
   },
 }))
 
 vi.mock('../ErrorBoundary/errors.ts', () => ({
-  AppError: class AppError extends Error { },
+  AppError: class AppError extends Error {},
   AppErrors: {
     WalletNotConnected: 'WalletNotConnected',
   },

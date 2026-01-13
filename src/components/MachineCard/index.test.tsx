@@ -10,7 +10,7 @@ vi.mock('../../nexus/api', () => ({
 }))
 
 // Mock the type import separately
-type RoflMarketInstance = {
+type _RoflMarketInstance = {
   id: string
   provider: string
   offer_id: string

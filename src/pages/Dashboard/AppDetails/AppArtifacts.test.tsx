@@ -98,7 +98,7 @@ describe('AppArtifacts', () => {
 
   describe('Both Artifacts', () => {
     it('should render both rofl and compose yaml when both provided', () => {
-      const { container } = render(
+      const { container: _container } = render(
         <AppArtifacts isFetched={true} roflYaml="version: 1" composeYaml="version: 3" />,
       )
 

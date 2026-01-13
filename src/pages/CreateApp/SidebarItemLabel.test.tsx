@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { SidebarItemLabel } from './SidebarItemLabel'
 
@@ -58,7 +58,7 @@ describe('SidebarItemLabel', () => {
   })
 
   it('should apply active styling when active is true', () => {
-    const { container } = render(
+    const { container: _container } = render(
       <SidebarItemLabel active={true} completed={false} index={0} label="Active Step" />,
     )
 
@@ -67,7 +67,7 @@ describe('SidebarItemLabel', () => {
   })
 
   it('should apply muted styling when not active', () => {
-    const { container } = render(
+    const { container: _container } = render(
       <SidebarItemLabel active={false} completed={false} index={0} label="Inactive Step" />,
     )
 
@@ -184,7 +184,7 @@ describe('SidebarItemLabel', () => {
   })
 
   it('should render label with text-sm class', () => {
-    const { container } = render(
+    const { container: _container } = render(
       <SidebarItemLabel active={false} completed={false} index={0} label="Test Label" />,
     )
 

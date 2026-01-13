@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import * as React from 'react'
 
@@ -51,10 +51,6 @@ vi.mock('../../components/AccountAvatar', () => ({
 }))
 
 import { RainbowKitProviderWithAuth } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 describe('RainbowKitProviderWithAuth', () => {
   let mockOpenChainModal: ReturnType<typeof vi.fn>
@@ -298,7 +294,7 @@ describe('RainbowKitProviderWithAuth', () => {
         value: { hostname: 'unknown.com' },
       })
 
-      const hostname = 'unknown.com'
+      const _hostname = 'unknown.com'
       const domain = 'rofl.app' // default
 
       expect(domain).toBe('rofl.app')
@@ -339,7 +335,7 @@ describe('RainbowKitProviderWithAuth', () => {
       expect(() => {
         try {
           window.localStorage.removeItem('jwt')
-        } catch (e) {
+        } catch {
           // Expected to catch
         }
       }).not.toThrow()
@@ -494,7 +490,7 @@ describe('RainbowKitProviderWithAuth', () => {
     it('should return false when chain modal is triggered', async () => {
       const currentChainId = 1 // Ethereum
       const chainId = sapphire.id // 23294
-      const chainModalOpen = false
+      const _chainModalOpen = false
 
       const shouldReturnFalse = currentChainId !== chainId
 

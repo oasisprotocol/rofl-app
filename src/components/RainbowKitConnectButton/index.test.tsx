@@ -1,16 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import * as React from 'react'
 import { RainbowKitConnectButton } from './index'
 import { useAccount, useDisconnect } from 'wagmi'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
 import { useNavigate } from 'react-router-dom'
-import { sapphire, sapphireTestnet } from 'viem/chains'
+import { sapphire } from 'viem/chains'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
 
 // Mock all dependencies
 vi.mock('@oasisprotocol/ui-library/src/hooks/use-mobile', () => ({
@@ -32,7 +28,7 @@ vi.mock('react-router-dom', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, variant, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, variant, _asChild, ...props }: any) =>
     React.createElement('button', { onClick, className, variant, ...props }, children),
 }))
 
@@ -59,9 +55,9 @@ vi.mock('../AccountAvatar', () => ({
     ),
 }))
 
-// Mock RainbowKit
 vi.mock('@rainbow-me/rainbowkit', () => {
-  const { sapphire, mainnet } = require('viem/chains')
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { sapphire, mainnet: _mainnet } = require('viem/chains')
 
   return {
     ConnectButton: {
@@ -172,7 +168,7 @@ describe('RainbowKitConnectButton', () => {
 
   describe('Disconnect functionality', () => {
     it('should call disconnect and navigate when disconnecting', () => {
-      const { container } = render(<RainbowKitConnectButton />)
+      const { container: _container } = render(<RainbowKitConnectButton />)
 
       const disconnectButton = screen.getByText('Disconnect')
       fireEvent.click(disconnectButton)
@@ -183,7 +179,7 @@ describe('RainbowKitConnectButton', () => {
 
     it('should call onMobileClose when provided', () => {
       const onMobileClose = vi.fn()
-      const { container } = render(<RainbowKitConnectButton onMobileClose={onMobileClose} />)
+      const { container: _container } = render(<RainbowKitConnectButton onMobileClose={onMobileClose} />)
 
       const disconnectButton = screen.getByText('Disconnect')
       fireEvent.click(disconnectButton)

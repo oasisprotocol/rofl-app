@@ -6,7 +6,7 @@ import { CodeDisplay } from './index'
 
 // Import the mocked MonacoEditor to access helper functions
 // The mock returns { default: MonacoEditorMock }, so we need to access the default
-// The helper functions are attached to MonacoEditorMock itself, not the export
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const MonacoEditorMock = require('@monaco-editor/react').default
 
 /**

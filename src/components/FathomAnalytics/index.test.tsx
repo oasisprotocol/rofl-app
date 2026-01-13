@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import * as React from 'react'
 
 // Mock the fathom-client module
@@ -24,7 +24,6 @@ vi.mock('./index', async () => {
 import { load, trackPageview } from 'fathom-client'
 import { useLocation } from 'react-router-dom'
 import { FathomAnalytics, FathomAnalyticsHandler } from './index'
-import { BrowserRouter } from 'react-router-dom'
 
 describe('FathomAnalytics', () => {
   beforeEach(() => {
@@ -379,7 +378,7 @@ describe('FathomAnalytics', () => {
   describe('useEffect for load (lines 13-19)', () => {
     it('should call load with VITE_FATHOM_SIDE_ID when analytics enabled', () => {
       // Document that load would be called with site ID when enabled
-      const siteId = 'test-site-id'
+      const _siteId = 'test-site-id'
       const loadConfig = { auto: false }
       expect(loadConfig).toEqual({ auto: false })
     })

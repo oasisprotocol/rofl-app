@@ -14,8 +14,6 @@ vi.mock('react-router-dom', async () => {
 })
 
 import { LandingTemplates } from './index'
-import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from '../constants/wagmi-config'
 
 // Mock other dependencies
 
@@ -38,7 +36,7 @@ vi.mock('../../components/Layout/Footer', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, _asChild, ...props }: any) =>
     React.createElement('button', { onClick, className, ...props }, children),
 }))
 
@@ -126,7 +124,7 @@ describe('LandingTemplates Page Integration Tests', () => {
     })
 
     it('should maintain correct DOM structure', () => {
-      const { container } = render(
+      const { container: _container } = render(
         <MemoryRouter>
           <LandingTemplates />
         </MemoryRouter>,
@@ -291,7 +289,7 @@ describe('LandingTemplates Page Integration Tests', () => {
 
   describe('Responsive behavior', () => {
     it('should have responsive wrapper classes', () => {
-      const { container } = render(
+      const { container: _container } = render(
         <MemoryRouter>
           <LandingTemplates />
         </MemoryRouter>,
@@ -304,7 +302,7 @@ describe('LandingTemplates Page Integration Tests', () => {
     })
 
     it('should have responsive container classes', () => {
-      const { container } = render(
+      const { container: _container } = render(
         <MemoryRouter>
           <LandingTemplates />
         </MemoryRouter>,
@@ -493,7 +491,7 @@ describe('LandingTemplates Page Integration Tests', () => {
 
   describe('Component ordering', () => {
     it('should render components in correct order', () => {
-      const { container } = render(
+      const { container: _container } = render(
         <MemoryRouter>
           <LandingTemplates />
         </MemoryRouter>,

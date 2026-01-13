@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import * as React from 'react'
 import { MachineLogs } from './MachineLogs'
 import * as machineApiModule from '../../../backend/machine-api'
@@ -20,7 +20,7 @@ vi.mock('../../../hooks/useScheduler', () => ({
 }))
 
 vi.mock('@oasisprotocol/ui-library/src/components/ui/button', () => ({
-  Button: ({ children, onClick, className, variant, disabled, asChild, ...props }: any) =>
+  Button: ({ children, onClick, className, variant, disabled, _asChild, ...props }: any) =>
     React.createElement(
       'button',
       {

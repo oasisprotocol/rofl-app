@@ -24,7 +24,7 @@ vi.mock('../../hooks/useNetwork', () => ({
 
 // Mock the dependencies
 vi.mock('../../components/InputFormField', () => ({
-  InputFormField: ({ control, name, label, placeholder, type }: any) =>
+  InputFormField: ({ _control, name, label, placeholder, type }: any) =>
     React.createElement(
       'div',
       { 'data-testid': `input-${name}`, 'data-type': type },
@@ -40,7 +40,7 @@ vi.mock('../../components/InputFormField', () => ({
 }))
 
 vi.mock('../../components/SelectFormField', () => ({
-  SelectFormField: ({ control, name, label, placeholder, options }: any) =>
+  SelectFormField: ({ _control, name, label, placeholder, options }: any) =>
     React.createElement(
       'div',
       { 'data-testid': `select-${name}` },

@@ -6,7 +6,7 @@ import { type AgentFormData } from './types'
 
 // Mock the dependencies
 vi.mock('../../components/SelectFormField', () => ({
-  SelectFormField: ({ label, name, placeholder, options, control }: any) => (
+  SelectFormField: ({ label, name, placeholder, options, _control }: any) => (
     <div data-testid={`select-${name}`}>
       <label>{label}</label>
       <select data-testid={name} placeholder={placeholder}>
@@ -388,7 +388,7 @@ describe('TgbotAgentForm', () => {
 
   describe('User Interactions', () => {
     it('should allow user to select a model', async () => {
-      const user = userEvent.setup()
+      const _user = userEvent.setup()
       render(<TgbotAgentForm {...defaultProps} />)
 
       const select = screen.getByPlaceholderText('Select a model')

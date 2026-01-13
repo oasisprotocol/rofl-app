@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor, act } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render, screen, act } from '@testing-library/react'
 import { CustomBuildSetupForm } from './CustomBuildSetupForm'
 import type { CustomBuildFormData } from './types'
 
@@ -36,7 +35,7 @@ vi.mock('../../components/SecretsTable', () => ({
 const mockOnClickCallbacks: Array<() => void> = []
 
 vi.mock('../../components/SecretsTable/AddSecretFormContent', () => ({
-  AddSecretFormContent: ({ formControl, onClick, resetKey, className }: any) => {
+  AddSecretFormContent: ({ _formControl, onClick, resetKey, className }: any) => {
     // Store the onClick callback for testing
     mockOnClickCallbacks.push(onClick)
 
@@ -46,7 +45,7 @@ vi.mock('../../components/SecretsTable/AddSecretFormContent', () => ({
         <button
           onClick={e => {
             e.preventDefault()
-            onClick && onClick()
+            if (onClick) onClick()
           }}
           data-testid="add-secret-button"
         >
@@ -300,7 +299,7 @@ describe('CustomBuildSetupForm', () => {
     })
 
     it('should display compose validation error when present', async () => {
-      const { rerender } = renderComponent()
+      const { rerender: _rerender } = renderComponent()
 
       // The validation error comes from useComposeValidation hook
       // We verify the error display is rendered
@@ -351,7 +350,7 @@ describe('CustomBuildSetupForm', () => {
 
       const addSecretForm = screen.getByTestId('add-secret-form')
       // The className is applied via cn() function, check the className prop
-      const className = addSecretForm.getAttribute('className') || addSecretForm.getAttribute('class')
+      const _className = addSecretForm.getAttribute('className') || addSecretForm.getAttribute('class')
       // When secrets are empty, the component should receive mt-0 in className prop
       expect(addSecretForm).toBeInTheDocument()
     })
@@ -366,7 +365,7 @@ describe('CustomBuildSetupForm', () => {
 
   describe('password field reset', () => {
     it('should increment resetKey when adding secret', () => {
-      const { rerender } = renderComponent()
+      const { rerender: _rerender } = renderComponent()
 
       // After adding a secret, the resetKey should increment
       // This is tested indirectly through component behavior

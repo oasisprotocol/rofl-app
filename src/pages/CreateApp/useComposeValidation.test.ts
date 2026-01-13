@@ -1,11 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
 import { useComposeValidation } from './useComposeValidation'
 import { useValidateRofl } from '../../backend/api'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'
-import { BrowserRouter } from 'react-router-dom'
-import { RoflAppBackendAuthProvider } from '../contexts/RoflAppBackendAuth/Provider'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 vi.mock('../../backend/api', () => ({
   useValidateRofl: vi.fn(),

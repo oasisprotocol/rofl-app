@@ -14,7 +14,7 @@ describe('orval.config.mjs - Orval configuration', () => {
     })
 
     it('should have .mjs extension', async () => {
-      const fs = await import('fs')
+      const _fs = await import('fs')
       const path = await import('path')
 
       const filePath = path.resolve('./src/nexus/orval.config.mjs')

@@ -13,16 +13,19 @@ yarn install
 ## Run Your First Test
 
 1. **Run all tests in watch mode**:
+
    ```bash
    yarn test
    ```
 
 2. **Run tests once**:
+
    ```bash
    yarn test:run
    ```
 
 3. **Generate coverage report**:
+
    ```bash
    yarn test:coverage
    ```
@@ -227,6 +230,7 @@ Before committing your code, ensure:
 ### Tests are failing with "Cannot find module"
 
 Make sure you're using the correct import path alias:
+
 ```tsx
 // Correct
 import { render } from '@/test/test-utils'
@@ -238,6 +242,7 @@ import { render } from '../../../test/test-utils'
 ### Tests are timing out
 
 Use `waitFor` for async operations:
+
 ```tsx
 import { waitFor } from '@testing-library/react'
 
@@ -249,6 +254,7 @@ await waitFor(() => {
 ### MSW is not intercepting requests
 
 Make sure to setup and teardown the server:
+
 ```tsx
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())

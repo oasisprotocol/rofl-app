@@ -21,7 +21,7 @@ describe('EmptyState Component', () => {
     })
 
     it('should render without children', () => {
-      const { container } = render(<EmptyState title="Test" description="Test description" />)
+      const { container: _container } = render(<EmptyState title="Test" description="Test description" />)
 
       // CardFooter should be rendered even without children
       expect(screen.getByText('Test')).toBeInTheDocument()
@@ -237,7 +237,7 @@ describe('EmptyState Component', () => {
     })
 
     it('should apply correct footer styling', () => {
-      const { container } = render(<EmptyState title="Title" description="Description" />)
+      const { container: _container } = render(<EmptyState title="Title" description="Description" />)
 
       // Just verify the component renders correctly with all expected elements
       expect(screen.getByText('Title')).toBeInTheDocument()
