@@ -71,7 +71,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: 'apps/:id',
+            path: 'app/:id',
             element: <MainLayout />,
             children: [
               {
@@ -95,7 +95,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: 'machines/:provider/instances/:id',
+            path: 'machine/:provider/instances/:id',
             element: <MainLayout />,
             children: [
               {
@@ -105,7 +105,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: 'machines/:provider/instances/:id/top-up',
+            path: 'machine/:provider/instances/:id/top-up',
             element: <MainLayout />,
             children: [
               {
