@@ -6,6 +6,7 @@ import { formatDistanceToNow, parseISO, isFuture } from 'date-fns'
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
 import { DetailsSectionRow } from '../../../components/DetailsSectionRow'
 import { MachineRestart } from './MachineRestart'
+import { GrantLogsPermissionDialog } from './GrantLogsPermissionDialog'
 import { useNetwork } from '../../../hooks/useNetwork'
 import {
   useGetRuntimeRoflAppsId,
@@ -13,15 +14,22 @@ import {
 } from '../../../nexus/api'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { MachineResources } from '../../../components/MachineResources'
-import { useMachineExecuteRestartCmd, useMachineExecuteStopCmd } from '../../../backend/api'
+import {
+  useGrantLogsPermission,
+  useMachineExecuteRestartCmd,
+  useMachineExecuteStopCmd,
+} from '../../../backend/api'
 import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { MachineLogs } from './MachineLogs'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { MachineName } from '../../../components/MachineName'
 import { toastWithDuration } from '../../../utils/toastWithDuration'
 import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachineRemoved'
+import { useAccount } from 'wagmi'
+import { getEvmBech32Address } from '../../../utils/helpers'
 
 export const MachinesDetails: FC = () => {
+  const account = useAccount()
   const network = useNetwork()
   const { provider, id } = useParams()
   const roflMachinesQuery = useGetRuntimeRoflmarketProvidersAddressInstancesId(
@@ -40,8 +48,10 @@ export const MachinesDetails: FC = () => {
   const machine = data?.data
   const restartMachine = useMachineExecuteRestartCmd()
   const stopMachine = useMachineExecuteStopCmd()
+  const grantLogsPermission = useGrantLogsPermission()
 
-  const showBlockingOverlay = restartMachine.isPending || stopMachine.isPending
+  const showBlockingOverlay =
+    restartMachine.isPending || stopMachine.isPending || grantLogsPermission.isPending
   return (
     <>
       <div>
@@ -77,7 +87,6 @@ export const MachinesDetails: FC = () => {
                       </>
                     )}
                   </div>
-
                   {!isMachineRemoved(machine) && (
                     <Button variant="outline" className="w-full md:w-auto" asChild>
                       <Link to="./top-up">
@@ -87,7 +96,11 @@ export const MachinesDetails: FC = () => {
                     </Button>
                   )}
                   <MachineRestart
-                    disabled={isMachineRemoved(machine)}
+                    disabled={
+                      isMachineRemoved(machine) ||
+                      !account.address ||
+                      machine.admin !== getEvmBech32Address(account.address)
+                    }
                     onConfirm={async () => {
                       await restartMachine.mutateAsync({
                         machineId: machine.id,
@@ -95,6 +108,25 @@ export const MachinesDetails: FC = () => {
                         network,
                       })
                       toastWithDuration('Machine is restarting (~1min)', 1 * 60 * 1000)
+                    }}
+                  />
+                  <GrantLogsPermissionDialog
+                    disabled={
+                      isMachineRemoved(machine) ||
+                      !account.address ||
+                      machine.admin !== getEvmBech32Address(account.address)
+                    }
+                    onConfirm={async evmAddress => {
+                      await grantLogsPermission.mutateAsync({
+                        machine: machine,
+                        provider: machine.provider,
+                        network,
+                        evmAddress,
+                      })
+                      toastWithDuration(
+                        'Logs view permission granted. Machine is restarting (~1min)',
+                        1 * 60 * 1000,
+                      )
                     }}
                   />
                   <TabsList className="w-full md:w-auto">
