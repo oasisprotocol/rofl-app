@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BuildBadge > should render DEV badge for dev.rofl.app hostname 1`] = `
+<div
+  class="h-[14px] py-2 px-1.5 bg-warning rounded-full inline-flex justify-center items-center"
+>
+  <div
+    class="text-white text-[10px] font-semibold uppercase"
+  >
+    DEV
+  </div>
+</div>
+`;
+
+exports[`BuildBadge > should render PR badge for *.rofl-app.pages.dev hostname 1`] = `
+<div
+  class="h-[14px] py-2 px-1.5 bg-warning rounded-full inline-flex justify-center items-center"
+>
+  <div
+    class="text-white text-[10px] font-semibold uppercase"
+  >
+    pr-123
+  </div>
+</div>
+`;
+
+exports[`BuildBadge > should render STG badge for stg.rofl.app hostname 1`] = `
+<div
+  class="h-[14px] py-2 px-1.5 bg-warning rounded-full inline-flex justify-center items-center"
+>
+  <div
+    class="text-white text-[10px] font-semibold uppercase"
+  >
+    STG
+  </div>
+</div>
+`;
