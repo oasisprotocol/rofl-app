@@ -25,6 +25,7 @@ export const AppNewMachine: FC = () => {
     try {
       roflTemplateYaml = yaml.parse(roflTemplateQuery.data)
     } catch (e) {
+      console.error('Failed to parse rofl-template.yaml:', e)
       roflTemplateYaml = undefined
     }
   }

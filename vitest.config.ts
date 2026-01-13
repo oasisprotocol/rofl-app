@@ -31,7 +31,8 @@ export default defineConfig({
     },
     include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
     exclude: ['node_modules', 'dist', 'ui-library', '.idea', '.git', '.cache'],
-    // Increase timeout for slow tests
+    // Increase timeout for React Testing Library async tests with jsdom.
+    // Default 5s is insufficient for complex component mounting and state updates.
     testTimeout: 30000,
     hookTimeout: 30000,
     // Don't bail on first failure - see all results - until 100 failures

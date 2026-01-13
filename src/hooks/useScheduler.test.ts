@@ -3,7 +3,6 @@ import { renderHook } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import * as React from 'react'
 import { useScheduler } from './useScheduler'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Mock the useNetwork hook
 const mockUseNetwork = vi.fn()
@@ -1421,7 +1420,7 @@ describe('useScheduler', () => {
         },
         {
           wrapper,
-          initialProps: { network: 'mainnet' as const },
+          initialProps: { network: 'mainnet' as 'mainnet' | 'testnet' },
         },
       )
 
