@@ -6,9 +6,10 @@ import { trackEvent } from 'fathom-client'
 import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { dashboardPath } from '../../pages/paths'
+import { getNetworkFromChainId } from '../../utils/helpers'
 
 export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }) {
-  const { address, isConnected } = useAccount()
+  const { address, isConnected, chainId } = useAccount()
   const navigate = useNavigate()
   const location = useLocation()
   const [token, setToken] = useState<string | null>(window.localStorage.getItem('jwt'))
@@ -70,9 +71,10 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
 
   useEffect(() => {
     if (isAuthenticated && location.pathname === '/') {
+      const network = getNetworkFromChainId(chainId)
       navigate(dashboardPath(network), { replace: true })
     }
-  }, [navigate, isAuthenticated, location.pathname])
+  }, [navigate, isAuthenticated, location.pathname, chainId])
 
   // Authentication status for RainbowKit
   const getAuthenticationStatus = (): AuthenticationStatus => {

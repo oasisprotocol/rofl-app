@@ -12,12 +12,12 @@ import {
 import { AccountAvatar } from '../AccountAvatar'
 import { useAccount, useDisconnect } from 'wagmi'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks.ts'
 import { ROFL_PAYMASTER_ENABLED_CHAINS_IDS } from '../../constants/rofl-paymaster-config.ts'
 import { dashboardPath } from '../../pages/paths.ts'
-import { useNetwork } from '../../hooks/useNetwork.ts'
+import { getNetworkFromChainId } from '../../utils/helpers.ts'
 
 type ConnectButtonRenderProps = Parameters<React.ComponentProps<typeof ConnectButton.Custom>['children']>[0]
 
@@ -30,24 +30,30 @@ const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address
   )
 }
 
-const useNavigateToDashboardOnChainChange = ({ enabled }: { enabled: boolean }) => {
+const useNavigateToDashboardOnChainChange = () => {
   const { chainId } = useAccount()
-  const network = useNetwork()
   const [selectedChainId, setSelectedChainId] = useState(chainId)
   const navigate = useNavigate()
+  const location = useLocation()
   const { isAuthenticated } = useRoflAppBackendAuthContext()
 
   useEffect(() => {
-    if (!enabled) return
-
     if (chainId && chainId !== selectedChainId && isAuthenticated) {
       if (!ROFL_PAYMASTER_ENABLED_CHAINS_IDS.includes(chainId.toString())) {
+        const newNetwork = getNetworkFromChainId(chainId)
         setSelectedChainId(chainId)
-        navigate(dashboardPath(network), { replace: true })
+
+        const currentPath = location.pathname
+        const networkRegex = /^\/(mainnet|testnet)(\/.*)?$/
+        const match = currentPath.match(networkRegex)
+
+        if (match) {
+          navigate(dashboardPath(newNetwork), { replace: true })
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- selectedChainId should not trigger effect
-  }, [enabled, chainId, navigate, isAuthenticated])
+  }, [chainId, navigate, isAuthenticated, location.pathname])
 }
 
 interface Props {
@@ -60,7 +66,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ children, onMobileClose }) 
   const { disconnect } = useDisconnect()
   const navigate = useNavigate()
 
-  useNavigateToDashboardOnChainChange({ enabled: !!children })
+  useNavigateToDashboardOnChainChange()
 
   const handleDisconnect = () => {
     disconnect()
