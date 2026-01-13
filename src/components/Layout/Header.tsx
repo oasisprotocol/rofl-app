@@ -17,16 +17,18 @@ import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
 import { NavbarLink } from '../NavbarLink'
 import { BuildBadge } from '../BuildBadge'
 import { appsPath, createPath, dashboardPath, explorePath, machinesPath } from '../../pages/paths'
+import { useNetwork } from '../../hooks/useNetwork'
 
 export const Header: FC = () => {
   const isMobile = useIsMobile()
   const { isConnected } = useAccount()
   const [isOpen, setIsOpen] = useState(false)
+  const network = useNetwork()
 
   return (
     <div className="w-full flex justify-between items-center">
       <div className="flex items-center gap-4">
-        <Link to={isConnected ? dashboardPath() : '/'}>
+        <Link to={isConnected ? dashboardPath(network) : '/'}>
           <img src={Logotype} alt="ROFL App" className="h-[36px]" />
         </Link>
         <BuildBadge />
@@ -65,13 +67,13 @@ export const Header: FC = () => {
               </SheetHeader>
               <nav>
                 <div className="flex flex-col px-4 pb-4 gap-2">
-                  <NavbarLink to={dashboardPath()} onClick={() => setIsOpen(false)}>
+                  <NavbarLink to={dashboardPath(network)} onClick={() => setIsOpen(false)}>
                     <span className="text-foreground">Dashboard</span>
                   </NavbarLink>
-                  <NavbarLink to={appsPath()} onClick={() => setIsOpen(false)}>
+                  <NavbarLink to={appsPath(network)} onClick={() => setIsOpen(false)}>
                     <span className="text-foreground">Apps</span>
                   </NavbarLink>
-                  <NavbarLink to={machinesPath()} onClick={() => setIsOpen(false)}>
+                  <NavbarLink to={machinesPath(network)} onClick={() => setIsOpen(false)}>
                     <span className="text-foreground">Machines</span>
                   </NavbarLink>
                   <NavbarLink to={explorePath()} onClick={() => setIsOpen(false)}>

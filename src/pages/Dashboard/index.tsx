@@ -80,7 +80,7 @@ export const Dashboard: FC = () => {
             />
           )}
         </div>
-        <SectionHeader title="Apps" to={appsPath()} disabled={appsNumber === 0} />
+        <SectionHeader title="Apps" to={appsPath(network)} disabled={appsNumber === 0} />
         {isFetched && !appsNumber && <MyAppsEmptyState />}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {isLoading &&
@@ -92,7 +92,7 @@ export const Dashboard: FC = () => {
               ?.slice(0, cardsLimit)
               .map(app => <AppCard key={app.id} app={app} network={network} type="dashboard" />)}
         </div>
-        <SectionHeader title="Machines" to={machinesPath()} disabled={machinesNumber === 0} />
+        <SectionHeader title="Machines" to={machinesPath(network)} disabled={machinesNumber === 0} />
         {isMachinesFetched && !machinesNumber && <MachinesEmptyState />}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {isMachinesLoading &&

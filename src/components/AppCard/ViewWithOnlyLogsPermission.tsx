@@ -32,7 +32,7 @@ export const ViewWithOnlyLogsPermission: FC<ViewWithOnlyLogsPermissionProps> = (
       {machinesWithOnlyLogsPermission.map(machine => (
         <Button key={machine.id} variant="default" asChild>
           {/* TODO: Link to logs subpage. But shadcn does not support routed tabs nicely. */}
-          <Link to={machineDetailsPath(machine.provider, machine.id)}>View logs</Link>
+          <Link to={machineDetailsPath(network, machine.provider, machine.id)}>View logs</Link>
         </Button>
       ))}
     </div>

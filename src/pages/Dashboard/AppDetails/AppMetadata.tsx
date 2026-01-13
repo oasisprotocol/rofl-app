@@ -77,7 +77,13 @@ export const AppMetadata: FC<AppMetadataProps> = ({
               disabled={!lastMachineToDuplicate?.deployment?.app_id}
               asChild
             >
-              <Link to={machineDetailsTopUpPath(lastMachineToDuplicate.provider, lastMachineToDuplicate?.id)}>
+              <Link
+                to={machineDetailsTopUpPath(
+                  network,
+                  lastMachineToDuplicate.provider,
+                  lastMachineToDuplicate?.id,
+                )}
+              >
                 <CircleArrowUp />
                 Top up new machine based on last one
               </Link>
@@ -89,7 +95,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
             disabled={!roflTemplateQuery.data}
             asChild
           >
-            <Link to={appDetailsNewMachinePath(id)}>
+            <Link to={appDetailsNewMachinePath(network, id)}>
               <CircleArrowUp />
               Deploy to new machine
             </Link>
@@ -105,7 +111,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
                 <span className="inline-flex items-center gap-2">
                   <Link
                     key={machine.id}
-                    to={machineDetailsPath(machine.provider, machine.id)}
+                    to={machineDetailsPath(network, machine.provider, machine.id)}
                     className="text-primary"
                   >
                     <MachineName machine={machine} network={network} />

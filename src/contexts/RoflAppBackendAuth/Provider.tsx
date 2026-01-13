@@ -70,7 +70,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
 
   useEffect(() => {
     if (isAuthenticated && location.pathname === '/') {
-      navigate(dashboardPath(), { replace: true })
+      navigate(dashboardPath(network), { replace: true })
     }
   }, [navigate, isAuthenticated, location.pathname])
 

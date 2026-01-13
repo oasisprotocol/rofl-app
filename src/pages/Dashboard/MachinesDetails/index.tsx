@@ -151,7 +151,10 @@ export const MachinesDetails: FC = () => {
                       label={isMachineRemoved(machine) ? 'Last active app' : 'Active app'}
                       className="py-6 border-b"
                     >
-                      <Link to={appDetailsPath(machine.deployment.app_id as string)} className="text-primary">
+                      <Link
+                        to={appDetailsPath(network, machine.deployment.app_id as string)}
+                        className="text-primary"
+                      >
                         <MachineAppDetails appId={machine.deployment.app_id as string} />
                       </Link>
                     </DetailsSectionRow>

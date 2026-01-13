@@ -25,7 +25,7 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
       <CardHeader className="">
         <div className="flex items-start justify-between">
           <h3 className="text-lg font-semibold text-foreground pr-2 break-all text-primary">
-            <Link to={machineDetailsPath(machine.provider, machine.id)}>
+            <Link to={machineDetailsPath(network, machine.provider, machine.id)}>
               <MachineName machine={machine} network={network} />
             </Link>
           </h3>
@@ -44,7 +44,7 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
             {isFetched && !!roflAppName && (
               <>
                 <>{roflAppName}</>
-                <Link to={appDetailsPath(data?.data.id)}>
+                <Link to={appDetailsPath(network, data?.data.id)}>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </>
@@ -58,7 +58,7 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="secondary" asChild>
-          <Link to={machineDetailsPath(machine.provider, machine.id)}>View details</Link>
+          <Link to={machineDetailsPath(network, machine.provider, machine.id)}>View details</Link>
         </Button>
       </CardFooter>
     </Card>

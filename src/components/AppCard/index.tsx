@@ -33,7 +33,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
             )}
           >
             {type === 'dashboard' && (
-              <Link to={appDetailsPath(app.id)}>
+              <Link to={appDetailsPath(network, app.id)}>
                 <>{app.metadata?.['net.oasis.rofl.name'] || trimLongString(app.id)}</>
               </Link>
             )}
@@ -69,7 +69,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
       <CardFooter className="flex justify-between only:*:grow">
         {type === 'dashboard' && (
           <Button variant="secondary" asChild>
-            <Link to={appDetailsPath(app.id)}>View details</Link>
+            <Link to={appDetailsPath(network, app.id)}>View details</Link>
           </Button>
         )}
 

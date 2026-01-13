@@ -71,9 +71,9 @@ export const MachineTopUp: FC = () => {
 
   const handleBack = useCallback(() => {
     if (canNavigateAway) {
-      navigate(machineDetailsPath(machine!.provider, machine!.id))
+      navigate(machineDetailsPath(network, machine!.provider, machine!.id))
     }
-  }, [canNavigateAway, machine, navigate])
+  }, [canNavigateAway, machine, navigate, network])
 
   const handleTopUpSuccess = () => {
     refetchSapphireBalance()
@@ -105,7 +105,7 @@ export const MachineTopUp: FC = () => {
                     network,
                     build,
                   })
-                  navigate(machineDetailsPath(machine!.provider, newOrOldMachineId))
+                  navigate(machineDetailsPath(network, machine!.provider, newOrOldMachineId))
                 }}
               >
                 {({ form, noOffersWarning }) => {

@@ -10,9 +10,11 @@ import { Link } from 'react-router-dom'
 import { RainbowKitConnectButton } from '../../components/RainbowKitConnectButton'
 import { useAccount } from 'wagmi'
 import { dashboardPath } from '../paths'
+import { useNetwork } from '../../hooks/useNetwork'
 
 export const LandingTemplates: FC = () => {
   const { isConnected } = useAccount()
+  const network = useNetwork()
 
   return (
     <div className="[&>*]:md:max-h-none [&>*]:md:h-auto">
@@ -27,7 +29,7 @@ export const LandingTemplates: FC = () => {
                 {({ openConnectModal }) => {
                   return isConnected ? (
                     <Button size="lg" asChild>
-                      <Link to={dashboardPath()}>
+                      <Link to={dashboardPath(network)}>
                         Get started
                         <ArrowRight />
                       </Link>

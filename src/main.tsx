@@ -48,11 +48,10 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'dashboard',
+        path: ':network/dashboard',
         element: <ProtectedLayout />,
         children: [
           {
-            path: '/dashboard',
             element: <MainLayout />,
             children: [
               {

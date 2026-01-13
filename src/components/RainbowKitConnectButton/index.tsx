@@ -17,6 +17,7 @@ import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks.ts'
 import { ROFL_PAYMASTER_ENABLED_CHAINS_IDS } from '../../constants/rofl-paymaster-config.ts'
 import { dashboardPath } from '../../pages/paths.ts'
+import { useNetwork } from '../../hooks/useNetwork.ts'
 
 type ConnectButtonRenderProps = Parameters<React.ComponentProps<typeof ConnectButton.Custom>['children']>[0]
 
@@ -31,6 +32,7 @@ const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address
 
 const useNavigateToDashboardOnChainChange = ({ enabled }: { enabled: boolean }) => {
   const { chainId } = useAccount()
+  const network = useNetwork()
   const [selectedChainId, setSelectedChainId] = useState(chainId)
   const navigate = useNavigate()
   const { isAuthenticated } = useRoflAppBackendAuthContext()
@@ -41,7 +43,7 @@ const useNavigateToDashboardOnChainChange = ({ enabled }: { enabled: boolean }) 
     if (chainId && chainId !== selectedChainId && isAuthenticated) {
       if (!ROFL_PAYMASTER_ENABLED_CHAINS_IDS.includes(chainId.toString())) {
         setSelectedChainId(chainId)
-        navigate(dashboardPath(), { replace: true })
+        navigate(dashboardPath(network), { replace: true })
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- selectedChainId should not trigger effect
