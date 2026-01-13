@@ -12,6 +12,7 @@ import { formatDistanceToNow, parseISO } from 'date-fns'
 import { useAccount } from 'wagmi'
 import { ViewWithOnlyLogsPermission } from './ViewWithOnlyLogsPermission'
 import { appDetailsPath } from '../../pages/paths'
+import { EXPLORER_URL } from '../../constants/global'
 
 type AppCardProps = {
   app: RoflApp
@@ -77,7 +78,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
 
         <Button variant="secondary" asChild className="bg-background">
           <a
-            href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${app.id}`}
+            href={`${EXPLORER_URL}${network}/sapphire/rofl/app/${app.id}`}
             target="_blank"
             rel="noopener noreferrer"
           >

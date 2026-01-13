@@ -18,14 +18,13 @@ import { MachineName } from '../../../components/MachineName'
 import { MachineStatusIcon } from '../../../components/MachineStatusIcon'
 import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachineRemoved'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
-import { CircleArrowUp } from 'lucide-react'
+import { CircleArrowUp, ExternalLink } from 'lucide-react'
 import { useRoflAppBackendAuthContext } from '../../../contexts/RoflAppBackendAuth/hooks'
 import { useDownloadArtifact } from '../../../backend/api'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
-import { useAccount } from 'wagmi'
-import { getEvmBech32Address } from '../../../utils/helpers'
 import { useRoflAppDomains } from '../../../backend/useRoflAppDomains'
 import { appDetailsNewMachinePath, machineDetailsPath, machineDetailsTopUpPath } from '../../paths'
+import { EXPLORER_URL } from '../../../constants/global'
 
 type AppMetadataProps = {
   id: string
@@ -144,7 +143,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
       )}
       <DetailsSectionRow label="Explorer">
         <a
-          href={`https://explorer.oasis.io/${network}/sapphire/rofl/app/${id}`}
+          href={`${EXPLORER_URL}${network}/sapphire/rofl/app/${id}`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-primary"
@@ -209,7 +208,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
             }).format(new Date(transaction?.timestamp))}
             <br />
             <a
-              href={`https://explorer.oasis.io/${network}/sapphire/tx/${transaction.hash}`}
+              href={`${EXPLORER_URL}${network}/sapphire/tx/${transaction.hash}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary"
@@ -224,8 +223,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
 }
 
 const Endorsements = ({ endorsements }: { endorsements: unknown }) => {
-  const { address } = useAccount()
-  const oasisAddress = getEvmBech32Address(address!)
+  const network = useNetwork()
   const items = endorsements as Array<{ node?: string; any?: boolean }>
 
   if (items.some(item => 'node' in item)) {
@@ -246,9 +244,16 @@ const Endorsements = ({ endorsements }: { endorsements: unknown }) => {
   if (items.length === 1 && 'provider_instance_admin' in items[0]) {
     return (
       <>
-        {items[0].provider_instance_admin === oasisAddress
-          ? 'You are currently admin on machine'
-          : `${items[0].provider_instance_admin} is currently admin on machine`}
+        <a
+          href={`${EXPLORER_URL}${network}/sapphire/address/${items[0].provider_instance_admin}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary inline-flex items-center gap-2 mr-2"
+        >
+          {`${items[0].provider_instance_admin}`}
+          <ExternalLink className="h-4 w-4" />
+        </a>
+        is currently admin on machine
       </>
     )
   }
