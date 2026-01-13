@@ -27,6 +27,7 @@ import { toastWithDuration } from '../../../utils/toastWithDuration'
 import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachineRemoved'
 import { useAccount } from 'wagmi'
 import { getEvmBech32Address } from '../../../utils/helpers'
+import { appDetailsPath } from '../../paths'
 
 export const MachinesDetails: FC = () => {
   const account = useAccount()
@@ -150,8 +151,8 @@ export const MachinesDetails: FC = () => {
                       label={isMachineRemoved(machine) ? 'Last active app' : 'Active app'}
                       className="py-6 border-b"
                     >
-                      <Link to={`/dashboard/apps/${machine.deployment?.app_id}`} className="text-primary">
-                        <MachineAppDetails appId={machine.deployment?.app_id as string} />
+                      <Link to={appDetailsPath(machine.deployment.app_id as string)} className="text-primary">
+                        <MachineAppDetails appId={machine.deployment.app_id as string} />
                       </Link>
                     </DetailsSectionRow>
                   )}

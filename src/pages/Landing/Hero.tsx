@@ -6,6 +6,7 @@ import HeroImage from './images/hero.svg'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { RainbowKitConnectButton } from '../../components/RainbowKitConnectButton'
 import { useAccount } from 'wagmi'
+import { dashboardPath } from '../paths'
 
 export const Hero: FC = () => {
   const { isConnected } = useAccount()
@@ -38,7 +39,7 @@ export const Hero: FC = () => {
             {({ openConnectModal }) => {
               return isConnected ? (
                 <Button size="lg" asChild>
-                  <Link to="/dashboard">
+                  <Link to={dashboardPath()}>
                     Get started
                     <ArrowRight />
                   </Link>

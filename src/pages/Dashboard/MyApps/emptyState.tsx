@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { EmptyState } from '../../../components/EmptyState'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Plus } from 'lucide-react'
+import { createPath } from '../../paths'
 
 export const MyAppsEmptyState: FC = () => {
   return (
@@ -11,7 +12,7 @@ export const MyAppsEmptyState: FC = () => {
       description="Use one of our templates to create your first application running in Oasis ROFL."
     >
       <Button asChild>
-        <Link to="/create">
+        <Link to={createPath()}>
           Create
           <Plus className="h-4 w-4" />
         </Link>

@@ -8,6 +8,7 @@ import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { ArrowRight } from 'lucide-react'
 import { MachineName } from '../MachineName'
+import { appDetailsPath, machineDetailsPath } from '../../pages/paths'
 
 type ExploreAppCardProps = {
   machine: RoflMarketInstance
@@ -24,7 +25,7 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
       <CardHeader className="">
         <div className="flex items-start justify-between">
           <h3 className="text-lg font-semibold text-foreground pr-2 break-all text-primary">
-            <Link to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}>
+            <Link to={machineDetailsPath(machine.provider, machine.id)}>
               <MachineName machine={machine} network={network} />
             </Link>
           </h3>
@@ -43,7 +44,7 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
             {isFetched && !!roflAppName && (
               <>
                 <>{roflAppName}</>
-                <Link to={`/dashboard/apps/${data?.data.id}`}>
+                <Link to={appDetailsPath(data?.data.id)}>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </>
@@ -57,7 +58,7 @@ export const MachineCard: FC<ExploreAppCardProps> = ({ machine, network }) => {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="secondary" asChild>
-          <Link to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}>View details</Link>
+          <Link to={machineDetailsPath(machine.provider, machine.id)}>View details</Link>
         </Button>
       </CardFooter>
     </Card>

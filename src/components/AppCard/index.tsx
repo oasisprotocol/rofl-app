@@ -11,6 +11,7 @@ import { trimLongString } from '../../utils/trimLongString'
 import { formatDistanceToNow, parseISO } from 'date-fns'
 import { useAccount } from 'wagmi'
 import { ViewWithOnlyLogsPermission } from './ViewWithOnlyLogsPermission'
+import { appDetailsPath } from '../../pages/paths'
 
 type AppCardProps = {
   app: RoflApp
@@ -32,7 +33,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
             )}
           >
             {type === 'dashboard' && (
-              <Link to={`/dashboard/apps/${app.id}`}>
+              <Link to={appDetailsPath(app.id)}>
                 <>{app.metadata?.['net.oasis.rofl.name'] || trimLongString(app.id)}</>
               </Link>
             )}
@@ -68,7 +69,7 @@ export const AppCard: FC<AppCardProps> = ({ app, network, type }) => {
       <CardFooter className="flex justify-between only:*:grow">
         {type === 'dashboard' && (
           <Button variant="secondary" asChild>
-            <Link to={`/dashboard/apps/${app.id}`}>View details</Link>
+            <Link to={appDetailsPath(app.id)}>View details</Link>
           </Button>
         )}
 

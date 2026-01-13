@@ -3,6 +3,7 @@ import { CardWrapper } from '../../components/Card/index'
 import dashboardImage from './images/dashboard.webp'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { useAccount } from 'wagmi'
+import { createPath, explorePath, templatesPath } from '../paths'
 
 export const Cards: FC = () => {
   const { isConnected } = useAccount()
@@ -27,7 +28,7 @@ export const Cards: FC = () => {
         <CardWrapper
           title="Start with templates"
           description="Skip the complexity and launch faster with our custom-built templates."
-          to={isConnected ? '/create' : '/templates'}
+          to={isConnected ? createPath() : templatesPath()}
           label="Create app"
         />
         <CardWrapper
@@ -44,7 +45,7 @@ export const Cards: FC = () => {
         <CardWrapper
           title="Explore the ecosystem"
           description="Browse live examples and discover what's possible with verifiable offchain compute."
-          to="/explore"
+          to={explorePath()}
           label="Explore now"
           image={dashboardImage}
         />

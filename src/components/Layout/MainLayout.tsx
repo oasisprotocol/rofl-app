@@ -26,12 +26,13 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/breadcrumb'
 import { ErrorBoundary } from '../ErrorBoundary'
 import { SidebarFooterContent } from './SidebarFooter'
+import { appsPath, dashboardPath, explorePath, machinesPath } from '../../pages/paths'
 
 const navItems = {
-  dashboard: { label: 'Dashboard', path: '/dashboard' },
-  myApps: { label: 'Apps', path: '/dashboard/apps' },
-  machines: { label: 'Machines', path: '/dashboard/machines' },
-  explore: { label: 'Explore', path: '/explore' },
+  dashboard: { label: 'Dashboard', path: dashboardPath() },
+  myApps: { label: 'Apps', path: appsPath() },
+  machines: { label: 'Machines', path: machinesPath() },
+  explore: { label: 'Explore', path: explorePath() },
 }
 
 const breadcrumbConfigs = [
@@ -116,7 +117,7 @@ export const MainLayout: FC = () => {
                       className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                       asChild
                     >
-                      <NavLink to="/dashboard" end>
+                      <NavLink to={dashboardPath()} end>
                         <LayoutDashboard className="h-4 w-4 text-sidebar-foreground" />
                         Dashboard
                       </NavLink>
@@ -131,7 +132,7 @@ export const MainLayout: FC = () => {
                         className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                         asChild
                       >
-                        <NavLink to="/dashboard/apps" end>
+                        <NavLink to={appsPath()} end>
                           Apps
                         </NavLink>
                       </Button>
@@ -144,7 +145,7 @@ export const MainLayout: FC = () => {
                         className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                         asChild
                       >
-                        <NavLink to="/dashboard/machines" end>
+                        <NavLink to={machinesPath()} end>
                           Machines
                         </NavLink>
                       </Button>
@@ -157,7 +158,7 @@ export const MainLayout: FC = () => {
                     className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                     asChild
                   >
-                    <NavLink to="/explore" end>
+                    <NavLink to={explorePath()} end>
                       <Compass className="h-4 w-4 text-sidebar-foreground" />
                       Explore
                     </NavLink>

@@ -5,6 +5,7 @@ import { useInterval } from './useInterval'
 import { trackEvent } from 'fathom-client'
 import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { dashboardPath } from '../../pages/paths'
 
 export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }) {
   const { address, isConnected } = useAccount()
@@ -69,7 +70,7 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
 
   useEffect(() => {
     if (isAuthenticated && location.pathname === '/') {
-      navigate('/dashboard', { replace: true })
+      navigate(dashboardPath(), { replace: true })
     }
   }, [navigate, isAuthenticated, location.pathname])
 

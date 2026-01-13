@@ -17,6 +17,7 @@ import { TopUp } from '../../../components/rofl-paymaster/TopUp'
 import { Spinner } from '../../../components/Spinner'
 import { defaultBuildConfig } from '../../CreateApp/templates.tsx'
 import { useBlockNavigatingAway } from '../../CreateApp/useBlockNavigatingAway.ts'
+import { machineDetailsPath } from '../../paths.ts'
 
 export const MachineTopUp: FC = () => {
   const navigate = useNavigate()
@@ -70,7 +71,7 @@ export const MachineTopUp: FC = () => {
 
   const handleBack = useCallback(() => {
     if (canNavigateAway) {
-      navigate(`/dashboard/machines/${machine!.provider}/instances/${machine!.id}`)
+      navigate(machineDetailsPath(machine!.provider, machine!.id))
     }
   }, [canNavigateAway, machine, navigate])
 
@@ -104,7 +105,7 @@ export const MachineTopUp: FC = () => {
                     network,
                     build,
                   })
-                  navigate(`/dashboard/machines/${machine!.provider}/instances/${newOrOldMachineId}`)
+                  navigate(machineDetailsPath(machine!.provider, newOrOldMachineId))
                 }}
               >
                 {({ form, noOffersWarning }) => {

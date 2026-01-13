@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { CheckCircle, TriangleAlert } from 'lucide-react'
 import { useCreateAndDeployApp } from '../../backend/api'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
+import { dashboardPath } from '../paths'
 
 type Step = ReturnType<typeof useCreateAndDeployApp>['progress']['currentStep'] | 'success' | 'error'
 
@@ -29,7 +30,7 @@ const textContent = {
     description: (
       <>
         <Button asChild className="mt-4">
-          <Link to={'/dashboard'}>Navigate to Dashboard</Link>
+          <Link to={dashboardPath()}>Navigate to Dashboard</Link>
         </Button>
       </>
     ),

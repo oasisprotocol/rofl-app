@@ -25,6 +25,7 @@ import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { useAccount } from 'wagmi'
 import { getEvmBech32Address } from '../../../utils/helpers'
 import { useRoflAppDomains } from '../../../backend/useRoflAppDomains'
+import { appDetailsNewMachinePath, machineDetailsPath, machineDetailsTopUpPath } from '../../paths'
 
 type AppMetadataProps = {
   id: string
@@ -69,26 +70,26 @@ export const AppMetadata: FC<AppMetadataProps> = ({
       {isMachineLoading && <Skeleton className="w-full h-60px]" />}
       {editEnabled && (
         <div className="flex flex-wrap gap-3">
-          <Button
-            variant="outline"
-            className={cn(!lastMachineToDuplicate?.deployment?.app_id && 'pointer-events-none opacity-50')}
-            disabled={!lastMachineToDuplicate?.deployment?.app_id}
-            asChild
-          >
-            <Link
-              to={`/dashboard/machines/${lastMachineToDuplicate?.provider}/instances/${lastMachineToDuplicate?.id}/top-up`}
+          {lastMachineToDuplicate && (
+            <Button
+              variant="outline"
+              className={cn(!lastMachineToDuplicate?.deployment?.app_id && 'pointer-events-none opacity-50')}
+              disabled={!lastMachineToDuplicate?.deployment?.app_id}
+              asChild
             >
-              <CircleArrowUp />
-              Top up new machine based on last one
-            </Link>
-          </Button>
+              <Link to={machineDetailsTopUpPath(lastMachineToDuplicate.provider, lastMachineToDuplicate?.id)}>
+                <CircleArrowUp />
+                Top up new machine based on last one
+              </Link>
+            </Button>
+          )}
           <Button
             variant="outline"
             className={cn(!roflTemplateQuery.data && 'pointer-events-none opacity-50')}
             disabled={!roflTemplateQuery.data}
             asChild
           >
-            <Link to={`/dashboard/apps/${id}/new-machine`}>
+            <Link to={appDetailsNewMachinePath(id)}>
               <CircleArrowUp />
               Deploy to new machine
             </Link>
@@ -104,7 +105,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
                 <span className="inline-flex items-center gap-2">
                   <Link
                     key={machine.id}
-                    to={`/dashboard/machines/${machine.provider}/instances/${machine.id}`}
+                    to={machineDetailsPath(machine.provider, machine.id)}
                     className="text-primary"
                   >
                     <MachineName machine={machine} network={network} />
