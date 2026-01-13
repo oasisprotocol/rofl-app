@@ -19,7 +19,7 @@ export const getErc20Balance = async (
 ): Promise<GetBalanceReturnType> => {
   try {
     // Native token balance
-    if (tokenAddress.toLowerCase() === ROFL_PAYMASTER_NATIVE_TOKEN_ADDRESS) {
+    if (tokenAddress.toLowerCase() === ROFL_PAYMASTER_NATIVE_TOKEN_ADDRESS.toLowerCase()) {
       return await getBalance(wagmiConfig, {
         address: userAddress,
         chainId,
@@ -46,7 +46,7 @@ export const checkAndSetErc20Allowance = async (
   allowanceAmount = maxUint256,
 ): Promise<void> => {
   // Transactions with the native token don't need approval
-  if (tokenAddress.toLowerCase() === ROFL_PAYMASTER_NATIVE_TOKEN_ADDRESS) {
+  if (tokenAddress.toLowerCase() === ROFL_PAYMASTER_NATIVE_TOKEN_ADDRESS.toLowerCase()) {
     return
   }
 

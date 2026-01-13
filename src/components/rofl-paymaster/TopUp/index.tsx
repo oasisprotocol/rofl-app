@@ -2,6 +2,7 @@ import React, { type FC, type ReactNode, useEffect, useMemo, useRef, useState } 
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { BigNumber } from 'bignumber.js'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Input } from '@oasisprotocol/ui-library/src/components/ui/input'
 import {

@@ -1,5 +1,8 @@
+// Export a helper function to get hostname for testability
+export const getHostname = () => window.location.hostname
+
 export const BuildBadge = () => {
-  const hostname = window.location.hostname
+  const hostname = getHostname()
 
   let label = ''
 
