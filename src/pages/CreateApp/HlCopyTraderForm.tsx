@@ -2,14 +2,14 @@ import { type FC } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { CreateFormNavigation } from './CreateFormNavigation'
-import { hlCopyTraderFormSchema, type HlCopyTraderFormData } from './types'
+import { hlCopyTraderFormSchema, type HlCopyTraderFormData, type ERC8004FormData } from './types'
 import { InputFormField } from '../../components/InputFormField'
 
 type HlCopyTraderFormProps = {
   handleNext: () => void
   handleBack: () => void
-  inputs?: HlCopyTraderFormData
-  setAppDataForm: (data: { inputs: HlCopyTraderFormData }) => void
+  inputs?: HlCopyTraderFormData & ERC8004FormData
+  setAppDataForm: (data: { inputs: HlCopyTraderFormData & ERC8004FormData }) => void
 }
 
 export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
@@ -31,7 +31,7 @@ export const HlCopyTraderForm: FC<HlCopyTraderFormProps> = ({
   })
 
   function onSubmit(values: HlCopyTraderFormData) {
-    setAppDataForm({ inputs: values })
+    setAppDataForm({ inputs: values as HlCopyTraderFormData & ERC8004FormData })
     handleNext()
   }
 

@@ -2,7 +2,7 @@ import { type FC, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { CreateFormNavigation } from './CreateFormNavigation'
-import { customBuildFormSchema, type CustomBuildFormData } from './types'
+import { customBuildFormSchema, type CustomBuildFormData, ERC8004FormData } from './types'
 import { SecretsTable } from '../../components/SecretsTable'
 import { CodeDisplay } from '../../components/CodeDisplay'
 import { type RoflAppSecrets } from '../../nexus/api'
@@ -10,12 +10,13 @@ import { AddSecretFormContent } from '../../components/SecretsTable/AddSecretFor
 import { useComposeValidation } from './useComposeValidation'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { composePlaceholder } from './composePlaceholder'
+import { ROFL_8004_SERVICE_ENV_PREFIX } from '../../constants/rofl-8004.ts'
 
 type CustomBuildSetupFormProps = {
   handleNext: () => void
   handleBack: () => void
-  inputs?: CustomBuildFormData
-  setAppDataForm: (data: { inputs: CustomBuildFormData }) => void
+  inputs?: CustomBuildFormData & ERC8004FormData
+  setAppDataForm: (data: { inputs: CustomBuildFormData & ERC8004FormData }) => void
 }
 
 export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
@@ -59,13 +60,13 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     const isValid = await validateCompose(compose)
 
     if (isValid) {
-      setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData })
+      setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData & ERC8004FormData })
       handleNext()
     }
   }
 
   const navigateBack = () => {
-    setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData })
+    setAppDataForm({ inputs: { compose, secrets } as CustomBuildFormData & ERC8004FormData })
     handleBack()
   }
 
@@ -88,6 +89,14 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
 
     if (!name || name.trim() === '') {
       form.setError('name', { type: 'manual', message: 'Name is required.' })
+      hasError = true
+    }
+
+    if (name && name.startsWith(ROFL_8004_SERVICE_ENV_PREFIX)) {
+      form.setError('name', {
+        type: 'manual',
+        message: `Secret names starting with "${ROFL_8004_SERVICE_ENV_PREFIX}" are reserved and cannot be used.`,
+      })
       hasError = true
     }
 

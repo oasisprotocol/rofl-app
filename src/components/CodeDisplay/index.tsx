@@ -15,14 +15,26 @@ const MonacoEditor = lazy(async () => {
   try {
     const monaco = await import('monaco-editor')
     const monacoReact = await import('@monaco-editor/react')
+
     window.MonacoEnvironment = {
-      getWorker() {
+      getWorker(_, label) {
+        // JSON worker
+        if (label === 'json') {
+          return new Worker(
+            new URL(
+              '../../../node_modules/monaco-editor/esm/vs/language/json/json.worker.js',
+              import.meta.url,
+            ),
+            { type: 'module' },
+          )
+        }
         return new Worker(
           new URL('../../../node_modules/monaco-editor/esm/vs/editor/editor.worker.js', import.meta.url),
           { type: 'module' },
         )
       },
     }
+
     monacoReact.loader.config({ monaco })
 
     return monacoReact
@@ -43,6 +55,7 @@ type CodeDisplayProps = {
   onChange?: (value: string | undefined) => void
   // CSS white-space set in index.css for proper placeholder rendering
   placeholder?: string
+  language?: 'yaml' | 'json'
 }
 
 export const CodeDisplay: FC<CodeDisplayProps> = ({
@@ -51,6 +64,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
   readOnly = true,
   onChange,
   placeholder,
+  language = 'yaml',
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const monacoInstanceRef = useRef<typeof monaco | null>(null)
@@ -130,6 +144,25 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
     monacoInstance.editor.setModelMarkers(model, 'highlightYamlErrors', markers)
   }
 
+  const highlightJsonErrors = (newData: string | undefined) => {
+    const monacoInstance = monacoInstanceRef.current
+    if (!monacoInstance || !editorRef.current || newData === undefined) {
+      return
+    }
+    const model = editorRef.current.getModel()
+    if (!model) return
+
+    const markers: monaco.editor.IMarkerData[] = []
+
+    try {
+      JSON.parse(newData)
+    } catch (e) {
+      console.warn(e)
+    }
+
+    monacoInstance.editor.setModelMarkers(model, 'highlightJsonErrors', markers)
+  }
+
   const handleEditorDidMount = (
     editor: monaco.editor.IStandaloneCodeEditor,
     monacoInstance: typeof monaco,
@@ -140,7 +173,13 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
   }
 
   const handleEditorChange = (newData: string | undefined) => {
-    if (!readOnly) highlightYamlErrors(newData)
+    if (!readOnly) {
+      if (language === 'yaml') {
+        highlightYamlErrors(newData)
+      } else if (language === 'json') {
+        highlightJsonErrors(newData)
+      }
+    }
 
     highlightErrorLogs(newData)
 
@@ -152,7 +191,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
       <Suspense fallback={<TextAreaFallback value={data} />}>
         <MonacoEditor
           loading={<TextAreaFallback value={data} />}
-          language="yaml"
+          language={language}
           value={data}
           theme="customTheme"
           beforeMount={handleEditorWillMount}

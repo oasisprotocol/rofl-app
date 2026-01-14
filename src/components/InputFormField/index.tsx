@@ -4,7 +4,13 @@ import { Input } from '@oasisprotocol/ui-library/src/components/ui/input'
 import { Textarea } from '@oasisprotocol/ui-library/src/components/ui/textarea'
 import { Label } from '@oasisprotocol/ui-library/src/components/ui/label'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Info } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from '@oasisprotocol/ui-library/src/components/ui/tooltip'
 
 type InputFormFieldProps<T extends FieldValues> = {
   control: Control<T>
@@ -14,6 +20,7 @@ type InputFormFieldProps<T extends FieldValues> = {
   type?: 'input' | 'password' | 'number' | 'textarea'
   disabled?: boolean
   min?: number
+  info?: string
 }
 
 export const InputFormField = <T extends FieldValues>({
@@ -24,6 +31,7 @@ export const InputFormField = <T extends FieldValues>({
   type = 'input',
   disabled = false,
   min,
+  info,
 }: InputFormFieldProps<T>): ReactNode => {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -40,7 +48,21 @@ export const InputFormField = <T extends FieldValues>({
 
   return (
     <div className="grid gap-2">
-      {label && <Label htmlFor={name}>{label}</Label>}
+      {label && (
+        <div className="flex items-center gap-1.5">
+          <Label htmlFor={name}>{label}</Label>
+          {info && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent>{info}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
+      )}
       <Controller
         control={control}
         name={name}
@@ -78,7 +100,13 @@ export const InputFormField = <T extends FieldValues>({
                 )}
               </div>
             ) : (
-              <Textarea id={name} placeholder={placeholder} {...field} aria-invalid={!!fieldState.error} />
+              <Textarea
+                id={name}
+                placeholder={placeholder}
+                {...field}
+                aria-invalid={!!fieldState.error}
+                disabled={disabled}
+              />
             )}
             {fieldState.error && <div className="text-destructive text-sm">{fieldState.error.message}</div>}
           </>

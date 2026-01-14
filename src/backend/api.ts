@@ -20,6 +20,7 @@ import { toast } from 'sonner'
 import { isMachineRemoved } from '../components/MachineStatusIcon/isMachineRemoved.ts'
 import { trackEvent } from 'fathom-client'
 import { getOasisAddressBytesFromEvm } from '../utils/helpers.ts'
+import { addRofl8004ServiceToCompose, hasRofl8004ServiceSecrets } from '../utils/rofl-8004.ts'
 
 const BACKEND_URL = import.meta.env.VITE_ROFL_APP_BACKEND
 
@@ -432,7 +433,12 @@ export function useCreateAndDeployApp() {
       const manifest = yaml.stringify(
         fillTemplate(roflTemplateYaml, appData.metadata!, build, network, appId, address),
       )
-      const compose = template.yaml.compose
+
+      let compose = template.yaml.compose
+      if (hasRofl8004ServiceSecrets(appData)) {
+        compose = addRofl8004ServiceToCompose(template.yaml.compose, appData)
+      }
+
       console.log('Build?')
       setCurrentStep('building')
 

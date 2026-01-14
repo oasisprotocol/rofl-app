@@ -20,6 +20,8 @@ import { Dialog, DialogContent } from '@oasisprotocol/ui-library/src/components/
 import { HelpWidget } from '../../CreateApp/HelpWidget'
 import { AddSecret } from '../../../components/SecretsTable/AddSecret'
 import { useAccount } from 'wagmi'
+import { ROFL_8004_METADATA_KEY } from '../../../constants/rofl-8004.ts'
+import { AppERC8004 } from './AppERC8004.tsx'
 
 function setDefaultMetadataViewState(metadata: RoflAppMetadata | undefined = {}): ViewMetadataState {
   return {
@@ -64,6 +66,10 @@ export const AppDetails: FC = () => {
     token,
   )
   const { data: readme } = useDownloadArtifact(`${id}-readme-md`, token)
+
+  const instancesWithERC8004Token =
+    roflApp?.active_instances.filter(({ metadata }) => metadata?.[ROFL_8004_METADATA_KEY]) ?? []
+  const hasInstancesWithERC8004Token = instancesWithERC8004Token.length > 0
 
   const editEnabled = !!token && !roflApp?.removed && roflApp?.admin_eth === account.address
   const removeApp = useRemoveApp()
@@ -179,6 +185,7 @@ export const AppDetails: FC = () => {
                       <TabsTrigger value="details">Details</TabsTrigger>
                       <TabsTrigger value="secrets">Secrets</TabsTrigger>
                       <TabsTrigger value="compose">Manifest</TabsTrigger>
+                      {hasInstancesWithERC8004Token && <TabsTrigger value="erc-8004">ERC-8004</TabsTrigger>}
                     </TabsList>
                   </div>
                 </div>
@@ -191,6 +198,7 @@ export const AppDetails: FC = () => {
                   policy={roflApp.policy}
                   setViewMetadataState={setViewMetadataState}
                   editEnabled={editEnabled}
+                  instancesWithERC8004Token={instancesWithERC8004Token}
                 />
               </TabsContent>
               <TabsContent value="secrets" className="relative pt-10">
@@ -214,6 +222,11 @@ export const AppDetails: FC = () => {
                   composeYaml={composeYaml}
                 />
               </TabsContent>
+              {hasInstancesWithERC8004Token && (
+                <TabsContent value="erc-8004">
+                  <AppERC8004 instancesWithERC8004Token={instancesWithERC8004Token} />
+                </TabsContent>
+              )}
             </Tabs>
           </div>
         </>

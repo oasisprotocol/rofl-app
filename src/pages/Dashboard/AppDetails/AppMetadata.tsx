@@ -5,6 +5,7 @@ import {
   useGetRuntimeRoflAppsIdTransactions,
   useGetRuntimeRoflmarketInstances,
   type RoflAppPolicy,
+  RoflInstance,
 } from '../../../nexus/api'
 import { useNetwork } from '../../../hooks/useNetwork'
 import { isUrlSafe } from '../../../utils/url'
@@ -25,6 +26,8 @@ import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { useAccount } from 'wagmi'
 import { getEvmBech32Address } from '../../../utils/helpers'
 import { useRoflAppDomains } from '../../../backend/useRoflAppDomains'
+import { fromMetadataToAgentMetadata } from '../../../utils/rofl-8004.ts'
+import { get8004ScanUrl } from '../../../constants/rofl-8004.ts'
 
 type AppMetadataProps = {
   id: string
@@ -33,6 +36,7 @@ type AppMetadataProps = {
   policy: RoflAppPolicy
   setViewMetadataState: (state: ViewMetadataState) => void
   editEnabled?: boolean
+  instancesWithERC8004Token: RoflInstance[]
 }
 
 export const AppMetadata: FC<AppMetadataProps> = ({
@@ -42,6 +46,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   policy,
   setViewMetadataState,
   editEnabled,
+  instancesWithERC8004Token,
 }) => {
   const network = useNetwork()
   const { data } = useGetRuntimeRoflAppsIdTransactions(network, 'sapphire', id, {
@@ -63,6 +68,11 @@ export const AppMetadata: FC<AppMetadataProps> = ({
   const lastMachineToDuplicate = machinesData?.data.instances[0]
 
   const appDomains = useRoflAppDomains(network, id)
+
+  const [instance] = instancesWithERC8004Token
+  const agentMetadata = instance ? fromMetadataToAgentMetadata(instance.metadata) : undefined
+  const agentChainName = agentMetadata?.chainName
+  const agentTokenId = agentMetadata?.agentId
 
   return (
     <div className="space-y-4">
@@ -188,6 +198,18 @@ export const AppMetadata: FC<AppMetadataProps> = ({
           ))}
         </div>
       </DetailsSectionRow>
+      {agentChainName && agentTokenId && (
+        <DetailsSectionRow label="ERC-8004 agent registration">
+          <a
+            href={get8004ScanUrl(agentChainName, agentTokenId.toString())}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary"
+          >
+            {get8004ScanUrl(agentChainName, agentTokenId.toString())}
+          </a>
+        </DetailsSectionRow>
+      )}
       <div className="text-xl font-bold">Policy</div>
       <DetailsSectionRow label="Who can run this app">
         <Endorsements endorsements={policy.endorsements} />

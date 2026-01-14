@@ -3,14 +3,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { SelectFormField } from '../../components/SelectFormField'
 import { CreateFormNavigation } from './CreateFormNavigation'
-import { tgbotFormSchema, type AgentFormData } from './types'
+import { tgbotFormSchema, type AgentFormData, type ERC8004FormData } from './types'
 import { InputFormField } from '../../components/InputFormField'
 
 type TgbotAgentFormProps = {
   handleNext: () => void
   handleBack: () => void
-  inputs?: AgentFormData
-  setAppDataForm: (data: { inputs: AgentFormData }) => void
+  inputs?: AgentFormData & ERC8004FormData
+  setAppDataForm: (data: { inputs: AgentFormData & ERC8004FormData }) => void
 }
 
 export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
@@ -32,7 +32,7 @@ export const TgbotAgentForm: FC<TgbotAgentFormProps> = ({
   })
 
   function onSubmit(values: AgentFormData) {
-    setAppDataForm({ inputs: values })
+    setAppDataForm({ inputs: values as AgentFormData & ERC8004FormData })
     handleNext()
   }
 

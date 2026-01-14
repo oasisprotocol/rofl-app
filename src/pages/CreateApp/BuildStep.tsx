@@ -38,7 +38,7 @@ export const BuildStep: FC<BuildStepProps> = ({
 
   return (
     <CreateLayout
-      currentStep={3}
+      currentStep={4}
       selectedTemplateName={selectedTemplateName}
       selectedTemplateId={selectedTemplateId}
       customStepTitle={customStepTitle}
