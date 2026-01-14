@@ -42,10 +42,35 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
   }, [isInitialLoad, isConnected, token])
 
   useEffect(() => {
+    // Wallet disconnected - clear token
+    if (!address) {
+      setToken(null)
+      setIsTokenExpired(false)
+      return
+    }
+
     const currentToken = window.localStorage.getItem('jwt')
-    if (currentToken && address) {
+    if (currentToken) {
       const expired = isJWTExpired(currentToken, address)
       setIsTokenExpired(expired)
+
+      // Clear token if address mismatch (user switched accounts)
+      if (expired) {
+        try {
+          const jwt = JSON.parse(atob(currentToken.split('.')[1]))
+          const tokenAddress = jwt.address?.toLowerCase()
+          if (tokenAddress && tokenAddress !== address.toLowerCase()) {
+            window.localStorage.removeItem('jwt')
+            setToken(null)
+            setIsTokenExpired(false)
+          }
+        } catch {
+          // Invalid token - clear it
+          window.localStorage.removeItem('jwt')
+          setToken(null)
+          setIsTokenExpired(false)
+        }
+      }
     }
   }, [address, token])
 
@@ -56,7 +81,10 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
       setIsTokenExpired(expired)
 
       if (expired) {
-        // Token expired, requiring re-authentication
+        // Clear expired token
+        window.localStorage.removeItem('jwt')
+        setToken(null)
+        setIsTokenExpired(false)
       } else if (currentToken !== token) {
         setToken(currentToken)
         setIsTokenExpired(false)
