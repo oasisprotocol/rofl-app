@@ -15,8 +15,6 @@ import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useTicker } from '../../hooks/useTicker'
 import { useBlockNavigatingAway } from './useBlockNavigatingAway.ts'
 
-const { VITE_FEATURE_FLAG_PAYMASTER } = import.meta.env
-
 type PaymentStepProps = {
   handleNext: () => void
   handleBack: () => void
@@ -113,7 +111,9 @@ export const PaymentStep: FC<PaymentStepProps> = ({
       )}
       {!hasEnoughBalance && minAmount && (
         <p className="text-sm text-foreground font-semibold text-center my-4">
-          You need more ${chain.nativeCurrency.symbol} to complete this process.
+          You need more $
+          {network === 'mainnet' ? sapphire.nativeCurrency.symbol : sapphireTestnet.nativeCurrency.symbol} to
+          complete this process.
           <br />
           Top up your wallet below.
         </p>
@@ -140,14 +140,14 @@ export const PaymentStep: FC<PaymentStepProps> = ({
         </TopUp>
       )}
 
-      {isTestnetBlocked && !VITE_FEATURE_FLAG_PAYMASTER && (
+      {isTestnetBlocked && (
         <div className="text-sm text-destructive mt-4 text-pretty">
           Functionality is currently blocked on the Oasis Sapphire Testnet. To build and deploy your
           application, please switch to Mainnet.
         </div>
       )}
 
-      {(hasEnoughBalance || (isTestnet && !VITE_FEATURE_FLAG_PAYMASTER)) && (
+      {hasEnoughBalance && (
         <form onSubmit={handleNext} className="w-full">
           <CreateFormNavigation
             handleBack={() => {

@@ -8,7 +8,8 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/dialog'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Spinner } from '../../Spinner'
-import { useCountdownTimer } from './useCountdownTimer'
+import { useCountdownTimer } from '../../../hooks/useCountdownTimer'
+import { type PaymasterStepStatus } from '../../../hooks/usePaymaster'
 
 export interface ProgressStep {
   id: number
@@ -20,9 +21,7 @@ export interface ProgressStep {
 interface TopUpProgressDialogProps {
   isOpen: boolean
   currentStep: number | null
-  stepStatuses: {
-    [key: number]: 'pending' | 'processing' | 'completed' | 'error'
-  }
+  stepStatuses: Partial<Record<number, PaymasterStepStatus>>
   progressSteps: ProgressStep[]
   onClose: () => void
 }
