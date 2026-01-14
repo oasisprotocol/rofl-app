@@ -99,19 +99,21 @@ export const SecretsTable: FC<SecretsTableProps> = ({
                   <span className="text-muted-foreground">Encrypted</span>
                 </TableCell>
                 <TableCell className="w-10" align="right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" disabled={!editEnabled}>
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleOpenEditDialog(key)}>Edit</DropdownMenuItem>
-                      <DropdownMenuItem variant="destructive" onClick={() => handleOpenRemoveDialog(key)}>
-                        Remove
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  {editEnabled && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleOpenEditDialog(key)}>Edit</DropdownMenuItem>
+                        <DropdownMenuItem variant="destructive" onClick={() => handleOpenRemoveDialog(key)}>
+                          Remove
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
