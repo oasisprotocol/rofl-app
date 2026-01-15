@@ -4,41 +4,10 @@ import { Link } from 'react-router-dom'
 import { CheckCircle, TriangleAlert } from 'lucide-react'
 import { useCreateAndDeployApp } from '../../backend/api'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
+import { dashboardPath } from '../paths'
+import { useNetwork } from '../../hooks/useNetwork'
 
 type Step = ReturnType<typeof useCreateAndDeployApp>['progress']['currentStep'] | 'success' | 'error'
-
-const textContent = {
-  creating: {
-    header: 'Creating app...',
-    description: '',
-  },
-  building: {
-    header: 'Building app...',
-    description: '',
-  },
-  updating: {
-    header: 'Updating app secrets...',
-    description: '',
-  },
-  deploying: {
-    header: 'Deploying app to machine...',
-    description: '',
-  },
-  success: {
-    header: 'App will be ready in 5 minutes!',
-    description: (
-      <>
-        <Button asChild className="mt-4">
-          <Link to={'/dashboard'}>Navigate to Dashboard</Link>
-        </Button>
-      </>
-    ),
-  },
-  error: {
-    header: 'Error creating ROFL app',
-    description: 'An error occurred while creating the ROFL app. Please try again later.',
-  },
-} satisfies Record<Step, unknown>
 
 type AnimatedStepTextProps = {
   step: Step
@@ -46,6 +15,41 @@ type AnimatedStepTextProps = {
 
 export const AnimatedStepText: FC<AnimatedStepTextProps> = ({ step }) => {
   const [isVisible, setIsVisible] = useState(false)
+  const network = useNetwork()
+
+  const textContent = {
+    creating: {
+      header: 'Creating app...',
+      description: '',
+    },
+    building: {
+      header: 'Building app...',
+      description: '',
+    },
+    updating: {
+      header: 'Updating app secrets...',
+      description: '',
+    },
+    deploying: {
+      header: 'Deploying app to machine...',
+      description: '',
+    },
+    success: {
+      header: 'App will be ready in 5 minutes!',
+      description: (
+        <>
+          <Button asChild className="mt-4">
+            <Link to={dashboardPath(network)}>Navigate to Dashboard</Link>
+          </Button>
+        </>
+      ),
+    },
+    error: {
+      header: 'Error creating ROFL app',
+      description: 'An error occurred while creating the ROFL app. Please try again later.',
+    },
+  } satisfies Record<Step, unknown>
+
   const content = textContent[step]
 
   useEffect(() => {

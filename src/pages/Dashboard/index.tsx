@@ -10,6 +10,7 @@ import { AppCard } from '../../components/AppCard'
 import { MachineCard } from '../../components/MachineCard'
 import { useAccount } from 'wagmi'
 import { isMachineRemoved } from '../../components/MachineStatusIcon/isMachineRemoved'
+import { appsPath, machinesPath } from '../paths'
 
 const cardsLimit = 3
 const refetchInterval = 10000 // 10 seconds
@@ -79,7 +80,7 @@ export const Dashboard: FC = () => {
             />
           )}
         </div>
-        <SectionHeader title="Apps" to="/dashboard/apps" disabled={appsNumber === 0} />
+        <SectionHeader title="Apps" to={appsPath(network)} disabled={appsNumber === 0} />
         {isFetched && !appsNumber && <MyAppsEmptyState />}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {isLoading &&
@@ -91,7 +92,7 @@ export const Dashboard: FC = () => {
               ?.slice(0, cardsLimit)
               .map(app => <AppCard key={app.id} app={app} network={network} type="dashboard" />)}
         </div>
-        <SectionHeader title="Machines" to="/dashboard/machines" disabled={machinesNumber === 0} />
+        <SectionHeader title="Machines" to={machinesPath(network)} disabled={machinesNumber === 0} />
         {isMachinesFetched && !machinesNumber && <MachinesEmptyState />}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {isMachinesLoading &&

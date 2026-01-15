@@ -16,16 +16,19 @@ import {
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
 import { NavbarLink } from '../NavbarLink'
 import { BuildBadge } from '../BuildBadge'
+import { appsPath, createPath, dashboardPath, explorePath, machinesPath } from '../../pages/paths'
+import { useNetwork } from '../../hooks/useNetwork'
 
 export const Header: FC = () => {
   const isMobile = useIsMobile()
   const { isConnected } = useAccount()
   const [isOpen, setIsOpen] = useState(false)
+  const network = useNetwork()
 
   return (
     <div className="w-full flex justify-between items-center">
       <div className="flex items-center gap-4">
-        <Link to={isConnected ? '/dashboard' : '/'}>
+        <Link to={isConnected ? dashboardPath(network) : '/'}>
           <img src={Logotype} alt="ROFL App" className="h-[36px]" />
         </Link>
         <BuildBadge />
@@ -33,7 +36,7 @@ export const Header: FC = () => {
       <div className="flex items-center gap-4">
         {isConnected && (
           <Button asChild>
-            <Link to="/create">
+            <Link to={createPath()}>
               Create
               <Plus className="ml-2 h-4 w-4" />
             </Link>
@@ -64,16 +67,16 @@ export const Header: FC = () => {
               </SheetHeader>
               <nav>
                 <div className="flex flex-col px-4 pb-4 gap-2">
-                  <NavbarLink to="/dashboard" onClick={() => setIsOpen(false)}>
+                  <NavbarLink to={dashboardPath(network)} onClick={() => setIsOpen(false)}>
                     <span className="text-foreground">Dashboard</span>
                   </NavbarLink>
-                  <NavbarLink to="/dashboard/apps" onClick={() => setIsOpen(false)}>
+                  <NavbarLink to={appsPath(network)} onClick={() => setIsOpen(false)}>
                     <span className="text-foreground">Apps</span>
                   </NavbarLink>
-                  <NavbarLink to="/dashboard/machines" onClick={() => setIsOpen(false)}>
+                  <NavbarLink to={machinesPath(network)} onClick={() => setIsOpen(false)}>
                     <span className="text-foreground">Machines</span>
                   </NavbarLink>
-                  <NavbarLink to="/explore" onClick={() => setIsOpen(false)}>
+                  <NavbarLink to={explorePath()} onClick={() => setIsOpen(false)}>
                     <span className="text-foreground">Explore</span>
                   </NavbarLink>
                 </div>

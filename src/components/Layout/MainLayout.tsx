@@ -26,39 +26,42 @@ import {
 } from '@oasisprotocol/ui-library/src/components/ui/breadcrumb'
 import { ErrorBoundary } from '../ErrorBoundary'
 import { SidebarFooterContent } from './SidebarFooter'
-
-const navItems = {
-  dashboard: { label: 'Dashboard', path: '/dashboard' },
-  myApps: { label: 'Apps', path: '/dashboard/apps' },
-  machines: { label: 'Machines', path: '/dashboard/machines' },
-  explore: { label: 'Explore', path: '/explore' },
-}
-
-const breadcrumbConfigs = [
-  {
-    pattern: navItems.explore.path,
-    breadcrumbs: [navItems.explore],
-    matchType: 'startsWith',
-  },
-  {
-    pattern: navItems.machines.path,
-    breadcrumbs: [navItems.dashboard, navItems.machines],
-    matchType: 'startsWith',
-  },
-  {
-    pattern: navItems.myApps.path,
-    breadcrumbs: [navItems.dashboard, navItems.myApps],
-    matchType: 'startsWith',
-  },
-  {
-    pattern: navItems.dashboard.path,
-    breadcrumbs: [navItems.dashboard],
-    matchType: 'exact',
-  },
-]
+import { appsPath, dashboardPath, explorePath, machinesPath } from '../../pages/paths'
+import { useNetwork } from '../../hooks/useNetwork'
 
 export const MainLayout: FC = () => {
   const location = useLocation()
+  const network = useNetwork()
+
+  const navItems = {
+    dashboard: { label: 'Dashboard', path: dashboardPath(network) },
+    myApps: { label: 'Apps', path: appsPath(network) },
+    machines: { label: 'Machines', path: machinesPath(network) },
+    explore: { label: 'Explore', path: explorePath() },
+  }
+
+  const breadcrumbConfigs = [
+    {
+      pattern: navItems.explore.path,
+      breadcrumbs: [navItems.explore],
+      matchType: 'startsWith',
+    },
+    {
+      pattern: navItems.machines.path,
+      breadcrumbs: [navItems.dashboard, navItems.machines],
+      matchType: 'startsWith',
+    },
+    {
+      pattern: navItems.myApps.path,
+      breadcrumbs: [navItems.dashboard, navItems.myApps],
+      matchType: 'startsWith',
+    },
+    {
+      pattern: navItems.dashboard.path,
+      breadcrumbs: [navItems.dashboard],
+      matchType: 'exact',
+    },
+  ]
 
   const getBreadcrumbConfig = () => {
     const pathname = location.pathname.toLowerCase()
@@ -116,7 +119,7 @@ export const MainLayout: FC = () => {
                       className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                       asChild
                     >
-                      <NavLink to="/dashboard" end>
+                      <NavLink to={dashboardPath(network)} end>
                         <LayoutDashboard className="h-4 w-4 text-sidebar-foreground" />
                         Dashboard
                       </NavLink>
@@ -131,7 +134,7 @@ export const MainLayout: FC = () => {
                         className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                         asChild
                       >
-                        <NavLink to="/dashboard/apps" end>
+                        <NavLink to={appsPath(network)} end>
                           Apps
                         </NavLink>
                       </Button>
@@ -144,7 +147,7 @@ export const MainLayout: FC = () => {
                         className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                         asChild
                       >
-                        <NavLink to="/dashboard/machines" end>
+                        <NavLink to={machinesPath(network)} end>
                           Machines
                         </NavLink>
                       </Button>
@@ -157,7 +160,7 @@ export const MainLayout: FC = () => {
                     className="w-full justify-start p-2 h-8 rounded-md cursor-pointer [&.active]:bg-accent/50"
                     asChild
                   >
-                    <NavLink to="/explore" end>
+                    <NavLink to={explorePath()} end>
                       <Compass className="h-4 w-4 text-sidebar-foreground" />
                       Explore
                     </NavLink>
