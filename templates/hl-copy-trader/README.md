@@ -38,7 +38,7 @@ Before setting up your copy trader, ensure you have:
 ### Step 3: Fund Your Trading Account
 
 1. After deploying your ROFL app, find your bot's trading address in the logs.
-   - Navigate to **[My Machines](https://rofl.app/dashboard/machines)**.
+   - Navigate to **Machines**.
    - Click **View Details** on your machine.
    - Go to the **Logs** tab to find the address.
 2. Send USDC (Perps) to this address on Hyperliquid.
@@ -69,7 +69,7 @@ copy any trades. Instead, upon starting, it will immediately:
 
 To enable withdrawal:
 
-1. Navigate to **[My Apps](https://rofl.app/dashboard/apps)**.
+1. Navigate to **Apps**.
 2. Click **View Details** on your app.
 3. Go to the **Secrets** tab.
 4. Set the `WITHDRAW` secret to `true`.
