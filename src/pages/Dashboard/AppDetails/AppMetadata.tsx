@@ -146,19 +146,16 @@ export const AppMetadata: FC<AppMetadataProps> = ({
           href={`${EXPLORER_URL}${network}/sapphire/rofl/app/${id}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-primary"
+          className="text-primary inline-flex items-center gap-2 mr-2"
         >
           {id}
+          <ExternalLink className="h-4 w-4" />
         </a>
       </DetailsSectionRow>
       <DetailsSectionRow label="Created" className="pb-6 border-b">
         {new Date(date_created).toLocaleString()}
       </DetailsSectionRow>
-      <MetadataDialog
-        metadata={editableState}
-        setViewMetadataState={setViewMetadataState}
-        editEnabled={editEnabled}
-      />
+      {editEnabled && <MetadataDialog metadata={editableState} setViewMetadataState={setViewMetadataState} />}
       <DetailsSectionRow label="Author">
         <>{editableState.author}</>
       </DetailsSectionRow>

@@ -88,9 +88,7 @@ export const Dashboard: FC = () => {
               <Skeleton key={index} className="w-full h-[200px]" />
             ))}
           {isFetched &&
-            roflApps
-              ?.slice(0, cardsLimit)
-              .map(app => <AppCard key={app.id} app={app} network={network} type="dashboard" />)}
+            roflApps?.slice(0, cardsLimit).map(app => <AppCard key={app.id} app={app} network={network} />)}
         </div>
         <SectionHeader title="Machines" to={machinesPath(network)} disabled={machinesNumber === 0} />
         {isMachinesFetched && !machinesNumber && <MachinesEmptyState />}

@@ -20,10 +20,9 @@ import { type ViewMetadataState } from './types'
 type MetadataDialogProps = {
   metadata?: RoflAppMetadata
   setViewMetadataState: (state: ViewMetadataState) => void
-  editEnabled?: boolean
 }
 
-export const MetadataDialog: FC<MetadataDialogProps> = ({ metadata, setViewMetadataState, editEnabled }) => {
+export const MetadataDialog: FC<MetadataDialogProps> = ({ metadata, setViewMetadataState }) => {
   const [open, setOpen] = useState(false)
 
   const form = useForm<MetadataFormData>({
@@ -72,11 +71,7 @@ export const MetadataDialog: FC<MetadataDialogProps> = ({ metadata, setViewMetad
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button
-          disabled={!editEnabled}
-          variant="outline"
-          className="w-full md:w-auto md:ml-8 -mt-2 mb-2 md:float-right"
-        >
+        <Button variant="outline" className="w-full md:w-auto md:ml-8 -mt-2 mb-2 md:float-right">
           <SquarePen />
           Edit
         </Button>

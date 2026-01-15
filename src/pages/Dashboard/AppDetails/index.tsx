@@ -159,9 +159,8 @@ export const AppDetails: FC = () => {
                   />
                 </div>
                 <div className="flex items-center gap-8">
-                  {roflApp && !roflApp?.removed && (
+                  {roflApp && !roflApp?.removed && editEnabled && (
                     <RemoveAppButton
-                      disabled={!editEnabled}
                       stakedAmount={roflApp.stake}
                       onConfirm={async () => {
                         if (roflApp.metadata['net.oasis.roflapp.template'] === 'hl-copy-trader') {
@@ -178,7 +177,7 @@ export const AppDetails: FC = () => {
                     <TabsList className="w-full md:w-auto">
                       <TabsTrigger value="details">Details</TabsTrigger>
                       <TabsTrigger value="secrets">Secrets</TabsTrigger>
-                      <TabsTrigger value="compose">Manifest</TabsTrigger>
+                      {editEnabled && <TabsTrigger value="compose">Manifest</TabsTrigger>}
                     </TabsList>
                   </div>
                 </div>
@@ -205,7 +204,7 @@ export const AppDetails: FC = () => {
                   setViewSecretsState={setViewSecretsState}
                   editEnabled={editEnabled}
                 />
-                <AddSecret disabled={!editEnabled} handleAddSecret={handleAddSecret} />
+                {editEnabled && <AddSecret handleAddSecret={handleAddSecret} />}
               </TabsContent>
               <TabsContent value="compose">
                 <AppArtifacts
