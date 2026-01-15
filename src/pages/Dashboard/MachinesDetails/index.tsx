@@ -28,6 +28,7 @@ import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachin
 import { useAccount } from 'wagmi'
 import { getEvmBech32Address } from '../../../utils/helpers'
 import { appDetailsPath } from '../../paths'
+import { hasViewLogsPermission } from '../../../utils/hasViewLogsPermission'
 
 export const MachinesDetails: FC = () => {
   const account = useAccount()
@@ -58,6 +59,8 @@ export const MachinesDetails: FC = () => {
     !isMachineRemoved(machine) &&
     account.address &&
     machine?.admin === getEvmBech32Address(account.address)
+  const canAccessLogs =
+    editEnabled || (machine && account.address && hasViewLogsPermission(machine, account.address))
 
   return (
     <>
@@ -130,7 +133,7 @@ export const MachinesDetails: FC = () => {
                   )}
                   <TabsList className="w-full md:w-auto">
                     <TabsTrigger value="details">Details</TabsTrigger>
-                    <TabsTrigger value="logs">Logs</TabsTrigger>
+                    {canAccessLogs && <TabsTrigger value="logs">Logs</TabsTrigger>}
                   </TabsList>
                 </div>
               </>
