@@ -18,7 +18,7 @@ export const TokenLogo: FC<ChainTokenLogoProps> = ({ chainId, token }) => {
     symbol: '',
     decimals: 18,
     ...(displayToken || {}),
-    logoURI: '',
+    logoURI: displayToken?.logoURI || '',
   }
 
   return (

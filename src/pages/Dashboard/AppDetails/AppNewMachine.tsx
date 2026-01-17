@@ -20,7 +20,15 @@ export const AppNewMachine: FC = () => {
   const { id } = useParams()
   const { token } = useRoflAppBackendAuthContext()
   const roflTemplateQuery = useDownloadArtifact(`${id}-rofl-template-yaml`, token)
-  const roflTemplateYaml = roflTemplateQuery.data && yaml.parse(roflTemplateQuery.data)
+  let roflTemplateYaml: ReturnType<typeof yaml.parse> | undefined
+  if (roflTemplateQuery.data) {
+    try {
+      roflTemplateYaml = yaml.parse(roflTemplateQuery.data)
+    } catch (e) {
+      console.error('Failed to parse rofl-template.yaml:', e)
+      roflTemplateYaml = undefined
+    }
+  }
 
   const deployAppToNewMachineMutation = useDeployAppToNewMachine()
 
@@ -31,7 +39,8 @@ export const AppNewMachine: FC = () => {
   const isLoading = roflTemplateQuery.isLoading
   const isFetched = roflTemplateQuery.isFetched
   if (!token) return <div>Missing token</div>
-  if (!roflTemplateYaml) return <div>Missing rofl-template.yaml</div>
+  if (!roflTemplateYaml || typeof roflTemplateYaml !== 'object' || !roflTemplateYaml.resources)
+    return <div>Missing rofl-template.yaml</div>
   return (
     <div>
       <div className="flex pl-6 pt-6 pr-3">
@@ -55,7 +64,7 @@ export const AppNewMachine: FC = () => {
                   tee: roflTemplateYaml.tee as 'tdx' | 'sgx' | undefined,
                   cpus: roflTemplateYaml.resources.cpus as number | undefined,
                   memory: roflTemplateYaml.resources.memory as number | undefined,
-                  storage: roflTemplateYaml.resources.storage.size as number | undefined,
+                  storage: roflTemplateYaml.resources.storage?.size as number | undefined,
                 }}
                 onSubmit={async build => {
                   await deployAppToNewMachineMutation.mutateAsync({
