@@ -22,3 +22,8 @@ export function getNetworkFromChainId(chainId: number | undefined): 'mainnet' | 
   if (chainId === sapphireTestnet.id) return 'testnet'
   return 'mainnet'
 }
+
+export function getOasisAddressFromBase64PublicKey(key: string) {
+  const keyBytes = new Uint8Array(Buffer.from(key, 'base64'))
+  return oasis.staking.addressToBech32(oasis.staking.addressFromPublicKey(keyBytes))
+}
