@@ -28,6 +28,7 @@ import { isMachineRemoved } from '../../../components/MachineStatusIcon/isMachin
 import { useAccount } from 'wagmi'
 import { getEvmBech32Address } from '../../../utils/helpers'
 import { appDetailsPath } from '../../paths'
+import { hasViewLogsPermission } from '../../../utils/hasViewLogsPermission'
 
 export const MachinesDetails: FC = () => {
   const account = useAccount()
@@ -53,6 +54,14 @@ export const MachinesDetails: FC = () => {
 
   const showBlockingOverlay =
     restartMachine.isPending || stopMachine.isPending || grantLogsPermission.isPending
+  const editEnabled =
+    machine &&
+    !isMachineRemoved(machine) &&
+    account.address &&
+    machine?.admin === getEvmBech32Address(account.address)
+  const canAccessLogs =
+    editEnabled || (machine && account.address && hasViewLogsPermission(machine, account.address))
+
   return (
     <>
       <div>
@@ -88,51 +97,43 @@ export const MachinesDetails: FC = () => {
                       </>
                     )}
                   </div>
-                  {!isMachineRemoved(machine) && (
-                    <Button variant="outline" className="w-full md:w-auto" asChild>
-                      <Link to="./top-up">
-                        <CircleArrowUp />
-                        Top up
-                      </Link>
-                    </Button>
+                  {editEnabled && (
+                    <>
+                      <Button variant="outline" className="w-full md:w-auto" asChild>
+                        <Link to="./top-up">
+                          <CircleArrowUp />
+                          Top up
+                        </Link>
+                      </Button>
+                      <MachineRestart
+                        onConfirm={async () => {
+                          await restartMachine.mutateAsync({
+                            machineId: machine.id,
+                            provider: machine.provider,
+                            network,
+                          })
+                          toastWithDuration('Machine is restarting (~1min)', 1 * 60 * 1000)
+                        }}
+                      />
+                      <GrantLogsPermissionDialog
+                        onConfirm={async evmAddress => {
+                          await grantLogsPermission.mutateAsync({
+                            machine: machine,
+                            provider: machine.provider,
+                            network,
+                            evmAddress,
+                          })
+                          toastWithDuration(
+                            'Logs view permission granted. Machine is restarting (~1min)',
+                            1 * 60 * 1000,
+                          )
+                        }}
+                      />
+                    </>
                   )}
-                  <MachineRestart
-                    disabled={
-                      isMachineRemoved(machine) ||
-                      !account.address ||
-                      machine.admin !== getEvmBech32Address(account.address)
-                    }
-                    onConfirm={async () => {
-                      await restartMachine.mutateAsync({
-                        machineId: machine.id,
-                        provider: machine.provider,
-                        network,
-                      })
-                      toastWithDuration('Machine is restarting (~1min)', 1 * 60 * 1000)
-                    }}
-                  />
-                  <GrantLogsPermissionDialog
-                    disabled={
-                      isMachineRemoved(machine) ||
-                      !account.address ||
-                      machine.admin !== getEvmBech32Address(account.address)
-                    }
-                    onConfirm={async evmAddress => {
-                      await grantLogsPermission.mutateAsync({
-                        machine: machine,
-                        provider: machine.provider,
-                        network,
-                        evmAddress,
-                      })
-                      toastWithDuration(
-                        'Logs view permission granted. Machine is restarting (~1min)',
-                        1 * 60 * 1000,
-                      )
-                    }}
-                  />
                   <TabsList className="w-full md:w-auto">
                     <TabsTrigger value="details">Details</TabsTrigger>
-                    <TabsTrigger value="logs">Logs</TabsTrigger>
+                    {canAccessLogs && <TabsTrigger value="logs">Logs</TabsTrigger>}
                   </TabsList>
                 </div>
               </>

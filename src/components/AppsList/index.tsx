@@ -16,8 +16,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
   const pageLimit = type === 'dashboard' ? 9 : 18
   const { address, isConnected } = useAccount()
   const { ref, inView } = useInView()
-  // Fallback is needed to render Explore page content without wallet connection
-  const network = useNetwork(type === 'dashboard' ? undefined : 'mainnet')
+  const network = useNetwork()
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } =
     useNexusInfiniteQuery({
@@ -55,7 +54,7 @@ export const AppsList: FC<AppsListProps> = ({ emptyState, type }) => {
           ))}
 
         {allRoflApps.map(app => (
-          <AppCard key={app.id} app={app} network={network} type={type} />
+          <AppCard key={app.id} app={app} network={network} />
         ))}
 
         {isFetchingNextPage &&
