@@ -25,6 +25,7 @@ import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 import { useRoflAppDomains } from '../../../backend/useRoflAppDomains'
 import { appDetailsNewMachinePath, machineDetailsPath, machineDetailsTopUpPath } from '../../paths'
 import { EXPLORER_URL } from '../../../constants/global'
+import { Endorsement, type EndorsementRecord } from './Endorsement'
 
 type AppMetadataProps = {
   id: string
@@ -193,7 +194,7 @@ export const AppMetadata: FC<AppMetadataProps> = ({
       </DetailsSectionRow>
       <div className="text-xl font-bold">Policy</div>
       <DetailsSectionRow label="Who can run this app">
-        <Endorsements endorsements={policy.endorsements} />
+        <Endorsement endorsements={policy.endorsements as EndorsementRecord[]} />
       </DetailsSectionRow>
       <DetailsSectionRow label="Latest Update" className=" pb-6 border-b">
         {transaction && (
@@ -217,43 +218,4 @@ export const AppMetadata: FC<AppMetadataProps> = ({
       </DetailsSectionRow>
     </div>
   )
-}
-
-const Endorsements = ({ endorsements }: { endorsements: unknown }) => {
-  const network = useNetwork()
-  const items = endorsements as Array<{ node?: string; any?: boolean }>
-
-  if (items.some(item => 'node' in item)) {
-    return (
-      <>
-        {items.map(item => (
-          <div key={item.node}>{item.node}</div>
-        ))}
-      </>
-    )
-  }
-
-  if (items.length === 1 && 'any' in items[0]) {
-    return <>Any</>
-  }
-
-  // TODO: Replace with https://github.com/oasisprotocol/rofl-app/issues/241
-  if (items.length === 1 && 'provider_instance_admin' in items[0]) {
-    return (
-      <>
-        <a
-          href={`${EXPLORER_URL}${network}/sapphire/address/${items[0].provider_instance_admin}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary inline-flex items-center gap-2 mr-2"
-        >
-          {`${items[0].provider_instance_admin}`}
-          <ExternalLink className="h-4 w-4" />
-        </a>
-        is currently admin on machine
-      </>
-    )
-  }
-
-  return <></>
 }
