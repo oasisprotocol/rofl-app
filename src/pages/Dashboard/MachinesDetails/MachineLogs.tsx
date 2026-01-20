@@ -128,7 +128,7 @@ export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, inst
             </Button>
           </div>
           {hyperliquidExtractedMessage}
-          <CodeDisplay data={logsWithSections} className="h-[700px]" />
+          <CodeDisplay data={logsWithSections} autoScrollToBottom className="h-[700px]" />
         </>
       )}
     </>
