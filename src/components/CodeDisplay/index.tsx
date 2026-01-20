@@ -1,5 +1,5 @@
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
-import { type FC, lazy, Suspense, useRef } from 'react'
+import { type FC, lazy, Suspense, useRef, useLayoutEffect } from 'react'
 import * as yaml from 'yaml'
 import * as monaco from 'monaco-editor'
 
@@ -40,6 +40,7 @@ type CodeDisplayProps = {
   data: string
   className?: string
   readOnly?: boolean
+  autoScrollToBottom?: boolean
   onChange?: (value: string | undefined) => void
   // CSS white-space set in index.css for proper placeholder rendering
   placeholder?: string
@@ -49,11 +50,32 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
   data,
   className,
   readOnly = true,
+  autoScrollToBottom = false,
   onChange,
   placeholder,
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const monacoInstanceRef = useRef<typeof monaco | null>(null)
+  const previousDataRef = useRef<string>(data)
+
+  function scrollToBottom() {
+    if (!editorRef.current) return
+    editorRef.current.revealLine(editorRef.current.getModel()?.getLineCount() ?? 0)
+  }
+  useLayoutEffect(() => {
+    if (!autoScrollToBottom) return
+    const previousData = previousDataRef.current
+    previousDataRef.current = data
+    if (!editorRef.current) return
+    if (data === previousData) return
+
+    const wasScrolledToTheEnd =
+      editorRef.current.getScrollTop() + editorRef.current.getLayoutInfo().height >=
+      editorRef.current.getScrollHeight() - 40 // some threshold
+    if (wasScrolledToTheEnd || !previousData) {
+      setTimeout(() => scrollToBottom(), 1)
+    }
+  }, [data, autoScrollToBottom])
 
   if (data === null || data === undefined) {
     return null
@@ -137,6 +159,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
     editorRef.current = editor
     monacoInstanceRef.current = monacoInstance
     highlightErrorLogs(data)
+    if (autoScrollToBottom) scrollToBottom()
   }
 
   const handleEditorChange = (newData: string | undefined) => {

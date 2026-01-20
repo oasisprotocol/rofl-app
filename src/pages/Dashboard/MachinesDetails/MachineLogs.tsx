@@ -60,16 +60,16 @@ export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, inst
   // https://github.com/oasisprotocol/oasis-sdk/blob/e2061d999426e3455ca4ed7c8a5c82f0b52441e5/rofl-containers/src/main.rs#L110
   const containersInitializedMessage = '"everything is up and running"'
   const firstSection = logs.join('\n').includes(containersInitializedMessage)
-    ? '# Application\n'
+    ? '# Booted\n'
     : '# Still booting\n'
   const logsWithSections =
     firstSection +
     logs
       .slice()
-      .reverse()
       .map(line => '  ' + line)
-      .map(line => (line.includes(containersInitializedMessage) ? '\n\n\n# Booted\n' + line : line))
-      .join('\n')
+      .map(line => (line.includes(containersInitializedMessage) ? '\n\n\n# Application\n' + line : line))
+      .join('\n') +
+    '\n  # ... waiting for more logs'
 
   // Workaround for Hyperliquid Copy Trader
   // Detect
@@ -128,7 +128,7 @@ export const MachineLogs: FC<MachineLogsProps> = ({ schedulerRak, provider, inst
             </Button>
           </div>
           {hyperliquidExtractedMessage}
-          <CodeDisplay data={logsWithSections} className="h-[700px]" />
+          <CodeDisplay data={logsWithSections} autoScrollToBottom className="h-[700px]" />
         </>
       )}
     </>
