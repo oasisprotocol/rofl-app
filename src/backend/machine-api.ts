@@ -105,11 +105,93 @@ export function useMachineAuth(schedulerApi: string | undefined, provider: strin
   })
 }
 
+let i = 0
 export function useFetchLogs(schedulerApi: string | undefined, instance: string, token: string | null) {
   return useQuery<string[], Error>({
     queryKey: [schedulerApi, instance, token],
     queryFn: async () => {
-      return await fetchMachineLogs({ schedulerApi: schedulerApi!, instance: instance, token: token! })
+      const logs = `
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:19"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:20"}
+{"err":"unknown host","level":"error","module":"runtime/proxy/http","msg":"failed to handle connection"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"epoch":45391,"level":"info","module":"runtime/modules/rofl/app/registration","msg":"refreshing registration"}
+{"level":"info","module":"runtime","msg":"refreshed registration","result":"Simple(NullValue)"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:21"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:22"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:23"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 16:57:24"}
+{"err":"closed connection","level":"error","module":"runtime/proxy/http","msg":"failed to handle connection"}
+{"err":"closed connection","level":"error","module":"runtime/proxy/http","msg":"failed to handle connection"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:07:57"}
+{"err":"closed connection","level":"error","module":"runtime/proxy/http","msg":"failed to handle connection"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"everything is up and running"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"err":"timed out","level":"error","module":"runtime/proxy/http","msg":"failed to handle connection"}
+{"err":"closed connection","level":"error","module":"runtime/proxy/http","msg":"failed to handle connection"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}
+{"level":"warn","module":"runtime","msg":"8ee6520d9e94 [GIN] 2025/11/10 - 17:18:42"}`
+        .trim()
+        .split('\n')
+      i += 5
+      return logs.slice(0, 10 + i)
     },
     enabled: !!token && !!schedulerApi,
     throwOnError: false,
@@ -118,7 +200,7 @@ export function useFetchLogs(schedulerApi: string | undefined, instance: string,
 }
 
 export function useMachineAccess(schedulerApi: string | undefined, provider: string, instance: string) {
-  const [token, setToken] = useState<string | null>(null)
+  const [token, setToken] = useState<string | null>('aa')
   const authMutation = useMachineAuth(schedulerApi, provider)
   const fetchLogsQuery = useFetchLogs(schedulerApi, instance, token)
 
@@ -141,7 +223,7 @@ export function useMachineAccess(schedulerApi: string | undefined, provider: str
 
   return {
     startFetchingMachineLogs,
-    isAuthenticating: authMutation.isPending,
+    isAuthenticating: false,
     isLoadingLogs: fetchLogsQuery.isFetching,
     token,
     logs: fetchLogsQuery.data ?? [],
