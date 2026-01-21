@@ -54,22 +54,25 @@ export function RoflAppBackendAuthProvider({ children }: { children: ReactNode }
       const expired = isJWTExpired(currentToken, address)
       setIsTokenExpired(expired)
 
-      // Clear token if address mismatch (user switched accounts)
-      if (expired) {
-        try {
-          const jwt = JSON.parse(atob(currentToken.split('.')[1]))
-          const tokenAddress = jwt.address?.toLowerCase()
-          if (tokenAddress && tokenAddress !== address.toLowerCase()) {
-            window.localStorage.removeItem('jwt')
-            setToken(null)
-            setIsTokenExpired(false)
-          }
-        } catch {
-          // Invalid token - clear it
+      try {
+        const jwt = JSON.parse(atob(currentToken.split('.')[1]))
+        const tokenAddress = jwt.address?.toLowerCase()
+        // Clear token if address mismatch (user switched accounts)
+        if (tokenAddress && tokenAddress !== address.toLowerCase()) {
+          window.localStorage.removeItem('jwt')
+          setToken(null)
+          setIsTokenExpired(false)
+        } else if (expired) {
+          // Clear expired token with matching address
           window.localStorage.removeItem('jwt')
           setToken(null)
           setIsTokenExpired(false)
         }
+      } catch {
+        // Invalid token - clear it
+        window.localStorage.removeItem('jwt')
+        setToken(null)
+        setIsTokenExpired(false)
       }
     }
   }, [address, token])
