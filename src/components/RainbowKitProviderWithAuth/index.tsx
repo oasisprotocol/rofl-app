@@ -14,6 +14,7 @@ import { sapphire, sapphireTestnet } from 'viem/chains'
 import { AccountAvatar } from '../AccountAvatar'
 import type { FC, PropsWithChildren } from 'react'
 import { useNetwork } from '../../hooks/useNetwork.ts'
+import { useEffect, useMemo, useRef } from 'react'
 
 const rainbowKitTheme: Theme = {
   ...darkTheme(),
@@ -29,79 +30,89 @@ export const RainbowKitProviderWithAuth: FC<PropsWithChildren> = ({ children }) 
   const chainId = useNetwork('mainnet') === 'mainnet' ? sapphire.id : sapphireTestnet.id
   const { chainModalOpen, openChainModal } = useChainModal()
 
-  const authenticationAdapter = createAuthenticationAdapter({
-    getNonce: async () => {
-      return await fetchNonce(address!)
-    },
+  // Use ref to avoid recreating the adapter when modal state changes
+  const chainModalOpenRef = useRef(chainModalOpen)
+  useEffect(() => {
+    chainModalOpenRef.current = chainModalOpen
+  }, [chainModalOpen])
 
-    createMessage: ({ nonce, address, chainId }) => {
-      const hostname = window.location.hostname
-      let domain: string
+  const authenticationAdapter = useMemo(
+    () =>
+      createAuthenticationAdapter({
+        getNonce: async () => {
+          return await fetchNonce(address!)
+        },
 
-      if (hostname === 'rofl.app') {
-        domain = 'rofl.app'
-      } else if (hostname === 'stg.rofl.app') {
-        domain = 'stg.rofl.app'
-      } else if (
-        hostname === 'dev.rofl.app' ||
-        hostname.endsWith('.rofl-app.pages.dev') ||
-        hostname === 'localhost'
-      ) {
-        domain = 'dev.rofl.app'
-      } else {
-        domain = 'rofl.app'
-      }
+        createMessage: ({ nonce, address, chainId }) => {
+          const hostname = window.location.hostname
+          let domain: string
 
-      const uri = `https://${domain}`
-      const statement = 'Sign in to ROFL App Backend'
-
-      return createSiweMessage({
-        address,
-        domain,
-        statement,
-        uri,
-        version: '1',
-        chainId,
-        issuedAt: new Date(),
-        nonce,
-      })
-    },
-
-    verify: async ({ message, signature }) => {
-      try {
-        if (currentChainId !== chainId) {
-          if (!chainModalOpen) {
-            openChainModal?.()
+          if (hostname === 'rofl.app') {
+            domain = 'rofl.app'
+          } else if (hostname === 'stg.rofl.app') {
+            domain = 'stg.rofl.app'
+          } else if (
+            hostname === 'dev.rofl.app' ||
+            hostname.endsWith('.rofl-app.pages.dev') ||
+            hostname === 'localhost'
+          ) {
+            domain = 'dev.rofl.app'
+          } else {
+            domain = 'rofl.app'
           }
-          return false
-        }
 
-        const token = await login({ message, signature })
+          const uri = `https://${domain}`
+          const statement = 'Sign in to ROFL App Backend'
 
-        try {
-          window.localStorage.setItem('jwt', token)
-          window.dispatchEvent(new Event('storage'))
+          return createSiweMessage({
+            address,
+            domain,
+            statement,
+            uri,
+            version: '1',
+            chainId,
+            issuedAt: new Date(),
+            nonce,
+          })
+        },
 
-          return true
-        } catch {
-          // Ignore failures
-        }
-        return false
-      } catch (error) {
-        console.error('Authentication failed:', error)
-        return false
-      }
-    },
+        verify: async ({ message, signature }) => {
+          try {
+            if (currentChainId !== chainId) {
+              if (!chainModalOpenRef.current) {
+                openChainModal?.()
+              }
+              return false
+            }
 
-    signOut: async () => {
-      try {
-        window.localStorage.removeItem('jwt')
-        window.dispatchEvent(new Event('storage'))
-      } catch {
-        // Ignore failures
-      }
-    },
-  })
+            const token = await login({ message, signature })
+
+            try {
+              window.localStorage.setItem('jwt', token)
+              window.dispatchEvent(new Event('storage'))
+
+              return true
+            } catch {
+              // Ignore failures
+            }
+            return false
+          } catch (error) {
+            console.error('Authentication failed:', error)
+            return false
+          }
+        },
+
+        signOut: async () => {
+          try {
+            window.localStorage.removeItem('jwt')
+            window.dispatchEvent(new Event('storage'))
+          } catch {
+            // Ignore failures
+          }
+        },
+      }),
+    [address, currentChainId, chainId, openChainModal],
+  )
 
   return (
     <RainbowKitAuthenticationProvider adapter={authenticationAdapter} status={status}>
