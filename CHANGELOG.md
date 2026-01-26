@@ -12,6 +12,68 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 2.0.0 (2026-01-26)
+
+### Removals and Breaking Changes
+
+- Remove survey popup
+  ([#382](https://github.com/oasisprotocol/rofl-app/issues/382))
+
+### Features
+
+- ROFL Paymaster testnet integration
+  ([#345](https://github.com/oasisprotocol/rofl-app/issues/345))
+
+- Display proxy domains
+  ([#366](https://github.com/oasisprotocol/rofl-app/issues/366))
+
+- Show "View logs" button in explore page if someone grants you permission
+  ([#376](https://github.com/oasisprotocol/rofl-app/issues/376))
+
+- Grant logs permission on a machine and restart
+  ([#391](https://github.com/oasisprotocol/rofl-app/issues/391))
+
+- Enable read only mode for machines and apps
+  ([#396](https://github.com/oasisprotocol/rofl-app/issues/396))
+
+### Bug Fixes and Improvements
+
+- Fix isTokenExpired only updated in a 10-second interval
+  ([#393](https://github.com/oasisprotocol/rofl-app/issues/393))
+
+- Fix account switching
+  ([#397](https://github.com/oasisprotocol/rofl-app/issues/397))
+
+- Display new endorsement fields
+  ([#399](https://github.com/oasisprotocol/rofl-app/issues/399))
+
+- Un-reverse logs (show new log lines at the bottom)
+  ([#400](https://github.com/oasisprotocol/rofl-app/issues/400))
+
+- Display who can view logs
+  ([#401](https://github.com/oasisprotocol/rofl-app/issues/401))
+
+### Internal Changes
+
+- Update dependencies
+  ([#292](https://github.com/oasisprotocol/rofl-app/issues/292),
+   [#300](https://github.com/oasisprotocol/rofl-app/issues/300),
+   [#324](https://github.com/oasisprotocol/rofl-app/issues/324),
+   [#364](https://github.com/oasisprotocol/rofl-app/issues/364),
+   [#365](https://github.com/oasisprotocol/rofl-app/issues/365),
+   [#368](https://github.com/oasisprotocol/rofl-app/issues/368),
+   [#402](https://github.com/oasisprotocol/rofl-app/issues/402))
+
+- Bump rofl-containers
+  ([#371](https://github.com/oasisprotocol/rofl-app/issues/371),
+   [#388](https://github.com/oasisprotocol/rofl-app/issues/388))
+
+- Prepare app routing for read only mode
+  ([#394](https://github.com/oasisprotocol/rofl-app/issues/394))
+
+- Update Wallet Connect id
+  ([#404](https://github.com/oasisprotocol/rofl-app/issues/404))
+
 ## 1.1.1 (2025-11-20)
 
 ### Bug Fixes and Improvements
