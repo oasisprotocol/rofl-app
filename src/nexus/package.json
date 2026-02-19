@@ -4,6 +4,6 @@
     "generate": "orval"
   },
   "dependencies": {
-    "orval": "^7.9.0"
+    "orval": "^7.21.0"
   }
 }
