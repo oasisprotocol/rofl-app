@@ -715,7 +715,7 @@ export function useUpdateApp() {
             secrets: secretsViewState.isDirty
               ? Object.fromEntries(
                   Object.entries(secretsViewState.secrets ?? {}).map(([key, value]) => {
-                    return [key, oasis.misc.fromBase64(value)]
+                    return [key, oasis.misc.fromBase64(value as string)]
                   }),
                 )
               : app.secrets,

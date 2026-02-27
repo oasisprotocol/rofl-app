@@ -75,8 +75,8 @@ export const CustomBuildSetupForm: FC<CustomBuildSetupFormProps> = ({
     clearValidation()
   }
 
-  const handleSecretsChange = (state: { isDirty: boolean; secrets: Record<string, string> }) => {
-    form.setValue('secrets', state.secrets)
+  const handleSecretsChange = (state: { isDirty: boolean; secrets: RoflAppSecrets }) => {
+    form.setValue('secrets', state.secrets as Record<string, string>)
   }
 
   const handleAddSecret = () => {
