@@ -90,13 +90,19 @@ export const BuildForm: FC<BuildFormProps> = ({
         offer.resources.tee !== oasisRT.types.RoflmarketTeeType.SGX
       )
         return false
-      if (selectedTemplateRequirements.cpus && offer.resources.cpus < selectedTemplateRequirements.cpus)
+      if (
+        selectedTemplateRequirements.cpus &&
+        (offer.resources.cpus as number) < selectedTemplateRequirements.cpus
+      )
         return false
-      if (selectedTemplateRequirements.memory && offer.resources.memory < selectedTemplateRequirements.memory)
+      if (
+        selectedTemplateRequirements.memory &&
+        (offer.resources.memory as number) < selectedTemplateRequirements.memory
+      )
         return false
       if (
         selectedTemplateRequirements.storage &&
-        offer.resources.storage < selectedTemplateRequirements.storage
+        (offer.resources.storage as number) < selectedTemplateRequirements.storage
       )
         return false
       return true
@@ -134,9 +140,9 @@ export const BuildForm: FC<BuildFormProps> = ({
     if (selectedOfferId && offers) {
       const selectedOffer = offers.find(offer => offer.id === selectedOfferId)
       if (selectedOffer) {
-        form.setValue('offerCpus', selectedOffer.resources.cpus)
-        form.setValue('offerMemory', selectedOffer.resources.memory)
-        form.setValue('offerStorage', selectedOffer.resources.storage)
+        form.setValue('offerCpus', selectedOffer.resources.cpus as number)
+        form.setValue('offerMemory', selectedOffer.resources.memory as number)
+        form.setValue('offerStorage', selectedOffer.resources.storage as number)
       }
     }
   }, [selectedOfferId, offers, form])
