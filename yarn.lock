@@ -1723,16 +1723,16 @@
   resolved "https://registry.yarnpkg.com/@radix-ui/rect/-/rect-1.1.1.tgz#78244efe12930c56fd255d7923865857c41ac8cb"
   integrity sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==
 
-"@rainbow-me/rainbowkit@^2.2.8":
-  version "2.2.8"
-  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-2.2.8.tgz#6fe6b26cd297a5aef7f00410429f0e6ec5474944"
-  integrity sha512-EdNIK2cdAT6GJ9G11wx7nCVfjqBfxh7dx/1DhPYrB+yg+VFrII6cM1PiMFVC9evD4mqVHe9mmLAt3nvlwDdiPQ==
+"@rainbow-me/rainbowkit@^2.2.10":
+  version "2.2.10"
+  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-2.2.10.tgz#e50bb4a61c3c5b73a7f6f00a63c89e2f34c28c7a"
+  integrity sha512-8+E4die1A2ovN9t3lWxWnwqTGEdFqThXDQRj+E4eDKuUKyymYD+66Gzm6S9yfg8E95c6hmGlavGUfYPtl1EagA==
   dependencies:
     "@vanilla-extract/css" "1.17.3"
     "@vanilla-extract/dynamic" "2.1.4"
     "@vanilla-extract/sprinkles" "1.6.4"
     clsx "2.1.1"
-    cuer "0.0.2"
+    cuer "0.0.3"
     react-remove-scroll "2.6.2"
     ua-parser-js "^1.0.37"
 
@@ -3468,10 +3468,10 @@ csstype@^3.2.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.2.3.tgz#ec48c0f3e993e50648c86da559e2610995cf989a"
   integrity sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==
 
-cuer@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/cuer/-/cuer-0.0.2.tgz#c41b8fffd6c62580048ead623aef9c6c5eb51aa0"
-  integrity sha512-MG1BYnnSLqBnO0dOBS1Qm/TEc9DnFa9Sz2jMA24OF4hGzs8UuPjpKBMkRPF3lrpC+7b3EzULwooX9djcvsM8IA==
+cuer@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/cuer/-/cuer-0.0.3.tgz#bb892dd748ca279d7452413e8d28abd2d9ef5914"
+  integrity sha512-f/UNxRMRCYtfLEGECAViByA3JNflZImOk11G9hwSd+44jvzrc99J35u5l+fbdQ2+ZG441GvOpaeGYBmWquZsbQ==
   dependencies:
     qr "~0"
 
