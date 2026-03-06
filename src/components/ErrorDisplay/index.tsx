@@ -1,5 +1,5 @@
 import { type FC, type ReactNode } from 'react'
-import { isRouteErrorResponse } from 'react-router-dom'
+import { isRouteErrorResponse } from 'react-router'
 import { EmptyState } from '../EmptyState'
 import { AppError, AppErrors, type ErrorPayload } from '../ErrorBoundary/errors'
 

@@ -1,5 +1,5 @@
 import { useEffect, useState, type FC } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import HeroImage from './images/hero.svg'

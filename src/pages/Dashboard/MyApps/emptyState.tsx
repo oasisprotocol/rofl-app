@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { EmptyState } from '../../../components/EmptyState'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { Plus } from 'lucide-react'

@@ -1,4 +1,4 @@
-import { Link, type To } from 'react-router-dom'
+import { Link, type To } from 'react-router'
 import {
   Card,
   CardDescription,

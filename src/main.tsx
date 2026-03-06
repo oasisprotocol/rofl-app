@@ -1,6 +1,6 @@
 import './polyfill'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useLocation } from 'react-router'
 import { WagmiProvider } from 'wagmi'
 import { Landing } from './pages/Landing'
 import { Dashboard } from './pages/Dashboard'

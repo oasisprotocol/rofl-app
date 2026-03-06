@@ -4,7 +4,7 @@ import { RoflAppBackendAuthContext } from './Context'
 import { useInterval } from './useInterval'
 import { trackEvent } from 'fathom-client'
 import { AuthenticationStatus } from '@rainbow-me/rainbowkit'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 import { dashboardPath } from '../../pages/paths'
 import { getNetworkFromChainId } from '../../utils/helpers'
 

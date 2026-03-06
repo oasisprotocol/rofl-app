@@ -1,5 +1,5 @@
 import { type FC, Suspense } from 'react'
-import { Link, Outlet, Navigate } from 'react-router-dom'
+import { Link, Outlet, Navigate } from 'react-router'
 import { useAccount } from 'wagmi'
 import { ArrowLeft, ArrowRight, Wallet } from 'lucide-react'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks'

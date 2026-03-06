@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useBlocker } from 'react-router-dom'
+import { useBlocker } from 'react-router'
 
 let globalIsBlocking = false // If useBlockNavigatingAway gets destroyed, load state from this.
 

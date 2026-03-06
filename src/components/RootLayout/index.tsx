@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { FathomAnalytics } from '../FathomAnalytics'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 import { Toaster as Sonner, ToasterProps } from 'sonner'
 import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout'
 import { Footer } from '../Layout/Footer'
