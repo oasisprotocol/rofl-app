@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@oasisprotocol/ui-library/src/components/ui/tabs'
 import { CircleArrowUp, Clock } from 'lucide-react'
 import { formatDistanceToNow, parseISO, isFuture } from 'date-fns'

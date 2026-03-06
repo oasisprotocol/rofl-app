@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import { useBlocker } from 'react-router-dom'
+import { useBlocker } from 'react-router'
 import { DiscardChanges } from './DiscardButton'
 import { ApplyChanges } from './ApplyChanges'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'

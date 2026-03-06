@@ -1,6 +1,6 @@
 import { CSSProperties, type FC, useEffect, useState } from 'react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { CheckCircle, TriangleAlert } from 'lucide-react'
 import { useCreateAndDeployApp } from '../../backend/api'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'

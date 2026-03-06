@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { type RoflApp } from '../../nexus/api'
 import { Badge } from '@oasisprotocol/ui-library/src/components/ui/badge'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'

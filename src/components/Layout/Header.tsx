@@ -1,5 +1,5 @@
 import { useState, type FC } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router'
 import Logotype from './logo.svg'
 import { RainbowKitConnectButton } from '../RainbowKitConnectButton'
 import { Menu, Plus } from 'lucide-react'

@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useAccount } from 'wagmi'
 import { AppError, AppErrors } from '../components/ErrorBoundary/errors'
 import { sapphire, sapphireTestnet } from 'viem/chains'

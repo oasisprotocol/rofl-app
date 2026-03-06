@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { Header } from './Header'
 import { Footer } from './Footer'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router'
 import {
   Sidebar,
   SidebarContent,

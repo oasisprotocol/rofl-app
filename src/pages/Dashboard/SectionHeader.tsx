@@ -1,7 +1,7 @@
 import { type FC } from 'react'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
 import { ArrowRight } from 'lucide-react'
-import { Link, type To } from 'react-router-dom'
+import { Link, type To } from 'react-router'
 
 interface SectionHeaderProps {
   title: string

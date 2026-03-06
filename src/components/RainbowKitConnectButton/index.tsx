@@ -12,7 +12,7 @@ import {
 import { AccountAvatar } from '../AccountAvatar'
 import { useAccount, useDisconnect } from 'wagmi'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 import { sapphire, sapphireTestnet } from 'viem/chains'
 import { useRoflAppBackendAuthContext } from '../../contexts/RoflAppBackendAuth/hooks.ts'
 import { ROFL_PAYMASTER_ENABLED_CHAINS_IDS } from '../../constants/rofl-paymaster-config.ts'

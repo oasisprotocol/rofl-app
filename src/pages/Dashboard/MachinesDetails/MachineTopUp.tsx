@@ -1,6 +1,6 @@
 import { type FC, useCallback, useEffect, useMemo } from 'react'
 import { useNetwork } from '../../../hooks/useNetwork'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 import { useGetRuntimeRoflmarketProvidersAddressInstancesId } from '../../../nexus/generated/api'
 import { Skeleton } from '@oasisprotocol/ui-library/src/components/ui/skeleton.tsx'
 import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
