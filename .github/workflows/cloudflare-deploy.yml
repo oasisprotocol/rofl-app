@@ -29,7 +29,7 @@ jobs:
       - name: Add in progress comment to PR
         # We want to add in progress comment on a pull request event only.
         if: github.event_name == 'pull_request'
-        uses: mshick/add-pr-comment@v2
+        uses: mshick/add-pr-comment@v3
         with:
           message: |
             ## Deploying with <a href="https://pages.dev">Cloudflare Pages</a>
@@ -43,15 +43,15 @@ jobs:
               </tr>
             </table>
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         # Checkout pull request HEAD commit instead of merge commit.
         with:
           submodules: true
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Set up Node.js 20
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
-          node-version: '20.x'
+          node-version: '24.16.0'
           cache: yarn
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -60,7 +60,7 @@ jobs:
       - name: Publish to Cloudflare Pages
         # Id is needed to access output in a next step.
         id: deploy
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           # Token with Cloudflare Pages edit permission only generated in Cloudflare dashboard -> Manage Account -> Account API Tokens
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_API_TOKEN }}
@@ -72,7 +72,7 @@ jobs:
             github.event.pull_request.number) || '' }}
       # On a subsequent run the original comment will be updated.
       - name: Update PR comment
-        uses: mshick/add-pr-comment@v2
+        uses: mshick/add-pr-comment@v3
         # We want to update a comment on a pull request event only.
         if: github.event_name == 'pull_request' && always()
         with:
