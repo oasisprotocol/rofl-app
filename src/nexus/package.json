@@ -1,9 +1,0 @@
-{
-  "scripts": {
-    "start": "orval",
-    "generate": "orval"
-  },
-  "dependencies": {
-    "orval": "^7.21.0"
-  }
-}
